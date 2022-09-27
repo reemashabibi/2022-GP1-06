@@ -11,6 +11,7 @@ As the educational field seeks for a technological solution that will link schoo
 
 
 Technology
+
 We will use Flutter which supports cross platform development for different operating systems. The project will need a database to store the user’s information which will be handled by Firebase and PHP on the server side of the application. The project will be developed and managed by Jira, Git, Github, Android studio, Visual Studio, XCode, Google Chrome and any other software that we might acquire during the development process. 
 
 
