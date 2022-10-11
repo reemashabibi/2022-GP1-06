@@ -9,6 +9,7 @@
 <body>
     <?php
     echo "Hi";
+    echo "commit";
     ?>
 </body>
 </html>
