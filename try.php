@@ -10,6 +10,7 @@
     <?php
     echo "Hi";
     echo "commit";
+    echo "commit2";
     ?>
 </body>
 </html>
