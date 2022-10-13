@@ -1,0 +1,270 @@
+[debug] [2022-10-13T23:17:12.030Z] ----------------------------------------------------------------------
+[debug] [2022-10-13T23:17:12.035Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init
+[debug] [2022-10-13T23:17:12.036Z] CLI Version:   11.14.3
+[debug] [2022-10-13T23:17:12.037Z] Platform:      darwin
+[debug] [2022-10-13T23:17:12.039Z] Node Version:  v16.18.0
+[debug] [2022-10-13T23:17:12.044Z] Time:          Fri Oct 14 2022 02:17:12 GMT+0300 (Arabian Standard Time)
+[debug] [2022-10-13T23:17:12.044Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-10-13T23:17:12.155Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-13T23:17:12.156Z] > authorizing via signed-in user (441201342@student.ksu.edu.sa)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/njoudalfahad/Downloads/2022-GP1-06
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2022-10-13T23:18:29.151Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2022-10-13T23:18:32.120Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2022-10-13T23:18:32.120Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[debug] [2022-10-13T23:18:34.918Z] ----------------------------------------------------------------------
+[debug] [2022-10-13T23:18:34.921Z] Command:       /usr/local/bin/node /usr/local/bin/firebase init
+[debug] [2022-10-13T23:18:34.922Z] CLI Version:   11.14.3
+[debug] [2022-10-13T23:18:34.922Z] Platform:      darwin
+[debug] [2022-10-13T23:18:34.922Z] Node Version:  v16.18.0
+[debug] [2022-10-13T23:18:34.924Z] Time:          Fri Oct 14 2022 02:18:34 GMT+0300 (Arabian Standard Time)
+[debug] [2022-10-13T23:18:34.924Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-10-13T23:18:34.959Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-13T23:18:34.960Z] > authorizing via signed-in user (441201342@student.ksu.edu.sa)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/njoudalfahad/Downloads/2022-GP1-06
+
+[info] i  Using project first-intilazation (Halaqah) 
+[info] 
+=== Database Setup
+[info] i  database: ensuring required API firebasedatabase.googleapis.com is enabled... 
+[debug] [2022-10-13T23:18:36.646Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firebasedatabase.googleapis.com [none]
+[debug] [2022-10-13T23:18:36.646Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firebasedatabase.googleapis.com x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:18:40.098Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firebasedatabase.googleapis.com 200
+[debug] [2022-10-13T23:18:40.098Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firebasedatabase.googleapis.com [omitted]
+[info] ✔  database: required API firebasedatabase.googleapis.com is enabled 
+[info] 
+[debug] [2022-10-13T23:18:40.100Z] >>> [apiv2][query] GET https://firebasedatabase.googleapis.com/v1beta/projects/first-intilazation/locations/-/instances/first-intilazation-default-rtdb [none]
+[debug] [2022-10-13T23:18:42.753Z] <<< [apiv2][status] GET https://firebasedatabase.googleapis.com/v1beta/projects/first-intilazation/locations/-/instances/first-intilazation-default-rtdb 200
+[debug] [2022-10-13T23:18:42.753Z] <<< [apiv2][body] GET https://firebasedatabase.googleapis.com/v1beta/projects/first-intilazation/locations/-/instances/first-intilazation-default-rtdb {"name":"projects/217654697689/locations/us-central1/instances/first-intilazation-default-rtdb","project":"projects/217654697689","databaseUrl":"https://first-intilazation-default-rtdb.firebaseio.com","type":"DEFAULT_DATABASE","state":"ACTIVE"}
+[info] 
+[info] Firebase Realtime Database Security Rules allow you to define how your data should be
+[info] structured and when your data can be read from and written to.
+[info] 
+[debug] [2022-10-13T23:19:16.243Z] >>> [apiv2][query] GET https://first-intilazation-default-rtdb.firebaseio.com/.settings/rules.json [none]
+[debug] [2022-10-13T23:19:18.974Z] <<< [apiv2][status] GET https://first-intilazation-default-rtdb.firebaseio.com/.settings/rules.json 200
+[debug] [2022-10-13T23:19:18.974Z] <<< [apiv2][body] GET https://first-intilazation-default-rtdb.firebaseio.com/.settings/rules.json [stream]
+[info] ✔  Database Rules for first-intilazation-default-rtdb have been written to all. 
+[info] Future modifications to all will update Realtime Database Security Rules when you run
+[info] firebase deploy.
+[info] 
+=== Firestore Setup
+[debug] [2022-10-13T23:19:18.978Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firestore.googleapis.com [none]
+[debug] [2022-10-13T23:19:18.978Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firestore.googleapis.com x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:19:20.238Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firestore.googleapis.com 200
+[debug] [2022-10-13T23:19:20.238Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/firestore.googleapis.com [omitted]
+[debug] [2022-10-13T23:19:20.239Z] >>> [apiv2][query] GET https://appengine.googleapis.com/v1/apps/first-intilazation [none]
+[debug] [2022-10-13T23:19:23.107Z] <<< [apiv2][status] GET https://appengine.googleapis.com/v1/apps/first-intilazation 200
+[debug] [2022-10-13T23:19:23.108Z] <<< [apiv2][body] GET https://appengine.googleapis.com/v1/apps/first-intilazation {"name":"apps/first-intilazation","id":"first-intilazation","authDomain":"gmail.com","locationId":"us-central","codeBucket":"staging.first-intilazation.appspot.com","servingStatus":"SERVING","defaultHostname":"first-intilazation.uc.r.appspot.com","defaultBucket":"first-intilazation.appspot.com","serviceAccount":"first-intilazation@appspot.gserviceaccount.com","gcrDomain":"us.gcr.io","databaseType":"CLOUD_FIRESTORE","featureSettings":{"splitHealthChecks":true,"useContainerOptimizedOs":true}}
+[debug] [2022-10-13T23:19:23.108Z] database_type: CLOUD_FIRESTORE
+[debug] [2022-10-13T23:19:23.108Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-13T23:19:23.108Z] > authorizing via signed-in user (441201342@student.ksu.edu.sa)
+[debug] [2022-10-13T23:19:23.109Z] [iam] checking project first-intilazation for permissions ["firebase.projects.get"]
+[debug] [2022-10-13T23:19:23.109Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions [none]
+[debug] [2022-10-13T23:19:23.109Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:19:23.110Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-10-13T23:19:26.279Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions 200
+[debug] [2022-10-13T23:19:26.279Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions {"permissions":["firebase.projects.get"]}
+[info] 
+[info] Firestore Security Rules allow you to define how and when to allow
+[info] requests. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2022-10-13T23:19:35.196Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/first-intilazation/releases pageSize=10&pageToken=
+[debug] [2022-10-13T23:19:38.362Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/first-intilazation/releases 200
+[debug] [2022-10-13T23:19:38.362Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/first-intilazation/releases {"releases":[{"name":"projects/first-intilazation/releases/cloud.firestore","rulesetName":"projects/first-intilazation/rulesets/b14638bf-807c-443d-ae30-cc12aca8263c","createTime":"2022-10-07T13:18:20.924923Z","updateTime":"2022-10-07T13:18:20.924923Z"}]}
+[debug] [2022-10-13T23:19:38.362Z] Found ruleset: projects/first-intilazation/rulesets/b14638bf-807c-443d-ae30-cc12aca8263c
+[debug] [2022-10-13T23:19:38.363Z] >>> [apiv2][query] GET https://firebaserules.googleapis.com/v1/projects/first-intilazation/rulesets/b14638bf-807c-443d-ae30-cc12aca8263c [none]
+[debug] [2022-10-13T23:19:39.386Z] <<< [apiv2][status] GET https://firebaserules.googleapis.com/v1/projects/first-intilazation/rulesets/b14638bf-807c-443d-ae30-cc12aca8263c 200
+[debug] [2022-10-13T23:19:39.386Z] <<< [apiv2][body] GET https://firebaserules.googleapis.com/v1/projects/first-intilazation/rulesets/b14638bf-807c-443d-ae30-cc12aca8263c [omitted]
+[info] 
+[info] Firestore indexes allow you to perform complex queries while
+[info] maintaining performance that scales with the size of the result
+[info] set. You can keep index definitions in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[debug] [2022-10-13T23:19:46.353Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/first-intilazation/databases/(default)/collectionGroups/-/indexes [none]
+[debug] [2022-10-13T23:19:46.355Z] >>> [apiv2][query] GET https://firestore.googleapis.com/v1/projects/first-intilazation/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false [none]
+[debug] [2022-10-13T23:19:49.525Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/first-intilazation/databases/(default)/collectionGroups/-/indexes 200
+[debug] [2022-10-13T23:19:49.525Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/first-intilazation/databases/(default)/collectionGroups/-/indexes {}
+[debug] [2022-10-13T23:19:49.527Z] <<< [apiv2][status] GET https://firestore.googleapis.com/v1/projects/first-intilazation/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false 200
+[debug] [2022-10-13T23:19:49.527Z] <<< [apiv2][body] GET https://firestore.googleapis.com/v1/projects/first-intilazation/databases/(default)/collectionGroups/-/fields?filter=indexConfig.usesAncestorConfig=false {"fields":[{"name":"projects/first-intilazation/databases/(default)/collectionGroups/__default__/fields/*","indexConfig":{"indexes":[{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"ASCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","order":"DESCENDING"}],"state":"READY"},{"queryScope":"COLLECTION","fields":[{"fieldPath":"*","arrayConfig":"CONTAINS"}],"state":"READY"}]}}]}
+[info] 
+=== Functions Setup
+[debug] [2022-10-13T23:19:49.528Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-13T23:19:49.529Z] > authorizing via signed-in user (441201342@student.ksu.edu.sa)
+[debug] [2022-10-13T23:19:49.529Z] [iam] checking project first-intilazation for permissions ["firebase.projects.get"]
+[debug] [2022-10-13T23:19:49.529Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions [none]
+[debug] [2022-10-13T23:19:49.529Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:19:49.530Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-10-13T23:19:50.501Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions 200
+[debug] [2022-10-13T23:19:50.501Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2022-10-13T23:19:50.502Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com [none]
+[debug] [2022-10-13T23:19:50.502Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:19:50.505Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/runtimeconfig.googleapis.com [none]
+[debug] [2022-10-13T23:19:50.505Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:19:51.678Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/runtimeconfig.googleapis.com 200
+[debug] [2022-10-13T23:19:51.678Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/runtimeconfig.googleapis.com [omitted]
+[debug] [2022-10-13T23:19:51.680Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com 200
+[debug] [2022-10-13T23:19:51.680Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com [omitted]
+[debug] [2022-10-13T23:19:51.681Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com:enable [none]
+[debug] [2022-10-13T23:19:51.681Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com:enable x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:19:53.516Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com:enable 200
+[debug] [2022-10-13T23:19:53.517Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com:enable [omitted]
+[debug] [2022-10-13T23:20:03.522Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com [none]
+[debug] [2022-10-13T23:20:03.522Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/first-intilazation
+[debug] [2022-10-13T23:20:04.661Z] <<< [apiv2][status] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com 200
+[debug] [2022-10-13T23:20:04.661Z] <<< [apiv2][body] GET https://serviceusage.googleapis.com/v1/projects/first-intilazation/services/cloudfunctions.googleapis.com [omitted]
+[info] Let's create a new codebase for your functions.
+[info] A directory corresponding to the codebase will be created in your project
+[info] with sample code pre-configured.
+
+[info] See https://firebase.google.com/docs/functions/organize-functions for
+[info] more information on organizing your functions using codebases.
+
+[info] Functions can be deployed with firebase deploy.
+
+[info] ✔  Wrote functions/package.json 
+[info] ✔  Wrote functions/.eslintrc.js 
+[info] ✔  Wrote functions/index.js 
+[info] ✔  Wrote functions/.gitignore 
+[info] 
+=== Hosting Setup
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 
+[debug] [2022-10-13T23:22:17.550Z] >>> [apiv2][query] GET https://www.gstatic.com/firebasejs/releases.json [none]
+[debug] [2022-10-13T23:22:17.933Z] <<< [apiv2][status] GET https://www.gstatic.com/firebasejs/releases.json 200
+[debug] [2022-10-13T23:22:17.933Z] <<< [apiv2][body] GET https://www.gstatic.com/firebasejs/releases.json {"current":{"version":"9.12.1","browserURL":"https://www.gstatic.com/firebasejs/9.12.1/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/9.12.1/firebase.tgz"},"live":{"version":"9.12","browserURL":"https://www.gstatic.com/firebasejs/live/9.12/firebase.js","packageURL":"https://www.gstatic.com/firebasejs/live/9.12/firebase.tgz"},"components":{"analytics":"https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js","app":"https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js","app-check":"https://www.gstatic.com/firebasejs/9.12.1/firebase-app-check.js","auth":"https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js","auth/cordova":"https://www.gstatic.com/firebasejs/9.12.1/firebase-auth/cordova.js","auth/react-native":"https://www.gstatic.com/firebasejs/9.12.1/firebase-auth/react-native.js","functions":"https://www.gstatic.com/firebasejs/9.12.1/firebase-functions.js","firestore":"https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js","firestore/lite":"https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore/lite.js","installations":"https://www.gstatic.com/firebasejs/9.12.1/firebase-installations.js","storage":"https://www.gstatic.com/firebasejs/9.12.1/firebase-storage.js","performance":"https://www.gstatic.com/firebasejs/9.12.1/firebase-performance.js","remote-config":"https://www.gstatic.com/firebasejs/9.12.1/firebase-remote-config.js","messaging":"https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging.js","messaging/sw":"https://www.gstatic.com/firebasejs/9.12.1/firebase-messaging/sw.js","database":"https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js","firestore.memory":"https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.memory.js"}}
+[info] ✔  Wrote public/index.html 
+[info] 
+[info] i  Detected a .git folder at /Users/njoudalfahad/Downloads/2022-GP1-06 
+[info] i  Authorizing with GitHub to upload your service account to a GitHub repository's secrets store. 
+[info] 
+[info] Visit this URL on this device to log in:
+[info] https://github.com/login/oauth/authorize?client_id=89cf50f02ac6aaed3484&state=1063652376&redirect_uri=http%3A%2F%2Flocalhost%3A9005&scope=read%3Auser%20repo%20public_repo
+[info] 
+[info] Waiting for authentication...
+[debug] [2022-10-13T23:22:30.668Z] >>> [apiv2][query] POST https://github.com/login/oauth/access_token [none]
+[debug] [2022-10-13T23:22:30.669Z] >>> [apiv2][body] POST https://github.com/login/oauth/access_token [stream]
+[debug] [2022-10-13T23:22:31.266Z] <<< [apiv2][status] POST https://github.com/login/oauth/access_token 200
+[debug] [2022-10-13T23:22:31.267Z] <<< [apiv2][body] POST https://github.com/login/oauth/access_token {"access_token":"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","token_type":"bearer","scope":"read:user,repo"}
+[debug] [2022-10-13T23:22:31.306Z] >>> [apiv2][query] GET https://api.github.com/user [none]
+[debug] [2022-10-13T23:22:31.881Z] <<< [apiv2][status] GET https://api.github.com/user 200
+[debug] [2022-10-13T23:22:31.882Z] <<< [apiv2][body] GET https://api.github.com/user {"login":"NjoudAlfahad","id":114523162,"node_id":"U_kgDOBtN8Gg","avatar_url":"https://avatars.githubusercontent.com/u/114523162?v=4","gravatar_id":"","url":"https://api.github.com/users/NjoudAlfahad","html_url":"https://github.com/NjoudAlfahad","followers_url":"https://api.github.com/users/NjoudAlfahad/followers","following_url":"https://api.github.com/users/NjoudAlfahad/following{/other_user}","gists_url":"https://api.github.com/users/NjoudAlfahad/gists{/gist_id}","starred_url":"https://api.github.com/users/NjoudAlfahad/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/NjoudAlfahad/subscriptions","organizations_url":"https://api.github.com/users/NjoudAlfahad/orgs","repos_url":"https://api.github.com/users/NjoudAlfahad/repos","events_url":"https://api.github.com/users/NjoudAlfahad/events{/privacy}","received_events_url":"https://api.github.com/users/NjoudAlfahad/received_events","type":"User","site_admin":false,"name":null,"company":null,"blog":"","location":null,"email":null,"hireable":null,"bio":null,"twitter_username":null,"public_repos":0,"public_gists":0,"followers":0,"following":0,"created_at":"2022-09-27T19:02:13Z","updated_at":"2022-09-27T19:02:13Z","private_gists":0,"total_private_repos":0,"owned_private_repos":0,"disk_usage":0,"collaborators":0,"two_factor_authentication":false,"plan":{"name":"free","space":976562499,"collaborators":0,"private_repos":10000}}
+[info] 
+[info] ✔  Success! Logged into GitHub as NjoudAlfahad 
+[info] 
+[debug] [2022-10-13T23:23:13.211Z] >>> [apiv2][query] GET https://api.github.com/repos/reemashabibi/actions/secrets/public-key type=owner
+[debug] [2022-10-13T23:23:13.213Z] >>> [apiv2][query] GET https://api.github.com/repos///actions/secrets/public-key type=owner
+[debug] [2022-10-13T23:23:13.215Z] >>> [apiv2][query] GET https://api.github.com/repos/2022-GP1-06/actions/secrets/public-key type=owner
+[debug] [2022-10-13T23:23:15.801Z] <<< [apiv2][status] GET https://api.github.com/repos///actions/secrets/public-key 404
+[debug] [2022-10-13T23:23:15.802Z] <<< [apiv2][body] GET https://api.github.com/repos///actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[debug] [2022-10-13T23:23:15.826Z] <<< [apiv2][status] GET https://api.github.com/repos/reemashabibi/actions/secrets/public-key 404
+[debug] [2022-10-13T23:23:15.826Z] <<< [apiv2][body] GET https://api.github.com/repos/reemashabibi/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[debug] [2022-10-13T23:23:15.828Z] <<< [apiv2][status] GET https://api.github.com/repos/2022-GP1-06/actions/secrets/public-key 404
+[debug] [2022-10-13T23:23:15.828Z] <<< [apiv2][body] GET https://api.github.com/repos/2022-GP1-06/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[debug] [2022-10-13T23:23:35.297Z] >>> [apiv2][query] GET https://api.github.com/repos//reemashabibi/2022-GP1-06/actions/secrets/public-key type=owner
+[debug] [2022-10-13T23:23:35.764Z] <<< [apiv2][status] GET https://api.github.com/repos//reemashabibi/2022-GP1-06/actions/secrets/public-key 404
+[debug] [2022-10-13T23:23:35.765Z] <<< [apiv2][body] GET https://api.github.com/repos//reemashabibi/2022-GP1-06/actions/secrets/public-key {"message":"Not Found","documentation_url":"https://docs.github.com/rest"}
+[debug] [2022-10-13T23:23:46.133Z] >>> [apiv2][query] GET https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/public-key type=owner
+[debug] [2022-10-13T23:23:46.906Z] <<< [apiv2][status] GET https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/public-key 200
+[debug] [2022-10-13T23:23:46.906Z] <<< [apiv2][body] GET https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/public-key {"key_id":"568250167242549743","key":"atK2Dq+2lVCryoKdXUJg0vX1ZLGLwE4jyBgHsGI8mHk="}
+[debug] [2022-10-13T23:23:46.908Z] >>> [apiv2][query] GET https://api.github.com/repos/reemashabibi/2022-GP1-06 [none]
+[debug] [2022-10-13T23:23:47.418Z] <<< [apiv2][status] GET https://api.github.com/repos/reemashabibi/2022-GP1-06 200
+[debug] [2022-10-13T23:23:47.418Z] <<< [apiv2][body] GET https://api.github.com/repos/reemashabibi/2022-GP1-06 {"id":542225710,"node_id":"R_kgDOIFG1Lg","name":"2022-GP1-06","full_name":"reemashabibi/2022-GP1-06","private":false,"owner":{"login":"reemashabibi","id":98376931,"node_id":"U_kgDOBd0c4w","avatar_url":"https://avatars.githubusercontent.com/u/98376931?v=4","gravatar_id":"","url":"https://api.github.com/users/reemashabibi","html_url":"https://github.com/reemashabibi","followers_url":"https://api.github.com/users/reemashabibi/followers","following_url":"https://api.github.com/users/reemashabibi/following{/other_user}","gists_url":"https://api.github.com/users/reemashabibi/gists{/gist_id}","starred_url":"https://api.github.com/users/reemashabibi/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/reemashabibi/subscriptions","organizations_url":"https://api.github.com/users/reemashabibi/orgs","repos_url":"https://api.github.com/users/reemashabibi/repos","events_url":"https://api.github.com/users/reemashabibi/events{/privacy}","received_events_url":"https://api.github.com/users/reemashabibi/received_events","type":"User","site_admin":false},"html_url":"https://github.com/reemashabibi/2022-GP1-06","description":null,"fork":false,"url":"https://api.github.com/repos/reemashabibi/2022-GP1-06","forks_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/forks","keys_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/keys{/key_id}","collaborators_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/collaborators{/collaborator}","teams_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/teams","hooks_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/hooks","issue_events_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/issues/events{/number}","events_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/events","assignees_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/assignees{/user}","branches_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/branches{/branch}","tags_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/tags","blobs_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/git/blobs{/sha}","git_tags_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/git/tags{/sha}","git_refs_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/git/refs{/sha}","trees_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/git/trees{/sha}","statuses_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/statuses/{sha}","languages_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/languages","stargazers_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/stargazers","contributors_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/contributors","subscribers_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/subscribers","subscription_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/subscription","commits_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/commits{/sha}","git_commits_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/git/commits{/sha}","comments_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/comments{/number}","issue_comment_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/issues/comments{/number}","contents_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/contents/{+path}","compare_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/compare/{base}...{head}","merges_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/merges","archive_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/{archive_format}{/ref}","downloads_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/downloads","issues_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/issues{/number}","pulls_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/pulls{/number}","milestones_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/milestones{/number}","notifications_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/notifications{?since,all,participating}","labels_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/labels{/name}","releases_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/releases{/id}","deployments_url":"https://api.github.com/repos/reemashabibi/2022-GP1-06/deployments","created_at":"2022-09-27T18:10:45Z","updated_at":"2022-10-11T11:05:28Z","pushed_at":"2022-10-13T21:58:07Z","git_url":"git://github.com/reemashabibi/2022-GP1-06.git","ssh_url":"git@github.com:reemashabibi/2022-GP1-06.git","clone_url":"https://github.com/reemashabibi/2022-GP1-06.git","svn_url":"https://github.com/reemashabibi/2022-GP1-06","homepage":null,"size":10,"stargazers_count":0,"watchers_count":0,"language":"PHP","has_issues":true,"has_projects":true,"has_downloads":true,"has_wiki":true,"has_pages":false,"forks_count":0,"mirror_url":null,"archived":false,"disabled":false,"open_issues_count":0,"license":null,"allow_forking":true,"is_template":false,"web_commit_signoff_required":false,"topics":[],"visibility":"public","forks":0,"open_issues":0,"watchers":0,"default_branch":"main","permissions":{"admin":false,"maintain":false,"push":true,"triage":true,"pull":true},"temp_clone_token":"","allow_squash_merge":true,"allow_merge_commit":true,"allow_rebase_merge":true,"allow_auto_merge":false,"delete_branch_on_merge":false,"allow_update_branch":false,"use_squash_pr_title_as_default":false,"squash_merge_commit_message":"COMMIT_MESSAGES","squash_merge_commit_title":"COMMIT_OR_PR_TITLE","merge_commit_message":"PR_TITLE","merge_commit_title":"MERGE_MESSAGE","network_count":0,"subscribers_count":1}
+[debug] [2022-10-13T23:23:47.421Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts [none]
+[debug] [2022-10-13T23:23:47.421Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts {"accountId":"github-action-542225710","serviceAccount":{"displayName":"GitHub Actions (reemashabibi/2022-GP1-06)","description":"A service account with permission to deploy to Firebase Hosting for the GitHub repository reemashabibi/2022-GP1-06"}}
+[debug] [2022-10-13T23:23:50.879Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts 200
+[debug] [2022-10-13T23:23:50.880Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts [omitted]
+[debug] [2022-10-13T23:23:50.881Z] >>> [apiv2][query] GET https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com [none]
+[debug] [2022-10-13T23:23:50.883Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:getIamPolicy [none]
+[debug] [2022-10-13T23:23:51.910Z] <<< [apiv2][status] GET https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com 200
+[debug] [2022-10-13T23:23:51.910Z] <<< [apiv2][body] GET https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com {"name":"projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com","projectId":"first-intilazation","uniqueId":"109613609414818496238","email":"github-action-542225710@first-intilazation.iam.gserviceaccount.com","displayName":"GitHub Actions (reemashabibi/2022-GP1-06)","etag":"MDEwMjE5MjA=","description":"A service account with permission to deploy to Firebase Hosting for the GitHub repository reemashabibi/2022-GP1-06","oauth2ClientId":"109613609414818496238"}
+[debug] [2022-10-13T23:23:51.936Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:getIamPolicy 200
+[debug] [2022-10-13T23:23:51.936Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:getIamPolicy {"version":1,"etag":"BwXq8r80ksY=","bindings":[{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-217654697689@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:first-intilazation@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:firebase-service-account@firebase-sa-management.iam.gserviceaccount.com","serviceAccount:service-217654697689@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebaseauth.admin","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebasedatabase.admin","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebaserules.system","members":["serviceAccount:service-217654697689@firebase-rules.iam.gserviceaccount.com"]},{"role":"roles/firestore.serviceAgent","members":["serviceAccount:service-217654697689@gcp-sa-firestore.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:441201342@student.ksu.edu.sa","user:441201365@student.ksu.edu.sa","user:Reema.fahad.a99@gmail.com","user:gadeerwaleed@gmail.com"]},{"role":"roles/pubsub.serviceAgent","members":["serviceAccount:service-217654697689@gcp-sa-pubsub.iam.gserviceaccount.com"]}]}
+[debug] [2022-10-13T23:23:51.937Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:setIamPolicy [none]
+[debug] [2022-10-13T23:23:51.937Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:setIamPolicy {"policy":{"version":1,"etag":"BwXq8r80ksY=","bindings":[{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-217654697689@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:first-intilazation@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:firebase-service-account@firebase-sa-management.iam.gserviceaccount.com","serviceAccount:service-217654697689@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebaseauth.admin","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com","serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebasedatabase.admin","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebaserules.system","members":["serviceAccount:service-217654697689@firebase-rules.iam.gserviceaccount.com"]},{"role":"roles/firestore.serviceAgent","members":["serviceAccount:service-217654697689@gcp-sa-firestore.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:441201342@student.ksu.edu.sa","user:441201365@student.ksu.edu.sa","user:Reema.fahad.a99@gmail.com","user:gadeerwaleed@gmail.com"]},{"role":"roles/pubsub.serviceAgent","members":["serviceAccount:service-217654697689@gcp-sa-pubsub.iam.gserviceaccount.com"]},{"role":"roles/serviceusage.apiKeysViewer","members":["serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebasehosting.admin","members":["serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/run.viewer","members":["serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]}]},"updateMask":"bindings"}
+[debug] [2022-10-13T23:23:53.466Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:setIamPolicy 200
+[debug] [2022-10-13T23:23:53.466Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/first-intilazation:setIamPolicy {"version":1,"etag":"BwXq8s1xnzk=","bindings":[{"role":"roles/cloudfunctions.serviceAgent","members":["serviceAccount:service-217654697689@gcf-admin-robot.iam.gserviceaccount.com"]},{"role":"roles/editor","members":["serviceAccount:first-intilazation@appspot.gserviceaccount.com"]},{"role":"roles/firebase.managementServiceAgent","members":["serviceAccount:firebase-service-account@firebase-sa-management.iam.gserviceaccount.com","serviceAccount:service-217654697689@gcp-sa-firebase.iam.gserviceaccount.com"]},{"role":"roles/firebase.sdkAdminServiceAgent","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebaseauth.admin","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com","serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebasedatabase.admin","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebasehosting.admin","members":["serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/firebaserules.system","members":["serviceAccount:service-217654697689@firebase-rules.iam.gserviceaccount.com"]},{"role":"roles/firestore.serviceAgent","members":["serviceAccount:service-217654697689@gcp-sa-firestore.iam.gserviceaccount.com"]},{"role":"roles/iam.serviceAccountTokenCreator","members":["serviceAccount:firebase-adminsdk-xt4xg@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/owner","members":["user:441201342@student.ksu.edu.sa","user:441201365@student.ksu.edu.sa","user:Reema.fahad.a99@gmail.com","user:gadeerwaleed@gmail.com"]},{"role":"roles/pubsub.serviceAgent","members":["serviceAccount:service-217654697689@gcp-sa-pubsub.iam.gserviceaccount.com"]},{"role":"roles/run.viewer","members":["serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]},{"role":"roles/serviceusage.apiKeysViewer","members":["serviceAccount:github-action-542225710@first-intilazation.iam.gserviceaccount.com"]}]}
+[debug] [2022-10-13T23:23:53.466Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com/keys [none]
+[debug] [2022-10-13T23:23:53.466Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com/keys {"keyAlgorithm":"KEY_ALG_UNSPECIFIED","privateKeyType":"TYPE_GOOGLE_CREDENTIALS_FILE"}
+[debug] [2022-10-13T23:23:54.672Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com/keys 200
+[debug] [2022-10-13T23:23:54.672Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com/keys {"name":"projects/first-intilazation/serviceAccounts/github-action-542225710@first-intilazation.iam.gserviceaccount.com/keys/70bf9c80c488c0df4d35dd0216c0916574744573","privateKeyType":"TYPE_GOOGLE_CREDENTIALS_FILE","privateKeyData":"ewogICJ0eXBlIjogInNlcnZpY2VfYWNjb3VudCIsCiAgInByb2plY3RfaWQiOiAiZmlyc3QtaW50aWxhemF0aW9uIiwKICAicHJpdmF0ZV9rZXlfaWQiOiAiNzBiZjljODBjNDg4YzBkZjRkMzVkZDAyMTZjMDkxNjU3NDc0NDU3MyIsCiAgInByaXZhdGVfa2V5IjogIi0tLS0tQkVHSU4gUFJJVkFURSBLRVktLS0tLVxuTUlJRXZnSUJBREFOQmdrcWhraUc5dzBCQVFFRkFBU0NCS2d3Z2dTa0FnRUFBb0lCQVFER1ByRkhrVGNGREhDdlxubUJNN2VaWEZ2N3djSDQ3bHhneGJFQzBJOGwyc0RWSWk1K285VXAvdk10SlFvTzFWUjFzZjdoU2s0cGo5WmNNalxuenJXOFJKRm85emhLcFNiRXJMSSswT0JNWTRiRFNyY1F1Y2x6Z2k2Z2wwZXNlMWt2NGpqMTdXQ2Nselg5TE1YRVxuLzJNK2lzY3ZmWm1jNzhkZm1reDliQzdGSkRqMVBYR1prQ3c5UjVwcGdTY0FLbFRBZmdEMTYxektIVjZJUUh3SFxuNkhrNWxlaFdpRWNXeE5Na2tvMndJbktGOXhZeGxFQ3c4VWppSmJYVENqUHNEb1RnOTFzeGlFb0RhaW1JV05GV1xud1c3VVZZdnFjWnpJZkszRWJrdDVOU20va3RMN21WbUxYZ1FjNmxzMHJtcFBLQVg1Vlh3dHk5bzVhZEVFTW1vK1xuUXhIYitvQnZBZ01CQUFFQ2dnRUFEOTVvMW0rN1ZiNGZMdzhmU3YxNmphL0JZUWJ0cTFybEZrei9MZDRvdldMN1xubGl1MlJsNWN5d3JvWnVmYTE1NjBucU95SjFpMEltU0k4RTdWb1ZKanlXRXdzbGp4OTRCVGJFL1FCSTFhOWpyK1xuMkdubXhFWkJjVDFxMFZXMlYremwzbG00Q0JEYWszK0gvVExzUU05ZkRtQWhjYnlIMnhGQTJqRlV0UmNuTUFvdFxuQXM4SVRWQlNVbGVUN3NOcmNaUXpCL2ZyWU96RW0wUXdVNDdTc2p2cHJHSHc0eVZzV0J4d1ZJZ0NWblBBdUFDWVxuellDMVE2UlBsZDlFenplUy9OcTg5QzNRU0RTZU1DQXFXRzQ1UE5LQXBYYmcxUFNpMnJ4M3J4Uk9Rd3VVOHVEaFxucU9abnV3d1BnTzhtcDVjZDZCb3Zta2V5TUF6UkMrOEo0MTF2WXdlbDhRS0JnUURoVUdPbnZ0ZEZVcnZoSllLSVxubldUelFMeTZIRkJ1SC9malBocFNJWE5HNDVudFJuYmlwam5ZVGNuRjB0MVhYR3g0cDBoM0VVMDBnckxtVDBnb1xuOUp0eDZhVmJ3bnZackNEdE9ZN09XYW1WNnRpS1dUaVdpQUJWZytwWndLZjJCRTUwQkMzTXplTC9BVU44Um5hN1xuQkNaYWVQbWNyVnA0Mld1Y0VsMWhmaTVxSXdLQmdRRGhQb2lZbFEwWHc5RXFtNHFDQXVocmZjd3cxcGJrZjZzWFxuMzV4MmZOT3RvbUh4VktIbUVzRlA3cTBOKzRPVkVwUDZmYnBBa3BsTW1oVmtJa1U2Q1NuelNlWUlCTVE2V2pOSFxuN1lyR010b21tcHRtWUkzN1dvWGFFVFN3bWRBNEdhZklwbEdwVklFaXc3dkMzQUQxSEFZT3B1WWdxNkg3SHBLWlxuV2VZajVtSlhSUUtCZ0hXNURQaWVTOWZhckhPc3A1RTl1M3NsZmZZM3lRWmhDYUhmMXR6R3dYWnVnUVJxWnI5eFxuWHBQWHdPN3RoOXlYVzgyR2llUThVL3gxdFllRU1RM0ZFRnJxV3cyZ2hobHJTQ0RxaStUaEVDeFdjaUdIRUh3R1xuUHpadklFa1kwaWxHZ3I4M1Y3N0ViREFVdHUvOTJSZEp5Y2hIb1JQdHQzR2hHQXFKeGVTa2l4ZkZBb0dCQUxjZVxuUDY3TWZuaHptZmtwdXRFM3kveVhxUW1MYStFWWFlQmV5clVKaG80REZkMDlFT0liSFUzK25ISmhwL2Zwd3FSQ1xuMHNqc1pmVUF6Nk00dVU4VlpDV0dUcHoyUXhHdGcwTld1eHVtKy9PbWZmQWRUMUNwcDJoQjFMUStXQ2xEc2tSTlxuOHRYVy9hVmx1NkFQZkRmSk1LTjR6RjZES28wZHJkRStaUHVLc1NpQkFvR0JBSkxSWlQwVG9SejhrWkRZMGo2YVxuNWRnYWRiK3FvaDlKYk83VnExcWY5T3dSSnlmNko0VVFCT05Od05sZVFnZlBZMVduQ3JCaTNKRXRkcFlWUU9pUVxuWmhLYkhsM0wxdE11RW1GOEg1UVJTbGl0YVpxMjh5RFo1dVU4TFZ6elpranFITjlzdmFqSkJjczIzOTVISlVyeVxuRjBaS0RCTjk4MG5oZkU3d2NRRC9iREp1XG4tLS0tLUVORCBQUklWQVRFIEtFWS0tLS0tXG4iLAogICJjbGllbnRfZW1haWwiOiAiZ2l0aHViLWFjdGlvbi01NDIyMjU3MTBAZmlyc3QtaW50aWxhemF0aW9uLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwKICAiY2xpZW50X2lkIjogIjEwOTYxMzYwOTQxNDgxODQ5NjIzOCIsCiAgImF1dGhfdXJpIjogImh0dHBzOi8vYWNjb3VudHMuZ29vZ2xlLmNvbS9vL29hdXRoMi9hdXRoIiwKICAidG9rZW5fdXJpIjogImh0dHBzOi8vb2F1dGgyLmdvb2dsZWFwaXMuY29tL3Rva2VuIiwKICAiYXV0aF9wcm92aWRlcl94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL29hdXRoMi92MS9jZXJ0cyIsCiAgImNsaWVudF94NTA5X2NlcnRfdXJsIjogImh0dHBzOi8vd3d3Lmdvb2dsZWFwaXMuY29tL3JvYm90L3YxL21ldGFkYXRhL3g1MDkvZ2l0aHViLWFjdGlvbi01NDIyMjU3MTAlNDBmaXJzdC1pbnRpbGF6YXRpb24uaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iCn0K","validAfterTime":"2022-10-13T23:23:54Z","validBeforeTime":"9999-12-31T23:59:59Z","keyAlgorithm":"KEY_ALG_RSA_2048","keyOrigin":"GOOGLE_PROVIDED","keyType":"USER_MANAGED"}
+[info] 
+[info] ✔  Created service account github-action-542225710 with Firebase Hosting admin permissions. 
+[debug] [2022-10-13T23:23:54.693Z] >>> [apiv2][query] PUT https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/FIREBASE_SERVICE_ACCOUNT_FIRST_INTILAZATION [none]
+[debug] [2022-10-13T23:23:54.693Z] >>> [apiv2][body] PUT https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/FIREBASE_SERVICE_ACCOUNT_FIRST_INTILAZATION {"encrypted_value":"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","key_id":"568250167242549743"}
+[debug] [2022-10-13T23:23:55.383Z] <<< [apiv2][status] PUT https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/FIREBASE_SERVICE_ACCOUNT_FIRST_INTILAZATION 201
+[debug] [2022-10-13T23:23:55.383Z] <<< [apiv2][body] PUT https://api.github.com/repos/reemashabibi/2022-GP1-06/actions/secrets/FIREBASE_SERVICE_ACCOUNT_FIRST_INTILAZATION {}
+[info] ✔  Uploaded service account JSON to GitHub as secret FIREBASE_SERVICE_ACCOUNT_FIRST_INTILAZATION. 
+[info] i  You can manage your secrets at https://github.com/reemashabibi/2022-GP1-06/settings/secrets. 
+[info] 
+[info] 
+[info] ✔  Created workflow file /Users/njoudalfahad/Downloads/2022-GP1-06/.github/workflows/firebase-hosting-pull-request.yml 
+[info] 
+[info] ✔  Created workflow file /Users/njoudalfahad/Downloads/2022-GP1-06/.github/workflows/firebase-hosting-merge.yml 
+[info] 
+[info] i  Action required: Visit this URL to revoke authorization for the Firebase CLI GitHub OAuth App: 
+[info] https://github.com/settings/connections/applications/89cf50f02ac6aaed3484
+[info] i  Action required: Push any new workflow file(s) to your repo 
+[info] 
+=== Storage Setup
+[info] 
+[info] Firebase Storage Security Rules allow you to define how and when to allow
+[info] uploads and downloads. You can keep these rules in your project directory
+[info] and publish them with firebase deploy.
+[info] 
+[info] ✔  Wrote storage.rules 
+[info] 
+=== Emulators Setup
+[info] i  firestore: downloading cloud-firestore-emulator-v1.15.1.jar... {"metadata":{"emulator":{"name":"firestore"},"message":"downloading cloud-firestore-emulator-v1.15.1.jar..."}}
+[debug] [2022-10-13T23:25:28.696Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.15.1.jar 
+[debug] [2022-10-13T23:25:31.348Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.15.1.jar 200
+[debug] [2022-10-13T23:25:31.349Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.15.1.jar [stream]
+[info] i  database: downloading firebase-database-emulator-v4.10.0.jar... {"metadata":{"emulator":{"name":"database"},"message":"downloading firebase-database-emulator-v4.10.0.jar..."}}
+[debug] [2022-10-13T23:25:44.966Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/firebase-database-emulator-v4.10.0.jar 
+[debug] [2022-10-13T23:25:45.670Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/firebase-database-emulator-v4.10.0.jar 200
+[debug] [2022-10-13T23:25:45.670Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/firebase-database-emulator-v4.10.0.jar [stream]
+[info] i  pubsub: downloading pubsub-emulator-0.1.0.zip... {"metadata":{"emulator":{"name":"pubsub"},"message":"downloading pubsub-emulator-0.1.0.zip..."}}
+[debug] [2022-10-13T23:25:53.548Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.1.0.zip 
+[debug] [2022-10-13T23:25:54.476Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.1.0.zip 200
+[debug] [2022-10-13T23:25:54.476Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/pubsub-emulator-0.1.0.zip [stream]
+[info] i  storage: downloading cloud-storage-rules-runtime-v1.1.1.jar... {"metadata":{"emulator":{"name":"storage"},"message":"downloading cloud-storage-rules-runtime-v1.1.1.jar..."}}
+[debug] [2022-10-13T23:26:08.060Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-storage-rules-runtime-v1.1.1.jar 
+[debug] [2022-10-13T23:26:08.616Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-storage-rules-runtime-v1.1.1.jar 200
+[debug] [2022-10-13T23:26:08.616Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-storage-rules-runtime-v1.1.1.jar [stream]
+[info] i  ui: downloading ui-v1.11.1.zip... {"metadata":{"emulator":{"name":"ui"},"message":"downloading ui-v1.11.1.zip..."}}
+[debug] [2022-10-13T23:26:18.191Z] >>> [apiv2][query] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.11.1.zip 
+[info] 
+=== Remoteconfig Setup
+[debug] [2022-10-13T23:26:18.726Z] <<< [apiv2][status] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.11.1.zip 200
+[debug] [2022-10-13T23:26:18.726Z] <<< [apiv2][body] GET https://storage.googleapis.com/firebase-preview-drop/emulator/ui-v1.11.1.zip [stream]
