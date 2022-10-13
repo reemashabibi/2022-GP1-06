@@ -11,6 +11,7 @@
     echo "Hi";
     echo "commit";
     echo "commit2";
+    echo "commit3";
     ?>
 </body>
 </html>
