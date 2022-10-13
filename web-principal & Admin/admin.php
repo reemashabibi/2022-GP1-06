@@ -7,6 +7,10 @@
     <title>Document</title>
 </head>
 <body>
-
+    <?php
+    echo "Hi";
+    echo "commit";
+    echo "commit2";
+    ?>
 </body>
 </html>
