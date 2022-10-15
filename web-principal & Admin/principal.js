@@ -49,5 +49,55 @@ docsSnap.forEach(doc => {
     console.log(doc.data());
 });
 
+export async function callAdmins(pid){
+  const q = query(collection(db, "Admin"), where("schoolID", "==", pid ));
+  var i=0;
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+  
+    var data = doc.data();
+    var firstName = data.FirstName;
+    var lastName = data.LastName;
+    var email = data.Email
 
- 
+    const div1 = document.createElement("div");
+    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30";
+    document.getElementById("bigdiv").appendChild(div1);
+    const div2 = document.createElement("div");
+    div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap";
+    div1.appendChild(div2);
+    const div3 = document.createElement("div");
+    div3.className= "img-holder mr-md-4 mb-md-0 mb-4 mx-auto mx-md-0 d-md-none d-lg-flex";
+    div2.appendChild(div3);
+    const numberlist = document.createTextNode(++i);
+    div3.appendChild(numberlist);
+    const div4 = document.createElement("div");
+    div4.className= "job-content";
+    div2.appendChild(div4);
+    const h5 = document.createElement('h5');
+    h5.className="text-center text-md-left";
+    h5.appendChild( document.createTextNode(firstName+" "+lastName));
+    div4.appendChild(h5);
+   
+    const ul1 = document.createElement("ul");
+    ul1.className="d-md-flex flex-wrap text-capitalize ff-open-sans";
+    div4.appendChild(ul1);
+    const li1= document.createElement('li');
+    li1.className="mr-md-4";
+    ul1.appendChild(li1);
+    const i1= document.createElement("i");
+    i1.appendChild(document.createTextNode(email));
+    i1.className="zmdi zmdi-email mr-2";
+    li1.appendChild(i1);
+    const div5 = document.createElement("div");
+    div5.className="job-right my-4 flex-shrink-0";
+    const a1= document.createElement('a');
+    a1.className="btn d-block w-100 d-sm-inline-block btn-light";
+    a1.appendChild(document.createTextNode("حذف الإداري"));
+    div5.appendChild(a1);
+    div1.appendChild(div5);
+
+  });
+
+}
