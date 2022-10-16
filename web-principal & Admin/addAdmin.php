@@ -4,60 +4,61 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <link rel="stylesheet" href="addAdminStyle.css" />
-
-
-<title>إضافة إداري</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- Custom Theme files -->
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-<!-- //Custom Theme files -->
-<!-- web font -->
-<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
-<!-- //web font -->
+    <title>Document</title>
 </head>
-
-
 <body>
-	<!-- main -->
-	<div class="main-w3layouts wrapper">
-		<h1>إضافة إداري</h1>
-		<div class="main-agileinfo">
-			<div class="agileits-top">
-				<form action="#" method="post">
-
-					<input class="text" type="text" name="First Name" placeholder="الاسم الأول" required="">
-
-                    <br>
-                    <br>
-					<input class="text" type="text" name="Last Name" placeholder="الاسم الأخير" required="">
-                    <br>
-
-					<input class="text email" type="email" name="email" placeholder="البريد الإلكتروني" required="">
-
-			<!--		<input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required=""> -->
-					<div class="wthree-text">
-						<div class="clear"> </div>
-					</div>
-					<input type="submit" value="إضافة">
-				</form>
-				
-			</div>
-		</div>
-	
-	</div>
-
     
+
+<div class="page">
+  <div class="container">
+    <div class="left">
+      <div class="login">Login</div>
+      <div class="eula">By logging in you agree to the ridiculously long terms that you didn't bother to read</div>
+    </div>
+    <div class="right">
+      <svg viewBox="0 0 320 300">
+        <defs>
+          <linearGradient
+                          inkscape:collect="always"
+                          id="linearGradient"
+                          x1="13"
+                          y1="193.49992"
+                          x2="307"
+                          y2="193.49992"
+                          gradientUnits="userSpaceOnUse">
+            <stop
+                  style="stop-color:#ff00ff;"
+                  offset="0"
+                  id="stop876" />
+            <stop
+                  style="stop-color:#ff0000;"
+                  offset="1"
+                  id="stop878" />
+          </linearGradient>
+        </defs>
+        <path d="m 40,120.00016 239.99984,-3.2e-4 c 0,0 24.99263,0.79932 25.00016,35.00016 0.008,34.20084 -25.00016,35 -25.00016,35 h -239.99984 c 0,-0.0205 -25,4.01348 -25,38.5 0,34.48652 25,38.5 25,38.5 h 215 c 0,0 20,-0.99604 20,-25 0,-24.00396 -20,-25 -20,-25 h -190 c 0,0 -20,1.71033 -20,25 0,24.00396 20,25 20,25 h 168.57143" />
+      </svg>
+      <div class="form">
+        <label for="email">Email</label>
+        <input type="email" id="email">
+        <label for="password">Password</label>
+        <input type="password" id="password">
+        <input type="submit" id="submit" value="Submit">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 <!-- randomly generated pass -->
 <?php
 $comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 $shfl = str_shuffle($comb);
 $pwd = substr($shfl,0,8);
 ?>
-
 </body>
 </html>
+
+
+

@@ -1,10 +1,4 @@
-/*--
-Author: Colorlib
-Author URL: https://colorlib.com
-License: Creative Commons Attribution 3.0 Unported
-License URL: http://creativecommons.org/licenses/by/3.0/
---*/
-/*-- reset --*/
+
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, dl, dt, dd, ol, nav ul, nav li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
     margin: 0;
     padding: 0;
@@ -38,6 +32,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     border-spacing: 0;
   }
   
+
   /*-- start editing from here --*/
   a {
     text-decoration: none;
@@ -49,7 +44,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   
   /* text align right */
   .txt-lt {
-    text-align: left;
+    text-align: right;
   }
   
   /* text align left */
@@ -64,7 +59,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   
   /* float right */
   .float-lt {
-    float: left;
+    float: right;
   }
   
   /* float left */
@@ -109,7 +104,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
   
   /*-- end reset --*/
   body {
-    background: #76b852;
+    background: #CCCCFF;
     /* fallback for old browsers */
     background: -webkit-linear-gradient(to top, #76b852, #8DC26F);
     background: -moz-linear-gradient(to top, #76b852, #8DC26F);
@@ -326,8 +321,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
     }
   }
   
-  /*-- //checkbox --*/
-  /*-- copyright --*/
+
   .colorlibcopy-agile {
     margin: 2em 0 1em;
     text-align: center;
