@@ -7,7 +7,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: linear-gradient(45deg, rgb(233, 246, 247), dodgerblue);
+  background: linear-gradient(45deg, rgb(233, 246, 247), #ccc);
   font-family: "Sansita Swashed", cursive;
 }
 .center {
@@ -67,11 +67,31 @@ body {
 }
 .center .inputbox [type="button"] {
   width: 50%;
-  background: dodgerblue;
+  background: #ccc;
   color: #fff;
   border: #fff;
   text-align: center;
 }
 .center .inputbox:hover [type="button"] {
-  background: linear-gradient(45deg, rgb(198, 218, 253), dodgerblue);
+  background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
+}
+
+
+/* Add some hover effects to buttons */
+.center .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+
+/* Set a style for the submit/login button */
+.center .btn {
+  border-radius: 10px;
+  background-color: #4ebfc1;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
 }

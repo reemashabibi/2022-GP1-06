@@ -6,7 +6,7 @@
   import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   import { collection, getDocs, addDoc, Timestamp, deleteDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-  //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+  import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
   import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
  // import firebase from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
   //import "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -44,9 +44,9 @@ getDocs(colRefClass)
     snapshot.docs.forEach(doc => {
       //levels.push({ ...doc.data(), id: doc.id })
       const new_op = document.createElement("option");
-      new_op.setAttribute("id", doc.id);
-      new_op.innerHTML = doc.data().ClassName +" Level: "+ doc.data().Level ;
-      document.getElementById("class").appendChild(new_op);
+      new_op.innerHTML = doc.data().ClassName +":فصل:"+ doc.data().Level+"مستوى" ;
+      new_op.setAttribute("id" ,doc.id );
+      document.getElementById("classes").appendChild(new_op);
     })
     //console.log(levels)
   })
@@ -54,27 +54,42 @@ getDocs(colRefClass)
 
 
 //add student info
-
 const colRefStudent = collection(db, "Student");
-
-const selectedClass = document.getElementById("class").selectedIndex.id;
-//const selectedClassID = selectedClass.options[selectedClass.selectedIndex].id;
-
-
+const selectedClass = document.getElementById("classes");
+//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
 
 const addStudentForm = document.querySelector('.add')
-
-addStudentForm.addEventListener('submit', (e) => {
+email = document.getElementById( "email" ).value;
+addStudentForm.addEventListener('submit', async (e) => {
   e.preventDefault()
-  alert(selectedClass)
+
+  const q = query(collection(db, "Parent"), where("Email", "==", addStudentForm.email.value));
+  const querySnapshot = await getDocs(q);
+  var parentId = "null";
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+   // console.log(doc.id, " => ", doc.data());
+    if(!doc.empty)
+    parentId = doc.id;
+  }); 
+  if(parentId == "null"){
+    alert("ولي الأمر غير مسجل");
+    e.stopPropagation();
+    }
+ 
+
   addDoc(colRefStudent, {
     FirstName: addStudentForm.Fname.value,
     LastName: addStudentForm.Lname.value,
-    ClassID: "/Class/"+selectedClass,
-
-    
+    ClassID: "/Class/"+selectedClass[selectedClass.selectedIndex].id,
+    ParentID:  "/Parent/"+parentId,
   })
   .then(() => { 
     addStudentForm.reset()
   })
-})
+});
+
+
+
+
+//add parent info
