@@ -45,7 +45,7 @@ getDocs(colRefClass)
       //levels.push({ ...doc.data(), id: doc.id })
       const new_op = document.createElement("option");
       new_op.setAttribute("id", doc.id);
-      new_op.innerHTML = doc.data().ClassName +" Level: "+ doc.data().Level;
+      new_op.innerHTML = doc.data().ClassName +" Level: "+ doc.data().Level ;
       document.getElementById("class").appendChild(new_op);
     })
     //console.log(levels)
@@ -57,20 +57,24 @@ getDocs(colRefClass)
 
 const colRefStudent = collection(db, "Student");
 
-//const selectedClass = document.getElementById('class').value;
+const selectedClass = document.getElementById("class").selectedIndex.id;
+//const selectedClassID = selectedClass.options[selectedClass.selectedIndex].id;
+
+
 
 const addStudentForm = document.querySelector('.add')
-//const selectedLevelNum = selectedLevel.options[selectedLevel.selectedIndex].text;
+
 addStudentForm.addEventListener('submit', (e) => {
   e.preventDefault()
-  alert(addStudentForm.level.value),
+  alert(selectedClass)
   addDoc(colRefStudent, {
     FirstName: addStudentForm.Fname.value,
     LastName: addStudentForm.Lname.value,
-    ClassID: addClassForm.class.id,
+    ClassID: "/Class/"+selectedClass,
+
     
   })
   .then(() => { 
-    addClassForm.reset()
+    addStudentForm.reset()
   })
 })

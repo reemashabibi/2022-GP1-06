@@ -14,7 +14,7 @@
 
 <div class="center">
   <h1>إضافة طالب</h1>
-  <form id="add">
+  <form class="add">
 
   <div class="inputbox">
       <input id="Fname" type="text" required="required">
@@ -27,14 +27,14 @@
     </div>
 
     <div class="inputbox" ">
-      <select style="  margin-top: 15px; padding: 10px; background:#ccc; border: 2px solid #000; width:40%; height: 30px; text-align:center; " name="class" id="class" required="required">
-            <option value="non"></option>
+      <select style="  margin-top: 15px; padding: 10px; background:#ccc; border: 2px solid #000; width:40%; height: 30px; text-align:center; " id="class" name="class" required>
+            <option id="nonID" value="non"></option>
         </select>
       <span style="border: 2px solid #000; width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">الفصل</span>
     </div>
 
     <div class="inputbox">
-      <input type="text" required="required">
+      <input type="text" required>
       <span>البريد الإلكتروني لولي الأمر</span>
       <label for="" ><br><br><br><a href="#" onclick="openForm()" class="open-button" style=" display: flex; justify-content: right;">ولي أمر جديد</a></label>
     </div>
@@ -42,7 +42,7 @@
     
     <div class="inputbox">
         <button>إضافة</button>
-      <input type="button" value="إضافة">
+     
     </div>
   </form>
 </div>
