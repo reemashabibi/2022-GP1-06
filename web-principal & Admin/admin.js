@@ -3,7 +3,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-  import { collection, getDocs, addDoc, Timestamp  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+  import { collection, getDocs, addDoc, Timestamp,getDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
   import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -28,7 +28,7 @@
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  export { app, db, collection, getDocs, Timestamp, addDoc };
+  export { app, db, collection, getDocs, Timestamp, addDoc, doc };
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
@@ -51,3 +51,159 @@ docsSnap.forEach(doc => {
 
 
  
+export async function classes(pid){
+  const refrence = doc(db, "School", pid);
+  const q = query(collection(db, "Class"), where("schoolID", "==", refrence ));
+
+  const querySnapshot = await getDocs(q);
+ 
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+ 
+    var className = doc.data().ClassName;
+    var level = doc.data().Level;
+    
+    const div1 = document.createElement("div");
+    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab";
+  div1.id= doc.id;
+  div1.onclick = function () {
+    location.href = "students.php?c='"+div1.id+"'&s='"+pid+"'";
+};
+    document.getElementById("bigdiv").appendChild(div1);
+    const div2 = document.createElement("div");
+    div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap ";
+    div1.appendChild(div2);
+ 
+    const div4 = document.createElement("div");
+    div4.className= "job-content";
+    div2.appendChild(div4);
+    const h5 = document.createElement('h5');
+    h5.className="text-center text-md-left";
+    h5.appendChild( document.createTextNode(className+"-"+level));
+    div4.appendChild(h5);
+   
+   
+    const div5 = document.createElement("div");
+    div5.className="job-right my-4 flex-shrink-0";
+    const a1= document.createElement('a');
+    a1.className="btn d-block w-100 d-sm-inline-block btn-light";
+    a1.appendChild(document.createTextNode("تعيين معلم"));
+    a1.onclick = function () {
+      location.href = "teacherClass.php";
+  };
+    div5.appendChild(a1);
+    div1.appendChild(div5);
+
+
+
+  });
+
+}
+
+export async function viewStudents(classId,school){
+  const refrence = doc(db, "Class", classId);
+  
+
+  //for dropdown
+  var classes= [];
+  const srefrence = doc(db, "School", school);
+  const qc = query(collection(db, "Class"), where("schoolID", "==", srefrence ));
+
+  const querySnapshotc = await getDocs(qc);
+  querySnapshotc.forEach((doc) => {
+    var className = doc.data().ClassName;
+    var level = doc.data().Level;
+    var id = doc.id;
+    classes.push(id);
+    classes.push(className);
+    classes.push(level);
+  });
+
+//end of dropdown data
+  const q = query(collection(db, "Student"), where("ClassID", "==", refrence ));
+  
+  const querySnapshot = await getDocs(q);
+
+  querySnapshot.forEach(async (d) => {
+    // doc.data() is never undefined for query doc snapshots
+    var firstName = d.data().FirstName;
+    var lastName = d.data().LastName;
+    var parentId = d.data().ParentID;
+    
+    alert("i%2 loop");
+    var phone = 0;
+    var email = "";
+
+    if(parentId) {
+      let data = await getDoc(parentId);
+      if(data.exists()) {
+        phone = data.data().PhoneNumber;
+   email =data.data().Email;
+      }
+    }
+ 
+   
+    var tr = document.createElement('tr');
+    var td = document.createElement('td');
+    td.style.width =  "20%";
+    tr.appendChild(td);
+    
+     
+    var a2 = document.createElement('a');
+    a2.className = "table-link danger";
+    td.appendChild(a2);
+    var span2 =document.createElement('span');
+    span2.className="fa-stack";
+    a2.appendChild(span2);
+    var i3 =  document.createElement('i');
+    var i4 = document.createElement('i');
+    i3.className="fa fa-square fa-stack-2x";
+    i4.className="fa fa-trash-o fa-stack-1x fa-inverse";
+    i4.id=d.id;
+    span2.appendChild(i3);
+    span2.appendChild(i4);
+
+    var dropdown = document.createElement("select");
+    dropdown.name= "transferClass";
+    td.appendChild(dropdown);
+    
+    
+    for(var i=0; i<classes.length;i++){
+      var option = document.createElement("option");
+      if(i%2 == 0){
+       
+        
+        option.value = classes[i];
+      }
+      else{
+        option.innerHTML = classes[i]+"-"+classes[++i];
+        dropdown.appendChild(option);
+      }
+      
+    }
+    
+    var td2 = document.createElement('td');
+    td2.innerHTML= phone;
+    tr.appendChild(td2);
+
+    var td3 = document.createElement('td');
+    var a3 = document.createElement('a');
+    a3.innerHTML=email;
+    td3.appendChild(a3);
+    tr.appendChild(td3);
+
+    var td4 = document.createElement('td');
+    var a4 = document.createElement('a');
+    a4.innerHTML=firstName+" "+lastName;
+    td4.appendChild(a4);
+    tr.appendChild(td4);
+
+    document.getElementById('schedule').appendChild(tr);
+
+  });
+
+}
+
+
+
+//drop down

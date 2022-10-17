@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
-$_GET['pid'] = "POTur2qxIKmSafOghaFn ";
+$_GET['pid'] = "POTur2qxIKmSafOghaFn";
 $pid = $_GET['pid'];
 echo "<script type='module'>import { callAdmins } from './principal.js';
 document.getElementsByTagName('body').onload = callAdmins('$pid');</script>";
