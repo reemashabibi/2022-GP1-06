@@ -30,7 +30,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
                     <div class="section-title text-center ">
                     <h3 class="topTitle">لائحة الصفوف</h3>
 
-                        <button class="button-36 topTitle" onclick="location.href='addAdmin?class.php'"  >إضافة صف</button>
+                        <button class="button-36 topTitle addNewClass" onclick="location.href='addAdmin?class.php'"  >إضافة صف</button>
                        
                     </div>
                 </div>
@@ -57,7 +57,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
                     <div class="section-title text-center ">
                     <h3 class="topTitle">لائحة المعلمين</h3>
 
-                        <button class="button-36 topTitle" onclick="location.href='addAdmin.php'"  >إضافة معلم</button>
+                        <button class="button-36 topTitle addTeacher" onclick="location.href='addAdmin.php'"  >إضافة معلم</button>
                        
                     </div>
                 </div>
