@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <?php
+echo "<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>";
 $_GET['pid'] = 'POTur2qxIKmSafOghaFn';
 $pid = $_GET['pid'];
 echo "<script type='module'>import { addClass } from './admin.js';
@@ -7,6 +8,7 @@ document.getElementById('btn').onclick = function() {
   addClass('$pid');
 }
 </script>";
+
 ?>
 
 <html lang="en">
@@ -17,7 +19,7 @@ document.getElementById('btn').onclick = function() {
     <title>Document</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
-   
+
 </head>
 <body>
 <div class="center">

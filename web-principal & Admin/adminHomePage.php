@@ -30,11 +30,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
                     <div class="section-title text-center ">
                     <h3 class="topTitle">لائحة الصفوف</h3>
 
-<<<<<<< HEAD
-                        <button class="button-36 topTitle addNewClass" onclick="location.href='addAdmin?class.php'"  >إضافة صف</button>
-=======
                         <button class="button-36 topTitle" onclick="location.href='class.php'"  >إضافة صف</button>
->>>>>>> 52f7fa7 (add class form,)
                        
                     </div>
                 </div>
