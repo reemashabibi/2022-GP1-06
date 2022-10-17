@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسجيل</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <!-- CSS is not finished yet -->
+    <style>
+        body{ 
+            display: flex ;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mb-5">
+        <h3 class="mb-3">سجل مدرستك في حلقة</h3>
+        <input type="text" placeholder="اسم المدرسة" id="snameInp"  class="form-control mb-3" >
+        <input type="text" placeholder="رقم/اسم الفرع" id="bnumInp"  class="form-control mb-3" >
+        <input type="text" placeholder="الاسم الأول لمدير المدرسة" id="fnameInp"  class="form-control mb-3" >
+        <input type="text" placeholder="الاسم الأخير لمدير المدرسة" id="lnameInp"  class="form-control mb-3" >
+        <input type="text" placeholder="البريد الإلكتروني" id="emailInp"  class="form-control mb-3" >
+        <input type="text" placeholder="كلمة السر" id="passInp" class="form-control mb-3" >
+        
+        <button type="text" id="subButton" class="btn w-100 btn-outline-primary mb-3" >تسجيل</button>
+        <a href="index.html" class=" badge-secondary py-1 w-100" > لديك حساب ؟</a>
+    </div>
+
+
+
+
+
+
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        const firebaseConfig = {
+             apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+             authDomain: "halaqa-89b43.firebaseapp.com",
+             projectId: "halaqa-89b43",
+             storageBucket: "halaqa-89b43.appspot.com",
+             messagingSenderId: "969971486820",
+             appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+             measurementId: "G-PCYTHJF1SD"
+        };
+        const app = initializeApp(firebaseConfig);
+        import {getDatabase ,ref , set ,child ,get }
+           from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+           const db = getDatabase();
+
+
+           const schoolName=document.getElementById("snameInp");
+           const BranchNumber=document.getElementById("bnumInp");
+           const FirstName=document.getElementById("fnameInp");
+           const LastName=document.getElementById("lnameInp");
+           const Email=document.getElementById("emailInp");
+           const Password=document.getElementById("passInp");
+           const submit=document.getElementById("subButton");
+
+           submit.addEventListener('click', RegisterSchool); 
+
+
+           function isEmpty(str){
+            return str === null || str.match(/^ *$/)!== null;
+           }
+
+           function validation(){
+            
+            let nameregex=/^[a-zA-Z]+$/;
+            let schoolregex=/^[a-zA-Z0-9]+$/;
+            let email =/^[a-zA-Z0-9]+@[a-zA-Z]\.com$/
+            if (!nameregex.test(FirstName.value)){
+                alert("الاسم الأول يتكون من حروف فقط ");
+                return false;
+            }
+            if (!nameregex.test(LastName.value)){
+                alert("الاسم الثاني يتكون من حروف فقط ");
+                return false;
+            }
+            if (!schoolregex.test(SchoolName.value)){
+                alert("الاسم المدرسة يتكون من حروف و أرقام فقط ");
+                return false;
+            }
+            if (!email.test(Email.value)){
+                alert("يرجى التحقق من طريقة كتابة البريد الإلكتروني");
+                return false;
+            }
+
+            if(isEmpty(Email.value) || isEmpty(SchoolName.value)|| isEmpty(LastName.value) || isEmpty(FirstName.value) || isEmpty(BranchNumber.value) || isEmpty(Password.value) ){
+                alert("جميع الحقول مطلوبة ، الرجاء التحقق من تعبأتها كاملة");
+                return false;
+            }
+
+            return true;
+
+           }
+
+           function RegisterSchool(){
+            if (!validation()) {
+                return;
+            }
+            const dbRef =ref(db);
+
+            get(child(dbRef, "School/"+ SchoolName.value)).then((snapshot)=>{ //Not working !!!!
+                if(snapshot.exists()){
+                    alert("المدرسة مسجلة مسبقاً");
+                }
+                else{
+                    set(ref(db,"School/"+SchoolName.value), // Not working !!!
+                    {
+                        SchoolName:schoolName.value,
+                        BranchNumber:BranchNumber.value
+                        //PrincipalID=
+
+
+                    })
+                }
+            }).then(()=>{
+                alert("تم إضافة المدرسة بنجاح");
+            })
+            .catch((error)=>{
+                alert("حدث خطأ الرجاء المحاولة في وقتٍ لاحق");
+
+            });
+
+            function encryptPassword(){
+                var pass12 = CryptoJS.AES.encrypt(Password.value,Password.value);
+                return pass12.toString;
+            }
+
+
+           }
+          
+    </script>
+
+    
+</body>
+</html>
