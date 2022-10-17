@@ -32,7 +32,7 @@
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-
+/*
 //Delete student
 function deleteStudent(sid){ 
   const colRefStudent = collection(db, "Student");
@@ -52,7 +52,7 @@ function deleteStudent(sid){
   })
 
 }
-
+*/
 
 
 //Delete class
@@ -95,6 +95,24 @@ addClassForm.addEventListener('submit', async (e) => {
 
 */
  
+
+
+//Add class
+export async function addClass(pid){
+  alert(pid)
+  const classForm = document.querySelector('.addClassForm');
+  const colRefClass = collection(db, "Class");
+  addDoc(colRefClass, {
+    ClassName: classForm.Cname.value,
+    Level: classForm.level.value,
+    schoolID:  "/School/"+pid,
+  })
+  .then(() => { 
+    classForm.reset()
+  })
+
+}
+
 export async function classes(pid){
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence ));
