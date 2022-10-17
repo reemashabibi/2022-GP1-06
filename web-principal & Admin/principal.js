@@ -36,8 +36,6 @@
   //db.settings({ timestampsInSnapshots: true});
 
 
-var mainText = document.getElementById("mainText");
-var submit = document.getElementById("submit");
 
 function submitClick(){
     window.alert("working");
@@ -52,6 +50,8 @@ docsSnap.forEach(doc => {
 export async function callAdmins(pid){
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Admin"), where("schoolID", "==", refrence ));
+  
+ 
   var i=0;
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {

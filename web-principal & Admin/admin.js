@@ -3,7 +3,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-  import { collection, getDocs, addDoc, Timestamp,getDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+  import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
   import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -32,21 +32,65 @@
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
- // const db = firebase.firestore();
-  //db.settings({ timestampsInSnapshots: true});
 
+//Delete student
+function deleteStudent(sid){ 
+  const colRefStudent = collection(db, "Student");
 
-var mainText = document.getElementById("mainText");
-var submit = document.getElementById("submit");
+  getDocs(colRefStudent)
+  .then(snapshot => {
+     //console.log(snapshot.docs)
+    //let levels = []
+    snapshot.docs.forEach(doc => {
+      if(doc.id == sid)
+      deleteDoc(doc)
+      .then(() => {
+        //delete it from the admin home page.
+      })
+    })
+    //console.log(levels)
+  })
 
-function submitClick(){
-    window.alert("working");
 }
 
-const colRef = collection(db, "Class");
-const docsSnap = await getDocs(colRef);
-docsSnap.forEach(doc => {
-    console.log(doc.data());
+
+
+//Delete class
+async function deleteClass(cid){ 
+  const q = query(collection(db, "Student"), where("ClassId", "==", "/Class/"+cid));
+  const querySnapshot = await getDocs(q);
+  querySnapshot.forEach((doc) => {
+    // doc.data() is never undefined for query doc snapshots
+   // console.log(doc.id, " => ", doc.data());
+    if(!doc.empty){
+    alert("لا يمكن حذف الفصل، يوجد طلاب تابعين للفصل");
+    return false;}
+    else{
+      deleteDoc(doc);
+    }
+  
+  }); 
+}
+
+//Add class
+const colRefClass = collection(db, "Class");
+
+//const selectedClass = document.getElementById("classes");
+//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
+
+const addClassForm = document.querySelector('.addClass')
+//email = document.getElementById( "email" ).value;
+addClassForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  addDoc(colRefClass, {
+    ClassName: addClassForm.Cname.value,
+    Level: addClassForm.level.value,
+    schoolID:  "/School/"+parentId,
+  })
+  .then(() => { 
+    
+    addClassForm.reset()
+  })
 });
 
 

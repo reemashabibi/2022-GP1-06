@@ -4,60 +4,78 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-    <link rel="stylesheet" href="addAdminStyle.css" />
-
-
-<title>إضافة إداري</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- Custom Theme files -->
-<link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
-<!-- //Custom Theme files -->
-<!-- web font -->
-<link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
-<!-- //web font -->
+    <link rel="stylesheet" href="create.css">
+    <title>إضافة إداري</title>
+    <!-- add database connection + session -->
 </head>
 
-
 <body>
-	<!-- main -->
-	<div class="main-w3layouts wrapper">
-		<h1>إضافة إداري</h1>
-		<div class="main-agileinfo">
-			<div class="agileits-top">
-				<form action="#" method="post">
+<div class="center">
+  <h1>إضافة إداري</h1>
 
-					<input class="text" type="text" name="First Name" placeholder="الاسم الأول" required="">
+  <form action="addAdminValid.php" method="POST" onsubmit="return validate();">
 
-                    <br>
-                    <br>
-					<input class="text" type="text" name="Last Name" placeholder="الاسم الأخير" required="">
-                    <br>
+  <div class="inputbox">
+      <input type="text" required="required" name ="firstName" id="firstName">
+      <span>الاسم الأول</span>
+    </div>
 
-					<input class="text email" type="email" name="email" placeholder="البريد الإلكتروني" required="">
+    <div class="inputbox">
+      <input type="text" required="required" name ="lastName" id="lastName">
+      <span>الاسم  الأخير</span>
+    </div>
 
-			<!--		<input class="text w3lpass" type="password" name="password" placeholder="Confirm Password" required=""> -->
-					<div class="wthree-text">
-						<div class="clear"> </div>
-					</div>
-					<input type="submit" value="إضافة">
-				</form>
-				
-			</div>
-		</div>
-	
-	</div>
 
-    
-<!-- randomly generated pass -->
-<?php
-$comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-$shfl = str_shuffle($comb);
-$pwd = substr($shfl,0,8);
-?>
+    <div class="inputbox">
+      <input type="email" required="required" name ="email" id="email">
+      <span>البريد الإلكتروني</span>
+    </div>
+
+
+    <div class="inputbox">
+      <input type="button" value="إضافة" name="rgs_btn" >
+    </div>
+  </form>
+</div>
+
+
+<!-- validate -->
+<script type="text/javascript">
+function validate() {
+ var fname = document.getElementById( "firstName" );
+ var letters = /^[A-Za-z]+$/;
+ if( !fname.value.match(letters) )
+ {
+  alert('first name must have alphabet characters only');
+  document.addAdmin.firstName.focus();
+  return false;
+ }
+
+ var lname = document.getElementById( "lastName" );
+ if( !lname.value.match(letters) )
+ {
+  alert('last name must have alphabet characters only');
+  document.addAdmin.lastName.focus();
+  return false;
+ }
+
+ var email = document.getElementById( "email" );
+ var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+ if( !email.value.match(mailformat)){
+  alert("You have entered an invalid email address!");
+  document.addAdmin.email.focus();
+  return false;
+ }
+
+ else {
+   return true;
+  }
+}
+</script>
+
 
 </body>
 </html>
+
+
+
