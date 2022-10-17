@@ -118,16 +118,125 @@
 }
 
 </style>
+<script type="module" src="addStudent.js" type="text/javascript"></script>
+
+    
+</head>
+
+<body>
+
+<div class="center">
+  <h1>إضافة طالب</h1>
+  <form onsubmit="return validateForm1();" class="add" >
+
+  <div class="inputbox">
+      <input type="text" required="required" name ="Fname" id="Fname">
+      <span>الاسم الأول</span>
+    </div>
+
+    <div class="inputbox">
+      <input type="text" required="required" name ="Lname" id="Lname">
+      <span>الاسم  الأخير</span>
+    </div>
+
+    <div class="inputbox" ">
+      <select required="true" style="  margin-top: 15px; padding: 10px; background:#ccc; border: 2px solid #000; width:40%; height: 30px; text-align:center; " id="classes" name="classes">
+            <option id="non" value="" name="non">--اختر الفصل--</option>
+        </select>
+      <span style="border: 2px solid #000; width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">الفصل</span>
+    </div>
+
+    <div class="inputbox">
+      <input type="email" required="required" name ="email" id="email" >
+      <span>البريد الإلكتروني لولي الأمر</span>
+      <label for="" ><br><br><br><a href="#" onclick="openForm()" class="open-button" id="open-button" style=" display: flex; justify-content: right;">ولي أمر جديد؟</a></label>
+    </div>
+
+    
+    <div class="inputbox">
+        <button  type="submit"  class="btn">إضافة</button>
+    </div>
+  </form>
+</div>
+
+
+<!-- Add parent form -->
+
+
+<div class="form-popup" id="parentForm">
+  <h1>إضافة ولي أمر</h1>
+
+  <form  onsubmit="return validateForm2();" class="form-container">
+
+
+  <div class="inputbox">
+      <input type="text" required="required" name ="Fname" id="Fname">
+      <span>الاسم الأول</span>
+    </div>
+
+    <div class="inputbox">
+      <input type="text" required="required" name ="Lname" id="Lname">
+      <span>الاسم  الأخير</span>
+    </div>
+
+
+    <div class="inputbox">
+      <input type="email" required="required" name ="email" id="email">
+      <span>البريد الإلكتروني</span>
+    </div>
+
+    <div class="inputbox">
+      <input type="tel" required="required" id="phone" name="phone" >
+      <span>رقم الجوال</span>
+    </div>
+
+    <div class="inputbox">
+      <input type="password" required="required" id="password" name="password" ">
+      <span>كلمة المرور</span>
+    </div>
+
+    <div class="inputbox">
+    <button type="submit" class="btn">إضافة</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">اغلاق</button>
+    </div>
+
+  </form>
+</div>
+
+<!-- randomly generated pass -->
+<?php
+$comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+$shfl = str_shuffle($comb);
+$pwd = substr($shfl,0,8);
+?>
+
+<!-- sending email -->
+
+<!-- Add parent script -->
+<script>
+   
+function openForm() {
+  document.getElementById("parentForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("parentForm").style.display = "none";
+}
+
+</script>
+
 
 <!-- validate -->
 <script type="text/javascript">
-function validate() {
+
+function validateForm1() {
+    /*
  var fname = document.getElementById( "Fname" );
  var letters = /^[A-Za-z]+$/;
  if( !fname.value.match(letters) )
  {
   alert('first name must have alphabet characters only');
-  document.addStudent.Fname.focus();
+  document.querySelector('.add').Fname.focus();
  
   return false;
  }
@@ -136,15 +245,22 @@ function validate() {
  if( !lname.value.match(letters) )
  {
   alert('last name must have alphabet characters only');
-  document.addStudent.Lname.focus();
+  document.querySelector('.add').Lname.focus();
   return false;
  }
 
+
+ var selectedClass = document.getElementById( "non" ).value;
+
+ if(selectedClass == "non"){
+  alert('أرجو اختيار الفصل');
+  document.querySelector('.add').non.focus();}*/
+/*
  var email = document.getElementById( "email" );
  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
  if( !email.value.match(mailformat)){
   alert("You have entered an invalid email address!");
-  document.addStudent.email.focus();
+  document.querySelector('.add').email.focus();
   return false;}
 
 
@@ -152,6 +268,7 @@ function validate() {
    return true;
   }
 
+ 
 
 /*
 var selectedClass =  document.getElementById("classes")[ document.getElementById("classes").selectedIndex].id;
@@ -165,116 +282,57 @@ alert(selectedClass)
  else {
    return true;
   }
-
-*/
 }
+
+
+function validateForm2() {
+  
+  var fname = document.getElementById( "Fname" );
+  var letters = /^[A-Za-z]+$/;
+  if( !fname.value.match(letters) )
+  {
+   alert('first name must have alphabet characters only');
+   document.querySelector('.form-container').Fname.focus();
+  
+   return false;
+  }
+ 
+  var lname = document.getElementById( "Lname" );
+  if( !lname.value.match(letters) )
+  {
+   alert('last name must have alphabet characters only');
+   document.querySelector('.form-container').Lname.focus();
+   return false;
+  }
+
+  var email = document.getElementById( "email" );
+  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  if( !email.value.match(mailformat)){
+   alert("You have entered an invalid email address!");
+   document.querySelector('.form-container').email.focus();
+   return false;}
+ 
+ 
+  else {
+    return true;
+   }
+
+   var phoneNo =document.getElementById("phone");
+   var phoneno = /^\d{10}$/;
+   if((phoneNo.value.match(phoneno)))
+         {
+       return true;
+         }
+       else
+         {
+         alert("Enter a valid phone number");
+         document.querySelector('.form-container').phone.focus();
+         return false;
+         }
+ 
+ 
+ }*/
     </script>
-</head>
-
-<body>
-
-<div class="center">
-  <h1>إضافة طالب</h1>
-  <form class="add" onsubmit="return validate();">
-
-  <div class="inputbox">
-      <input id="Fname" type="text" required="required">
-      <span>الاسم الأول</span>
-    </div>
-
-    <div class="inputbox">
-      <input id="Lname" type="text" required="required">
-      <span>الاسم  الأخير</span>
-    </div>
-
-    <div class="inputbox" ">
-      <select style="  margin-top: 15px; padding: 10px; background:#ccc; border: 2px solid #000; width:40%; height: 30px; text-align:center; " id="classes" name="classes" required>
-            <option id="non" value="non" selected></option>
-        </select>
-      <span style="border: 2px solid #000; width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">الفصل</span>
-    </div>
-
-    <div class="inputbox">
-      <input type="email" required="required" name ="email" id="email" >
-      <span>البريد الإلكتروني لولي الأمر</span>
-      <label for="" ><br><br><br><a href="#" onclick="openForm()" class="open-button" style=" display: flex; justify-content: right;">ولي أمر جديد؟</a></label>
-    </div>
-
-    
-    <div class="inputbox">
-        <button class="btn">إضافة</button>
-    </div>
-  </form>
-</div>
-
-
-<!-- Add parent form -->
-
-
-<div class="form-popup" id="parentForm">
-  <h1>إضافة ولي أمر</h1>
-
-  <form action="addAdminValid.php" method="POST" onsubmit="return validate();" class="form-container">
-
-  <div class="inputbox">
-      <input type="text" required="required" name ="firstName" id="firstName">
-      <span>الاسم الأول</span>
-    </div>
-
-    <div class="inputbox">
-      <input type="text" required="required" name ="lastName" id="lastName">
-      <span>الاسم  الأخير</span>
-    </div>
-
-
-    <div class="inputbox">
-      <input type="email" required="required" name ="email" id="email">
-      <span>البريد الإلكتروني</span>
-    </div>
-
-    <div class="inputbox">
-      <input type="tel" required="required" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-      <span>رقم الجوال</span>
-    </div>
-
-    <div class="inputbox">
-      <input type="password" required="required" id="password" name="password" ">
-      <span>كلمة المرور</span>
-    </div>
-
-    <div class="inputbox">
-    <button type="submit" class="btn">إضافة</button>
-    <button type="button" class="btn cancel" onclick="closeForm()">اغلاق</button>
-     
-    </div>
-  </form>
-</div>
-
-<!-- randomly generated pass -->
-<?php
-$comb = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-$shfl = str_shuffle($comb);
-$pwd = substr($shfl,0,8);
-?>
-
-<!-- sending email -->
-
-<script type="module" src="addStudent.js" type="text/javascript"></script>
-<!-- Add parent script -->
-<script>
-   
-function openForm() {
-  document.getElementById("parentForm").style.display = "block";
-}
-
-function closeForm() {
-  document.getElementById("parentForm").style.display = "none";
-}
-
-
-</script>
 </body>
 </html>
-
-
 

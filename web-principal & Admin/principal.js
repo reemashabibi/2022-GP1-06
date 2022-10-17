@@ -37,8 +37,21 @@
 
 
 
-  export async function callAdmins(pid){
-  const q = query(collection(db, "Admin"), where("schoolID", "==", pid ));
+function submitClick(){
+    window.alert("working");
+}
+
+const colRef = collection(db, "Class");
+const docsSnap = await getDocs(colRef);
+docsSnap.forEach(doc => {
+    console.log(doc.data());
+});
+
+export async function callAdmins(pid){
+  const refrence = doc(db, "School", pid);
+  const q = query(collection(db, "Admin"), where("schoolID", "==", refrence ));
+  
+ 
   var i=0;
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
