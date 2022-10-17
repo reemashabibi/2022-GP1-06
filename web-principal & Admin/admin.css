@@ -42,6 +42,10 @@ span::after {
 
 .theTab:hover 
 {
-    background :#5cacae;   
+    background :#7dc5c7;   
 
 }    
+.deleteClass{
+  margin-top: 5%;
+  background : #a4a2a2; 
+}

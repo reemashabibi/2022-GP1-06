@@ -3,7 +3,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-  import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+  import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
   import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -71,7 +71,7 @@ async function deleteClass(cid){
   
   }); 
 }
-
+/*
 //Add class
 const colRefClass = collection(db, "Class");
 
@@ -93,11 +93,11 @@ addClassForm.addEventListener('submit', async (e) => {
   })
 });
 
-
+*/
  
 export async function classes(pid){
   const refrence = doc(db, "School", pid);
-  const q = query(collection(db, "Class"), where("schoolID", "==", refrence ));
+  const q = query(collection(db, "Class"), where("SchoolID", "==", refrence ));
 
   const querySnapshot = await getDocs(q);
  
@@ -111,7 +111,8 @@ export async function classes(pid){
     div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab";
   div1.id= doc.id;
   div1.onclick = function () {
-    location.href = "students.php?c='"+div1.id+"'&s='"+pid+"'";
+
+    location.href = "students.php?c="+div1.id+"&s="+pid;
 };
     document.getElementById("bigdiv").appendChild(div1);
     const div2 = document.createElement("div");
@@ -136,7 +137,7 @@ export async function classes(pid){
       location.href = "teacherClass.php";
   };
   const a2= document.createElement('a');
-  a2.className="btn d-block w-100 d-sm-inline-block btn-light";
+  a2.className="btn d-block w-100 d-sm-inline-block btn-light deleteClass";
   a2.appendChild(document.createTextNode("حذف الصف"));
   a2.onclick = deleteClass(doc.id);
   div5.appendChild(a1);
@@ -149,17 +150,28 @@ export async function classes(pid){
 
 }
 
+
+
 export async function viewStudents(classId,school){
   const refrence = doc(db, "Class", classId);
-  
-
+ 
   //for dropdown
   var classes= [];
   const srefrence = doc(db, "School", school);
-  const qc = query(collection(db, "Class"), where("schoolID", "==", srefrence ));
+  const qc = query(collection(db, "Class"), where("SchoolID", "==", srefrence ));
+
+  let currentClass = await getDoc(refrence);
+  var CurrenrclassName = currentClass.data().ClassName;
+    var Currentlevel = currentClass.data().Level;
+    var CurrentClassid = currentClass.id;
+    classes.push(CurrentClassid);
+    classes.push(CurrenrclassName);
+    classes.push(Currentlevel);
 
   const querySnapshotc = await getDocs(qc);
-  querySnapshotc.forEach((doc) => {
+  querySnapshotc.forEach((doc) =>{
+  if(doc.id == classId) return;
+  
     var className = doc.data().ClassName;
     var level = doc.data().Level;
     var id = doc.id;
@@ -167,24 +179,28 @@ export async function viewStudents(classId,school){
     classes.push(className);
     classes.push(level);
   });
-
+console.log(classes);
 //end of dropdown data
-  const q = query(collection(db, "Student"), where("ClassID", "==", refrence ));
+var ClassID = "/Class/"+classId;
+  const q = query(collection(db, "Student"), where("ClassID", "==", ClassID ));
   
   const querySnapshot = await getDocs(q);
+if(querySnapshot.empty){
+  alert("لا يوجد طلاب حاليًا في هذا الفصل.");
+}
 
-  querySnapshot.forEach(async (d) => {
-    // doc.data() is never undefined for query doc snapshots
+  querySnapshot.forEach(async(d) => {
+  
     var firstName = d.data().FirstName;
     var lastName = d.data().LastName;
     var parentId = d.data().ParentID;
+  
     
-    alert("i%2 loop");
     var phone = 0;
     var email = "";
 
     if(parentId) {
-      let data = await getDoc(parentId);
+      let data = await getDoc(doc(db, "Parent", parentId.substring(parentId.indexOf('t') + 2)));
       if(data.exists()) {
         phone = data.data().PhoneNumber;
    email =data.data().Email;
@@ -194,7 +210,7 @@ export async function viewStudents(classId,school){
    
     var tr = document.createElement('tr');
     var td = document.createElement('td');
-    td.style.width =  "20%";
+    td.style.width =  "10%";
     tr.appendChild(td);
     
      
@@ -207,29 +223,31 @@ export async function viewStudents(classId,school){
     var i3 =  document.createElement('i');
     var i4 = document.createElement('i');
     i3.className="fa fa-square fa-stack-2x";
-    i4.className="fa fa-trash-o fa-stack-1x fa-inverse";
+    i4.className="fa fa-trash-o fa-stack-1x fa-inverse deltebtn";
+    i4.href="#";
     i4.id=d.id;
     span2.appendChild(i3);
     span2.appendChild(i4);
 
+    var td5 = document.createElement('td');
+    tr.appendChild(td5);
+    
     var dropdown = document.createElement("select");
     dropdown.name= "transferClass";
-    td.appendChild(dropdown);
+    dropdown.className="transfer";
+    dropdown.id = d.id;
+    td5.appendChild(dropdown);
     
     
     for(var i=0; i<classes.length;i++){
       var option = document.createElement("option");
-      if(i%2 == 0){
-       
-        
-        option.value = classes[i];
-      }
-      else{
-        option.innerHTML = classes[i]+"-"+classes[++i];
+           option.value = classes[i];
+        option.innerHTML = classes[++i]+"-"+classes[++i];
+      
         dropdown.appendChild(option);
+      
       }
       
-    }
     
     var td2 = document.createElement('td');
     td2.innerHTML= phone;
@@ -248,11 +266,41 @@ export async function viewStudents(classId,school){
     tr.appendChild(td4);
 
     document.getElementById('schedule').appendChild(tr);
+    
 
   });
 
 }
 
+//put the delete student code here or it wil not work!!!!!!!!!!!! the same for delete class
+$(document).ready(function(){
+$(document).on('click','.deltebtn',function(){
+  var studentID = $(this).attr('id');
+  alert("finally");
+});
+});
 
+//trasfer student
+$(document).ready(function(){
 
-//drop down
+  $(document).on('change','.transfer',async function(){
+  var studentID = $(this).attr('id');
+   if(confirm("هل تُأكد نقل الطالب إلى فصلٍ آخر؟")){
+    const data = {
+      ClassID: "/Class/"+$(this).val()
+    };
+    const docRef = doc(db, "Student", studentID);
+    updateDoc(docRef, data)
+    .then(docRef => {
+        console.log("Value of an Existing Document Field has been updated");
+        
+window.location.reload(true);
+    })
+    .catch(error => {
+        console.log(error);
+    })
+   }
+
+  });
+  });
+
