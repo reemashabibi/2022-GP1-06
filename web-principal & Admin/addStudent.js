@@ -46,6 +46,7 @@ getDocs(colRefClass)
       const new_op = document.createElement("option");
       new_op.innerHTML = doc.data().ClassName +":فصل:"+ doc.data().Level+"مستوى" ;
       new_op.setAttribute("id" ,doc.id );
+      new_op.setAttribute("value" ,doc.data().ClassName  );
       document.getElementById("classes").appendChild(new_op);
     })
     //console.log(levels)
@@ -56,13 +57,11 @@ getDocs(colRefClass)
 //add student info
 const colRefStudent = collection(db, "Student");
 const selectedClass = document.getElementById("classes");
-//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
-
 const addStudentForm = document.querySelector('.add')
 email = document.getElementById( "email" ).value;
+
 addStudentForm.addEventListener('submit', async (e) => {
   e.preventDefault()
-
   const q = query(collection(db, "Parent"), where("Email", "==", addStudentForm.email.value));
   const querySnapshot = await getDocs(q);
   var parentId = "null";
@@ -72,12 +71,9 @@ addStudentForm.addEventListener('submit', async (e) => {
     if(!doc.empty)
     parentId = doc.id;
   }); 
-  if(parentId == "null"){
-    alert("ولي الأمر غير مسجل");
-    e.stopPropagation();
-    }
+  if(parentId != "null"){
+   
  
-
   addDoc(colRefStudent, {
     FirstName: addStudentForm.Fname.value,
     LastName: addStudentForm.Lname.value,
@@ -86,7 +82,12 @@ addStudentForm.addEventListener('submit', async (e) => {
   })
   .then(() => { 
     addStudentForm.reset()
-  })
+  })}
+  else{
+    alert("ولي الأمر غير مسجل");
+    addStudentForm.reset()
+    document.getElementById("parentForm").style.display = "block";
+  }
 });
 
 
