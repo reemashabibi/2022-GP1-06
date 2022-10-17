@@ -135,7 +135,12 @@ export async function classes(pid){
     a1.onclick = function () {
       location.href = "teacherClass.php";
   };
-    div5.appendChild(a1);
+  const a2= document.createElement('a');
+  a2.className="btn d-block w-100 d-sm-inline-block btn-light";
+  a2.appendChild(document.createTextNode("حذف الصف"));
+  a2.onclick = deleteClass(doc.id);
+  div5.appendChild(a1);
+    div5.appendChild(a2);
     div1.appendChild(div5);
 
 
