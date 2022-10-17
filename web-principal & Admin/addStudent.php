@@ -336,5 +336,3 @@ function validateForm2() {
 </body>
 </html>
 
-
-
