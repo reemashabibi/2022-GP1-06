@@ -70,15 +70,17 @@ addStudentForm.addEventListener('submit', async (e) => {
    // console.log(doc.id, " => ", doc.data());
     if(!doc.empty)
     parentId = doc.id;
+    
   }); 
   if(parentId != "null"){
    
- 
+  const docRef = doc(db, "Parent", parentId);
+  const docRefClass = doc(db, "Class", selectedClass[selectedClass.selectedIndex].id);
   addDoc(colRefStudent, {
     FirstName: addStudentForm.Fname.value,
     LastName: addStudentForm.Lname.value,
-    ClassID: "/Class/"+selectedClass[selectedClass.selectedIndex].id,
-    ParentID:  "/Parent/"+parentId,
+    ClassID: docRefClass,
+    ParentID:  docRef,
   })
   .then(() => { 
     addStudentForm.reset()

@@ -32,6 +32,29 @@ export { app, db, collection, getDocs, Timestamp, addDoc, doc };
 export { query, orderBy, limit, where, onSnapshot }; 
 const analytics = getAnalytics(app);
 
+
+
+//add class to drop-down menu
+const colRefClass = collection(db, "Level");
+
+getDocs(colRefClass)
+  .then(snapshot => {
+     //console.log(snapshot.docs)
+    //let levels = []
+    snapshot.docs.forEach(doc => {
+      //levels.push({ ...doc.data(), id: doc.id })
+      const new_op = document.createElement("option");
+      new_op.innerHTML = doc.id ;
+      new_op.setAttribute("id" ,doc.id );
+      document.getElementById("classes").appendChild(new_op);
+    })
+    //console.log(levels)
+  })
+
+
+
+
+
 //Add class
 var prid;
 const classForm = document.querySelector('.addClassForm');
@@ -44,8 +67,8 @@ classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     addDoc(colRefClass, {
       ClassName: classForm.Cname.value,
-      Level: classForm.level.value,
-      schoolID:  refrence,
+      Level: classForm.classes.value,
+      SchoolID:  refrence,
     })
     .then(() => { 
       classForm.reset()

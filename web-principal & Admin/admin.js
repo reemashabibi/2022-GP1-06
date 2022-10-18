@@ -32,70 +32,6 @@
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-/*
-//Delete student
-function deleteStudent(sid){ 
-  const colRefStudent = collection(db, "Student");
-
-  getDocs(colRefStudent)
-  .then(snapshot => {
-     //console.log(snapshot.docs)
-    //let levels = []
-    snapshot.docs.forEach(doc => {
-      if(doc.id == sid)
-      deleteDoc(doc)
-      .then(() => {
-        //delete it from the admin home page.
-      })
-    })
-    //console.log(levels)
-  })
-
-}
-*/
-
-
-//Delete class
-async function deleteClass(cid){ 
-  const q = query(collection(db, "Student"), where("ClassId", "==", "/Class/"+cid));
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-   // console.log(doc.id, " => ", doc.data());
-    if(!doc.empty){
-    alert("لا يمكن حذف الفصل، يوجد طلاب تابعين للفصل");
-    return false;}
-    else{
-      deleteDoc(doc);
-    }
-  
-  }); 
-}
-/*
-//Add class
-const colRefClass = collection(db, "Class");
-
-//const selectedClass = document.getElementById("classes");
-//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
-
-const addClassForm = document.querySelector('.addClass')
-//email = document.getElementById( "email" ).value;
-addClassForm.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  addDoc(colRefClass, {
-    ClassName: addClassForm.Cname.value,
-    Level: addClassForm.level.value,
-    schoolID:  "/School/"+parentId,
-  })
-  .then(() => { 
-    
-    addClassForm.reset()
-  })
-});
-
-*/
- 
-
 
 
 export async function classes(pid){
@@ -140,9 +76,9 @@ export async function classes(pid){
       location.href = "teacherClass.php";
   };
   const a2= document.createElement('a');
-  a2.className="btn d-block w-100 d-sm-inline-block btn-light deleteClass";
+  a2.className="btn d-block w-100 d-sm-inline-block btn-light";
   a2.appendChild(document.createTextNode("حذف الصف"));
-  a2.onclick = deleteClass(doc.id);
+  a2.setAttribute('id', doc.id)
   div5.appendChild(a1);
     div5.appendChild(a2);
     div1.appendChild(div5);
@@ -152,6 +88,7 @@ export async function classes(pid){
   });
 
 }
+
 
 
 
@@ -184,8 +121,8 @@ export async function viewStudents(classId,school){
   });
 console.log(classes);
 //end of dropdown data
-var ClassID = "/Class/"+classId;
-  const q = query(collection(db, "Student"), where("ClassID", "==", ClassID ));
+
+  const q = query(collection(db, "Student"), where("ClassID", "==", refrence ));
   
   const querySnapshot = await getDocs(q);
 if(querySnapshot.empty){
@@ -203,7 +140,7 @@ if(querySnapshot.empty){
     var email = "";
 
     if(parentId) {
-      let data = await getDoc(doc(db, "Parent", parentId.substring(parentId.indexOf('t') + 2)));
+      let data = await getDoc(parentId);
       if(data.exists()) {
         phone = data.data().PhoneNumber;
    email =data.data().Email;
@@ -275,13 +212,38 @@ if(querySnapshot.empty){
 
 }
 
+
 //put the delete student code here or it wil not work!!!!!!!!!!!! the same for delete class
 $(document).ready(function(){
 $(document).on('click','.deltebtn',function(){
   var studentID = $(this).attr('id');
-  alert("finally");
+  const docRef = doc(db, "Student", studentID);
+
+deleteDoc(docRef).then(() => {
+  alert("تم حذف الطالب");
+  window.location.reload(true);
+})
+.catch(error => {
+  console.log(error);
+})
 });
 });
+
+
+$(document).ready(function(){
+   $(document).on('click','.btn-light', async function(){
+    var classID = $(this).attr('id');
+    const docRef = doc(db, "Class", classID);
+    const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
+  
+    
+    const querySnapshotc = await getDocs(q);
+    alert()
+  
+
+  });
+});
+
 
 //trasfer student
 $(document).ready(function(){
