@@ -97,21 +97,26 @@ addClassForm.addEventListener('submit', async (e) => {
  
 
 
-//Add class
-export async function addClass(pid){
-  alert(pid)
-  const classForm = document.querySelector('.addClassForm');
-  const colRefClass = collection(db, "Class");
-  addDoc(colRefClass, {
-    ClassName: classForm.Cname.value,
-    Level: classForm.level.value,
-    schoolID:  "/School/"+pid,
-  })
-  .then(() => { 
-    classForm.reset()
-  })
 
+//Add class
+var prid;
+const classForm = document.querySelector('.addClassForm');
+export async function addClass(pid){
+prid = pid;
 }
+classForm.addEventListener('submit', async (e) => {
+  const colRefClass = collection(db, "Class");
+  const refrence = doc(db, "School", prid);
+    e.preventDefault()
+    addDoc(colRefClass, {
+      ClassName: classForm.Cname.value,
+      Level: classForm.level.value,
+      schoolID:  refrence,
+    })
+    .then(() => { 
+      classForm.reset()
+    })
+  });
 
 export async function classes(pid){
   const refrence = doc(db, "School", pid);
