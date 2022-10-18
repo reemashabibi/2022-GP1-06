@@ -31,6 +31,7 @@ document.getElementsByTagName('body').onload = callAdmins('$pid');</script>";
                     <h3 class="topTitle">قائمة الإداريين</h3>
 
                         <button class="button-36 topTitle" onclick="location.href='addAdmin.php'"  >إضافة إداري</button>
+                        <div class="loader topTitle"></div>
                        
                     </div>
                 </div>

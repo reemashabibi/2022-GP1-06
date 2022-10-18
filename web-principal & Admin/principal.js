@@ -70,6 +70,7 @@ export async function callAdmins(pid){
     const a1= document.createElement('a');
     a1.className="btn d-block w-100 d-sm-inline-block btn-light";
     a1.appendChild(document.createTextNode("حذف الإداري"));
+    a1.id= doc.id;
     div5.appendChild(a1);
     div1.appendChild(div5);
     const div2 = document.createElement("div");
@@ -97,5 +98,6 @@ export async function callAdmins(pid){
    
 
   });
+  $('.loader').hide();
 
 }

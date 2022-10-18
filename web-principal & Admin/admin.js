@@ -32,72 +32,13 @@
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-/*
-//Delete student
-function deleteStudent(sid){ 
-  const colRefStudent = collection(db, "Student");
-
-  getDocs(colRefStudent)
-  .then(snapshot => {
-     //console.log(snapshot.docs)
-    //let levels = []
-    snapshot.docs.forEach(doc => {
-      if(doc.id == sid)
-      deleteDoc(doc)
-      .then(() => {
-        //delete it from the admin home page.
-      })
-    })
-    //console.log(levels)
-  })
-
-}
-*/
-
-
-//Delete class
-async function deleteClass(cid){ 
-  const q = query(collection(db, "Student"), where("ClassId", "==", "/Class/"+cid));
-  const querySnapshot = await getDocs(q);
-  querySnapshot.forEach((doc) => {
-    // doc.data() is never undefined for query doc snapshots
-   // console.log(doc.id, " => ", doc.data());
-    if(!doc.empty){
-    alert("لا يمكن حذف الفصل، يوجد طلاب تابعين للفصل");
-    return false;}
-    else{
-      deleteDoc(doc);
-    }
-  
-  }); 
-}
-
-//const selectedClass = document.getElementById("classes");
-//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
-
-const addClassForm = document.querySelector('.addClass')
-//email = document.getElementById( "email" ).value;
-addClassForm.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  addDoc(colRefClass, {
-    ClassName: addClassForm.Cname.value,
-    Level: addClassForm.level.value,
-    schoolID:  "/School/"+parentId,
-  })
-  .then(() => { 
-    
-    addClassForm.reset()
-  })
-});
-
-
- 
-
 
 
 export async function classes(pid){
+
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence ));
+  const qTeacher = query(collection(db, "Teacher"), where("SchoolID", "==", refrence));
 
   const querySnapshot = await getDocs(q);
  
@@ -115,6 +56,23 @@ export async function classes(pid){
     location.href = "students.php?c="+div1.id+"&s="+pid;
 };
     document.getElementById("bigdiv").appendChild(div1);
+
+    const div5 = document.createElement("div");
+    div5.className="job-right my-4 flex-shrink-0";
+    const a1= document.createElement('a');
+    a1.className="btn d-block w-100 d-sm-inline-block btn-light";
+    a1.appendChild(document.createTextNode("تعيين معلم"));
+    a1.onclick = function () {
+      location.href = "teacherClass.php";
+  };
+  const a2= document.createElement('a');
+  a2.className="btn d-block w-100 d-sm-inline-block btn-light";
+  a2.appendChild(document.createTextNode("حذف الصف"));
+  a2.setAttribute('id', doc.id)
+  div5.appendChild(a1);
+    div5.appendChild(a2);
+    div1.appendChild(div5);
+
     const div2 = document.createElement("div");
     div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap ";
     div1.appendChild(div2);
@@ -128,29 +86,74 @@ export async function classes(pid){
     div4.appendChild(h5);
    
    
-    const div5 = document.createElement("div");
-    div5.className="job-right my-4 flex-shrink-0";
-    const a1= document.createElement('a');
-    a1.className="btn d-block w-100 d-sm-inline-block btn-light";
-    a1.appendChild(document.createTextNode("تعيين معلم"));
-    a1.onclick = function () {
-      location.href = "teacherClass.php";
-  };
-  const a2= document.createElement('a');
-  a2.className="btn d-block w-100 d-sm-inline-block btn-light deleteClass";
-  a2.appendChild(document.createTextNode("حذف الصف"));
-  a2.onclick = deleteClass(doc.id);
-  div5.appendChild(a1);
-    div5.appendChild(a2);
-    div1.appendChild(div5);
+  
 
 
 
   });
 
+  $('.loader').hide();
+  //view teachers
+  const querySnapshot2 = await getDocs(qTeacher);
+ 
+ if(querySnapshot2.empty){
+  alert("empty");
+ }
+  querySnapshot2.forEach((doc2) => {
+    // doc.data() is never undefined for query doc snapshots
+ 
+    var firstName = doc2.data().FirstName;
+    var lastName = doc2.data().LastName;
+    var email = doc2.data().Email
+    
+    const div1 = document.createElement("div");
+    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30";
+    document.getElementById("bigdiv2").appendChild(div1);
+    const div5 = document.createElement("div");
+    div5.className="job-right my-4 flex-shrink-0";
+    const a1= document.createElement('a');
+    a1.className="btn d-block w-100 d-sm-inline-block btn-light";
+    a1.appendChild(document.createTextNode("حذف المعلم"));
+    a1.id= doc.id;
+    div5.appendChild(a1);
+
+    
+    div1.appendChild(div5);
+    const div2 = document.createElement("div");
+    div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap";
+    div1.appendChild(div2);
+    
+    const div4 = document.createElement("div");
+    div4.className= "job-content";
+    div2.appendChild(div4);
+    const h5 = document.createElement('h5');
+    h5.className="text-center text-md-left";
+    h5.appendChild( document.createTextNode(firstName+" "+lastName));
+    div4.appendChild(h5);
+   
+    const ul1 = document.createElement("ul");
+    ul1.className="d-md-flex flex-wrap text-capitalize ff-open-sans";
+    div4.appendChild(ul1);
+    const li1= document.createElement('li');
+    li1.className="mr-md-4";
+    ul1.appendChild(li1);
+    const i1= document.createElement("i");
+    i1.appendChild(document.createTextNode(email));
+    i1.className="zmdi zmdi-email mr-2";
+    li1.appendChild(i1);
+
+
+  });
+  
+  
+
 }
 
 
+function showPage() {
+  document.getElementsByClassName("loader").style.display = "none";
+
+}
 
 export async function viewStudents(classId,school){
   const refrence = doc(db, "Class", classId);
@@ -181,8 +184,8 @@ export async function viewStudents(classId,school){
   });
 console.log(classes);
 //end of dropdown data
-var ClassID = "/Class/"+classId;
-  const q = query(collection(db, "Student"), where("ClassID", "==", ClassID ));
+
+  const q = query(collection(db, "Student"), where("ClassID", "==", refrence ));
   
   const querySnapshot = await getDocs(q);
 if(querySnapshot.empty){
@@ -200,7 +203,7 @@ if(querySnapshot.empty){
     var email = "";
 
     if(parentId) {
-      let data = await getDoc(doc(db, "Parent", parentId.substring(parentId.indexOf('t') + 2)));
+      let data = await getDoc(parentId);
       if(data.exists()) {
         phone = data.data().PhoneNumber;
    email =data.data().Email;
@@ -272,22 +275,49 @@ if(querySnapshot.empty){
 
 }
 
+
 //put the delete student code here or it wil not work!!!!!!!!!!!! the same for delete class
 $(document).ready(function(){
 $(document).on('click','.deltebtn',function(){
   var studentID = $(this).attr('id');
-  alert("finally");
+  const docRef = doc(db, "Student", studentID);
+
+deleteDoc(docRef).then(() => {
+  alert("تم حذف الطالب");
+  window.location.reload(true);
+})
+.catch(error => {
+  console.log(error);
+})
 });
 });
+
+
+$(document).ready(function(){
+   $(document).on('click','.btn-light', async function(){
+    var classID = $(this).attr('id');
+    const docRef = doc(db, "Class", classID);
+    const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
+  
+    
+    const querySnapshotc = await getDocs(q);
+    alert()
+  
+
+  });
+});
+
 
 //trasfer student
 $(document).ready(function(){
 
   $(document).on('change','.transfer',async function(){
   var studentID = $(this).attr('id');
+  var classId=$(this).val();
+  const refrence = doc(db, "Class", classId);
    if(confirm("هل تُأكد نقل الطالب إلى فصلٍ آخر؟")){
     const data = {
-      ClassID: "/Class/"+$(this).val()
+      ClassID: refrence
     };
     const docRef = doc(db, "Student", studentID);
     updateDoc(docRef, data)

@@ -31,17 +31,49 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
                     <h3 class="topTitle">قائمة الفصول</h3>
 
                         <button class="button-36 topTitle" onclick="location.href='class.php'"  >إضافة صف</button>
-                       
+                        <div class="loader topTitle"></div>
+                        
+
                     </div>
                 </div>
             </div>
-
+           
             <div class="row">
+                <div class="col-lg-10 mx-auto">
+                    <div class="career-search mb-60">
+                    
+                        
+                        <div class="filter-result " id="bigdiv">
+                       
+                        
+
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+           
+            <div class="row titleLoaderClash">
+                 <div class="col-lg-10 mx-auto mb-4">
+                    <div class="section-title text-center ">
+                    <h3 class="topTitle">قائمة المعلمين</h3>
+
+                        <button class="button-36 topTitle addTeacher" onclick="location.href='addAdmin.php'"  >إضافة معلم</button>
+                        <div class="loader topTitle"></div>
+
+                       
+                    </div>
+                </div>
+</div>
+       
+        <div class="row">
                 <div class="col-lg-10 mx-auto">
                     <div class="career-search mb-60">
 
                         
-                        <div class="filter-result " id="bigdiv">
+                        <div class="filter-result " id="bigdiv2">
                    
 
 
@@ -52,19 +84,8 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
 
                 </div>
             </div>
-            <div class="row">
-                 <div class="col-lg-10 mx-auto mb-4">
-                    <div class="section-title text-center ">
-                    <h3 class="topTitle">قائمة المعلمين</h3>
 
-                        <button class="button-36 topTitle addTeacher" onclick="location.href='addAdmin.php'"  >إضافة معلم</button>
-                       
-                    </div>
-                </div>
-            </div
-        </div>
-
-
+            </div>
 
 </body>
 </html>
