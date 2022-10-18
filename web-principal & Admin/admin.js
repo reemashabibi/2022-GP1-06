@@ -297,13 +297,14 @@ $(document).ready(function(){
    $(document).on('click','.btn-light', async function(){
     var classID = $(this).attr('id');
     const docRef = doc(db, "Class", classID);
-    const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
-  
-    
-    const querySnapshotc = await getDocs(q);
-    alert()
-  
-
+    //const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
+    deleteDoc(docRef).then(() => {
+      alert("تم حذف الفصل");
+      window.location.reload(true);
+    })
+    .catch(error => {
+      console.log(error);
+    })
   });
 });
 

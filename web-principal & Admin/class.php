@@ -35,9 +35,9 @@ document.getElementById('btn').onclick = function() {
 
   <div class="inputbox" ">
       <select required="true" style="  margin-top: 15px; padding: 10px; background:#ccc; border: 2px solid #000; width:40%; height: 30px; text-align:center; " id="classes" name="classes">
-            <option id="non" value="" name="non">--اختر الفصل--</option>
+            <option id="non" value="" name="non">--مستوى الطالب--</option>
         </select>
-      <span style="border: 2px solid #000; width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">الفصل</span>
+      <span style="border: 2px solid #000; width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">المستوى</span>
     </div>
 
     <div class="inputbox">
