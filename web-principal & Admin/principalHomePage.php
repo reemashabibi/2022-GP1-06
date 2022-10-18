@@ -28,7 +28,7 @@ document.getElementsByTagName('body').onload = callAdmins('$pid');</script>";
             <div class="row">
                  <div class="col-lg-10 mx-auto mb-4">
                     <div class="section-title text-center ">
-                    <h3 class="topTitle">لائحة الإداريين</h3>
+                    <h3 class="topTitle">قائمة الإداريين</h3>
 
                         <button class="button-36 topTitle" onclick="location.href='addAdmin.php'"  >إضافة إداري</button>
                        

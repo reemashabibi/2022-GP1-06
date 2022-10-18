@@ -71,30 +71,7 @@ async function deleteClass(cid){
   
   }); 
 }
-/*
-//Add class
-const colRefClass = collection(db, "Class");
 
-//const selectedClass = document.getElementById("classes");
-//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
-
-const addClassForm = document.querySelector('.addClass')
-//email = document.getElementById( "email" ).value;
-addClassForm.addEventListener('submit', async (e) => {
-  e.preventDefault()
-  addDoc(colRefClass, {
-    ClassName: addClassForm.Cname.value,
-    Level: addClassForm.level.value,
-    schoolID:  "/School/"+parentId,
-  })
-  .then(() => { 
-    
-    addClassForm.reset()
-  })
-});
-
-*/
- 
 export async function classes(pid){
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence ));

@@ -28,7 +28,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
             <div class="row">
                  <div class="col-lg-10 mx-auto mb-4">
                     <div class="section-title text-center ">
-                    <h3 class="topTitle">لائحة الصفوف</h3>
+                    <h3 class="topTitle">قائمة الفصول</h3>
 
                         <button class="button-36 topTitle addNewClass" onclick="location.href='addAdmin?class.php'"  >إضافة صف</button>
                        
@@ -55,7 +55,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
             <div class="row">
                  <div class="col-lg-10 mx-auto mb-4">
                     <div class="section-title text-center ">
-                    <h3 class="topTitle">لائحة المعلمين</h3>
+                    <h3 class="topTitle">قائمة المعلمين</h3>
 
                         <button class="button-36 topTitle addTeacher" onclick="location.href='addAdmin.php'"  >إضافة معلم</button>
                        
