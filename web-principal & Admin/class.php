@@ -3,7 +3,7 @@
 echo "<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>";
 $_GET['pid'] = 'POTur2qxIKmSafOghaFn';
 $pid = $_GET['pid'];
-echo "<script type='module'>import { addClass } from './admin.js';
+echo "<script type='module'>import { addClass } from './class.js';
 document.getElementById('btn').onclick = function() {
   addClass('$pid');
 }
@@ -45,7 +45,7 @@ document.getElementById('btn').onclick = function() {
   </form>
 </div>
 
-<script type="module" src="admin.js"></script> 
+<script type="module" src="class.js"></script> 
 <!-- Add class style -->
 <style>
 
