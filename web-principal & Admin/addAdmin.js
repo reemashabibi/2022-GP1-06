@@ -1,7 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+//
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, deleteDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -24,8 +26,9 @@ const firebaseConfig = {
   const analytics = getAnalytics(app);
 
   const colRef = collection(db, 'Admin');
+  const auth = getAuth(app);
 
-//get collection data
+  //get collection data
   getDocs(colRef)
     .then((snapshot) => {
      let Admin = []
@@ -37,62 +40,183 @@ const firebaseConfig = {
     .catch(err => {
         console.log(err.mssage)
     });
-/////////////
 
 
-    function pass(){
-        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-                var string_length = 8;
-                var pass = '';
-                for (var i=0; i<string_length; i++) {
-                    var rnum = Math.floor(Math.random() * chars.length);
-                    pass += chars.substring(rnum,rnum+1);
-                }
-            return pass;
-        }
+
+  //randomly generated pass
+  function pass(){
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var string_length = 8;
+            var pass = '';
+            for (var i=0; i<string_length; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                pass += chars.substring(rnum,rnum+1);
+            }
+        return pass;
+    }
+
+        //validate form
+     function validate() {
+            var fname = document.getElementById( "firstName" );
+            var letters = /^[A-Za-z]+$/;
+            if( !fname.value.match(letters) )
+            {
+             alert('first name must have alphabet characters only');
+             document.addAdmin.firstName.focus();
+             return false;
+            }
+           
+            var lname = document.getElementById( "lastName" );
+            if( !lname.value.match(letters) )
+            {
+             alert('last name must have alphabet characters only');
+             document.addAdmin.lastName.focus();
+             return false;
+            }
+           
+            var email = document.getElementById( "email" );
+            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+            if( !email.value.match(mailformat)){
+             alert("You have entered an invalid email address!");
+             document.addAdmin.email.focus();
+             return false;
+            }
+           
+            else {
+              return true;
+             }
+           }
 
 
-    //adding an admin
-    const addAdminForm = document.querySelector('.addAdmin')
-   // email = document.getElementById( "email" ).value;
-   //var validationFailed = false;
-    addAdminForm.addEventListener('submit',  async (e) => {
+
+           const addAdminForm = document.querySelector('.addAdmin')
+           //let added = false;
+           //let pass = pass();
+           addAdminForm.addEventListener('submit',  async (e) => {
+            // alert("in");
+             if(validate()){
+             //    alert("in2");
+             e.preventDefault()
+            // alert("triggerd");
+             const registerEmail = document.getElementById("email").value;
+             const registerPass =  pass();
+             createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+             .then(  (userCredential) => {
+                 // Signed in 
+                 const user = userCredential.user;
+                 //alert("تمت الإضافة بنجاح");
+                 //alert(user.uid);
+         
+                  setDoc(doc(db, "Admin", user.uid), {
+                    Email: addAdminForm.email.value,
+                    FirstName: addAdminForm.firstName.value,
+                    LastName: addAdminForm.lastName.value, 
+                    password: registerPass,
+                    //schoolID?
+                    schoolID: "/School/"+22,
+                  });
+
+                 alert("تم بنجاح");
+                 addAdminForm.reset();
+               })
+               .catch((error) => {
+                 const errorCode = error.code;
+                 const errorMessage = error.message;
+                 // ..
+                // alert("البريد الالكتروني مستخدم من قبل");
+                 alert(errorMessage);
+                 addAdminForm.reset();
+               });
+               //added = true;
+         
+             }//end if
+             else{
+                // alert("return");
+             }
+         
+         
+           });//the end
+
+
+  ///Adding an admin  
+    
+  /*
+  const addAdminForm = document.querySelector('.addAdmin')
+  //let added = false;
+  //let pass = pass();
+  addAdminForm.addEventListener('submit',  async (e) => {
+    //alert("in");
+    if(validate()){
+     //   alert("in2");
     e.preventDefault()
-    //alert("added");
-  //check if one exitsts
-    const q = query(collection(db, "Admin"), where("Email", "==", addAdminForm.email.value));
-    const querySnapshot = await getDocs(q);
-    var exist = false;
-    querySnapshot.forEach((doc) => {
-        if(!doc.empty)
-         exist = true;
-         //alert("exist");
-        // addAdminForm.reset()
-      });
+   // alert("triggerd");
+    const registerEmail = document.getElementById("email").value;
+    const registerPass =  pass();
+    createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+    .then((userCredential) => {
+        // Signed in 
+        const user = userCredential.user;
+        //alert("تمت الإضافة بنجاح");
+        //alert(registerPass + " -- " + registerEmail);
 
-    if (!exist) {
-        alert("added");
         addDoc(colRef, {
             Email: addAdminForm.email.value,
             FirstName: addAdminForm.firstName.value,
             LastName: addAdminForm.lastName.value, 
-            password: pass(),
+            password: registerPass,
             //schoolID?
             schoolID: "/School/"+22,
         })
-        .then (() => {
-          addAdminForm.reset()
-            //send an email
-        })
+        alert("تم بنجاح");
+        addAdminForm.reset();
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        // ..
+        alert("البريد الالكتروني مستخدم من قبل");
+        addAdminForm.reset();
+      });
+      //added = true;
 
-    }
+    }//end if
     else{
-        alert("exist!!");
-        addAdminForm.reset()
+       // alert("return");
     }
+
+
+  })//the end
+  
+  */
+
+  /*
+  const addAdminForm = document.querySelector('.addAdmin')
+  addAdminForm.addEventListener('submit',  async (e) => {
+    e.preventDefault();
+
+    //get user info
+    const registerEmail = document.getElementById("email").value;
+    const registerPass =  pass();
+
+    //create an account for the user
+    auth.createUserWithEmailAndPassword(registerEmail, registerPass).then(cred => {
+        return db.collection('Admin').doc(cred.user.uid).set({
+        Email: addAdminForm.email.value,
+        FirstName: addAdminForm.firstName.value,
+        LastName: addAdminForm.lastName.value, 
+        password: registerPass,
+        //schoolID?
+        schoolID: "/School/"+22,
+        })
+    }).then(() => {
+       // const modal = document.querySelector("#modal-signup");
+      //  M.modal.getInstance("#modal-signup").close();
+        addAdminForm.reset();
+
+
+
+
     });
 
-
-
-
-    //deleting an admin
+  });//The end
+*/
