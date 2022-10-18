@@ -32,7 +32,7 @@
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-
+/*
 //Delete student
 function deleteStudent(sid){ 
   const colRefStudent = collection(db, "Student");
@@ -52,7 +52,7 @@ function deleteStudent(sid){
   })
 
 }
-
+*/
 
 
 //Delete class
@@ -71,6 +71,29 @@ async function deleteClass(cid){
   
   }); 
 }
+
+//const selectedClass = document.getElementById("classes");
+//const selectedClassID = selectedClass[selectedClass.selectedIndex].id;
+
+const addClassForm = document.querySelector('.addClass')
+//email = document.getElementById( "email" ).value;
+addClassForm.addEventListener('submit', async (e) => {
+  e.preventDefault()
+  addDoc(colRefClass, {
+    ClassName: addClassForm.Cname.value,
+    Level: addClassForm.level.value,
+    schoolID:  "/School/"+parentId,
+  })
+  .then(() => { 
+    
+    addClassForm.reset()
+  })
+});
+
+
+ 
+
+
 
 export async function classes(pid){
   const refrence = doc(db, "School", pid);

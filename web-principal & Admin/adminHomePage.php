@@ -2,7 +2,7 @@
 <?php
 $_GET['pid'] = 'POTur2qxIKmSafOghaFn';
 $pid = $_GET['pid'];
-echo "<script type='module'>import { classes } from './admin.js';
+echo "<script type='module'>import { classes  } from './admin.js';
 document.getElementsByTagName('body').onload = classes('$pid');</script>";
 ?>
 
@@ -30,7 +30,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
                     <div class="section-title text-center ">
                     <h3 class="topTitle">قائمة الفصول</h3>
 
-                        <button class="button-36 topTitle addNewClass" onclick="location.href='addAdmin?class.php'"  >إضافة صف</button>
+                        <button class="button-36 topTitle" onclick="location.href='class.php'"  >إضافة صف</button>
                        
                     </div>
                 </div>

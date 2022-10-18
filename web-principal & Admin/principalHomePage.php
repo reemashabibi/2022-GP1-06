@@ -22,7 +22,7 @@ document.getElementsByTagName('body').onload = callAdmins('$pid');</script>";
   <a class="active" href="#principalHomePage.php">الصفحة الرئيسية</a>
   <a href="addAdmin.php">إضافة إداري</a>
   <a href="editPrincipal.html">معلومات الحساب</a>
-  <a>تسجيل الخروج</a>
+  <a id="signoutlinl">تسجيل الخروج</a>
 </div>
 <div class="container">
             <div class="row">
