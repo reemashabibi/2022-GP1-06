@@ -1,0 +1,96 @@
+@import url("https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@600&display=swap");
+body {
+  
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  
+  background: linear-gradient(45deg, rgb(233, 246, 247), #ccc);
+  font-family: "Sansita Swashed", cursive;
+}
+.center {
+  position: relative;
+  padding: 50px 50px;
+  background: #fff;
+  border-radius: 10px;
+}
+.center h1 {
+  font-size: 2em;
+  border-right: 5px solid rgb(2, 53, 105);
+  padding: 10px;
+  color: #000;
+  letter-spacing: 5px;
+  margin-bottom: 60px;
+  font-weight: bold;
+  padding-left: 10px;
+  text-align: right;
+}
+.center .inputbox {
+  position: relative;
+  width: 300px;
+  height: 50px;
+  margin-bottom: 50px;
+  
+}
+.center .inputbox input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 2px solid #000;
+  outline: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  text-align: right;
+}
+.center .inputbox:last-child {
+  margin-bottom: 0;
+}
+.center .inputbox span {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  font-size: 1em;
+  transition: 0.6s;
+  font-family: sans-serif;
+  
+}
+.center .inputbox input:focus ~ span,
+.center .inputbox input:valid ~ span {
+  transform: translateX(-13px) translateY(-35px);
+  font-size: 1em;
+  
+}
+.center .inputbox [type="button"] {
+  width: 50%;
+  background: #ccc;
+  color: #fff;
+  border: #fff;
+  text-align: center;
+}
+.center .inputbox:hover [type="button"] {
+  background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
+}
+
+
+/* Add some hover effects to buttons */
+.center .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+
+/* Set a style for the submit/login button */
+.center .btn {
+  border-radius: 10px;
+  background-color: #4ebfc1;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
