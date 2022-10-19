@@ -60,7 +60,7 @@ document.getElementsByTagName('body').onload = classes('$pid');</script>";
                     <div class="section-title text-center ">
                     <h3 class="topTitle">قائمة المعلمين</h3>
 
-                        <button class="button-36 topTitle addTeacher" onclick="location.href='addAdmin.php'"  >إضافة معلم</button>
+                        <button class="button-36 topTitle addTeacher" onclick="location.href='addTeacher.php'"  >إضافة معلم</button>
                         <div class="loader topTitle"></div>
 
                        

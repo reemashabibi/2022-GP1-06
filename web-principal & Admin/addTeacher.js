@@ -29,7 +29,7 @@ const firebaseConfig = {
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-  const colRef = collection(db, 'Admin');
+  const colRef = collection(db, 'Teacher');
   const auth = getAuth(app);
 
   //get collection data
@@ -109,7 +109,7 @@ const firebaseConfig = {
            
          
         // const registerEmail = null;
-           const addAdminForm = document.querySelector('.addAdmin')
+           const addAdminForm = document.querySelector('.addTeacher')
            let send = false;
            let adminID = null;
            addAdminForm.addEventListener('submit',  async (e) => {
@@ -126,7 +126,7 @@ const firebaseConfig = {
                 alert("triggerd");
                 const user = userCredential.user;
 
-                  setDoc(doc(db, "Admin", user.uid), {
+                  setDoc(doc(db, "Teacher", user.uid), {
                     Email: addAdminForm.email.value,
                     FirstName: addAdminForm.firstName.value,
                     LastName: addAdminForm.lastName.value, 
