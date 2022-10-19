@@ -1,5 +1,8 @@
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , sendEmailVerification , updatePassword, sendPasswordResetEmail, sendSignInLinkToEmail, fetchSignInMethodsForEmail
+
+} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 //
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -7,6 +10,7 @@ import { collection, getDocs, addDoc, Timestamp, deleteDoc } from "https://www.g
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
@@ -88,14 +92,28 @@ const firebaseConfig = {
            }
 
 
-
+           /* get schoolID
+           const authPrin = getAuth();
+           lest Schoo_lID = null;
+           onAuthStateChanged(authPrin, (user) => {
+           if (user) {
+              // User is signed in, see docs for a list of available properties
+             // https://firebase.google.com/docs/reference/js/firebase.User
+              Schoo_lID = user.uid;
+              // ...
+                } else {
+                 // User is signed out
+                 // ...
+                }
+            }); */
+           
            const addAdminForm = document.querySelector('.addAdmin')
-           //let added = false;
-           //let pass = pass();
+           let send = false;
+           let adminID = null;
            addAdminForm.addEventListener('submit',  async (e) => {
             // alert("in");
              if(validate()){
-             //    alert("in2");
+             //   alert("in2");
              e.preventDefault()
             // alert("triggerd");
              const registerEmail = document.getElementById("email").value;
@@ -103,10 +121,9 @@ const firebaseConfig = {
              createUserWithEmailAndPassword(auth, registerEmail, registerPass)
              .then(  (userCredential) => {
                  // Signed in 
+                 alert("triggerd");
                  const user = userCredential.user;
-                 //alert("تمت الإضافة بنجاح");
-                 //alert(user.uid);
-         
+
                   setDoc(doc(db, "Admin", user.uid), {
                     Email: addAdminForm.email.value,
                     FirstName: addAdminForm.firstName.value,
@@ -114,109 +131,29 @@ const firebaseConfig = {
                     password: registerPass,
                     //schoolID?
                     schoolID: "/School/"+22,
+                  //  schoolID:"/School/"+Schoo_lID,
                   });
 
                  alert("تم بنجاح");
-                 addAdminForm.reset();
+                 addAdminForm.reset()
+                 //const newPassword = pass();
+                 sendEmailVerification(user).then(() => {
+                  // EmailSent
+                  alert("sent");
+                })      
                })
                .catch((error) => {
                  const errorCode = error.code;
                  const errorMessage = error.message;
-                 // ..
-                // alert("البريد الالكتروني مستخدم من قبل");
                  alert(errorMessage);
-                 addAdminForm.reset();
-               });
+               })
                //added = true;
-         
              }//end if
              else{
                 // alert("return");
+       
              }
-         
-         
+             
            });//the end
 
-
-  ///Adding an admin  
-    
-  /*
-  const addAdminForm = document.querySelector('.addAdmin')
-  //let added = false;
-  //let pass = pass();
-  addAdminForm.addEventListener('submit',  async (e) => {
-    //alert("in");
-    if(validate()){
-     //   alert("in2");
-    e.preventDefault()
-   // alert("triggerd");
-    const registerEmail = document.getElementById("email").value;
-    const registerPass =  pass();
-    createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-    .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        //alert("تمت الإضافة بنجاح");
-        //alert(registerPass + " -- " + registerEmail);
-
-        addDoc(colRef, {
-            Email: addAdminForm.email.value,
-            FirstName: addAdminForm.firstName.value,
-            LastName: addAdminForm.lastName.value, 
-            password: registerPass,
-            //schoolID?
-            schoolID: "/School/"+22,
-        })
-        alert("تم بنجاح");
-        addAdminForm.reset();
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-        alert("البريد الالكتروني مستخدم من قبل");
-        addAdminForm.reset();
-      });
-      //added = true;
-
-    }//end if
-    else{
-       // alert("return");
-    }
-
-
-  })//the end
-  
-  */
-
-  /*
-  const addAdminForm = document.querySelector('.addAdmin')
-  addAdminForm.addEventListener('submit',  async (e) => {
-    e.preventDefault();
-
-    //get user info
-    const registerEmail = document.getElementById("email").value;
-    const registerPass =  pass();
-
-    //create an account for the user
-    auth.createUserWithEmailAndPassword(registerEmail, registerPass).then(cred => {
-        return db.collection('Admin').doc(cred.user.uid).set({
-        Email: addAdminForm.email.value,
-        FirstName: addAdminForm.firstName.value,
-        LastName: addAdminForm.lastName.value, 
-        password: registerPass,
-        //schoolID?
-        schoolID: "/School/"+22,
-        })
-    }).then(() => {
-       // const modal = document.querySelector("#modal-signup");
-      //  M.modal.getInstance("#modal-signup").close();
-        addAdminForm.reset();
-
-
-
-
-    });
-
-  });//The end
-*/
+ 
