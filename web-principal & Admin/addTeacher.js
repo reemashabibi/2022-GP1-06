@@ -29,7 +29,7 @@ const firebaseConfig = {
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-  const colRef = collection(db, 'Teacher');
+  const colRef = collection(db, 'Admin');
   const auth = getAuth(app);
 
   //get collection data
@@ -106,56 +106,55 @@ const firebaseConfig = {
                  // ...
                 }
             }); */
-           
-         
-        // const registerEmail = null;
-           const addAdminForm = document.querySelector('.addTeacher')
-           let send = false;
-           let adminID = null;
-           addAdminForm.addEventListener('submit',  async (e) => {
-            // alert("in");
-             if(validate()){
-             //   alert("in2");
-             e.preventDefault()
-            // alert("triggerd");
-             const registerEmail = document.getElementById("email").value;
-             const registerPass =  pass();
-             createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-             .then(  (userCredential) => {
-                 // Signed in 
-                alert("triggerd");
-                const user = userCredential.user;
 
-                  setDoc(doc(db, "Teacher", user.uid), {
-                    Email: addAdminForm.email.value,
-                    FirstName: addAdminForm.firstName.value,
-                    LastName: addAdminForm.lastName.value, 
-                    password: "",
-                    //schoolID?
-                    schoolID: "/School/"+22,
-                  // schoolID:"/School/"+Schoo_lID,
-                  });
 
-                  alert("تم بنجاح");
-                  sendPasswordResetEmail(auth,registerEmail).then(() => {
-                   // EmailSent
-                  // alert(registerEmail + " -- " + auth);
-                   alert("reset");
-                 })      
+
+            const addAdminForm = document.querySelector('.addTeacher')
+            addAdminForm.addEventListener('submit',  async (e) => {
+             // alert("in");
+              if(validate()){
+              //    alert("in2");
+              e.preventDefault()
+              alert("triggerd");
+              const registerFname = document.getElementById("firstName").value;
+              const registerlname = document.getElementById("lastName").value;
+              const registerEmail = document.getElementById("email").value;
+              const registerPass =  pass();
+              createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+              .then(  (userCredential) => {
+                  // Signed in 
+                  const user = userCredential.user;
+                  
+                 //send an email to reset password
+                 sendPasswordResetEmail(auth,registerEmail).then(() => {
+                  // EmailSent
+                 // alert(registerEmail + " -- " + auth);
+                  alert("reset");
+                })
+
+                //add to the document
+                setDoc(doc(db, "Teacher", user.uid), {
+                  Email: registerEmail,
+                  FirstName: registerFname,
+                  LastName: registerlname, 
+                  password: "",
+                  //schoolID?
+                  schoolID: "/School/"+22,
+                });
+
+               alert("تم بنجاح");
+                 
                 })
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
+                 // alert("البريد الالكتروني مستخدم من قبل");
                   alert(errorMessage);
-                })
+                  addAdminForm.reset();
+                });
                 addAdminForm.reset();
-             }//end if
-             else{
-                // alert("return");
-       
-             }
-             
-           });//the end
-
-        
-       
+              }//end if
+              else{
+                 // alert("return");
+              }
+            }); //The END
