@@ -36,7 +36,7 @@
         <span>البريد الإلكتروني</span>
       </div>
       <div class="inputbox">
-        <input type="email" required="required"  id="passInp">
+        <input type="password" required="required"  id="passInp">
         <span>كلمة السر</span>
       </div>
       
@@ -44,8 +44,10 @@
         <button type="text" id="subButton" class="btn"  >تسجيل</button>
     </div>
     </form>
-    <div class="inputbox">
-        <a href="index.html" class="alink" > لديك حساب ؟</a>  
+    <br>
+    <br>
+    <div >
+        <a href="index.html" class="alink" > مدرستك مسجلة مسبقاً ؟</a>  
       </div>
         
     </div>
@@ -124,44 +126,60 @@ submit.addEventListener('click',  async (e) => {
       
     if (!exist) {
         
+   addSchool() ; 
+   addPrincipal();
+   registerUser();
+  
+       
         
-        const auth = getAuth();
-        createUserWithEmailAndPassword(auth, Email.value, Password.value) .then((userCredential) => {
-   // Signed in 
-       const user = userCredential.user;
-
-    }) .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-   });
-
-    
-        addDoc(colRefP, {
-            Email: Email.value,
-            FirstName: FirstName.value,
-            LastName: LastName.value, 
-            password: Password.value,
-            SchoolID: '',
-        })
-        .then (() => {
-          
-            
-        })
-        addDoc(colRefSchool, {
-            Name: schoolName.value,
-            BranchNumber: BranchNumber.value,
-            ParentID: '',
-        })
-        .then (() => {
-          
-        })
         alert("تم تسجيل المدرسة بنجاح");
+       /* else {
+          alert(" يوجد خطأ يرجى المحاولة في وقت لاحق ");
+        }*/
+
     }
     else{
         alert("المدرسة مسجلة مسبقاً");
         
     }
     });
+
+    function addSchool(){
+      
+        addDoc(colRefSchool, {
+            Name: schoolName.value,
+            BranchNumber: BranchNumber.value,
+            PrincipalID: Email.value ,
+        })
+        .then (() => {
+          return true;
+        
+        });
+        return false;
+    }
+    function addPrincipal(){
+      addDoc(colRefP, {
+            Email: Email.value,
+            FirstName: FirstName.value,
+            LastName: LastName.value, 
+            password: Password.value,
+            SchoolID: schoolName.value ,
+        })
+        .then (() => {
+            
+            return true;
+        });
+        return false;
+    }
+
+    function registerUser(){
+      const auth = getAuth();
+        createUserWithEmailAndPassword(auth, Email.value, Password.value) .then((userCredential) => {
+       // Signed in 
+       const user = userCredential.user; }) .catch((error) => {
+       const errorCode = error.code;
+       const errorMessage = error.message; });
+    }
 
 
       </script>
@@ -172,26 +190,19 @@ submit.addEventListener('click',  async (e) => {
       const Firstname=document.getElementById("fnameInp");
       const Lastname=document.getElementById("lnameInp");
       const Email1=document.getElementById("emailInp");
+      const password=document.getElementById("passInp");
+      const schoolname=document.getElementById("snameInp");
+      const Branchnumber=document.getElementById("bnumInp");
 
 
    function validate() {
     
-    var letters = /^[A-Za-z]+$/;
+    if(Firstname.value==""|| Lastname.value=="" || schoolname.value=="" || Branchnumber.value=="" || password.value==""){
+      alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+      return false;
+    }
 
-    if( !Firstname.value.match(letters) )
-    {
-     alert('يمكن للاسم ان يحتوي على أحرف فقط');
-     document.getElementById("fnameInp").focus();
-     return false;
-    }
-   
     
-    if( !Lastname.value.match(letters) )
-    {
-      alert('يمكن للاسم ان يحتوي على أحرف فقط');
-      document.getElementById("lnameInp").focus();
-     return false;
-    }
    
    
     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;

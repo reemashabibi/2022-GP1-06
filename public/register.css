@@ -94,3 +94,12 @@ body {
   margin-bottom:10px;
   opacity: 0.8;
 }
+
+.alink {
+  text-decoration: none;
+  color:cadetblue;
+}
+a:hover {
+  border-bottom: 1px solid;
+  color:darkcyan;
+}
