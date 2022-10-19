@@ -5,15 +5,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="create.css">
-    <script type="module" src="addAdmin.js"></script>
-    <title>إضافة إداري</title>
+    <script type="module" src="addTeacher.js"></script>
+    <title>إضافة معلم</title>
 </head>
 
 <body>
 <div class="center">
-  <h1>إضافة إداري</h1>
+  <h1>إضافة معلم</h1>
 
-  <form class="addAdmin" id="modal-signup">
+  <form class="addTeacher" id="modal-signup">
 
   <div class="inputbox">
       <input type="text" required="required" name ="firstName" id="firstName">
@@ -38,29 +38,6 @@
   </form>
 </div>
 
-
-<script> 
-/*function test(){
- Email.send({
-  
-                SecureToken : "fc2af1b0-d695-40c6-b4e6-7d028e798e39",
-                To : "reema.fahad.a99@gmail.com",
-                From : "reemafahadshabibi7@gmail.com",
-                Subject : "This is the subject",
-                Body : "And this is the body  username is:"+Email+" password is:"+ password+" .. thank you"
-            }).then(
-             // message => alert(message)
-             addAdminForm.reset()
-             
-            );
-          }
-          */
-
-</script>
-
-
 </body>
 </html>
-
-
 
