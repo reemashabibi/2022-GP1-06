@@ -34,7 +34,7 @@
 
 
 
-export async function classes(pid){
+export async function viewTachersAndClasses(pid){
 
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence ));
@@ -50,11 +50,8 @@ export async function classes(pid){
     
     const div1 = document.createElement("div");
     div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab";
-  div1.id= doc.id;
-  div1.onclick = function () {
+  
 
-    location.href = "students.php?c="+div1.id+"&s="+pid;
-};
     document.getElementById("bigdiv").appendChild(div1);
 
     const div5 = document.createElement("div");
@@ -63,7 +60,7 @@ export async function classes(pid){
     a1.className="btn d-block w-100 d-sm-inline-block btn-light";
     a1.appendChild(document.createTextNode("تعيين معلم"));
     a1.onclick = function () {
-      location.href = "teacherClass.php";
+      location.href = "teacherSubjectClass.php?cid="+doc.id;
   };
   const a2= document.createElement('a');
   a2.className="btn d-block w-100 d-sm-inline-block btn-light";
@@ -75,6 +72,10 @@ export async function classes(pid){
 
     const div2 = document.createElement("div");
     div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap ";
+    div2.onclick = function () {
+
+      location.href = "students.php?c="+doc.id+"&s="+pid;
+  };
     div1.appendChild(div2);
  
     const div4 = document.createElement("div");
@@ -150,10 +151,6 @@ export async function classes(pid){
 }
 
 
-function showPage() {
-  document.getElementsByClassName("loader").style.display = "none";
-
-}
 
 export async function viewStudents(classId,school){
   const refrence = doc(db, "Class", classId);
@@ -297,14 +294,22 @@ $(document).ready(function(){
    $(document).on('click','.btn-light', async function(){
     var classID = $(this).attr('id');
     const docRef = doc(db, "Class", classID);
-    //const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
-    deleteDoc(docRef).then(() => {
-      alert("تم حذف الفصل");
-      window.location.reload(true);
-    })
-    .catch(error => {
-      console.log(error);
-    })
+    const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot.empty){
+      deleteDoc(docRef).then(() => {
+        alert("تم حذف الفصل");
+        window.location.reload(true);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+    }
+    else{
+      alert("هذا الفصل يحتوي على طلاب. ليتم حذف الفصل يجب ألا يحتوي على أي طالب.");
+    }
+    
+  
   });
 });
 

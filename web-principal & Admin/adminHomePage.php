@@ -2,8 +2,8 @@
 <?php
 $_GET['pid'] = 'POTur2qxIKmSafOghaFn';
 $pid = $_GET['pid'];
-echo "<script type='module'>import { classes  } from './admin.js';
-document.getElementsByTagName('body').onload = classes('$pid');</script>";
+echo "<script type='module'>import { viewTachersAndClasses  } from './admin.js';
+document.getElementsByTagName('body').onload = viewTachersAndClasses('$pid');</script>";
 ?>
 
 

@@ -278,7 +278,7 @@ div.content {
 .loader {
   position: absolute;
   left: 50%;
-  top: 30em;
+  top:23em;
   z-index: 1;
   width: 120px;
   height: 120px;
