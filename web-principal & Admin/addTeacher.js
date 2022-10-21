@@ -109,8 +109,7 @@ const firebaseConfig = {
 
 
 
-
-            const addAdminForm = document.querySelector('.addAdmin')
+            const addAdminForm = document.querySelector('.addTeacher')
             addAdminForm.addEventListener('submit',  async (e) => {
              // alert("in");
               if(validate()){
@@ -134,7 +133,7 @@ const firebaseConfig = {
                 })
 
                 //add to the document
-                setDoc(doc(db, "Admin", user.uid), {
+                setDoc(doc(db, "Teacher", user.uid), {
                   Email: registerEmail,
                   FirstName: registerFname,
                   LastName: registerlname, 
@@ -159,5 +158,3 @@ const firebaseConfig = {
                  // alert("return");
               }
             }); //The END
-           
-  

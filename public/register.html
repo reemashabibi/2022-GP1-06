@@ -5,142 +5,223 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>التسجيل</title>
+    <link href="register.css" rel="stylesheet" >
     
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <!-- CSS is not finished yet -->
-    <style>
-        body{ 
-            display: flex ;
-            justify-content: center;
-            align-items: center;
-            width: 100vw;
-            height: 100vh;
-        }
-    </style>
+   
+   
 </head>
 <body>
 
-    <div class="mb-5">
-        <h3 class="mb-3">سجل مدرستك في حلقة</h3>
-        <input type="text" placeholder="اسم المدرسة" id="snameInp"  class="form-control mb-3" >
-        <input type="text" placeholder="رقم/اسم الفرع" id="bnumInp"  class="form-control mb-3" >
-        <input type="text" placeholder="الاسم الأول لمدير المدرسة" id="fnameInp"  class="form-control mb-3" >
-        <input type="text" placeholder="الاسم الأخير لمدير المدرسة" id="lnameInp"  class="form-control mb-3" >
-        <input type="text" placeholder="البريد الإلكتروني" id="emailInp"  class="form-control mb-3" >
-        <input type="text" placeholder="كلمة السر" id="passInp" class="form-control mb-3" >
+    <div class="center" >
+        <h1 >سجل مدرستك في حلقة</h1>
+        <form>
+     <div class="inputbox">
+        <input type="text" required="required" id="snameInp"  >
+        <span>اسم المدرسة </span>
+     </div>
+     <div class="inputbox">
+        <input type="text" required="required" id="bnumInp"  >
+        <span>رقم/اسم الفرع </span>
+     </div>
+     <div class="inputbox">
+        <input type="text" required="required" id="fnameInp"   >
+        <span>الاسم الأول لمدير المدرسة</span>
+     </div>
+     <div class="inputbox">
+        <input type="text" required="required" id="lnameInp"  >
+        <span>الاسم الأخير لمدير المدرسة</span>
+     </div>
+     <div class="inputbox">
+        <input type="email" required="required"  id="emailInp">
+        <span>البريد الإلكتروني</span>
+      </div>
+      <div class="inputbox">
+        <input type="password" required="required"  id="passInp">
+        <span>كلمة السر</span>
+      </div>
+      
+      <div class="inputbox">
+        <button type="text" id="subButton" class="btn"  >تسجيل</button>
+    </div>
+    </form>
+    <br>
+    <br>
+    <div >
+        <a href="index.html" class="alink" > مدرستك مسجلة مسبقاً ؟</a>  
+      </div>
         
-        <button type="text" id="subButton" class="btn w-100 btn-outline-primary mb-3" >تسجيل</button>
-        <a href="index.html" class=" badge-secondary py-1 w-100" > لديك حساب ؟</a>
     </div>
 
 
 
 
 
-
-
-
     <script type="module">
+        
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        //import {getDatabase  , set ,child  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+
+
+
+
         const firebaseConfig = {
-             apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
-             authDomain: "halaqa-89b43.firebaseapp.com",
-             projectId: "halaqa-89b43",
-             storageBucket: "halaqa-89b43.appspot.com",
-             messagingSenderId: "969971486820",
-             appId: "1:969971486820:web:40cc0abf19a909cc470f71",
-             measurementId: "G-PCYTHJF1SD"
+          apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+          authDomain: "halaqa-89b43.firebaseapp.com",
+          projectId: "halaqa-89b43",
+          storageBucket: "halaqa-89b43.appspot.com",
+          messagingSenderId: "969971486820",
+          appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+          measurementId: "G-PCYTHJF1SD"
         };
+      
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
-        import {getDatabase ,ref , set ,child ,get }
-           from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-           const db = getDatabase();
+        
+        export { app, db, collection, getDocs, Timestamp, addDoc };
+        export { query, orderBy, limit, where, onSnapshot }; 
+        const analytics = getAnalytics(app);
 
 
-           const schoolName=document.getElementById("snameInp");
-           const BranchNumber=document.getElementById("bnumInp");
-           const FirstName=document.getElementById("fnameInp");
-           const LastName=document.getElementById("lnameInp");
-           const Email=document.getElementById("emailInp");
-           const Password=document.getElementById("passInp");
-           const submit=document.getElementById("subButton");
+        const db = getFirestore(app);
+        const colRefSchool = collection(db, "School");
+        const colRefP = collection(db, "Principal");
+        
+    
+      
 
-           submit.addEventListener('click', RegisterSchool); 
+// save user input 
+      const schoolName=document.getElementById("snameInp");
+      const BranchNumber=document.getElementById("bnumInp");
+      const FirstName=document.getElementById("fnameInp");
+      const LastName=document.getElementById("lnameInp");
+      const Email=document.getElementById("emailInp");
+      const Password=document.getElementById("passInp");
+      const submit=document.getElementById("subButton");
+
+    
+    
 
 
-           function isEmpty(str){
-            return str === null || str.match(/^ *$/)!== null;
-           }
+submit.addEventListener('click',  async (e) => {
+    e.preventDefault()
+   if(!validate()){
+    return false;
+   }
+  //check if school exitsts
+    const q = query(collection(db, "School"), where("Name", "==", schoolName.value));
+    const querySnapshot = await getDocs(q);
+    var exist = false;
+    querySnapshot.forEach((doc) => {
+        if(!doc.empty)
+         exist = true;
+         
+       
+      });
+      
+    if (!exist) {
+        
+   addSchool() ; 
+   addPrincipal();
+   registerUser();
+  
+       
+        
+        alert("تم تسجيل المدرسة بنجاح");
+       /* else {
+          alert(" يوجد خطأ يرجى المحاولة في وقت لاحق ");
+        }*/
 
-           function validation(){
+    }
+    else{
+        alert("المدرسة مسجلة مسبقاً");
+        
+    }
+    });
+
+    function addSchool(){
+      
+        addDoc(colRefSchool, {
+            Name: schoolName.value,
+            BranchNumber: BranchNumber.value,
+            PrincipalID: Email.value ,
+        })
+        .then (() => {
+          return true;
+        
+        });
+        return false;
+    }
+    function addPrincipal(){
+      addDoc(colRefP, {
+            Email: Email.value,
+            FirstName: FirstName.value,
+            LastName: LastName.value, 
+            password: Password.value,
+            SchoolID: schoolName.value ,
+        })
+        .then (() => {
             
-            let nameregex=/^[a-zA-Z]+$/;
-            let schoolregex=/^[a-zA-Z0-9]+$/;
-            let email =/^[a-zA-Z0-9]+@[a-zA-Z]\.com$/
-            if (!nameregex.test(FirstName.value)){
-                alert("الاسم الأول يتكون من حروف فقط ");
-                return false;
-            }
-            if (!nameregex.test(LastName.value)){
-                alert("الاسم الثاني يتكون من حروف فقط ");
-                return false;
-            }
-            if (!schoolregex.test(SchoolName.value)){
-                alert("الاسم المدرسة يتكون من حروف و أرقام فقط ");
-                return false;
-            }
-            if (!email.test(Email.value)){
-                alert("يرجى التحقق من طريقة كتابة البريد الإلكتروني");
-                return false;
-            }
-
-            if(isEmpty(Email.value) || isEmpty(SchoolName.value)|| isEmpty(LastName.value) || isEmpty(FirstName.value) || isEmpty(BranchNumber.value) || isEmpty(Password.value) ){
-                alert("جميع الحقول مطلوبة ، الرجاء التحقق من تعبأتها كاملة");
-                return false;
-            }
-
             return true;
+        });
+        return false;
+    }
 
-           }
-
-           function RegisterSchool(){
-            if (!validation()) {
-                return;
-            }
-            const dbRef =ref(db);
-
-            get(child(dbRef, "School/"+ SchoolName.value)).then((snapshot)=>{ //Not working !!!!
-                if(snapshot.exists()){
-                    alert("المدرسة مسجلة مسبقاً");
-                }
-                else{
-                    set(ref(db,"School/"+SchoolName.value), // Not working !!!
-                    {
-                        SchoolName:schoolName.value,
-                        BranchNumber:BranchNumber.value
-                        //PrincipalID=
+    function registerUser(){
+      const auth = getAuth();
+        createUserWithEmailAndPassword(auth, Email.value, Password.value) .then((userCredential) => {
+       // Signed in 
+       const user = userCredential.user; }) .catch((error) => {
+       const errorCode = error.code;
+       const errorMessage = error.message; });
+    }
 
 
-                    })
-                }
-            }).then(()=>{
-                alert("تم إضافة المدرسة بنجاح");
-            })
-            .catch((error)=>{
-                alert("حدث خطأ الرجاء المحاولة في وقتٍ لاحق");
-
-            });
-
-            function encryptPassword(){
-                var pass12 = CryptoJS.AES.encrypt(Password.value,Password.value);
-                return pass12.toString;
-            }
+      </script>
 
 
-           }
+<script type="text/javascript">
+    
+      const Firstname=document.getElementById("fnameInp");
+      const Lastname=document.getElementById("lnameInp");
+      const Email1=document.getElementById("emailInp");
+      const password=document.getElementById("passInp");
+      const schoolname=document.getElementById("snameInp");
+      const Branchnumber=document.getElementById("bnumInp");
+
+
+   function validate() {
+    
+    if(Firstname.value==""|| Lastname.value=="" || schoolname.value=="" || Branchnumber.value=="" || password.value==""){
+      alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+      return false;
+    }
+
+    
+   
+   
+    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if( !Email1.value.match(mailformat)){
+     alert("يرجى إدخال بريد إلكتروني صحيح ");
+     document.getElementById("emailInp").focus();
+     return false;
+    }
+   
+    else {
+      return true;
+     }
+   }
+   
+   </script>
+
+
+
           
-    </script>
 
     
 </body>
