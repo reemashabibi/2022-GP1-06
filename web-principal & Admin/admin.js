@@ -152,7 +152,7 @@ export async function viewTachersAndClasses(pid){
 
 
 
-}
+
 
 export async function viewStudents(classId,school){
   const refrence = doc(db, "Class", classId);
