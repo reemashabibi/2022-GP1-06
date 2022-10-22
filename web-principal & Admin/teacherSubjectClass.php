@@ -79,7 +79,7 @@ document.getElementsByTagName('body').onload = subjectTeacherForm('$cid', '$pid'
 
             </div>
             
-<input class="button-9" type="submit" value="حفظ جميع التعديلات" />
+
 </form>
         </div>
     </div>
