@@ -33,8 +33,7 @@ export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
 
 
-
-export async function classes(pid) {
+export async function viewTachersAndClasses(pid){
 
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence));
@@ -49,12 +48,10 @@ export async function classes(pid) {
     var level = doc.data().Level;
 
     const div1 = document.createElement("div");
-    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab";
-    div1.id = doc.id;
-    div1.onclick = function () {
+    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab ";
+    div1.id = level;
+  
 
-      location.href = "students.php?c=" + div1.id + "&s=" + pid;
-    };
     document.getElementById("bigdiv").appendChild(div1);
 
     const div5 = document.createElement("div");
@@ -63,27 +60,35 @@ export async function classes(pid) {
     a1.className = "btn d-block w-100 d-sm-inline-block btn-light";
     a1.appendChild(document.createTextNode("تعيين معلم"));
     a1.onclick = function () {
-      location.href = "teacherClass.php";
-    };
-    const a2 = document.createElement('a');
-    a2.className = "btn d-block w-100 d-sm-inline-block btn-light";
-    a2.appendChild(document.createTextNode("حذف الصف"));
-    a2.setAttribute('id', doc.id)
-    div5.appendChild(a1);
+      location.href = "teacherSubjectClass.php?cid="+doc.id;
+  };
+  //delete button
+  const a2= document.createElement('button');
+  a2.className="btn btn-danger rounded-0 deletebtn";
+  a2.type = "button"
+  a2.setAttribute('id', doc.id);
+  const i = document.createElement('i');
+  i.className="fa fa-trash";
+  a2.appendChild(i);
+  div5.appendChild(a1);
     div5.appendChild(a2);
     div1.appendChild(div5);
 
+
     const div2 = document.createElement("div");
-    div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap ";
+    div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap";
+ 
     div1.appendChild(div2);
 
     const div4 = document.createElement("div");
     div4.className = "job-content";
     div2.appendChild(div4);
-    const h5 = document.createElement('h5');
-    h5.className = "text-center text-md-left";
-    h5.appendChild(document.createTextNode(className + "-" + level));
-    div4.appendChild(h5);
+    const classlink = document.createElement('a');
+    classlink.className = "text-center text-md-left";
+    classlink.appendChild(document.createTextNode(className + "-" + level));
+    classlink.href="students.php?c="+doc.id+"&s="+pid;
+    classlink.id = "className";
+    div4.appendChild(classlink);
 
 
 
@@ -111,11 +116,15 @@ export async function classes(pid) {
     document.getElementById("bigdiv2").appendChild(div1);
     const div5 = document.createElement("div");
     div5.className = "job-right my-4 flex-shrink-0";
-    const a1 = document.createElement('a');
-    a1.className = "btn d-block w-100 d-sm-inline-block btn-light";
-    a1.appendChild(document.createTextNode("حذف المعلم"));
-    a1.id = doc.id;
-    div5.appendChild(a1);
+   //delete button
+   const a2= document.createElement('button');
+   a2.className="btn btn-danger rounded-0 deletebtn";
+   a2.type = "button"
+   a2.setAttribute('id', doc.id);
+   const i = document.createElement('i');
+   i.className="fa fa-trash";
+   a2.appendChild(i);
+    div5.appendChild(a2);
 
 
     div1.appendChild(div5);
@@ -138,24 +147,29 @@ export async function classes(pid) {
     li1.className = "mr-md-4";
     ul1.appendChild(li1);
     const i1 = document.createElement("i");
-    i1.appendChild(document.createTextNode(email));
     i1.className = "zmdi zmdi-email mr-2";
+    i1.appendChild(document.createTextNode(email));
     li1.appendChild(i1);
 
 
   });
 
 
-
+//sort classes by level
+$("#bigdiv > .theTab").sort(function(a, b) {
+  return parseInt(a.id) - parseInt(b.id);
+}).each(function() {
+  var elem = $(this);
+  elem.remove();
+  $(elem).appendTo("#bigdiv");
+});
 }
 
 
-function showPage() {
-  document.getElementsByClassName("loader").style.display = "none";
 
-}
 
-export async function viewStudents(classId, school) {
+
+export async function viewStudents(classId,school){
   const refrence = doc(db, "Class", classId);
 
   //for dropdown
@@ -272,7 +286,7 @@ export async function viewStudents(classId, school) {
 
 
   });
-
+  $('.loader').hide();
 }
 
 
@@ -294,17 +308,25 @@ $(document).ready(function () {
 
 
 $(document).ready(function () {
-  $(document).on('click', '.btn-light', async function () {
+  $(document).on('click', '.deletebtn', async function () {
     var classID = $(this).attr('id');
     const docRef = doc(db, "Class", classID);
-    //const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
-    deleteDoc(docRef).then(() => {
-      alert("تم حذف الفصل");
-      window.location.reload(true);
-    })
+    const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
+    const querySnapshot = await getDocs(q);
+    if(querySnapshot.empty){
+      deleteDoc(docRef).then(() => {
+        alert("تم حذف الفصل");
+        window.location.reload(true);
+      })
       .catch(error => {
         console.log(error);
       })
+    }
+    else{
+      alert("هذا الفصل يحتوي على طلاب. ليتم حذف الفصل يجب ألا يحتوي على أي طالب.");
+    }
+    
+  
   });
 });
 
@@ -317,6 +339,7 @@ $(document).ready(function () {
     var classId = $(this).val();
     const refrence = doc(db, "Class", classId);
     if (confirm("هل تُأكد نقل الطالب إلى فصلٍ آخر؟")) {
+      
       const data = {
         ClassID: refrence
       };
@@ -325,13 +348,19 @@ $(document).ready(function () {
         .then(docRef => {
           console.log("Value of an Existing Document Field has been updated");
 
-          window.location.reload(true);
+          $(this).closest('tr').remove();
         })
         .catch(error => {
           console.log(error);
         })
     }
+    else{
+      $('.transfer option:first').prop('selected',true);
+    }
 
   });
 });
+
+
+
 

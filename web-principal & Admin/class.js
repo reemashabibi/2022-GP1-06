@@ -70,26 +70,25 @@ classForm.addEventListener('submit', async (e) => {
         Level: parseInt(classForm.classes.value),
         SchoolID: refrence,
     })
-        .then(async docRef => {
-            classForm.reset()
-            const refrence = doc(db, "Class", docRef.id);
-            let currentClass = await getDoc(refrence);
-            const levelID = currentClass.data().Level;
-            const qc = query(collection(db, "Level"), where("Number", "==", levelID));
-            const querySnapshotc = await getDocs(qc);
-            querySnapshotc.forEach((doc) => {
-                alert(doc.data().Number)
-                const colRefTeacherClass = collection(db, "Teacher_Class");
-                const subLength = doc.data().Subjects;
-                for (let i = 0; i < subLength.length; i++) {
-                    addDoc(colRefTeacherClass, {
-                        ClassID: refrence,
-                        Subjet: doc.data().Subjects[i],
-                        TeacherID: "",
-                    }).then(() => {
-                        console.log("added")
-                    })
-                }
+    .then(async docRef => { 
+      classForm.reset()
+      const refrence = doc(db, "Class",  docRef.id);
+      let currentClass = await getDoc(refrence);
+      const levelID = currentClass.data().Level;
+      const qc = query(collection(db, "Level"), where("Number", "==", levelID ));
+      const querySnapshotc = await getDocs(qc);
+     querySnapshotc.forEach((doc) =>{
+       alert(doc.data().Number)
+        const colRefTeacherClass = collection(db, "Teacher_Class");
+        const subLength= doc.data().Subjects;
+        for(let i = 0; i < subLength.length; i++){
+        addDoc(colRefTeacherClass, {
+        ClassID: refrence,
+        Subject: doc.data().Subjects[i],
+        TeacherID:  "",
+      }).then(() => { 
+        console.log("added")
+      })}
 
             });
 

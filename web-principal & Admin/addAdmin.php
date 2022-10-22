@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="create.css">
     <script type="module" src="addAdmin.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <title>إضافة إداري</title>
 </head>
 
@@ -32,31 +34,12 @@
     </div>
 
 
+
     <div class="inputbox">
     <button  type="submit"  class="btn" id="reg-btn" >إضافة</button>
     </div>
   </form>
 </div>
-
-
-<script> 
-/*function test(){
- Email.send({
-  
-                SecureToken : "fc2af1b0-d695-40c6-b4e6-7d028e798e39",
-                To : "reema.fahad.a99@gmail.com",
-                From : "reemafahadshabibi7@gmail.com",
-                Subject : "This is the subject",
-                Body : "And this is the body  username is:"+Email+" password is:"+ password+" .. thank you"
-            }).then(
-             // message => alert(message)
-             addAdminForm.reset()
-             
-            );
-          }
-          */
-
-</script>
 
 
 </body>

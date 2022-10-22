@@ -25,6 +25,9 @@
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <hr>
 <div class="container bootstrap snippets bootdey">
+<button class="button-36 topTitle" >إضافة طالب</button>
+<br>
+<br>
     <div class="row">
         <div class="col-lg-12">
             <div class="main-box no-header clearfix">
@@ -53,6 +56,7 @@
                     </div>
                 </div>
             </div>
+            <div class="loader topTitle"></div>
         </div>
     </div>
 </div>
