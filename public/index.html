@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل الدخول</title>
     <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <style>
         body{
             display: flex ;
@@ -20,8 +18,8 @@
 </head>
 <body>
 
-    <div class="mb-5">
-        <h3 class="mb-3">تسجيل الدخول</h3>
+    <div class="center">
+        <h1 class="">تسجيل الدخول</h1>
         
         <input type="text" placeholder="البريد الإلكتروني" id="emailInp"  class="form-control mb-3" >
         <input type="text" placeholder="كلمة السر" id="passInp" class="form-control mb-3" >
@@ -37,15 +35,12 @@
         <a href="register.html" class=" badge-secondary py-1 w-100" >  مدرسة جديدة؟ التسجيل هنا</a>
     </div>
 
-
-
-
-
-
-
-
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+
+
         const firebaseConfig = {
              apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
              authDomain: "halaqa-89b43.firebaseapp.com",
@@ -55,13 +50,8 @@
              appId: "1:969971486820:web:40cc0abf19a909cc470f71",
              measurementId: "G-PCYTHJF1SD"
         };
-        const app = initializeApp(firebaseConfig);
-        import {getDatabase ,ref , set ,child ,get }
-           from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-           const db = getDatabase();
-
-
-
+           const app = initializeApp(firebaseConfig);
+           const db = getFirestore(app);
 
            const userType=document.getElementById("userType");
            const Email=document.getElementById("emailInp");
@@ -70,35 +60,50 @@
 
 
 
-           function AuthenticateUser(){
-            const dbref=ref(db);
+           submit.addEventListener('click',async (e) => {
+           e.preventDefault();
+           const auth = getAuth();
 
-            get(child(dbRef, "School/"+ SchoolName.value)).then((snapshot)=>{ //Not working !!!!
-                if(snapshot.exists()){
-                    let dbpass = decPass(snapshot.val().Password);
-                    if(dbpass==pass.value){
-                        login(snapshot.val());
-                    }
-                    else{
-                        alert("يرجى التحقق لا يوجد مستخدم ");// change message
-                    }
-                }
-                else{
-                    alert("يوجد خطأ في البريد الإلكتروني أو كلمة السر");
-                }   
-            });
-           }
+           signInWithEmailAndPassword(auth,Email,Password)
+           .then((userCredential) => {
+          // Signed in 
+           const user = userCredential.user;
+           alert("userlogedin");
+        
+        })
+        .catch((error) =>{
+            alert("somethingis wrong")+error.message;
+        })
 
-           function decPass(){
-                var pass12 = CryptoJS.AES.decrypt(dbpass,Password.value);
-                return pass12.toString(CryptoJS.enc.Utf8);
-            }
+            
 
-            function login(user){
-                sessionStorage.setItem('user', JSON.stringify(user))
-                window.location="";// depends on the user !!!!!!
 
-            }
+})
+           
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+           
+        
+
+            
+          
+
+            
+
+
 
 
 
@@ -107,6 +112,15 @@
 
 
     </script>
+
+
+
+
+
+
+
+
+  
 
     
 </body>
