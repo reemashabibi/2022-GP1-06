@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="register.css" rel="stylesheet" >
+    <title>معلومات الحساب</title>
+</head>
+<body>
+    <script type="module">
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+
+
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+          authDomain: "halaqa-89b43.firebaseapp.com",
+          projectId: "halaqa-89b43",
+          storageBucket: "halaqa-89b43.appspot.com",
+          messagingSenderId: "969971486820",
+          appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+          measurementId: "G-PCYTHJF1SD"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        
+        export { app, db, collection, getDocs, Timestamp, addDoc };
+        export { query, orderBy, limit, where, onSnapshot }; 
+        const analytics = getAnalytics(app);
+
+
+        const db = getFirestore(app);
+        const colRefSchool = collection(db, "School");
+    
+      //  db.settings({timestampInSnapshots: true });
+
+      
+      const schoolName=document.getElementById("snameInp");
+      const BranchNumber=document.getElementById("bnumInp");
+      const FirstName=document.getElementById("fnameInp");
+      const LastName=document.getElementById("lnameInp");
+      const Email=document.getElementById("emailInp");
+      const Password=document.getElementById("passInp");
+      
+
+      getDocs(colRefSchool).then((snapshot)=> {
+       snapshot.docs.forEach(doc => {
+        console.log(doc.data());
+       });
+       });
+      </script>
+
+
+      <div class="center" >
+        <h1 >سجل مدرستك في حلقة</h1>
+        <form id="signForm">
+     <div class="inputbox">
+        <input type="text" required="required" id="snameInp"  >
+        <span>اسم المدرسة </span>
+     </div>
+     <div class="inputbox">
+        <input type="text" required="required" id="bnumInp"  >
+        <span>رقم/اسم الفرع </span>
+     </div>
+     <div class="inputbox">
+        <input type="text" required="required" id="fnameInp"   >
+        <span>الاسم الأول لمدير المدرسة</span>
+     </div>
+     <div class="inputbox">
+        <input type="text" required="required" id="lnameInp"  >
+        <span>الاسم الأخير لمدير المدرسة</span>
+     </div>
+     <div class="inputbox">
+        <input type="email" required="required"  id="emailInp">
+        <span>البريد الإلكتروني</span>
+      </div>
+      <div class="inputbox">
+        <input type="password" required="required"  id="passInp">
+        <span>كلمة السر</span>
+      </div>
+      
+      <div class="inputbox">
+        <button type="text" id="subButton" class="btn"  >حفظ</button>
+    </div>
+    </form>
+    <br>
+    <br>
+
+    </div>
+</body>
+</html>
