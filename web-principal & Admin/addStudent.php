@@ -24,7 +24,7 @@
         <h3>معلومات الطالب</h3>
         
             <div class="inputbox">
-                <input type="text" required="required" name="Fname" id="Fname">
+                <input type="text"  required="required" name="Fname" id="Fname">
                 <span>الاسم الأول</span>
             </div>
 
