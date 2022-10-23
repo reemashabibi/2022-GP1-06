@@ -63,16 +63,17 @@ var filledCorrectly = false;
 addStudentForm.addEventListener('submit', async (e) => {
   notValidated = false;
   var fname = document.getElementById("Fname");
-  var letters = /^[A-Za-z]+$/;
-  if (!fname.value.match(letters)) {
-    alert('.يلزم ان يتكون الاسم الأول للطالب من احرف فقط');
+  var letters = null ;
+  if (fname.value == "") {
+    alert('يلزم ان يتكون الاسم الأول للطالب من احرف ');
     fname.focus();
     notValidated = true;
+    return false;
   }
 
   var Lname = document.getElementById("Lname");
-  if (!Lname.value.match(letters)) {
-    alert('.يلزم ان يتكون الاسم الأخير للطالب من احرف فقط');
+  if (Lname.value == "") {
+    alert('يلزم ان يتكون الاسم الأخير للطالب من احرف ');
     Lname.focus();
     notValidated = true;
   }
@@ -80,7 +81,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   var selectedClass = document.getElementById("classes");
   var selectedClassIn = selectedClass[selectedClass.selectedIndex].value;
   if (selectedClassIn == "non") {
-    alert('.أرجو اختيار الفصل');
+    alert('أرجو اختيار الفصل');
     document.querySelector('.add').non.focus();
     notValidated = true;
   }
@@ -91,7 +92,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
   if ((!phoneNo.value.match(phoneno))) {
-    alert('يلزم ان يتكون رقم الهاتف من ١٠ ارقام فقط');
+    alert('يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية');
     phoneNo.focus();
     notValidated = true;
   }
@@ -99,16 +100,16 @@ addStudentForm.addEventListener('submit', async (e) => {
 
 
   var FnameParent = document.getElementById("FnameParent");
-  var letters = /^[A-Za-z]+$/;
-  if (!FnameParent.value.match(letters)) {
-    alert('.يلزم ان يتكون الاسم الأول لولي الأمر من احرف فقط');
+  var letters = null;
+  if (FnameParent.value == "") {
+    alert('يلزم ان يتكون الاسم الأول لولي الأمر من احرف ');
     FnameParent.focus();
     notValidated = true;
   }
 
   var LnameParent = document.getElementById("LnameParent");
-  if (!LnameParent.value.match(letters)) {
-    alert('.يلزم ان يتكون الاسم الأخير لولي الأمر من احرف فقط');
+  if (LnameParent.value == "") {
+    alert('.يلزم ان يتكون الاسم الأخير لولي الأمر من احرف ');
     LnameParent.focus();
     notValidated = true;
   }
