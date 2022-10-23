@@ -1,3 +1,20 @@
+<script>
+    import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+    
+        onAuthStateChanges(auth, (user)=>{
+            if(user){
+                console.log("the same user");
+            }
+            else{
+                window.location.href="index.html";
+                console.log("the  user changed");
+            }
+    
+        })
+    </script>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,7 +77,7 @@
 
 
       <div class="center" >
-        <h1 >سجل مدرستك في حلقة</h1>
+        <h1 >   معلومات الحساب</h1>
         <form id="signForm">
      <div class="inputbox">
         <input type="text" required="required" id="snameInp"  >
