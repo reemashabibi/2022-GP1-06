@@ -61,11 +61,16 @@ document.getElementsByTagName('body').onload = viewTachersAndClasses('$pid');</s
         </div>
     </nav>
     <!--end of nav -->
+    <!--breadcrumb-->
+
+    <!--end of breadcrumb-->
 <div class="container">
             <div class="row">
                  <div class="col-lg-10 mx-auto mb-4">
                     <div class="section-title text-center ">
                     <h3 class="topTitle">قائمة الفصول</h3>
+<!-- HTML !-->
+
 
                         <button class="button-36 topTitle" onclick="location.href='class.php'"  >إضافة صف</button>
                         <div class="loader topTitle"></div>
