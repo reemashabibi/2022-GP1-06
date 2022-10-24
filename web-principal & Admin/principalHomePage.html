@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <script>
  import { callAdmins } from './principal.js';
-import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
  const user= auth.currentUser
-    onAuthStateChanges(auth, (user)=>{
+    onAuthStateChanged(auth, (user)=>{
         if(user){
             const uid=user.uid;
             document.getElementsByTagName('body').onload = callAdmins(uid);
