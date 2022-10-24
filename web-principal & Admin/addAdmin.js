@@ -100,6 +100,7 @@ const firebaseConfig = {
               // User is signed in, see docs for a list of available properties
              // https://firebase.google.com/docs/reference/js/firebase.User
               Schoo_lID = user.uid;
+              schoolIDref = doc(db, 'School', Schoo_lID);
               // ...
                 } else {
                  // User is signed out
@@ -137,8 +138,7 @@ const firebaseConfig = {
                   LastName: registerlname, 
                   password: "",
                   //schoolID?
-                  schoolID: "/School/"+22,
-                  schoolID: "/School/"+Schoo_lID,
+                  SchoolID: schoolIDref,
                 });
 
                alert("تم بنجاح");

@@ -45,7 +45,7 @@ function submitClick(){
 
 export async function callAdmins(pid){
   const refrence = doc(db, "School", pid);
-  const q = query(collection(db, "Admin"), where("schoolID", "==", refrence ));
+  const q = query(collection(db, "Admin"), where("SchoolID", "==", refrence ));
   
  
   var i=0;

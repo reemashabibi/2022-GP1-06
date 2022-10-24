@@ -33,9 +33,11 @@ export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
 
 
-export async function viewTachersAndClasses(pid){
- 
-  const refrence = doc(db, "School", pid);
+export async function viewTachersAndClasses(aid){
+  const adminDocrefrence = doc(db, "Admin", aid);
+  const docSnap = await getDoc(adminDocrefrence);
+  const refrence = doc(db, "School", docSnap.data().SchoolID);
+
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence));
   const qTeacher = query(collection(db, "Teacher"), where("SchoolID", "==", refrence));
 
@@ -90,7 +92,7 @@ export async function viewTachersAndClasses(pid){
     const classlink = document.createElement('a');
     classlink.className = "text-center text-md-left";
     classlink.appendChild(document.createTextNode(className + "-" + level));
-    classlink.href="students.php?c="+doc.id+"&s="+pid;
+    classlink.href="students.php?c="+doc.id+"&s="+docSnap.data().SchoolID.id;
     classlink.id = "className";
     div4.appendChild(classlink);
 
