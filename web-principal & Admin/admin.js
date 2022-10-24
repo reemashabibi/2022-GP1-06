@@ -55,14 +55,8 @@ export async function viewTachersAndClasses(pid){
     document.getElementById("bigdiv").appendChild(div1);
 
     const div5 = document.createElement("div");
-    div5.className = "job-right my-4 flex-shrink-0";
-    const a1 = document.createElement('a');
-    a1.className = "btn d-block w-100 d-sm-inline-block btn-light";
-    a1.appendChild(document.createTextNode("تعيين معلم"));
-    a1.onclick = function () {
-      location.href = "teacherSubjectClass.php?cid="+doc.id;
-  };
-  //delete button
+
+      //delete button
   const a2= document.createElement('button');
   a2.className="btn btn-danger rounded-0 deletebtn";
   a2.type = "button"
@@ -70,9 +64,19 @@ export async function viewTachersAndClasses(pid){
   const i = document.createElement('i');
   i.className="fa fa-trash";
   a2.appendChild(i);
+ 
+
+    div5.className = "job-right my-4 flex-shrink-0";
+    const a1 = document.createElement('a');
+    a1.className = "btn d-inline w-100 d-sm-inline-inline btn-light";
+    a1.appendChild(document.createTextNode("تعيين معلم"));
+    a1.onclick = function () {
+      location.href = "teacherSubjectClass.php?cid="+doc.id;
+  };
+
+  div5.appendChild(a2);
   div5.appendChild(a1);
-    div5.appendChild(a2);
-    div1.appendChild(div5);
+  div1.appendChild(div5);
 
 
     const div2 = document.createElement("div");
@@ -118,9 +122,9 @@ export async function viewTachersAndClasses(pid){
     div5.className = "job-right my-4 flex-shrink-0";
    //delete button
    const a2= document.createElement('button');
-   a2.className="btn btn-danger rounded-0 deletebtn";
+   a2.className="btn btn-danger rounded-0 deletebtnTeacher";
    a2.type = "button"
-   a2.setAttribute('id', doc.id);
+   a2.setAttribute('id', doc2.id);
    const i = document.createElement('i');
    i.className="fa fa-trash";
    a2.appendChild(i);
@@ -272,12 +276,14 @@ export async function viewStudents(classId,school){
 
     var td3 = document.createElement('td');
     var a3 = document.createElement('a');
+    a3.className = 'tdContent';
     a3.innerHTML = email;
     td3.appendChild(a3);
     tr.appendChild(td3);
 
     var td4 = document.createElement('td');
     var a4 = document.createElement('a');
+    a4.className = 'tdContent';
     a4.innerHTML = firstName + " " + lastName;
     td4.appendChild(a4);
     tr.appendChild(td4);
@@ -295,7 +301,7 @@ $(document).ready(function () {
   $(document).on('click', '.deltebtn', function () {
     var studentID = $(this).attr('id');
     const docRef = doc(db, "Student", studentID);
-
+    if(confirm("هل تأكد حذف الطالب وجميع البيانات المتعلقة به؟")){
     deleteDoc(docRef).then(() => {
       alert("تم حذف الطالب");
       window.location.reload(true);
@@ -303,7 +309,26 @@ $(document).ready(function () {
       .catch(error => {
         console.log(error);
       })
+    }
   });
+
+  $(document).on('click', '.deletebtnTeacher', function () {
+    var teacherID = $(this).attr('id');
+    const docRef = doc(db, "Teacher", teacherID);
+
+    if(confirm("هل تأكد حذف المعلم وجميع البيانات المتعلقة به؟")){
+      deleteDoc(docRef).then(() => {
+        alert("تم حذف المعلم");
+        window.location.reload(true);
+      })
+        .catch(error => {
+          console.log(error);
+        })
+    }
+
+  });
+
+  
 });
 
 

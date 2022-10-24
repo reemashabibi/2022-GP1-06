@@ -70,13 +70,13 @@ var globalTeachers;
     alert('لا توجد مواد');
 }
 var i=0;
-  querySnapshot.forEach((doc) => {
+  querySnapshot.forEach((subjectdoc) => {
     
   i++;
-    var subject = doc.data().Subject;
+    var subject = subjectdoc.data().Subject;
 
     var tr = document.createElement('tr');
-    tr.id = doc.id;
+    tr.id = subjectdoc.id;
     
 
     //teacher drop down
@@ -93,8 +93,35 @@ var i=0;
     var optionDefault = document.createElement("option");
     dropdown.appendChild(optionDefault);
 
-    
-    if(doc.data().TeacherID == ""){
+    var teacherNotDeleted = false;
+    if(subjectdoc.data().TeacherID != ""){
+      for(var i=0; i<teachers.length;i++){
+        if(teachers[i] == subjectdoc.data().TeacherID.id ){
+          teacherNotDeleted = true;
+          break;
+      }
+
+      }
+      if(!teacherNotDeleted){
+        const subjectdocRef = doc(db, "Teacher_Class", subjectdoc.id);
+
+      const data = {
+        TeacherID: ""
+         };
+
+       updateDoc(subjectdocRef, data)
+           .then(subjectdocRef => {
+             console.log("A New Document Field has been added to an existing document");
+             optionDefault.innerHTML= "--لم يتم تعيين معلم--";
+        optionDefault.value = "";
+           })
+        .catch(error => {
+         console.log(error);
+})
+      }
+
+    }
+    if(subjectdoc.data().TeacherID == "" ){
         optionDefault.innerHTML= "--لم يتم تعيين معلم--";
         optionDefault.value = "";
 
@@ -103,7 +130,7 @@ var i=0;
       
         for(var i=0; i<teachers.length;i++){
            
-            if(teachers[i] == doc.data().TeacherID.id ){
+            if(teachers[i] == subjectdoc.data().TeacherID.id ){
                 optionDefault.value = teachers[i];
                 optionDefault.innerHTML = teachers[++i]+" "+teachers[++i];
                 
@@ -119,7 +146,7 @@ var i=0;
   
     
     for(var i=0; i<teachers.length;i++){
-      if(doc.data().TeacherID != "" && teachers[i] == doc.data().TeacherID.id ){
+      if(subjectdoc.data().TeacherID != "" && teachers[i] == subjectdoc.data().TeacherID.id ){
         i+=2 
         
     }
