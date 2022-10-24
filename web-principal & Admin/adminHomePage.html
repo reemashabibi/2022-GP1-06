@@ -4,18 +4,17 @@
 import { viewTachersAndClasses  } from './admin.js';
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
- const user= auth.currentUser
+ const user= auth.currentUser;
     onAuthStateChanged(auth, (user)=>{
         if(user){
             const uid=user.uid;
-     document.getElementsByTagName('body').onload = viewTachersAndClasses(uid); 
-     console.log("the same user");
+            document.getElementsByTagName('body').onload = viewTachersAndClasses(uid);
+            console.log("the same user");
         }
         else{
             window.location.href="index.html";
             console.log("the  user changed");
         }
-
     })
    
    </script>

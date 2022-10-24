@@ -1,7 +1,7 @@
-<script>
-    import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+<script type="module">
+    import {  onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
     
-        onAuthStateChanges(auth, (user)=>{
+        onAuthStateChanged(auth, (user)=>{
             if(user){
                 console.log("the same user");
             }
@@ -55,7 +55,7 @@
 
 
         const db = getFirestore(app);
-        const colRefSchool = collection(db, "School");
+        
     
       //  db.settings({timestampInSnapshots: true });
 
@@ -68,11 +68,7 @@
       const Password=document.getElementById("passInp");
       
 
-      getDocs(colRefSchool).then((snapshot)=> {
-       snapshot.docs.forEach(doc => {
-        console.log(doc.data());
-       });
-       });
+      
       </script>
 
 

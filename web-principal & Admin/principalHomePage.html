@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<script  type='module'>
+<script>
  import { callAdmins } from './principal.js';
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
  const user= auth.currentUser
-    onAuthStateChanged(auth, (user)=>{
+    onAuthStateChanges(auth, (user)=>{
         if(user){
             const uid=user.uid;
             document.getElementsByTagName('body').onload = callAdmins(uid);
@@ -16,10 +16,26 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
         }
 
     })
+
+
+   
+
+    const logout= document.getElementsById("signOut");
+
+    logout.addEventListener('click',  async (e) => {
+      alert("lohhh");
+      e.preventDefault()
+      signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        window.location.replace="index.html";
+        }).catch((error) => {
+        console.log(error.message);
+        }); 
+
+     })
 </script>
 
-<script type='module'>//import { callAdmins } from './principal.js';
-//document.getElementsByTagName('body').onload = callAdmins('$pid');</script>
+
 
 <html lang="en">
 <head>
@@ -33,7 +49,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     
     <script type="module" src="principal.js"></script>
-    
+    <script  src="logout.js"></script>
 
     
     <title>الصفحة الرئيسية</title>
@@ -45,7 +61,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
   <a class="active" href="#principalHomePage.php">الصفحة الرئيسية</a>
   <a href="addAdmin.php">إضافة إداري</a>
   <a href="editPrincipal.html">معلومات الحساب</a>
-  <a class="signout">تسجيل الخروج</a>
+  <a id="signout" href="">تسجيل الخروج</a>
 </div>
 <div class="container">
             <div class="row">
