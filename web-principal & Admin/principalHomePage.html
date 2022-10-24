@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<script>
+<script type="module">
  import { callAdmins } from './principal.js';
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
@@ -51,7 +51,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
     <script src="navbar.js"></script>
     
     <script type="module" src="principal.js"></script>
-    <script  src="logout.js"></script>
+   <!--- <script  src="logout.js"></script> -->
 
     
     <title>الصفحة الرئيسية</title>
@@ -79,7 +79,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
             <li class="nav-item active">
                 <a class="nav-link" href="principalHomePage.html">الصفحة الرئيسية</a>
             </li>
-        ]
+        
 
         </ul>
     </div>
@@ -88,12 +88,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 <!--breadcrumb-->
 
 <!--end of breadcrumb-->
-<div class="sidebar">
-  <a class="active" href="#principalHomePage.php">الصفحة الرئيسية</a>
-  <a href="addAdmin.php">إضافة إداري</a>
-  <a href="editPrincipal.html">معلومات الحساب</a>
-  <a id="signout" href="">تسجيل الخروج</a>
-</div>
+
 <div class="container">
             <div class="row">
                  <div class="col-lg-10 mx-auto mb-4">
