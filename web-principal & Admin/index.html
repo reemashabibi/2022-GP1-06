@@ -112,7 +112,7 @@
              
 
 
-           signInWithEmailAndPassword(auth,Email,Password)
+           signInWithEmailAndPassword(auth,Email.value,Password.value)
            .then((userCredential) => {
           // Signed in 
            const user = userCredential.user;
@@ -179,7 +179,7 @@
 
  function validate() {
   
-  if(Email.value==""||password.value==""){
+  if(Email1.value==""||password.value==""){
     alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
     return false;
   }
