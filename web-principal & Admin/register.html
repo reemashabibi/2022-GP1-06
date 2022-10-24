@@ -137,14 +137,13 @@ submit.addEventListener('click',  async (e) => {
             Name: schoolName.value,
             BranchNumber: BranchNumber.value,
             PrincipalID: "/Principal/"+user.uid+"/",
-                });
+                }); alert(" تسجيل  ");
        setDoc(doc(db, "Principal", user.uid), {
             Email: Email.value,
             FirstName: FirstName.value,
             LastName: LastName.value, 
-            password: Password.value,
             SchoolID: "School/"+user.uid+"/",
-                });
+                }); alert("  المدرسة ");
                 signForm.reset();
                 window.location.href="principalHomePage.html";
 
@@ -170,44 +169,7 @@ submit.addEventListener('click',  async (e) => {
     }
     });
 
-    function addSchool(){
-      
-      //var schoolName = document.getElementById
-        addDoc(colRefSchool, {
-            Name: schoolName.value,
-            BranchNumber: BranchNumber.value,
-            PrincipalID: Email.value ,
-        })
-        .then (() => {
-          return true;
-        
-        });
-        return false;
-    }
-    function addPrincipal(){
-      addDoc(colRefP, {
-            Email: Email.value,
-            FirstName: FirstName.value,
-            LastName: LastName.value, 
-            password: Password.value,
-            SchoolID: schoolName.value ,
-        })
-        .then (() => {
-            
-            return true;
-        });
-        return false;
-    }
-
-    function registerUser(){
-      const auth = getAuth();
-        createUserWithEmailAndPassword(auth, Email.value, Password.value) .then((userCredential) => {
-       // Signed in 
-       const user = userCredential.user; }) .catch((error) => {
-       const errorCode = error.code;
-       const errorMessage = error.message; });
-    }
-
+    
 
       </script>
 
@@ -238,6 +200,11 @@ submit.addEventListener('click',  async (e) => {
      document.getElementById("emailInp").focus();
      return false;
     }
+
+    if(password.value.length < 6) {  
+    alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+     return false;  
+  }  
    
     else {
       return true;

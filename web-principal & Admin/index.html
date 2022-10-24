@@ -21,7 +21,7 @@
 
     <div class="center">
         <h1 class="">تسجيل الدخول</h1>
-        
+        <form id="logIn">
         <div class="inputbox">
             <input type="email" required="required"  id="emailInp">
             <span>البريد الإلكتروني</span>
@@ -40,10 +40,11 @@
           <div class="inputbox">
             <button type="text" id="subButton" class="btn"  > تسجيل الدخول</button>
         </div>
+    </form>
         
         <a href="register.html" class="alink">  مدرسة جديدة؟ التسجيل هنا</a>
         <br>
-        <a href="register.html" class="alink">  نسيت كلمة السر؟</a>
+        <a href="resetPassword.html" class="alink">  نسيت كلمة السر؟</a>
     </div>
 
     <script type="module">
@@ -79,38 +80,54 @@
            const Email=document.getElementById("emailInp");
            const Password=document.getElementById("passInp");
            const submit=document.getElementById("subButton");
+           const logInform=document.getElementById("logIn");
 
 
            submit.addEventListener('click',  async (e) => {
            e.preventDefault();
+           if(!validate()){
+            return false;
+            logInform.reset();
+           }
            const auth = getAuth();
            
+           if (userType.value=="principal"){
+              
+              const q = query(collection(db, "Principal"), where("Email", "==", Email.value));
+              const querySnapshot = await getDoc(q);
+              if(!querySnapshot.exists()){
+               alert("لا يوجد مدير بهذه البيانات يرجى التحقق من البيانات المدخلة");
+               logInform.reset();
+            }
+            }
+            
+            if ((userType.value=="admin")){
+              const q = query(collection(db, "Admin"), where("Email", "==", Email.value));
+              const querySnapshot = await getDoc(q);
+              if(!querySnapshot.exists()){
+               alert("لا يوجد إداري بهذه البيانات يرجى التحقق من البيانات المدخلة");
+               logInform.reset();
+            }
+            }
+             
 
-           signInWithEmailAndPassword(auth,Email,Password)
+
+           signInWithEmailAndPassword(auth,Email.value,Password.value)
            .then((userCredential) => {
           // Signed in 
            const user = userCredential.user;
-           
-           if (userType.value=="principal"){
-              const docRef = doc(db, "Principal", user.uid);}
-            else if ((userType.value=="admin")){
-              const docRef = doc(db, "admin", user.uid);
-            }
-            const docSnap = await getDoc(docRef);
-
-             if (docSnap.exists()) {
-                console.log("Document data:", docSnap.data());
-                
-}            else {
-             // doc.data() will be undefined in this case
-             console.log("No such document!");
-}
-
            alert("userlogedin");
+           if(userType.value=="principal"){
+            window.location.href="principalHomePage.html";
+           }
+           else if(userType.value=="admin"){
+            window.location.href="adminHomePage.html";
+
+           }
         
-        })
+           })
         .catch((error) =>{
-            alert("somethingis wrong")+error.message;
+            alert("somethingis wrong"+error.message);
         })
 
             
@@ -150,6 +167,30 @@
 
 
     </script>
+
+
+<script type="text/javascript">
+    
+    
+    const Email1=document.getElementById("emailInp");
+    const password=document.getElementById("passInp");
+  
+
+
+ function validate() {
+  
+  if(Email1.value==""||password.value==""){
+    alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+    return false;
+  }
+
+ 
+  else {
+    return true;
+   }
+ }
+ 
+ </script>
 
 
 

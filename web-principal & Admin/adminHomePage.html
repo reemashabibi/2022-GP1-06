@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<?php
-$_GET['pid'] = 'POTur2qxIKmSafOghaFn';
-$pid = $_GET['pid'];
-echo "<script type='module'>import { viewTachersAndClasses  } from './admin.js';
-document.getElementsByTagName('body').onload = viewTachersAndClasses('$pid');</script>";
-?>
+
+<script type='module'>
+import { viewTachersAndClasses  } from './admin.js';
+import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+ const auth = getAuth();
+ const user= auth.currentUser
+    onAuthStateChanges(auth, (user)=>{
+        if(user){
+            const uid=user.uid;
+     document.getElementsByTagName('body').onload = viewTachersAndClasses(uid); 
+     console.log("the same user");
+        }
+        else{
+            window.location.href="index.html";
+            console.log("the  user changed");
+        }
+
+    })
+   
+   </script>
+
 
 
 <html lang="en">
