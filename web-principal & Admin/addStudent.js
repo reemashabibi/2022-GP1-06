@@ -65,7 +65,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   var fname = document.getElementById("Fname");
   var letters = null ;
   if (fname.value == "") {
-    alert('يلزم ان يتكون الاسم الأول للطالب من احرف ');
+    alert('يجب أن لا يكون  الاسم الأول للطالب فارغًا');
     fname.focus();
     notValidated = true;
     return false;
@@ -73,7 +73,7 @@ addStudentForm.addEventListener('submit', async (e) => {
 
   var Lname = document.getElementById("Lname");
   if (Lname.value == "") {
-    alert('يلزم ان يتكون الاسم الأخير للطالب من احرف ');
+    alert('يجب أن لا يكون  الاسم الأخير للطالب فارغًا');
     Lname.focus();
     notValidated = true;
   }
@@ -81,7 +81,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   var selectedClass = document.getElementById("classes");
   var selectedClassIn = selectedClass[selectedClass.selectedIndex].value;
   if (selectedClassIn == "non") {
-    alert('أرجو اختيار الفصل');
+    alert('يرجى اختيار الفصل');
     document.querySelector('.add').non.focus();
     notValidated = true;
   }
@@ -102,14 +102,14 @@ addStudentForm.addEventListener('submit', async (e) => {
   var FnameParent = document.getElementById("FnameParent");
   var letters = null;
   if (FnameParent.value == "") {
-    alert('يلزم ان يتكون الاسم الأول لولي الأمر من احرف ');
+    alert('يجب أن لا يكون الاسم الأول لولي الأمر فارغًا');
     FnameParent.focus();
     notValidated = true;
   }
 
   var LnameParent = document.getElementById("LnameParent");
   if (LnameParent.value == "") {
-    alert('.يلزم ان يتكون الاسم الأخير لولي الأمر من احرف ');
+    alert('يجب أن لا يكون  الاسم الأخير لولي الأمر فارغًا');
     LnameParent.focus();
     notValidated = true;
   }
@@ -117,7 +117,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   var emailP = document.getElementById("emailP");
   var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (!emailP.value.match(mailformat)) {
-    alert('.ارجوا ادخال بريد الكتروني صالح');
+    alert("الرجاء إدحال بريد إلكتروني صحيح");
     emailP.focus();
     notValidated = true;
   }
@@ -148,7 +148,7 @@ addStudentForm.addEventListener('submit', async (e) => {
           parentId = doc.id;
 
         else {
-          alert("ولي الأمر غير مسجل، الرجاء اكمال البيانات");
+          alert("ولي الأمر غير مسجل، يرجى إكمال البيانات");
         }
       })
 
@@ -165,7 +165,7 @@ addStudentForm.addEventListener('submit', async (e) => {
         });
     }
     if (parentId == "null") {
-      alert("triggerd");
+     // alert("triggerd");
       const registerFname = document.getElementById("FnameParent").value;
       const registerlname = document.getElementById("LnameParent").value;
       const registerEmail = document.getElementById("emailP").value;
@@ -181,7 +181,7 @@ addStudentForm.addEventListener('submit', async (e) => {
           sendPasswordResetEmail(auth, registerEmail).then(() => {
             // EmailSent
             // alert(registerEmail + " -- " + auth);
-            alert("reset");
+          //  alert("reset");
           })
           const res = doc(db, "Parent", user.uid)
 
@@ -205,7 +205,7 @@ addStudentForm.addEventListener('submit', async (e) => {
             addStudentForm.reset();
           });
 
-          alert("تم");
+         // alert("تم");
         }).catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
@@ -216,7 +216,7 @@ addStudentForm.addEventListener('submit', async (e) => {
       // addStudentForm.reset();
 
     }//end if
-    alert("تمت اضافة الطالب بنجاح")
+    alert("تمت إضافة الطالب بنجاح")
 
   }
 
@@ -242,7 +242,7 @@ $(".phone").change(async function () {
       }
     })
   } else {
-    alert("ولي الأمر غير مسجل، الرجاء اكمال البيانات");
+    alert("ولي الأمر غير مسجل، يرجى اكمال البيانات");
     $("#FnameParent").val("");
     $("#LnameParent").val("");
     $("#emailP").val("");
