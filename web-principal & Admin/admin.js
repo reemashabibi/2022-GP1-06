@@ -34,7 +34,7 @@ const analytics = getAnalytics(app);
 
 
 export async function viewTachersAndClasses(pid){
-
+ 
   const refrence = doc(db, "School", pid);
   const q = query(collection(db, "Class"), where("SchoolID", "==", refrence));
   const qTeacher = query(collection(db, "Teacher"), where("SchoolID", "==", refrence));
