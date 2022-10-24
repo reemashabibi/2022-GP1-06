@@ -1,6 +1,66 @@
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , sendEmailVerification , updatePassword, sendPasswordResetEmail, fetchSignInMethodsForEmail
+
+} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAnalytics,setUserId } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+    authDomain: "halaqa-89b43.firebaseapp.com",
+    projectId: "halaqa-89b43",
+    storageBucket: "halaqa-89b43.appspot.com",
+    messagingSenderId: "969971486820",
+    appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+    measurementId: "G-PCYTHJF1SD"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  export { app, db, collection, getDocs, Timestamp, addDoc };
+  export { query, orderBy, limit, where, onSnapshot }; 
+  const analytics = getAnalytics(app);
+
+  const colRef = collection(db, 'Admin');
+  const auth = getAuth(app);
+
+  //get collection data
+  getDocs(colRef)
+    .then((snapshot) => {
+     let Admin = []
+     snapshot.docs.forEach((doc)=> {
+        Admin.push({...doc.data(), id: doc.id })
+     })
+     console.log(Admin)
+    })
+    .catch(err => {
+        console.log(err.mssage)
+    });
+
+
+      //randomly generated pass
+  function randID(){
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var string_length = 28;
+            var pass = '';
+            for (var i=0; i<string_length; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                pass += chars.substring(rnum,rnum+1);
+            }
+        return pass;
+    }
+
 const excel_file = document.getElementById('excel_file');
 
 excel_file.addEventListener('change', (event) => {
+
 
     if(!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type))
     {
@@ -8,40 +68,123 @@ excel_file.addEventListener('change', (event) => {
         excel_file.value = '';
         return false;
     }
-
+   let registerFname = "";
+   let registerlname = "";
+   let registerEmail = "";
+   let registerPass = "";
+   let user ;
+   let randomID;
+   // var counter =0;
     var reader = new FileReader();
     reader.readAsArrayBuffer(event.target.files[0]);
-    reader.onload = function(event){
-  
+    reader.onload = async function(event){
         var data = new Uint8Array(reader.result);
         var work_book = XLSX.read(data, {type:'array'});
         var sheet_name = work_book.SheetNames;
         var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
+
+
+        //view data
         if(sheet_data.length > 0)
         {
             var table_output = '<table class="table table-striped table-bordered">';
+
             for(var row = 0; row < sheet_data.length; row++)
             {
+
                 table_output += '<tr>';
-                for(var cell = 0; cell < sheet_data[row].length; cell++) {
-                    if(row == 0){
+
+                for(var cell = 0; cell < sheet_data[row].length; cell++)
+                {
+
+                    if(row == 0)
+                    {
+
                         table_output += '<th>'+sheet_data[row][cell]+'</th>';
-                     }
-                    else{
-                        table_output += '<td>'+sheet_data[row][cell]+'</td>';
-                        //fName = sheet_data[1][0];
-                        //lName = sheet_data[1][0+1];
-                       // email =  sheet_data[1][0+2]; 
-     
-                       
+
                     }
-                }//end row
-                 
+                    else
+                    {
+
+                        table_output += '<td>'+sheet_data[row][cell]+'</td>';
+
+                    }
+
+                }
+
+                table_output += '</tr>';
+
             }
+
             table_output += '</table>';
+
             document.getElementById('excel_data').innerHTML = table_output;
-           // alert ("FirstName:"+fName + " -LastName:" + lName +" -Email:"+ email);
         }
+
         excel_file.value = '';
+
+
+
+        ///alerts
+    if(sheet_data.length > 0)
+        {
+             for(var row = 1; row <5; await row++)
+            {
+                for(var cell = 0; cell < sheet_data[row].length; cell++) {
+         
+                    if(row == 0){
+                        //herders
+                      //  table_output += sheet_data[row][cell];
+                     }
+                    else
+                    {
+                     if(cell==0){
+                        registerFname  = sheet_data[row][cell];
+                       // alert(registerFname);
+                     }
+                     if(cell==1){
+                        registerlname = sheet_data[row][cell];
+                       // alert(registerlname);                 
+                    }
+                    if(cell==2){
+                        registerEmail = sheet_data[row][cell];
+                        
+                      //  alert(registerEmail);
+                    }
+                    }
+                }
+                registerPass = randID();
+               // randomID = randID();
+                createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+                .then(  (userCredential) => {
+                    // Signed in 
+                     user = userCredential.user;
+                   //send an email to reset password
+                //   setUserId(analytics,randomID );
+                   sendPasswordResetEmail(auth,registerEmail).then( () => {
+                    // EmailSent
+                  })
+                  //add to the document 
+                  setDoc(doc(db, "Admin", user.uid), {
+                    Email: registerEmail,
+                    FirstName: registerFname,
+                    LastName: registerlname, 
+                    password: "",
+                    //schoolID?
+                    schoolID: "/School/"+22,
+                    //schoolID: "/School/"+Schoo_lID,
+                  });
+
+                  }).catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                  })
+
+            }//end row  
+
+
+        }
     }
+
+
 });
