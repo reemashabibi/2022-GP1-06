@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<script>
+<script type="module">
  import { callAdmins } from './principal.js';
-import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+
  const auth = getAuth();
  const user= auth.currentUser
-    onAuthStateChanges(auth, (user)=>{
+    onAuthStateChanged(auth, (user)=>{
         if(user){
             const uid=user.uid;
             document.getElementsByTagName('body').onload = callAdmins(uid);
@@ -16,10 +17,26 @@ import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/
         }
 
     })
+
+
+   
+
+    const logout= document.getElementsById("signOut");
+
+    logout.addEventListener('click',  async (e) => {
+      alert("lohhh");
+      e.preventDefault()
+      signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        window.location.replace="index.html";
+        }).catch((error) => {
+        console.log(error.message);
+        }); 
+
+     })
 </script>
 
-<script type='module'>//import { callAdmins } from './principal.js';
-//document.getElementsByTagName('body').onload = callAdmins('$pid');</script>
+
 
 <html lang="en">
 <head>
@@ -27,7 +44,7 @@ import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script type="module" src="principal.js"></script>
-    <script  src="logout.js"></script>
+    
 
     
     <title>الصفحة الرئيسية</title>
@@ -39,7 +56,7 @@ import { getAuth, onAuthStateChanges } from "https://www.gstatic.com/firebasejs/
   <a class="active" href="#principalHomePage.php">الصفحة الرئيسية</a>
   <a href="addAdmin.php">إضافة إداري</a>
   <a href="editPrincipal.html">معلومات الحساب</a>
-  <a class="signout">تسجيل الخروج</a>
+  <a id="signout" href="">تسجيل الخروج</a>
 </div>
 <div class="container">
             <div class="row">
