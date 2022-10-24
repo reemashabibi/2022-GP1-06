@@ -122,9 +122,9 @@ export async function viewTachersAndClasses(pid){
     div5.className = "job-right my-4 flex-shrink-0";
    //delete button
    const a2= document.createElement('button');
-   a2.className="btn btn-danger rounded-0 deletebtn";
+   a2.className="btn btn-danger rounded-0 deletebtnTeacher";
    a2.type = "button"
-   a2.setAttribute('id', doc.id);
+   a2.setAttribute('id', doc2.id);
    const i = document.createElement('i');
    i.className="fa fa-trash";
    a2.appendChild(i);
@@ -301,7 +301,7 @@ $(document).ready(function () {
   $(document).on('click', '.deltebtn', function () {
     var studentID = $(this).attr('id');
     const docRef = doc(db, "Student", studentID);
-
+    if(confirm("هل تأكد حذف الطالب وجميع البيانات المتعلقة به؟")){
     deleteDoc(docRef).then(() => {
       alert("تم حذف الطالب");
       window.location.reload(true);
@@ -309,7 +309,26 @@ $(document).ready(function () {
       .catch(error => {
         console.log(error);
       })
+    }
   });
+
+  $(document).on('click', '.deletebtnTeacher', function () {
+    var teacherID = $(this).attr('id');
+    const docRef = doc(db, "Teacher", teacherID);
+
+    if(confirm("هل تأكد حذف المعلم وجميع البيانات المتعلقة به؟")){
+      deleteDoc(docRef).then(() => {
+        alert("تم حذف المعلم");
+        window.location.reload(true);
+      })
+        .catch(error => {
+          console.log(error);
+        })
+    }
+
+  });
+
+  
 });
 
 

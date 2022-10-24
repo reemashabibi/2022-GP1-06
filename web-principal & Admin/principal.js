@@ -41,11 +41,7 @@ function submitClick(){
     window.alert("working");
 }
 
-const colRef = collection(db, "Class");
-const docsSnap = await getDocs(colRef);
-docsSnap.forEach(doc => {
-    console.log(doc.data());
-});
+
 
 export async function callAdmins(pid){
   const refrence = doc(db, "School", pid);
@@ -67,12 +63,19 @@ export async function callAdmins(pid){
     document.getElementById("bigdiv").appendChild(div1);
     const div5 = document.createElement("div");
     div5.className="job-right my-4 flex-shrink-0";
-    const a1= document.createElement('a');
-    a1.className="btn d-block w-100 d-sm-inline-block btn-light";
-    a1.appendChild(document.createTextNode("حذف الإداري"));
-    a1.id= doc.id;
+    const a1= document.createElement('button');
+    a1.className="btn btn-danger rounded-0 deletebtn";
+    a1.type = "button"
+    a1.setAttribute('id', doc.id);
+    const i = document.createElement('i');
+    i.className="fa fa-trash";
+    a1.appendChild(i);
     div5.appendChild(a1);
     div1.appendChild(div5);
+
+
+
+
     const div2 = document.createElement("div");
     div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap";
     div1.appendChild(div2);
@@ -101,3 +104,22 @@ export async function callAdmins(pid){
   $('.loader').hide();
 
 }
+
+
+
+$(document).ready(function () {
+  $(document).on('click', '.deletebtn', async function () {
+    var adminID = $(this).attr('id');
+    const docRef = doc(db, "Admin", adminID);
+    if(confirm("هل تأكد حذف الإداري وجميع البيانات المتعلقة به؟")){
+    deleteDoc(docRef).then(() => {
+      alert("تم حذف الإداري");
+      window.location.reload(true);
+    })
+      .catch(error => {
+        console.log(error);
+      })
+    }
+  
+  });
+});

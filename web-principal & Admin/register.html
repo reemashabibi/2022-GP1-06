@@ -14,7 +14,7 @@
 
     <div class="center" >
         <h1 >سجل مدرستك في حلقة</h1>
-        <form>
+        <form id="signForm">
      <div class="inputbox">
         <input type="text" required="required" id="snameInp"  >
         <span>اسم المدرسة </span>
@@ -62,7 +62,7 @@
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
         import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
         import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-        //import {getDatabase  , set ,child  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
         import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
         import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
@@ -83,7 +83,7 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         
-        export { app, db, collection, getDocs, Timestamp, addDoc };
+        export { app, db, collection, getDocs, Timestamp, addDoc, setDoc };
         export { query, orderBy, limit, where, onSnapshot }; 
         const analytics = getAnalytics(app);
 
@@ -103,6 +103,7 @@
       const Email=document.getElementById("emailInp");
       const Password=document.getElementById("passInp");
       const submit=document.getElementById("subButton");
+      const signForm = document.getElementById('signForm');
 
     
     
@@ -126,12 +127,37 @@ submit.addEventListener('click',  async (e) => {
       
     if (!exist) {
         
-   addSchool() ; 
-   addPrincipal();
-   registerUser();
-  
-       
-        
+   
+       const auth = getAuth();
+        createUserWithEmailAndPassword(auth, Email.value, Password.value) 
+        .then((userCredential) => {
+       // Signed in 
+       const user = userCredential.user;
+       setDoc(doc(db, "School", user.uid), {
+            Name: schoolName.value,
+            BranchNumber: BranchNumber.value,
+            PrincipalID: "/Principal/"+user.uid+"/",
+                });
+       setDoc(doc(db, "Principal", user.uid), {
+            Email: Email.value,
+            FirstName: FirstName.value,
+            LastName: LastName.value, 
+            password: Password.value,
+            SchoolID: "School/"+user.uid+"/",
+                });
+                signForm.reset();
+                window.location.href="principalHomePage.html";
+
+      
+      }) 
+       .catch((error) => {
+       const errorCode = error.code;
+       const errorMessage = error.message;
+       console.log(errorMessage);
+       signForm.reset();
+       });
+
+     
         alert("تم تسجيل المدرسة بنجاح");
        /* else {
           alert(" يوجد خطأ يرجى المحاولة في وقت لاحق ");
@@ -140,12 +166,13 @@ submit.addEventListener('click',  async (e) => {
     }
     else{
         alert("المدرسة مسجلة مسبقاً");
-        
+        signForm.reset();
     }
     });
 
     function addSchool(){
       
+      //var schoolName = document.getElementById
         addDoc(colRefSchool, {
             Name: schoolName.value,
             BranchNumber: BranchNumber.value,

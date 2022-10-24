@@ -25,7 +25,6 @@ document.getElementsByTagName('body').onload = subjectTeacherForm('$cid', '$pid'
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
   
-    <script type="module" src="principal.js"></script>
     <link rel="stylesheet" href="navbar.css"/>
     <script src="navbar.js"></script>
 
@@ -119,7 +118,7 @@ document.getElementsByTagName('body').onload = subjectTeacherForm('$cid', '$pid'
                 </div>
 
             </div>
-            
+            <button class="button-9" style="width:1000%">حفظ التعديلات </button>
 
 </form>
         </div>

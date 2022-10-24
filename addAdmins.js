@@ -3,8 +3,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebas
 import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , sendEmailVerification , updatePassword, sendPasswordResetEmail, fetchSignInMethodsForEmail
 
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-//
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+import { getAnalytics,setUserId } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { collection, getDocs, addDoc, Timestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -46,11 +45,10 @@ const firebaseConfig = {
     });
 
 
-
-  //randomly generated pass
-  function pass(){
+      //randomly generated pass
+  function randID(){
     var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            var string_length = 8;
+            var string_length = 28;
             var pass = '';
             for (var i=0; i<string_length; i++) {
                 var rnum = Math.floor(Math.random() * chars.length);
@@ -59,110 +57,11 @@ const firebaseConfig = {
         return pass;
     }
 
-        //validate form
-     function validate() {
-            var fname = document.getElementById( "firstName" );
-            var letters = /^[A-Za-z]+$/;
-            if( !fname.value.match(letters) )
-            {
-             alert('first name must have alphabet characters only');
-             document.addAdmin.firstName.focus();
-             return false;
-            }
-           
-            var lname = document.getElementById( "lastName" );
-            if( !lname.value.match(letters) )
-            {
-             alert('last name must have alphabet characters only');
-             document.addAdmin.lastName.focus();
-             return false;
-            }
-           
-            var email = document.getElementById( "email" );
-            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            if( !email.value.match(mailformat)){
-             alert("You have entered an invalid email address!");
-             document.addAdmin.email.focus();
-             return false;
-            }
-           
-            else {
-              return true;
-             }
-           }
-
-
-         //  get schoolID
-           const authPrin = getAuth();
-           let Schoo_lID = null;
-           onAuthStateChanged(authPrin, (user) => {
-           if (user) {
-              // User is signed in, see docs for a list of available properties
-             // https://firebase.google.com/docs/reference/js/firebase.User
-              Schoo_lID = user.uid;
-              // ...
-                } else {
-                 // User is signed out
-                 // ...
-                }
-            }); 
-
-
-            const addAdminForm = document.querySelector('.addAdmin')
-            addAdminForm.addEventListener('submit',  async (e) => {
-             // alert("in");
-              if(validate()){
-              //    alert("in2");
-              e.preventDefault()
-              alert("triggerd");
-              const registerFname = document.getElementById("firstName").value;
-              const registerlname = document.getElementById("lastName").value;
-              const registerEmail = document.getElementById("email").value;
-              const registerPass =  pass();
-              createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-              .then(  (userCredential) => {
-                  // Signed in 
-                  const user = userCredential.user;
-                 //send an email to reset password
-                 sendPasswordResetEmail(auth,registerEmail).then(() => {
-                  // EmailSent
-                 // alert(registerEmail + " -- " + auth);
-                  alert("reset");
-                })
-
-                //add to the document
-                setDoc(doc(db, "Admin", user.uid), {
-                  Email: registerEmail,
-                  FirstName: registerFname,
-                  LastName: registerlname, 
-                  password: "",
-                  //schoolID?
-                  schoolID: "/School/"+22,
-                  schoolID: "/School/"+Schoo_lID,
-                });
-
-               alert("تم بنجاح");
-                 
-                })
-                .catch((error) => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                 // alert("البريد الالكتروني مستخدم من قبل");
-                  alert(errorMessage);
-                  addAdminForm.reset();
-                });
-                addAdminForm.reset();
-              }//end if
-              else{
-                 // alert("return");
-              }
-            }); //The END
-           
-
-
-///////////////////////////////////// Add AdminS //////////////////////////////////////////////////////
 const excel_file = document.getElementById('excel_file');
+
 excel_file.addEventListener('change', (event) => {
+
+
     if(!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type))
     {
         document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">Only .xlsx or .xls file format are allowed</div>';
@@ -184,35 +83,49 @@ excel_file.addEventListener('change', (event) => {
         var sheet_name = work_book.SheetNames;
         var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
 
-             //view tabel//
+
+        //view data
         if(sheet_data.length > 0)
         {
             var table_output = '<table class="table table-striped table-bordered">';
 
             for(var row = 0; row < sheet_data.length; row++)
             {
+
                 table_output += '<tr>';
+
                 for(var cell = 0; cell < sheet_data[row].length; cell++)
                 {
+
                     if(row == 0)
                     {
+
                         table_output += '<th>'+sheet_data[row][cell]+'</th>';
+
                     }
                     else
                     {
+
                         table_output += '<td>'+sheet_data[row][cell]+'</td>';
+
                     }
+
                 }
+
                 table_output += '</tr>';
+
             }
+
             table_output += '</table>';
+
             document.getElementById('excel_data').innerHTML = table_output;
         }
+
         excel_file.value = '';
 
 
 
-        //Adding
+        ///alerts
     if(sheet_data.length > 0)
         {
              for(var row = 1; row <5; await row++)
@@ -240,25 +153,38 @@ excel_file.addEventListener('change', (event) => {
                     }
                     }
                 }
-                registerPass = pass();
+                registerPass = randID();
                // randomID = randID();
                 createUserWithEmailAndPassword(auth, registerEmail, registerPass)
                 .then(  (userCredential) => {
                     // Signed in 
                      user = userCredential.user;
                    //send an email to reset password
+                //   setUserId(analytics,randomID );
                    sendPasswordResetEmail(auth,registerEmail).then( () => {
                     // EmailSent
                   })
-                  //add to the document
-                  //
+                  //add to the document 
+                  setDoc(doc(db, "Admin", user.uid), {
+                    Email: registerEmail,
+                    FirstName: registerFname,
+                    LastName: registerlname, 
+                    password: "",
+                    //schoolID?
+                    schoolID: "/School/"+22,
+                    //schoolID: "/School/"+Schoo_lID,
+                  });
+
                   }).catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                   })
+
             }//end row  
+
+
         }
     }
+
+
 });
-
-

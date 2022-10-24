@@ -1,16 +1,39 @@
 <!DOCTYPE html>
-<?php
-$_GET['pid'] = "POTur2qxIKmSafOghaFn";
-$pid = $_GET['pid'];
-echo "<script type='module'>import { callAdmins } from './principal.js';
-document.getElementsByTagName('body').onload = callAdmins('$pid');</script>";
-?>
+<script  type='module'>
+ import { callAdmins } from './principal.js';
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+ const auth = getAuth();
+ const user= auth.currentUser
+    onAuthStateChanged(auth, (user)=>{
+        if(user){
+            const uid=user.uid;
+            document.getElementsByTagName('body').onload = callAdmins(uid);
+            console.log("the same user");
+        }
+        else{
+            window.location.href="index.html";
+            console.log("the  user changed");
+        }
+
+    })
+</script>
+
+<script type='module'>//import { callAdmins } from './principal.js';
+//document.getElementsByTagName('body').onload = callAdmins('$pid');</script>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    
     <script type="module" src="principal.js"></script>
+    
 
     
     <title>الصفحة الرئيسية</title>
@@ -22,7 +45,7 @@ document.getElementsByTagName('body').onload = callAdmins('$pid');</script>";
   <a class="active" href="#principalHomePage.php">الصفحة الرئيسية</a>
   <a href="addAdmin.php">إضافة إداري</a>
   <a href="editPrincipal.html">معلومات الحساب</a>
-  <a id="signoutlinl">تسجيل الخروج</a>
+  <a class="signout">تسجيل الخروج</a>
 </div>
 <div class="container">
             <div class="row">

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <link href="register.css" rel="stylesheet" >
+
+    <style>
+        body{
+            display: flex ;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="center">
+        <h1 class="">تسجيل الدخول</h1>
+        
+        <div class="inputbox">
+            <input type="email" required="required"  id="emailInp">
+            <span>البريد الإلكتروني</span>
+          </div>
+          <div class="inputbox">
+            <input type="password" required="required"  id="passInp">
+            <span>كلمة السر</span>
+          </div>
+          <div class="inputbox">
+          <span for="userType" class="mb-3">:اختر نوع المستخدم</span>
+         <select name="userType" id="userType">
+           <option value="princapl">مدير</option>
+           <option value="admin">إداري</option>
+        </select>
+          </div>
+          <div class="inputbox">
+            <button type="text" id="subButton" class="btn"  > تسجيل الدخول</button>
+        </div>
+        
+        <a href="register.html" class="alink">  مدرسة جديدة؟ التسجيل هنا</a>
+        <br>
+        <a href="register.html" class="alink">  نسيت كلمة السر؟</a>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
+
+
+
+        const firebaseConfig = {
+             apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+             authDomain: "halaqa-89b43.firebaseapp.com",
+             projectId: "halaqa-89b43",
+             storageBucket: "halaqa-89b43.appspot.com",
+             messagingSenderId: "969971486820",
+             appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+             measurementId: "G-PCYTHJF1SD"
+        };
+           const app = initializeApp(firebaseConfig);
+           
+
+           export { app, db, collection, getDoc, Timestamp, addDoc, setDoc };
+           export { query, orderBy, limit, where, onSnapshot }; 
+           const db = getFirestore(app);
+           const analytics = getAnalytics(app);
+
+           const userType=document.getElementById("userType");
+           const Email=document.getElementById("emailInp");
+           const Password=document.getElementById("passInp");
+           const submit=document.getElementById("subButton");
+
+
+           submit.addEventListener('click',  async (e) => {
+           e.preventDefault();
+           const auth = getAuth();
+           
+
+           signInWithEmailAndPassword(auth,Email,Password)
+           .then((userCredential) => {
+          // Signed in 
+           const user = userCredential.user;
+           
+           if (userType.value=="principal"){
+              const docRef = doc(db, "Principal", user.uid);}
+            else if ((userType.value=="admin")){
+              const docRef = doc(db, "admin", user.uid);
+            }
+            const docSnap = await getDoc(docRef);
+
+             if (docSnap.exists()) {
+                console.log("Document data:", docSnap.data());
+                
+}            else {
+             // doc.data() will be undefined in this case
+             console.log("No such document!");
+}
+
+           alert("userlogedin");
+        
+        })
+        .catch((error) =>{
+            alert("somethingis wrong")+error.message;
+        })
+
+            
+
+
+})
+           
+
+
+
+           
+
+
+
+
+
+
+
+
+
+
+
+           
+        
+
+            
+          
+
+            
+
+
+
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
+  
+
+    
+</body>
+</html>
