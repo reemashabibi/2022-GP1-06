@@ -1,6 +1,6 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , sendEmailVerification , updatePassword, sendPasswordResetEmail, fetchSignInMethodsForEmail
+import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , sendEmailVerification , updatePassword, sendPasswordResetEmail, fetchSignInMethodsForEmail, updateCurrentUser
 
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 //
@@ -95,6 +95,7 @@ const firebaseConfig = {
          //  get schoolID
            const authPrin = getAuth();
            let Schoo_lID = null;
+           let schoolIDref = "";
            onAuthStateChanged(authPrin, (user) => {
            if (user) {
               // User is signed in, see docs for a list of available properties
@@ -114,15 +115,17 @@ const firebaseConfig = {
              // alert("in");
               if(validate()){
               //    alert("in2");
-              e.preventDefault()
+              e.preventDefault();
               alert("triggerd");
               const registerFname = document.getElementById("firstName").value;
               const registerlname = document.getElementById("lastName").value;
               const registerEmail = document.getElementById("email").value;
               const registerPass =  pass();
+              e.preventDefault();
               createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-              .then(  (userCredential) => {
+              .then( (userCredential) => {
                   // Signed in 
+                  alert("in");
                   const user = userCredential.user;
                  //send an email to reset password
                  sendPasswordResetEmail(auth,registerEmail).then(() => {
@@ -149,6 +152,7 @@ const firebaseConfig = {
                   const errorMessage = error.message;
                  // alert("البريد الالكتروني مستخدم من قبل");
                   alert(errorMessage);
+                  alert("didnt create");
                   addAdminForm.reset();
                 });
                 addAdminForm.reset();
@@ -156,6 +160,8 @@ const firebaseConfig = {
               else{
                  // alert("return");
               }
+              window.location.href = "principalHomePage.html";
+
             }); //The END
            
 

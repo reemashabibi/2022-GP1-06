@@ -61,7 +61,7 @@ export async function viewTachersAndClasses(aid){
       //delete button
   const a2= document.createElement('button');
   a2.className="btn btn-danger rounded-0 deletebtn";
-  a2.type = "button"
+  a2.type = "button";
   a2.setAttribute('id', doc.id);
   const i = document.createElement('i');
   i.className="fa fa-trash";
@@ -73,7 +73,7 @@ export async function viewTachersAndClasses(aid){
     a1.className = "btn d-inline w-100 d-sm-inline-inline btn-light";
     a1.appendChild(document.createTextNode("تعيين معلم"));
     a1.onclick = function () {
-      location.href = "teacherSubjectClass.php?cid="+doc.id;
+      location.href = "teacherSubjectClass.html?"+doc.id+"|";
   };
 
   div5.appendChild(a2);
@@ -92,7 +92,7 @@ export async function viewTachersAndClasses(aid){
     const classlink = document.createElement('a');
     classlink.className = "text-center text-md-left";
     classlink.appendChild(document.createTextNode(className + "-" + level));
-    classlink.href="students.php?c="+doc.id+"&s="+docSnap.data().SchoolID.id;
+    classlink.href="students.html?"+doc.id+"|"+docSnap.data().SchoolID.id;
     classlink.id = "className";
     div4.appendChild(classlink);
 

@@ -37,13 +37,15 @@ var principalId;
 var classId;
 var globalTeachers;
 
-  export async function subjectTeacherForm(cid, pid){
-    principalId = pid;
+  export async function subjectTeacherForm(cid, aid){
+    const adminDocrefrence = doc(db, "Admin", aid);
+    const docSnap = await getDoc(adminDocrefrence);
+    const srefrence = doc(db, "School", docSnap.data().SchoolID);
+    principalId = docSnap.data().SchoolID;
     const refrence = doc(db, "Class", cid);
     const q = query(collection(db, "Teacher_Class"), where("ClassID", "==", refrence ));
     
     //get all teacher documents that are in the school
-    const srefrence = doc(db, "School", pid);
     const qteacher = query(collection(db, "Teacher"), where("SchoolID", "==", srefrence ));
     const tacherQuerySnapshot = await getDocs(qteacher);
 

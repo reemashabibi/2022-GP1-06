@@ -1,222 +1,256 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التسجيل</title>
-    <link href="register.css" rel="stylesheet" >
-    
-   
-   
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>التسجيل</title>
+  <link href="register.css" rel="stylesheet">
+
+
+
 </head>
+
 <body>
 
-    <div class="center" >
-        <h1 >سجل مدرستك في حلقة</h1>
-        <form id="signForm">
-     <div class="inputbox">
-        <input type="text" required="required" id="snameInp"  >
+  <div class="center">
+    <h1>سجل مدرستك في حلقة</h1>
+    <form id="signForm">
+      <div class="inputbox">
+        <input type="text" required="required" id="snameInp">
         <span>اسم المدرسة </span>
-     </div>
-     <div class="inputbox">
-        <input type="text" required="required" id="bnumInp"  >
+      </div>
+      <div class="inputbox">
+        <input type="text" required="required" id="bnumInp">
         <span>رقم/اسم الفرع </span>
-     </div>
-     <div class="inputbox">
-        <input type="text" required="required" id="fnameInp"   >
+      </div>
+      <div class="inputbox">
+        <input type="text" required="required" id="fnameInp">
         <span>الاسم الأول لمدير المدرسة</span>
-     </div>
-     <div class="inputbox">
-        <input type="text" required="required" id="lnameInp"  >
+      </div>
+      <div class="inputbox">
+        <input type="text" required="required" id="lnameInp">
         <span>الاسم الأخير لمدير المدرسة</span>
-     </div>
-     <div class="inputbox">
-        <input type="email" required="required"  id="emailInp">
+      </div>
+      <div class="inputbox">
+        <input type="email" required="required" id="emailInp">
         <span>البريد الإلكتروني</span>
       </div>
       <div class="inputbox">
-        <input type="password" required="required"  id="passInp">
+        <input type="password" required="required" id="passInp">
         <span>كلمة السر</span>
       </div>
-      
+
       <div class="inputbox">
-        <button type="text" id="subButton" class="btn"  >تسجيل</button>
-    </div>
+        <button type="text" id="subButton" class="btn" type="button">تسجيل</button>
+      </div>
     </form>
     <br>
     <br>
-    <div >
-        <a href="index.html" class="alink" > مدرستك مسجلة مسبقاً ؟</a>  
-      </div>
-        
+    <div>
+      <a href="index.html" class="alink"> مدرستك مسجلة مسبقاً ؟</a>
     </div>
 
+  </div>
 
 
 
 
-    <script type="module">
-        
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-        import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-        import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
-        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+
+  <script type="module">
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+    import { collection, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+    import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+    import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
+    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 
 
 
 
-        const firebaseConfig = {
-          apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
-          authDomain: "halaqa-89b43.firebaseapp.com",
-          projectId: "halaqa-89b43",
-          storageBucket: "halaqa-89b43.appspot.com",
-          messagingSenderId: "969971486820",
-          appId: "1:969971486820:web:40cc0abf19a909cc470f71",
-          measurementId: "G-PCYTHJF1SD"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        
-        export { app, db, collection, getDocs, Timestamp, addDoc, setDoc };
-        export { query, orderBy, limit, where, onSnapshot }; 
-        const analytics = getAnalytics(app);
+    const firebaseConfig = {
+      apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+      authDomain: "halaqa-89b43.firebaseapp.com",
+      projectId: "halaqa-89b43",
+      storageBucket: "halaqa-89b43.appspot.com",
+      messagingSenderId: "969971486820",
+      appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+      measurementId: "G-PCYTHJF1SD"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+
+    export { app, db, collection, getDocs, Timestamp, addDoc, setDoc };
+    export { query, orderBy, limit, where, onSnapshot };
+    const analytics = getAnalytics(app);
 
 
-        const db = getFirestore(app);
-        const colRefSchool = collection(db, "School");
-        const colRefP = collection(db, "Principal");
-        
-    
-      
-
-// save user input 
-      const schoolName=document.getElementById("snameInp");
-      const BranchNumber=document.getElementById("bnumInp");
-      const FirstName=document.getElementById("fnameInp");
-      const LastName=document.getElementById("lnameInp");
-      const Email=document.getElementById("emailInp");
-      const Password=document.getElementById("passInp");
-      const submit=document.getElementById("subButton");
-      const signForm = document.getElementById('signForm');
-
-    
-    
+    const db = getFirestore(app);
+    const colRefSchool = collection(db, "School");
+    const colRefP = collection(db, "Principal");
 
 
-submit.addEventListener('click',  async (e) => {
-    e.preventDefault()
-   if(!validate()){
-    return false;
-   }
-  //check if school exitsts
-    const q = query(collection(db, "School"), where("Name", "==", schoolName.value));
-    const querySnapshot = await getDocs(q);
-    var exist = false;
-    querySnapshot.forEach((doc) => {
-        if(!doc.empty)
-         exist = true;
-         
-       
+
+
+    // save user input 
+    const schoolName = document.getElementById("snameInp");
+    const BranchNumber = document.getElementById("bnumInp");
+    const FirstName = document.getElementById("fnameInp");
+    const LastName = document.getElementById("lnameInp");
+    const Email = document.getElementById("emailInp");
+    const Password = document.getElementById("passInp");
+    const submit = document.getElementById("subButton");
+    const signForm = document.getElementById('signForm');
+
+
+
+
+
+    submit.addEventListener('click', async (e) => {
+      e.preventDefault()
+      if (!validate()) {
+        return false;
+      }
+      //check if school exitsts
+      const q = query(collection(db, "School"), where("Name", "==", schoolName.value));
+      const querySnapshot = await getDocs(q);
+      var exist = false;
+      querySnapshot.forEach((doc) => {
+        if (!doc.empty)
+          exist = true;
+
+
       });
-      
-    if (!exist) {
-        
-   
-       const auth = getAuth();
-        createUserWithEmailAndPassword(auth, Email.value, Password.value) 
-        .then((userCredential) => {
-       // Signed in 
-       const user = userCredential.user;
-       setDoc(doc(db, "School", user.uid), {
-            Name: schoolName.value,
-            BranchNumber: BranchNumber.value,
-            PrincipalID: "/Principal/"+user.uid+"/",
-                }); alert(" تسجيل  ");
-       setDoc(doc(db, "Principal", user.uid), {
-            Email: Email.value,
-            FirstName: FirstName.value,
-            LastName: LastName.value, 
-            SchoolID: "School/"+user.uid+"/",
-                }); alert("  المدرسة ");
-                signForm.reset();
-                window.location.href="principalHomePage.html";
 
-      
-      }) 
-       .catch((error) => {
-       const errorCode = error.code;
-       const errorMessage = error.message;
-       console.log(errorMessage);
-       signForm.reset();
-       });
+      if (!exist) {
 
-     
-        alert("تم تسجيل المدرسة بنجاح");
-       /* else {
-          alert(" يوجد خطأ يرجى المحاولة في وقت لاحق ");
-        }*/
 
-    }
-    else{
+        const auth = getAuth();
+        createUserWithEmailAndPassword(auth, Email.value, Password.value)
+          .then(async (userCredential) => {
+            // Signed in 
+            const user = userCredential.user;
+            alert(user.uid);
+            const schoolref = doc(db, "School", user.uid);
+            alert(schoolref);
+            await setDoc(doc(db, "School", user.uid), {
+              Name: schoolName.value,
+              BranchNumber: BranchNumber.value,
+            }).catch((error) => {
+                console.log(error);
+                alert(error);
+              });
+               alert(" تسجيل  ");
+            await setDoc(doc(db, "Principal", user.uid), {
+              Email: Email.value,
+              FirstName: FirstName.value,
+              LastName: LastName.value,
+            }); alert("  المدرسة ");
+            const principaldocRef = doc(db, "Principal", user.uid);
+            const schooldocRef = doc(db, "School", user.uid);
+alert(principaldocRef.id);
+            const schooldata = {
+              PrincipalID: principaldocRef
+            };
+            const principaldata = {
+              SchoolID: schooldocRef
+            };
+alert("now add to firestore");
+            updateDoc(principaldocRef, principaldata)
+              .then((docRef) => {
+                console.log("A New Document Field has been added to an existing document");
+                alert("added");
+              })
+              .catch((error) => {
+                console.log(error);
+                alert(error);
+              });
+            updateDoc(schooldocRef, schooldata)
+              .then((docRef) => {
+                console.log("A New Document Field has been added to an existing document");
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+            signForm.reset();
+            window.location.href = "principalHomePage.html";
+            alert("تم تسجيل المدرسة بنجاح");
+
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.log(errorMessage);
+            signForm.reset();
+          });
+
+
+
+        /* else {
+           alert(" يوجد خطأ يرجى المحاولة في وقت لاحق ");
+         }*/
+
+      }
+      else {
         alert("المدرسة مسجلة مسبقاً");
         signForm.reset();
-    }
+      }
     });
 
-    
-
-      </script>
 
 
-<script type="text/javascript">
-    
-      const Firstname=document.getElementById("fnameInp");
-      const Lastname=document.getElementById("lnameInp");
-      const Email1=document.getElementById("emailInp");
-      const password=document.getElementById("passInp");
-      const schoolname=document.getElementById("snameInp");
-      const Branchnumber=document.getElementById("bnumInp");
+  </script>
 
 
-   function validate() {
-    
-    if(Firstname.value==""|| Lastname.value=="" || schoolname.value=="" || Branchnumber.value=="" || password.value==""){
-      alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
-      return false;
+  <script type="text/javascript">
+
+    const Firstname = document.getElementById("fnameInp");
+    const Lastname = document.getElementById("lnameInp");
+    const Email1 = document.getElementById("emailInp");
+    const password = document.getElementById("passInp");
+    const schoolname = document.getElementById("snameInp");
+    const Branchnumber = document.getElementById("bnumInp");
+
+
+    function validate() {
+
+      if (Firstname.value == "" || Lastname.value == "" || schoolname.value == "" || Branchnumber.value == "" || password.value == "") {
+        alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+        return false;
+      }
+
+
+
+
+      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+      if (!Email1.value.match(mailformat)) {
+        alert("يرجى إدخال بريد إلكتروني صحيح ");
+        document.getElementById("emailInp").focus();
+        return false;
+      }
+
+      if (password.value.length < 6) {
+        alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+        return false;
+      }
+
+      else {
+        return true;
+      }
     }
 
-    
-   
-   
-    var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if( !Email1.value.match(mailformat)){
-     alert("يرجى إدخال بريد إلكتروني صحيح ");
-     document.getElementById("emailInp").focus();
-     return false;
-    }
-
-    if(password.value.length < 6) {  
-    alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
-     return false;  
-  }  
-   
-    else {
-      return true;
-     }
-   }
-   
-   </script>
+  </script>
 
 
 
-          
 
-    
+
+
 </body>
+
 </html>
