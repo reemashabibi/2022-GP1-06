@@ -62,18 +62,17 @@ const firebaseConfig = {
         //validate form
      function validate() {
             var fname = document.getElementById( "firstName" );
-            var letters = /^[A-Za-z]+$/;
-            if( !fname.value.match(letters) )
+            if( fname.value == "" )
             {
-             alert('first name must have alphabet characters only');
+             alert('يجب أن لا يكون الحقل المطلوب فارغًا');
              document.addAdmin.firstName.focus();
              return false;
             }
            
             var lname = document.getElementById( "lastName" );
-            if( !lname.value.match(letters) )
+            if( lname.value == "" )
             {
-             alert('last name must have alphabet characters only');
+              alert('يجب أن لا يكون الحقل المطلوب فارغًا');
              document.addAdmin.lastName.focus();
              return false;
             }
@@ -81,7 +80,7 @@ const firebaseConfig = {
             var email = document.getElementById( "email" );
             var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             if( !email.value.match(mailformat)){
-             alert("You have entered an invalid email address!");
+             alert("الرجاء إدحال بريد إلكتروني صحيح");
              document.addAdmin.email.focus();
              return false;
             }
@@ -100,8 +99,8 @@ const firebaseConfig = {
            if (user) {
               // User is signed in, see docs for a list of available properties
              // https://firebase.google.com/docs/reference/js/firebase.User
-              Schoo_lID = user.uid;
-              schoolIDref = doc(db, 'School', Schoo_lID);
+              School_lID = user.uid;
+             // schoolIDref = doc(db, 'School', Schoo_lID);
               // ...
                 } else {
                  // User is signed out
@@ -130,8 +129,6 @@ const firebaseConfig = {
                  //send an email to reset password
                  sendPasswordResetEmail(auth,registerEmail).then(() => {
                   // EmailSent
-                 // alert(registerEmail + " -- " + auth);
-                  alert("reset");
                 })
 
                 //add to the document
@@ -141,16 +138,18 @@ const firebaseConfig = {
                   LastName: registerlname, 
                   password: "",
                   //schoolID?
-                  SchoolID: schoolIDref,
+                   schoolID: "/School/"+School_lID,
+                  // schoolID: "/School/"+22,
                 });
 
-               alert("تم بنجاح");
+               alert("تمت الإضافة بنجاح");
                  
                 })
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
-                 // alert("البريد الالكتروني مستخدم من قبل");
+                  if (errorMessage =="Firebase: Error (auth/email-already-in-use).")
+                       alert("البريد الالكتروني مستخدم من قبل");
                   alert(errorMessage);
                   alert("didnt create");
                   addAdminForm.reset();
@@ -221,7 +220,7 @@ excel_file.addEventListener('change', (event) => {
         //Adding
     if(sheet_data.length > 0)
         {
-             for(var row = 1; row <5; await row++)
+             for(var row = 1; row <5;  row++)
             {
                 for(var cell = 0; cell < sheet_data[row].length; cell++) {
          
@@ -241,7 +240,6 @@ excel_file.addEventListener('change', (event) => {
                     }
                     if(cell==2){
                         registerEmail = sheet_data[row][cell];
-                        
                       //  alert(registerEmail);
                     }
                     }
@@ -249,20 +247,32 @@ excel_file.addEventListener('change', (event) => {
                 registerPass = pass();
                // randomID = randID();
                 createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-                .then(  (userCredential) => {
+                .then( (userCredential) => {
                     // Signed in 
                      user = userCredential.user;
                    //send an email to reset password
                    sendPasswordResetEmail(auth,registerEmail).then( () => {
                     // EmailSent
-                  })
-                  //add to the document
-                  //
+                  }) 
+              
+                                        //add to the document
+                                        setDoc(doc(db, "Admin", user.uid), {
+                                          Email: registerEmail,
+                                          FirstName: registerFname,
+                                          LastName: registerlname, 
+                                          password: "",
+                                          //schoolID?
+                                         // schoolID: "/School/"+School_lID,
+                                           schoolID: "/School/"+22,
+                                        });
+              //    alert(registerFname);
                   }).catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                   })
             }//end row  
+
+
         }
     }
 });

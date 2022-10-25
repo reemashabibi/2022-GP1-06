@@ -1,16 +1,6 @@
 <script type="module">
-    import {  onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
     
-        onAuthStateChanged(auth, (user)=>{
-            if(user){
-                console.log("the same user");
-            }
-            else{
-                window.location.href="index.html";
-                console.log("the  user changed");
-            }
     
-        })
     </script>
 
 
@@ -29,13 +19,11 @@
         
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
         import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
         import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
         import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
-
-
-
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
         const firebaseConfig = {
           apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
           authDomain: "halaqa-89b43.firebaseapp.com",
@@ -48,14 +36,43 @@
       
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const auth = getAuth();
+        const user= auth.currentUser;
+        const uid= user.uid;
+        onAuthStateChanged(auth, (user)=>{
+            if(user){
+                console.log("the same user");
+                console.log(auth.currentUser);
+                
+            }
+            else{
+                window.location.href="index.html";
+                console.log("the  user changed");
+            }
+    
+        })
+
+        
+
+
+
+       
         
         export { app, db, collection, getDocs, Timestamp, addDoc };
         export { query, orderBy, limit, where, onSnapshot }; 
-        const analytics = getAnalytics(app);
+        ;
 
 
         const db = getFirestore(app);
+        const colRef =  query(collection(db, "Principal"), where(doc.id , "==", uid));
+        const colRef2 =  query(collection(db, "School"), where(doc.id , "==", uid));
+
+        querySnapshot =  getDoc(colRef);
+
         
+            console.log(querySnapshot);
+       
     
       //  db.settings({timestampInSnapshots: true });
 
@@ -66,6 +83,7 @@
       const LastName=document.getElementById("lnameInp");
       const Email=document.getElementById("emailInp");
       const Password=document.getElementById("passInp");
+
       
 
       
