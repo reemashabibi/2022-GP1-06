@@ -1,12 +1,26 @@
 <!DOCTYPE html>
-<?php
-$_GET['cid'] = "aofgh2evQw8qko6jtwBs";
-$cid = $_GET['cid'];
-$pid = 'POTur2qxIKmSafOghaFn';
-echo "<script type='module'>import { subjectTeacherForm } from './SubjectTeacher.js';
-document.getElementsByTagName('body').onload = subjectTeacherForm('$cid', '$pid');
-</script>";
-?>
+
+
+ <script type='module'>
+ import { subjectTeacherForm } from './SubjectTeacher.js';
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+ const auth = getAuth();
+ const user= auth.currentUser;
+    onAuthStateChanged(auth, (user)=>{
+        if(user){
+            const uid=user.uid;
+            var queryString = location.search.substring(1);
+            var ids = queryString.split("|");
+            document.getElementsByTagName('body').onload = subjectTeacherForm(ids[0], uid);
+            console.log("the same user");
+        }
+        else{
+            window.location.href="index.html";
+            console.log("the  user changed");
+        }
+    })
+</script>;
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">

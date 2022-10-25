@@ -1,10 +1,27 @@
 <!DOCTYPE html>
-<?php
-  $cid = $_GET['c'];
-  $sid = $_GET['s'];
-  echo "<script type='module'>import { viewStudents } from './admin.js';
-  document.getElementsByTagName('body').onload = viewStudents('$cid','$sid');</script>";
- ?>
+
+
+  <script type='module'>
+    import { viewStudents } from './admin.js';
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+ const auth = getAuth();
+ const user= auth.currentUser;
+    onAuthStateChanged(auth, (user)=>{
+        if(user){
+            const uid=user.uid;
+            var queryString = location.search.substring(1);
+            var ids = queryString.split("|");
+            document.getElementsByTagName('body').onload = viewStudents(ids[0], ids[1]);
+            console.log("the same user");
+        }
+        else{
+            window.location.href="index.html";
+            console.log("the  user changed");
+        }
+    })
+  
+</script>
+ 
 <html lang="en">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

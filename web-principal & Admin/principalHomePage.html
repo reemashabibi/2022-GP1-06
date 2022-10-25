@@ -7,6 +7,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
     onAuthStateChanged(auth, (user)=>{
         if(user){
             const uid=user.uid;
+            alert(uid);
             document.getElementsByTagName('body').onload = callAdmins(uid);
             console.log("the same user");
         }
@@ -20,7 +21,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 
    
 
-    const logout= document.getElementById("signout");
+    const logout= document.getElementById("signOut");
 
     logout.addEventListener('click',  async (e) => {
       alert("lohhh");
@@ -32,7 +33,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
         console.log(error.message);
         }); 
 
-     })
+     }) 
 </script>
 
 

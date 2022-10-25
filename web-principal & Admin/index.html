@@ -27,7 +27,7 @@
           <div class="inputbox">
           <span for="userType" >:اختر نوع المستخدم</span>
          <select name="userType" id="userType">
-           <option value="princapl">مدير</option>
+           <option value="principal">مدير</option>
            <option value="admin">إداري</option>
         </select>
           </div>
@@ -88,8 +88,9 @@
            if (userType.value=="principal"){
               
               const q = query(collection(db, "Principal"), where("Email", "==", Email.value));
-              const querySnapshot = await getDoc(q);
-              if(!querySnapshot.exists()){
+              const querySnapshot = await getDocs(q);
+              alert("hi");
+              if(querySnapshot.empty){
                alert("لا يوجد مدير بهذه البيانات يرجى التحقق من البيانات المدخلة");
                logInform.reset();
             }
@@ -97,9 +98,9 @@
             }
             
             if ((userType.value=="admin")){
-              const q = query(collection(db, "Admin"), where("Email", "==", Email.value));
-              const querySnapshot = await getDoc(q);
-              if(!querySnapshot.exists()){
+              const q2 = query(collection(db, "Admin"), where("Email", "==", Email.value));
+              const querySnapshot = await getDocs(q2);
+              if(querySnapshot.empty){
                alert("لا يوجد إداري بهذه البيانات يرجى التحقق من البيانات المدخلة");
                logInform.reset();
             }
@@ -123,12 +124,12 @@
            })
         .catch((error) =>{
             alert("somethingis wrong"+error.message);
-        })
+        });
 
             
 
 
-})
+});
            
 
 
