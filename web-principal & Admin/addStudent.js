@@ -288,57 +288,105 @@ function pass() {
 
 
 
-/*
-// addStudentForm 
-addStudentForm.addEventListener('submit',  async (e) => {
-  if(filledCorrectly){
-    e.preventDefault()
-    alert("triggerd");
-    const registerFname = document.getElementById("FnameParent").value;
-    const registerlname = document.getElementById("LnameParent").value;
-    const registerEmail = document.getElementById("emailP").value;
-    const registerPhone = document.getElementById("phone").value;
-    const registerPass =  pass();
-    createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-    .then(  (userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        
-       //send an email to reset password
-       sendPasswordResetEmail(auth,registerEmail).then(() => {
-        // EmailSent
-       // alert(registerEmail + " -- " + auth);
-        alert("reset");
-      })
 
-      //add to the document
-      setDoc(doc(db, "Parent", user.uid), {
-        Email: registerEmail,
-        FirstName: registerFname,
-        LastName: registerlname, 
-        password: "",
-        phone:registerPhone,
-        //schoolID?
-        schoolID: "/School/"+22,
-      });
+///////////////////////////////////// Add StudentS //////////////////////////////////////////////////////
+const excel_file = document.getElementById('excel_file');
+excel_file.addEventListener('change', (event) => {
+    if(!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type))
+    {
+        document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">Only .xlsx or .xls file format are allowed</div>';
+        excel_file.value = '';
+        return false;
+    }
+   let registerFname = "";
+   let registerlname = "";
+   let registerEmail = "";
+   let registerPass = "";
+   let user ;
+   let randomID;
+   // var counter =0;
+    var reader = new FileReader();
+    reader.readAsArrayBuffer(event.target.files[0]);
+    reader.onload = async function(event){
+        var data = new Uint8Array(reader.result);
+        var work_book = XLSX.read(data, {type:'array'});
+        var sheet_name = work_book.SheetNames;
+        var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
 
-     alert("تم بنجاح");
-       
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-       // alert("البريد الالكتروني مستخدم من قبل");
-        alert(errorMessage);
-        addStudentForm.reset();
-      });
-      addStudentForm.reset();
+             //view tabel//
+        if(sheet_data.length > 0)
+        {
+            var table_output = '<table class="table table-striped table-bordered">';
+
+            for(var row = 0; row < sheet_data.length; row++)
+            {
+                table_output += '<tr>';
+                for(var cell = 0; cell < sheet_data[row].length; cell++)
+                {
+                    if(row == 0)
+                    {
+                        table_output += '<th>'+sheet_data[row][cell]+'</th>';
+                    }
+                    else
+                    {
+                        table_output += '<td>'+sheet_data[row][cell]+'</td>';
+                    }
+                }
+                table_output += '</tr>';
+            }
+            table_output += '</table>';
+            document.getElementById('excel_data').innerHTML = table_output;
+        }
+        excel_file.value = '';
 
 
 
-  }//end if
-  else{
-    alert("not filled yet.")
-  }
+        //Adding
+    if(sheet_data.length > 0)
+        {
+             for(var row = 1; row < sheet_data.length; await row++)
+            {
+                for(var cell = 0; cell < sheet_data[row].length; cell++) {
+         
+                    if(row == 0){
+                        //herders
+                      //  table_output += sheet_data[row][cell];
+                     }
+                    else
+                    {
+                     if(cell==0){
+                       // registerFname  = sheet_data[row][cell];
+                       alert(cell[0].value);
+                     }
+                     if(cell==1){
+                       // registerlname = sheet_data[row][cell];
+                       // alert(registerlname);                 
+                    }
+                    if(cell==2){
+                     //   registerEmail = sheet_data[row][cell];
+                        
+                      //  alert(registerEmail);
+                    }
+                    }
+                }
+                registerPass = pass();
+               // randomID = randID();
+                createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+                .then(  (userCredential) => {
+                    // Signed in 
+                     user = userCredential.user;
+                   //send an email to reset password
+                   sendPasswordResetEmail(auth,registerEmail).then( () => {
+                    // EmailSent
+                  })
+                  //add to the document
+                  //
+                  }).catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                  })
+            }//end row  
+        }
+    }
+});
 
-});//end addStudentForm.addEventListener */

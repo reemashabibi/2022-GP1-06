@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="create.css">
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 
     <title>إضافة طالب</title>
     
@@ -18,6 +21,7 @@
 <body>
 
     <div class="center">
+
         <h1>إضافة طالب</h1>
         
         <form  class="add" name="add">
@@ -78,14 +82,15 @@
 
 
 
-                <div class="inputbox">
-                    <input type="password" required="required" id="password" name="password" ">
-    <span>كلمة المرور</span>
-  </div>
+       
             </div>
  
             <div class="inputbox">
-                <button  type="submit" class="btn" id="btn">إضافة</button>
+                <button  type="submit" class="button-36 topTitle" id="btn">إضافة</button>
+
+            </div>
+            <div class="inputbox">
+            <button class="button-36 topTitle" onclick="location.href='addStudents.html'"  >إضافة قائمة طلاب</button>
             </div>
         </form>
     </div>
