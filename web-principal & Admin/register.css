@@ -26,11 +26,23 @@ body {
   padding-left: 10px;
   text-align: right;
 }
+.center h4 {
+  font-size: 0.76em;
+  
+  padding: 10px;
+  color: #000;
+  letter-spacing: 1px;
+  margin-bottom: 60px;
+  font-weight: bold;
+  padding-left: 10px;
+  text-align: right;
+}
 .center .inputbox {
   position: relative;
   width: 300px;
   height: 50px;
   margin-bottom: 50px;
+  padding-left: 50px;
   
 }
 .center .inputbox input {
