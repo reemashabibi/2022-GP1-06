@@ -93,13 +93,13 @@ const firebaseConfig = {
 
          //  get schoolID
            const authPrin = getAuth();
-           let Schoo_lID = null;
+           let School_lID = null;
            onAuthStateChanged(authPrin, (user) => {
            if (user) {
               // User is signed in, see docs for a list of available properties
              // https://firebase.google.com/docs/reference/js/firebase.User
-              Schoo_lID = user.uid;
-              schoolIDref = doc(db, 'School', Schoo_lID);
+              School_lID = user.uid;
+             // schoolIDref = doc(db, 'School', Schoo_lID);
               // ...
                 } else {
                  // User is signed out
@@ -126,8 +126,6 @@ const firebaseConfig = {
                  //send an email to reset password
                  sendPasswordResetEmail(auth,registerEmail).then(() => {
                   // EmailSent
-                 // alert(registerEmail + " -- " + auth);
-                 // alert("reset");
                 })
 
                 //add to the document
@@ -137,8 +135,8 @@ const firebaseConfig = {
                   LastName: registerlname, 
                   password: "",
                   //schoolID?
-                 // schoolID: "/School/"+Schoo_lID,
-                   schoolID: "/School/"+22,
+                   schoolID: "/School/"+School_lID,
+                  // schoolID: "/School/"+22,
                 });
 
                alert("تمت الإضافة بنجاح");
@@ -216,7 +214,7 @@ excel_file.addEventListener('change', (event) => {
         //Adding
     if(sheet_data.length > 0)
         {
-             for(var row = 1; row <5; await row++)
+             for(var row = 1; row <5;  row++)
             {
                 for(var cell = 0; cell < sheet_data[row].length; cell++) {
          
@@ -236,7 +234,6 @@ excel_file.addEventListener('change', (event) => {
                     }
                     if(cell==2){
                         registerEmail = sheet_data[row][cell];
-                        
                       //  alert(registerEmail);
                     }
                     }
@@ -244,20 +241,32 @@ excel_file.addEventListener('change', (event) => {
                 registerPass = pass();
                // randomID = randID();
                 createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-                .then(  (userCredential) => {
+                .then( (userCredential) => {
                     // Signed in 
                      user = userCredential.user;
                    //send an email to reset password
                    sendPasswordResetEmail(auth,registerEmail).then( () => {
                     // EmailSent
-                  })
-                  //add to the document
-                  //
+                  }) 
+              
+                                        //add to the document
+                                        setDoc(doc(db, "Admin", user.uid), {
+                                          Email: registerEmail,
+                                          FirstName: registerFname,
+                                          LastName: registerlname, 
+                                          password: "",
+                                          //schoolID?
+                                         // schoolID: "/School/"+School_lID,
+                                           schoolID: "/School/"+22,
+                                        });
+              //    alert(registerFname);
                   }).catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
                   })
             }//end row  
+
+
         }
     }
 });

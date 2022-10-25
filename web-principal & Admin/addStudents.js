@@ -91,7 +91,6 @@ excel_file.addEventListener('change', (event) => {
 
 
         //Adding
-        
     if(sheet_data.length > 0)
         {   
         
@@ -107,7 +106,7 @@ excel_file.addEventListener('change', (event) => {
                     {
                      if(cell==0){
                         registerFname  = sheet_data[row][cell];
-                       alert(registerFname);
+                        alert(registerFname);
                      }
                      if(cell==1){
                         registerlname = sheet_data[row][cell];
@@ -124,25 +123,20 @@ excel_file.addEventListener('change', (event) => {
                        //  alert(registerEmail);
                      }
                      if(cell==4){
-                        registerParentFname = sheet_data[row][cell];
-                         
+                        registerParentFname = sheet_data[row][cell];       
                        //  alert(registerEmail);
                      }
                      if(cell==5){
                         registerParentlname = sheet_data[row][cell];
-                         
                        //  alert(registerEmail);
                      }
                      if(cell==6){
                         registerParentEmail = sheet_data[row][cell];
-                         
                        //  alert(registerEmail);
                      }
                     }
                 }
-               // 
                // randomID = randID();
-               
                const q = query(collection(db, "Parent"), where("PhoneNumber", "==", registerParentPhone));
                const querySnapshot = await getDocs(q);
                const qClass = query(collection(db, "Class"), where("ClassName", "==", registerClass ));
@@ -186,7 +180,7 @@ excel_file.addEventListener('change', (event) => {
                 createUserWithEmailAndPassword(auth, registerParentEmail, registerPass)
                   .then((userCredential) => {
                     // Signed in 
-                    const user = userCredential.user;
+                    let user = userCredential.user;
           
                     //send an email to reset password
                     sendPasswordResetEmail(auth, registerParentEmail).then(() => {
@@ -194,7 +188,7 @@ excel_file.addEventListener('change', (event) => {
                       // alert(registerEmail + " -- " + auth);
                       alert("reset");
                     })
-                    const res = doc(db, "Parent", user.uid)
+                    let res = doc(db, "Parent", user.uid)
           
                     //add to the document
                     setDoc(doc(db, "Parent", user.uid), {
