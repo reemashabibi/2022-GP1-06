@@ -29,17 +29,17 @@ const firebaseConfig = {
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-  const colRef = collection(db, 'Admin');
+  const colRef = collection(db, 'Teacher');
   const auth = getAuth(app);
 
   //get collection data
   getDocs(colRef)
     .then((snapshot) => {
-     let Admin = []
+     let Teacher = []
      snapshot.docs.forEach((doc)=> {
-        Admin.push({...doc.data(), id: doc.id })
+      Teacher.push({...doc.data(), id: doc.id })
      })
-     console.log(Admin)
+     console.log(Teacher)
     })
     .catch(err => {
         console.log(err.mssage)
@@ -60,36 +60,35 @@ const firebaseConfig = {
     }
 
         //validate form
-     function validate() {
-            var fname = document.getElementById( "firstName" );
-            var letters = /^[A-Za-z]+$/;
-            if( !fname.value.match(letters) )
-            {
-             alert('first name must have alphabet characters only');
-             document.addAdmin.firstName.focus();
-             return false;
-            }
-           
-            var lname = document.getElementById( "lastName" );
-            if( !lname.value.match(letters) )
-            {
-             alert('last name must have alphabet characters only');
-             document.addAdmin.lastName.focus();
-             return false;
-            }
-           
-            var email = document.getElementById( "email" );
-            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            if( !email.value.match(mailformat)){
-             alert("You have entered an invalid email address!");
-             document.addAdmin.email.focus();
-             return false;
-            }
-           
-            else {
-              return true;
-             }
+        function validate() {
+          var fname = document.getElementById( "firstName" );
+          if( fname.value == "" )
+          {
+           alert('يجب أن لا يكون الحقل المطلوب فارغًا');
+           document.addAdmin.firstName.focus();
+           return false;
+          }
+         
+          var lname = document.getElementById( "lastName" );
+          if( lname.value == "" )
+          {
+            alert('يجب أن لا يكون الحقل المطلوب فارغًا');
+           document.addAdmin.lastName.focus();
+           return false;
+          }
+         
+          var email = document.getElementById( "email" );
+          var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+          if( !email.value.match(mailformat)){
+           alert("الرجاء إدحال بريد إلكتروني صحيح");
+           document.addAdmin.email.focus();
+           return false;
+          }
+         
+          else {
+            return true;
            }
+         }
 
 
            /* get schoolID

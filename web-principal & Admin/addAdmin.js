@@ -62,18 +62,17 @@ const firebaseConfig = {
         //validate form
      function validate() {
             var fname = document.getElementById( "firstName" );
-            var letters = /^[A-Za-z]+$/;
-            if( !fname.value.match(letters) )
+            if( fname.value == "" )
             {
-             alert('first name must have alphabet characters only');
+             alert('يجب أن لا يكون الحقل المطلوب فارغًا');
              document.addAdmin.firstName.focus();
              return false;
             }
            
             var lname = document.getElementById( "lastName" );
-            if( !lname.value.match(letters) )
+            if( lname.value == "" )
             {
-             alert('last name must have alphabet characters only');
+              alert('يجب أن لا يكون الحقل المطلوب فارغًا');
              document.addAdmin.lastName.focus();
              return false;
             }
@@ -81,7 +80,7 @@ const firebaseConfig = {
             var email = document.getElementById( "email" );
             var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
             if( !email.value.match(mailformat)){
-             alert("You have entered an invalid email address!");
+             alert("الرجاء إدحال بريد إلكتروني صحيح");
              document.addAdmin.email.focus();
              return false;
             }
@@ -115,7 +114,7 @@ const firebaseConfig = {
               if(validate()){
               //    alert("in2");
               e.preventDefault()
-              alert("triggerd");
+             // alert("triggerd");
               const registerFname = document.getElementById("firstName").value;
               const registerlname = document.getElementById("lastName").value;
               const registerEmail = document.getElementById("email").value;
@@ -128,7 +127,7 @@ const firebaseConfig = {
                  sendPasswordResetEmail(auth,registerEmail).then(() => {
                   // EmailSent
                  // alert(registerEmail + " -- " + auth);
-                  alert("reset");
+                 // alert("reset");
                 })
 
                 //add to the document
@@ -138,16 +137,18 @@ const firebaseConfig = {
                   LastName: registerlname, 
                   password: "",
                   //schoolID?
-                  SchoolID: schoolIDref,
+                 // schoolID: "/School/"+Schoo_lID,
+                   schoolID: "/School/"+22,
                 });
 
-               alert("تم بنجاح");
+               alert("تمت الإضافة بنجاح");
                  
                 })
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
-                 // alert("البريد الالكتروني مستخدم من قبل");
+                  if (errorMessage =="Firebase: Error (auth/email-already-in-use).")
+                       alert("البريد الالكتروني مستخدم من قبل");
                   alert(errorMessage);
                   addAdminForm.reset();
                 });
