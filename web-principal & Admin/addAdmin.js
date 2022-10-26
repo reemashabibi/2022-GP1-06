@@ -23,6 +23,7 @@ const firebaseConfig = {
   };
 
   const app = initializeApp(firebaseConfig);
+  const app2 = initializeApp(firebaseConfig,"Secondary");
   const db = getFirestore(app);
 
   export { app, db, collection, getDocs, Timestamp, addDoc };
@@ -31,6 +32,8 @@ const firebaseConfig = {
 
   const colRef = collection(db, 'Admin');
   const auth = getAuth(app);
+  const authSec = getAuth(app2);
+
 
   //get collection data
   getDocs(colRef)
@@ -122,12 +125,12 @@ const firebaseConfig = {
               const registerPass =  pass();
               e.preventDefault();
               
-              createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+              createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
               .then( (userCredential) => {
                   // Signed in 
                   const user = userCredential.user;
                  //send an email to reset password
-                 sendPasswordResetEmail(auth,registerEmail).then(() => {
+                 sendPasswordResetEmail(authSec,registerEmail).then(() => {
                   // EmailSent
                 })
 
