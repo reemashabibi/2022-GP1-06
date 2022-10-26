@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, setDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
@@ -30,9 +30,19 @@ const analytics = getAnalytics(app);
 
 
 const colRefStudent = collection(db, "Student");
+const auth = getAuth(app);
 
-
-
+  //randomly generated pass
+  function pass(){
+    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var string_length = 8;
+            var pass = '';
+            for (var i=0; i<string_length; i++) {
+                var rnum = Math.floor(Math.random() * chars.length);
+                pass += chars.substring(rnum,rnum+1);
+            }
+        return pass;
+    }
 ///////////////////////////////////// Add StudentS //////////////////////////////////////////////////////
 const excel_file = document.getElementById('excel_file');
 excel_file.addEventListener('change', (event) => {
@@ -87,7 +97,6 @@ excel_file.addEventListener('change', (event) => {
         }
         excel_file.value = '';
 
-       
 
 
         //Adding
@@ -96,7 +105,7 @@ excel_file.addEventListener('change', (event) => {
         
              for(var row = 1; row < sheet_data.length; await row++)
             {
-                for(var cell = 0; cell < 5; cell++) {
+                for(var cell = 0; cell < 6; cell++) {
          
                     if(row == 0){
                         //herders
@@ -137,6 +146,7 @@ excel_file.addEventListener('change', (event) => {
                     }
                 }
                // randomID = randID();
+               
                const q = query(collection(db, "Parent"), where("PhoneNumber", "==", registerParentPhone));
                const querySnapshot = await getDocs(q);
                const qClass = query(collection(db, "Class"), where("ClassName", "==", registerClass ));
@@ -170,17 +180,22 @@ excel_file.addEventListener('change', (event) => {
                    .then(() => {
                     // addStudentForm.reset()
                    });
-               }alert(classId == "null")
+               
+            }
                if(classId == "null"){
                     alert(" !الفصل "+registerClass+"غير مسجل بالنظام")
                     return false;}
+                    alert("parent id : "+ parentId)
+               }
+               //
                if (parentId == "null") {
                 alert("triggerd");
                 registerPass = pass();
+                
                 createUserWithEmailAndPassword(auth, registerParentEmail, registerPass)
                   .then((userCredential) => {
                     // Signed in 
-                    let user = userCredential.user;
+                    const user = userCredential.user;
           
                     //send an email to reset password
                     sendPasswordResetEmail(auth, registerParentEmail).then(() => {
@@ -188,7 +203,7 @@ excel_file.addEventListener('change', (event) => {
                       // alert(registerEmail + " -- " + auth);
                       alert("reset");
                     })
-                    let res = doc(db, "Parent", user.uid)
+                    const res = doc(db, "Parent", user.uid)
           
                     //add to the document
                     setDoc(doc(db, "Parent", user.uid), {
@@ -213,7 +228,7 @@ excel_file.addEventListener('change', (event) => {
                   const errorMessage = error.message;
                   // alert("البريد الالكتروني مستخدم من قبل");
                   alert(errorMessage);
-                  addStudentForm.reset();
+                 // addStudentForm.reset();
                 });
               // addStudentForm.reset();
         
@@ -223,5 +238,5 @@ excel_file.addEventListener('change', (event) => {
         }
     }
  
-}
+
 });
