@@ -93,13 +93,13 @@ const firebaseConfig = {
 
          //  get schoolID
            const authPrin = getAuth();
-           let Schoo_lID = null;
+           let School_ID = null;
            let schoolIDref = "";
            onAuthStateChanged(authPrin, (user) => {
            if (user) {
               // User is signed in, see docs for a list of available properties
              // https://firebase.google.com/docs/reference/js/firebase.User
-              School_lID = user.uid;
+              School_ID = user.uid;
              // schoolIDref = doc(db, 'School', Schoo_lID);
               // ...
                 } else {
@@ -121,10 +121,10 @@ const firebaseConfig = {
               const registerEmail = document.getElementById("email").value;
               const registerPass =  pass();
               e.preventDefault();
+              
               createUserWithEmailAndPassword(auth, registerEmail, registerPass)
               .then( (userCredential) => {
                   // Signed in 
-                  alert("in");
                   const user = userCredential.user;
                  //send an email to reset password
                  sendPasswordResetEmail(auth,registerEmail).then(() => {
@@ -138,10 +138,9 @@ const firebaseConfig = {
                   LastName: registerlname, 
                   password: "",
                   //schoolID?
-                   schoolID: "/School/"+School_lID,
+                   schoolID: "/School/"+School_ID,
                   // schoolID: "/School/"+22,
                 });
-
                alert("تمت الإضافة بنجاح");
                  
                 })
@@ -151,7 +150,7 @@ const firebaseConfig = {
                   if (errorMessage =="Firebase: Error (auth/email-already-in-use).")
                        alert("البريد الالكتروني مستخدم من قبل");
                   alert(errorMessage);
-                  alert("didnt create");
+                  
                   addAdminForm.reset();
                 });
                 addAdminForm.reset();
@@ -159,7 +158,7 @@ const firebaseConfig = {
               else{
                  // alert("return");
               }
-              window.location.href = "principalHomePage.html";
+             // window.location.href = "principalHomePage.html";
 
             }); //The END
            
