@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, setDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, updateDoc , arrayUnion, setDoc, collectionGroup  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
@@ -19,18 +19,45 @@ const firebaseConfig = {
   appId: "1:969971486820:web:40cc0abf19a909cc470f71",
   measurementId: "G-PCYTHJF1SD"
 };
-
+const app2 = initializeApp(firebaseConfig,"Secondary");
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
-export { app, db, collection, getDocs, Timestamp, addDoc };
-export { query, orderBy, limit, where, onSnapshot };
+const authSec = getAuth(app2);
 const analytics = getAnalytics(app);
 
+var uid;
+var email;
+const auth = getAuth();
+var snapshot;
+onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+       uid = user.uid;
+        email = user.email
+         snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 
 
-const colRefStudent = collection(db, "Student");
-const auth = getAuth(app);
+
+var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
+export { app, db, collection, getDocs, Timestamp, addDoc };
+export { query, orderBy, limit, where, onSnapshot };
+
+
+/*snapshot.docs.forEach(async doc => {
+const data = await getDoc(doc.ref.parent.parent);
+schoolID = data.id;
+
+});*/
+
+const colRefStudent = collection(db, "School",schoolID,"Student");
+
 
   //randomly generated pass
   function pass(){
@@ -70,7 +97,8 @@ excel_file.addEventListener('change', (event) => {
         var work_book = XLSX.read(data, {type:'array'});
         var sheet_name = work_book.SheetNames;
         var sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
-
+  
+     
              //view tabel//
         if(sheet_data.length > 0)
         {
@@ -87,25 +115,25 @@ excel_file.addEventListener('change', (event) => {
                     }
                     else
                     {
-                        table_output += '<td>'+sheet_data[row][cell]+'</td>';
+                        table_output += '<td id="row'+cell+'">'+sheet_data[row][cell]+'</td>';
                     }
                 }
-                table_output += '</tr>';
+                table_output += '</tr >';
             }
             table_output += '</table>';
             document.getElementById('excel_data').innerHTML = table_output;
         }
         excel_file.value = '';
 
-
+        const table = document.getElementById("table");
 
         //Adding
     if(sheet_data.length > 0)
         {   
         
-             for(var row = 1; row < sheet_data.length; await row++)
+             for(var row = 1; row <  sheet_data[row].length ; await row++)
             {
-                for(var cell = 0; cell < 6; cell++) {
+                for(var cell = 0; cell < 7; cell++) {
          
                     if(row == 0){
                         //herders
@@ -115,128 +143,198 @@ excel_file.addEventListener('change', (event) => {
                     {
                      if(cell==0){
                         registerFname  = sheet_data[row][cell];
-                        alert(registerFname);
+                        
                      }
                      if(cell==1){
                         registerlname = sheet_data[row][cell];
-                       // alert(registerlname);                 
+                       //alert(registerlname);                 
                     }
                     if(cell==2){
                         registerClass = sheet_data[row][cell];
                         
-                      //  alert(registerEmail);
+                       // alert(registerClass);
                     }
                     if(cell==3){
                         registerParentPhone = parseInt(sheet_data[row][cell]);
                          
-                       //  alert(registerEmail);
+                        // alert(registerParentPhone);
                      }
                      if(cell==4){
                         registerParentFname = sheet_data[row][cell];       
-                       //  alert(registerEmail);
+                      //   alert(registerParentFname);
                      }
                      if(cell==5){
                         registerParentlname = sheet_data[row][cell];
-                       //  alert(registerEmail);
+                      //   alert(registerParentlname);
                      }
                      if(cell==6){
                         registerParentEmail = sheet_data[row][cell];
-                       //  alert(registerEmail);
+                      //   alert(registerParentEmail);
                      }
                     }
                 }
                // randomID = randID();
                
-               const q = query(collection(db, "Parent"), where("PhoneNumber", "==", registerParentPhone));
+               const q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", registerParentPhone));
                const querySnapshot = await getDocs(q);
-               const qClass = query(collection(db, "Class"), where("ClassName", "==", registerClass ));
+               const qClass = query(collection(db,"School",schoolID,"Class"), where("ClassName", "==", registerClass ));
                const queryClassSnapshot = await getDocs(qClass);
                var parentId = "null";
                var classId = "null"
                var docRef = "null";
                var docRefClass = "null";
 
-               if (!querySnapshot.empty) {
-                 querySnapshot.forEach((doc) => {
-                   if (!doc.empty)
-                     parentId = doc.id;
-                 })
-
-                 if (!queryClassSnapshot.empty) {
-                    queryClassSnapshot.forEach((doc) => {
-                      if (!doc.empty)
-                        classId = doc.id;
-                    })
-           
-                 docRef = doc(db, "Parent", parentId);
-                 docRefClass = doc(db, "Class", classId);
+             
+                queryClassSnapshot.forEach((doc) => {
+                  if (!doc.empty)
+                    classId = doc.id;
+                   })
+                    if (!querySnapshot.empty) {
+                        querySnapshot.forEach((d) => {
+                            if (!d.empty)
+                              parentId = d.id;
+                          })
+                        }
+                if (!queryClassSnapshot.empty && !querySnapshot.empty) {  
+                   
+                 docRef = doc(db, "School",schoolID,"Parent", parentId);
+                 docRefClass = doc(db, "School",schoolID, "Class", classId);
                  
                  addDoc(colRefStudent, {
                    FirstName:registerFname ,
                    LastName: registerlname,
                    ClassID: docRefClass,
-                   ParentID: docRef,
-                 })
-                   .then(() => {
-                    // addStudentForm.reset()
+                   parentID:docRef ,
+                 }).then(d => {
+                    
+                    const StuRef = doc(db, "School",schoolID,"Student", d.id);
+                        updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+                        .then(() => {alert("updated")
+                            console.log("A New Document Field has been added to an existing document");
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                        updateDoc(docRef, {Students: arrayUnion(StuRef) })
+                        .then(() => {
+                            console.log("A New Document Field has been added to an existing document");
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                  //  table_output += '<td> تمت الإضافة</td>';
+                  
                    });
+
+
+
+
+
+
+
+
+
+                }//if parent and class exist/
+        
+                    else if(!queryClassSnapshot.empty)
+                    { 
+                        
+                        registerPass = pass();
+                        
+                        createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass)
+                          .then((userCredential) => {
+                            // Signed in 
+                            const user = userCredential.user;
+                  
+                            //send an email to reset password
+                            sendPasswordResetEmail(authSec, registerParentEmail).then(() => {
+                              // EmailSent
+                              // alert(registerEmail + " -- " + auth);
+                            })
+                            const res = doc(db, "School",schoolID,"Parent", user.uid)
+                  
+                            //add to the document
+                            setDoc(doc(db, "School",schoolID, "Parent", user.uid), {
+                              Email: registerParentEmail,
+                              FirstName: registerParentFname,
+                              LastName: registerParentlname,
+                              Phonenumber: registerParentPhone,
+                              Student: [],
+                            }).then(() => {
+                              docRef = doc(db, "School",schoolID, "Parent", res.id);
+                               docRefClass = doc(db, "School",schoolID,"Class", classId);
+                              addDoc(colRefStudent, {
+                                FirstName: registerFname,
+                                LastName: registerlname,
+                                ClassID: docRefClass,
+                                parentID: docRef,
+                              }).then(d => {
+                                const StuRef = doc(db, "School",schoolID,"Student", d.id);
+                                updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+                                .then(() => {
+                                    console.log("A New Document Field has been added to an existing document");
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                })
+                                updateDoc(docRef, {Students: arrayUnion(StuRef) })
+                                .then(() => {
+                                    console.log("A New Document Field has been added to an existing document");
+                                })
+                                .catch(error => {
+                                    console.log(error);
+                                })
+        
+                                table_output += '<td> تمت الإضافة</td>';})
+                              //addStudentForm.reset();
+                            });
+                            alert("تم");
+                        }).catch((error) => {
+                          const errorCode = error.code;
+                          const errorMessage = error.message;
+                          // alert("البريد الالكتروني مستخدم من قبل");
+                          alert(errorMessage);
+                         // addStudentForm.reset();
+                        });
+                        
+                    } else{alert("Class doesn't exsit")
+                  /////   var Row = document.getElementById("row"+row); 
+                    //var Cells = Row.getElementsByTagName("td"); 
+                   // alert(Cells[0].innerText); 
+                  ////  var x = Row.insertCell(1);
+                 /////   x.innerHTML = "New cell";
+                   // document.getElementById("table").rows[row].cell[7].innerHTML = "new";
+                   //sheet_data[row][7].innerHTML = "nnn";
+                }//end else class not exist
+
                
-            }
+               
+               
+            } 
+           
+
+        
+           
+              
+              
+               
+               
+            /*
                if(classId == "null"){
                     alert(" !الفصل "+registerClass+"غير مسجل بالنظام")
                     return false;}
                     alert("parent id : "+ parentId)
-               }
+               }*/
                //
-               if (parentId == "null") {
-                alert("triggerd");
-                registerPass = pass();
-                
-                createUserWithEmailAndPassword(auth, registerParentEmail, registerPass)
-                  .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-          
-                    //send an email to reset password
-                    sendPasswordResetEmail(auth, registerParentEmail).then(() => {
-                      // EmailSent
-                      // alert(registerEmail + " -- " + auth);
-                      alert("reset");
-                    })
-                    const res = doc(db, "Parent", user.uid)
-          
-                    //add to the document
-                    setDoc(doc(db, "Parent", user.uid), {
-                      Email: registerParentEmail,
-                      FirstName: registerParentFname,
-                      LastName: registerParentlname,
-                      PhoneNumber: registerParentPhone,
-                    }).then(() => {
-                      docRef = doc(db, "Parent", res.id);
-                      //docRefClass = doc(db, "Class", selectedClass[selectedClass.selectedIndex].id);
-                      addDoc(colRefStudent, {
-                        FirstName: registerFname,
-                        LastName: registerlname,
-                        ClassID: docRefClass,
-                        ParentID: docRef,
-                      });
-                      //addStudentForm.reset();
-                    });
-                    alert("تم");
-                }).catch((error) => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                  // alert("البريد الالكتروني مستخدم من قبل");
-                  alert(errorMessage);
-                 // addStudentForm.reset();
-                });
+               
+               
               // addStudentForm.reset();
         
-            }//end if
+             //end if
 
-            }//end row  
-        }
+            //end row  
+        
     }
- 
+    }
 
 });

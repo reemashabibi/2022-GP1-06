@@ -84,7 +84,8 @@ body {
   
 }
 .center .inputbox input:focus ~ span,
-.center .inputbox input:valid ~ span {
+.center .inputbox input:valid ~ span,
+.center .inputbox input:disabled ~ span{
   transform: translateX(-13px) translateY(-35px);
   font-size: 1em;
   
