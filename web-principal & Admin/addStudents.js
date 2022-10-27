@@ -209,7 +209,7 @@ excel_file.addEventListener('change', (event) => {
                     
                     const StuRef = doc(db, "School",schoolID,"Student", d.id);
                         updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
-                        .then(() => {alert("updated")
+                        .then(() => {
                             console.log("A New Document Field has been added to an existing document");
                         })
                         .catch(error => {
@@ -261,6 +261,7 @@ excel_file.addEventListener('change', (event) => {
                               Phonenumber: registerParentPhone,
                               Student: [],
                             }).then(() => {
+                              alert(classId)
                               docRef = doc(db, "School",schoolID, "Parent", res.id);
                                docRefClass = doc(db, "School",schoolID,"Class", classId);
                               addDoc(colRefStudent, {
@@ -268,7 +269,9 @@ excel_file.addEventListener('change', (event) => {
                                 LastName: registerlname,
                                 ClassID: docRefClass,
                                 parentID: docRef,
-                              }).then(d => {
+                              }).then(d => {                         
+                                docRefClass = doc(db, "School",schoolID,"Class", classId);
+                                docRef = doc(db, "School",schoolID, "Parent", res.id);
                                 const StuRef = doc(db, "School",schoolID,"Student", d.id);
                                 updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
                                 .then(() => {

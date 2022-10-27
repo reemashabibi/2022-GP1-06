@@ -87,8 +87,8 @@ classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     
    // const snapshot = await getDoc(doc(db, 'Admin', uid));
-    const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-    snapshot.docs.forEach(async doc => {
+    //const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+   // snapshot.docs.forEach(async doc => {
     //const data = await getDoc(doc.ref.parent.parent);
     //schoolID = data.id;
     const colRefClass = collection (db, "School",schoolID, "Class");
@@ -98,19 +98,20 @@ classForm.addEventListener('submit', async (e) => {
         Students: [],
     })
     .then(async docRef => { 
+      alert( docRef.id)
       classForm.reset()
-      const refrence = doc(db, "School", schoolID,  "Class",docRef.id);
+      const refrence = doc(db, "School", schoolID, "Class", docRef.id);
       let currentClass = await getDoc(refrence);
       const levelID = currentClass.data().Level;
       const qc = query(collection(db, "Level"), where("Number", "==", levelID ));
       const querySnapshotc = await getDocs(qc);
-     querySnapshotc.forEach((d) =>{
+     querySnapshotc.forEach((doc) =>{
        
         const colRefSubject = collection(db, "School",schoolID, "Class", docRef.id, "Subject");
-        const subLength= d.data().Subjects;
+        const subLength= doc.data().Subjects;
         for(let i = 0; i < subLength.length; i++){
         addDoc(colRefSubject, {
-        SubjectName: d.data().Subjects[i],
+        SubjectName: doc.data().Subjects[i],
         TeacherID:  "",
       }).then(() => { 
         console.log("added")
@@ -119,6 +120,6 @@ classForm.addEventListener('submit', async (e) => {
             });
 
         })
-    });
+
   
 });
