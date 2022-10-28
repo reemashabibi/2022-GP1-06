@@ -319,6 +319,8 @@ let docRefClass;
   }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      var x = table.rows[row].insertCell(7);
+    x.innerHTML = "لم تتم الاضافة";
     });
      
       alert("2###"+registerParentEmail)
