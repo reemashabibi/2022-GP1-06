@@ -12,6 +12,37 @@ body {
   /*font-family: "Sansita Swashed", cursive;  */
 }
 
+.req{
+  color:red;
+  font-size: 1em;
+}
+
+.closebtn {
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.alertWrong {
+  padding: 20px;
+  background-color: #f44336; 
+  color: white;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.alertRight {
+  padding: 20px;
+  background-color: #03c052; 
+  color: white;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
 .center h3 {
   font-size: 1em;
   border-right: 5px solid rgb(2, 53, 105);
