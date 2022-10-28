@@ -125,23 +125,28 @@ let authPrinID = "";
               createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
               .then( (userCredential) => {
                   // Signed in 
-                  const user = userCredential.user;
-                 sendPasswordResetEmail(authSec,registerEmail).then(() => {
-                  // EmailSent
-                }) 
+                 const user = userCredential.user;
+     
                 setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
+               // setDoc(doc(db, 'School/'+"kfGIwTyclpNernBQqSpQhkclzhh1"+'/Admin', user.uid), {
                   Email: registerEmail,
                   FirstName: registerFname,
                   LastName: registerlname,               
                 })
                 
-               alert("تمت الإضافة بنجاح");     
+               alert("تمت الإضافة بنجاح");    
+               sendPasswordResetEmail(authSec,registerEmail).then(() => {
+                // EmailSent
+                alert("sent");
+              })  
                 })
+
                 .catch((error) => {
                   const errorCode = error.code;
                   const errorMessage = error.message;
                   if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
                        alert("البريد الالكتروني مستخدم من قبل");}
+                       else
                   alert(errorMessage);
                   
                   addAdminForm.reset();

@@ -123,7 +123,6 @@ let authPrinID = "";
            .then( (userCredential) => {
                // Signed in 
                const user = userCredential.user;
-              // alert("email !")
               //send an email to reset password
               sendPasswordResetEmail(authSec,registerEmail).then(() => {
                // EmailSent
@@ -142,6 +141,7 @@ let authPrinID = "";
                const errorMessage = error.message;
                if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
                     alert("البريد الالكتروني مستخدم من قبل");}
+                    else
                alert(errorMessage);
                
                addTeacherForm.reset();

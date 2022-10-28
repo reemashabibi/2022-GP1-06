@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , signOut,  sendPasswordResetEmail,  updateCurrentUser
+import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged ,  sendPasswordResetEmail
 
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 //
-import { getAnalytics , setUserId} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { collection, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -50,7 +50,6 @@ let authPrinID = "";
    });
 
 
-
   //get collection data
   getDocs(colRef)
     .then((snapshot) => {
@@ -78,24 +77,11 @@ let authPrinID = "";
         return pass;
     }
 
-      //randomly generated pass
-  function randomID(){
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            var string_length = 10;
-            var pass = '';
-            for (var i=0; i<string_length; i++) {
-                var rnum = Math.floor(Math.random() * chars.length);
-                pass += chars.substring(rnum,rnum+1);
-            }
-        return pass;
-    }
-
-    let person = new Object();
-    person.firstName = "";
-    person.lastName = "";
-    person.email = "";
-    person.pID = "";
     let  sheet_data ;
+    let registerFname = "";
+    let registerlname = "";
+    let registerEmail = "";
+    let registerPass = "";
 
 ///////////////////////////////////// Add  TeacherS //////////////////////////////////////////////////////
 const excel_file = document.getElementById('excel_file');
@@ -106,12 +92,8 @@ excel_file.addEventListener('change', (event) => {
         excel_file.value = '';
         return false; //.xls .xlsx 
     }
-   let registerFname = "";
-   let registerlname = "";
-   let registerEmail = "";
-   let registerPass = "";
-   let user ;
-   let userID;
+  
+
     var reader = new FileReader();
     reader.readAsArrayBuffer(event.target.files[0]);
     reader.onload =  async function(event){
@@ -146,20 +128,10 @@ excel_file.addEventListener('change', (event) => {
         }
         excel_file.value = '';
 
-  
-let count = 0;
-let flag = false; 
-let userFN ="";
-let userLN = "";
-let userE = "";
-let  Names = new Object();
-let  EID = new Object();
-let stidS="";
 
         //Adding
     if(sheet_data.length > 0)
        {
-            /////5
             var i = 1;
              for(var row = 1; row <5;  row++)
            {
@@ -168,62 +140,54 @@ let stidS="";
          
                 if(row == 0){
                     //herders
-                   // table_output += sheet_data[row][cell];
                  }
                 else
                 {
                  if(cell==0){
                     registerFname  = sheet_data[row][cell];
-                    //alert(registerFname);
                  }
                  if(cell==1){
-                    registerlname = sheet_data[row][cell];
-                   // alert(registerlname);                 
+                    registerlname = sheet_data[row][cell];               
                 }
                 if(cell==2){
                     registerEmail = sheet_data[row][cell];
-                  //  alert(registerEmail);
-
                     }
                 }            
             }    
-
                 registerPass = pass();        
-                // alert("1### "+registerFname  + " -- "+ registerlname +  " -- "+ registerEmail  + "" ); 
-                  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
-                  .then( (userCredential) => {
-                      // Signed in 
-                     user = userCredential.user;
-                     userID = user.uid;
-                    sendPasswordResetEmail(authSec,registerEmail).then(() => {
-                      // EmailSent
-                    }) 
-                    //alert(user.uid); //true
-                    setDoc(doc(db, 'School/'+authPrinID+'/Teacher', user.uid), {
-                        Email: registerEmail,
-                        FirstName: registerFname,
-                        LastName: registerlname,     
-                        Subjects : [],
-                      });  
-                    //alert('2### '+  firstName +" -- " + lastName  + " -- " + email + " -- " + userID3  );            
-                   }).catch((error) => {
-                       const errorCode = error.code;
-                       const errorMessage = error.message;
-                     });
-                  //alert("4### "+registerFname  + " -- "+ registerlname +  " -- "+ registerEmail  + " -- " + userID);
+                authTeacherS (registerFname, registerlname,registerEmail, registerPass);
           }//end row  
-        }
-       
+        }       
    }
-
 });
 
-  
 
 
-/*
- setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
-                        Email: user.email,
-                        FirstName: registerFname,
-                        LastName: registerlname,               
-                      })*/
+ 
+function authTeacherS (registerFname, registerlname,registerEmail, registerPass){
+
+    registerPass =  pass(); 
+    createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+    .then(  (userCredential) => {
+        // Signed in 
+       // alert(" inn ");   
+        const user = userCredential.user;
+        sendPasswordResetEmail(authSec,registerEmail).then(() => {
+            // EmailSent
+           // alert("sent: " +registerEmail );
+          }) 
+      const res =  doc(db, 'School/'+authPrinID+'/Teacher', user.uid)    
+      //alert(" in ");     
+      //add to documnet
+      setDoc(res, {
+       Email: user.email,
+       FirstName: registerFname,
+       LastName: registerlname,               
+     }) 
+         
+     }).catch((error) => {
+         const errorCode = error.code;
+         const errorMessage = error.message;
+       });
+  }
+ 
