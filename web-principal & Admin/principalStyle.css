@@ -185,7 +185,7 @@ margin-top: 5rem;
 
 /* CSS */
 .button-36 {
-  background-image: linear-gradient(92.88deg, #5166b3 9.16%, #4371cc 43.89%, #3f62d7 64.72%);
+  background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
   border-radius: 8px;
   border-style: none;
   box-sizing: border-box;
@@ -319,4 +319,44 @@ div.content {
   from{ bottom:-100px; opacity:0 } 
   to{ bottom:0; opacity:1 }
 }
+html {
+  height:100%;
+}
 
+body {
+  margin:0;
+}
+
+.bg {
+  animation:slide 15s ease-in-out infinite alternate;
+  background-image: linear-gradient(-60deg, white 50%, #cff7f8
+
+ 50%);
+  bottom:0;
+  left:-50%;
+  opacity:.5;
+  position:fixed;
+  right:-50%;
+  top:0;
+  z-index:-1;
+}
+
+.bg2 {
+  animation-direction:alternate-reverse;
+  animation-duration:15s;
+}
+
+.bg3 {
+  animation-duration:15s;
+}
+
+
+
+@keyframes slide {
+  0% {
+    transform:translateX(-25%);
+  }
+  100% {
+    transform:translateX(25%);
+  }
+}
