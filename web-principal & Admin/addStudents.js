@@ -104,7 +104,7 @@ excel_file.addEventListener('change', (event) => {
 
       for (var row = 0; row < sheet_data.length; row++) {
         table_output += '<tr id="row">';
-        for (var cell = 0; cell < sheet_data[row].length; cell++) {
+        for (var cell = 0; cell <  sheet_data[row].length; cell++) {
           if (row == 0) {
             table_output += '<th>' + sheet_data[row][cell] + '</th>';
           }
@@ -215,28 +215,24 @@ excel_file.addEventListener('change', (event) => {
               .catch(error => {
                 console.log(error);
               })
-            //  table_output += '<td> تمت الإضافة</td>';
-
+            
           });
 
+          var x = table.rows[row].insertCell(7);
+          x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
 
 
         }//if parent and class exist/
 
         else if (!queryClassSnapshot.empty && querySnapshot.empty  ) {
-          authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot)
+          authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
         } else {
           alert("no class     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
 
           alert("Class doesn't exsit")
-          /////   var Row = document.getElementById("row"+row); 
-          //var Cells = Row.getElementsByTagName("td"); 
-          // alert(Cells[0].innerText); 
-          ////  var x = Row.insertCell(1);
-          /////   x.innerHTML = "New cell";
-          // document.getElementById("table").rows[row].cell[7].innerHTML = "new";
-          //sheet_data[row][7].innerHTML = "nnn";
+          var x = table.rows[row].insertCell(7);
+          x.innerHTML = "    لم تتم الإضافة، أرجو التأكد من بيانات الفصل المذكور";
         }//end else class not exist
 
     
@@ -254,21 +250,22 @@ excel_file.addEventListener('change', (event) => {
   }
 
 });
-function authParent(registerFname ,registerlname, registerClass, registerParentPhone, registerParentFname,registerParentlname,registerParentEmail,schoolID,registerPass,queryClassSnapshot,){
+    function authParent(registerFname ,registerlname, registerClass, registerParentPhone, registerParentFname,registerParentlname,registerParentEmail,schoolID,registerPass,queryClassSnapshot,row,table){
   alert("no parent     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
 let classId;
 let user ;
 let docRefClass;
   registerPass = pass();
-  createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass)
-    .then((userCredential) => {
+  createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass).then((userCredential) => {
 
 
       // Signed in 
       user = userCredential.user;
-     sendPasswordResetEmail(authSec, registerParentEmail).then(() => {
+    sendPasswordResetEmail(authSec, registerParentEmail).then(() => {
        alert("reset")
       })
+
+      
      const res = doc(db, "School", schoolID, "Parent", user.uid)
      //add to the document
      alert("1###"+registerParentEmail)
@@ -277,15 +274,14 @@ let docRefClass;
       FirstName: registerParentFname,
       LastName: registerParentlname,
       Phonenumber: registerParentPhone,
-      Students: [],
-      }).then(() => {
-
-
+      Students: [],})
+      .then(() => {
 
       queryClassSnapshot.forEach((doc) => {
         if (!doc.empty)
           classId = doc.id;
       })
+
       //docRef = doc(db, "School",schoolID, "Parent", res.id);
       docRefClass = doc(db, "School", schoolID, "Class", classId);
       addDoc(colRefStudent, {
@@ -294,6 +290,9 @@ let docRefClass;
         ClassID: docRefClass,
         parentID: res,
       }).then(d => {
+
+
+
         //docRef = doc(db, "School",schoolID, "Parent", res.id);
         const StuRef = doc(db, "School", schoolID, "Student", d.id);
         updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
@@ -310,16 +309,17 @@ let docRefClass;
           .catch(error => {
             console.log(error);
           })
-       // table_output += '<td> تمت الإضافة</td>';
-      })
+          var x = table.rows[row].insertCell(7);
+          x.innerHTML = "تمت الإضافة";
+      })// close then addDoc
 
-    });
-    alert("تم");
+    })
+    
   
   }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-    });   
+    });
      
       alert("2###"+registerParentEmail)
 
