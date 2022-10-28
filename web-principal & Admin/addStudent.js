@@ -248,6 +248,7 @@ else{
 
         else {
           alert("ولي الأمر غير مسجل، يرجى إكمال البيانات");
+          document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">ولي الأمر غير مسجل، يرجى إكمال البيانات</div>';
         }
       })
       docRef = doc(db, "School",schoolID,"Parent", parentId);
