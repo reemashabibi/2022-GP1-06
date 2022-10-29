@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="create.css">
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script type="module" src="addStudents.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>إضافة قائمة طلاب</title>
 </head>
 
@@ -21,8 +22,10 @@
         <div class="card">
             <div class="card-header"><b>اختر ملف اكسل</b></div>
             <div class="card-body">
-                <input type="file" id="excel_file" />
+                <input style="align-items: center ;" type="file" id="excel_file" />
             </div>
+            <button style="width: 50%; margin-left:25% ; " onclick="window.location.href='https://docs.google.com/spreadsheets/d/18osytXSG1AwjaaLBmSVOOh6pvuT8rb3NNUj1qbCVm8U/edit#gid=1002424693';"  style="font-size:24px">نموذج اضافة طلاب <i class="fa fa-file-excel-o" style="font-size:20px;color:green;"></i></button>
+
         </div>
         <div id="excel_data" class="mt-5"></div>
         <div class="inputbox">
