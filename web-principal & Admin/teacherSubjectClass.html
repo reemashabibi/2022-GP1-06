@@ -11,7 +11,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
             const uid=user.uid;
             var queryString = location.search.substring(1);
             var ids = queryString.split("|");
-            document.getElementsByTagName('body').onload = subjectTeacherForm(ids[0], uid);
+            document.getElementsByTagName('body').onload = subjectTeacherForm(ids[0], ids[1]);
             console.log("the same user");
         }
         else{
@@ -112,7 +112,8 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
                                 <tr>
                                     <th scope="col" style="width:70%">المعلم/المعلمة</th>
                                     <th scope="col" style="width:70%">المادة</th>
-                                    <th scope="col" style="width:70%">حذف المادة</th>
+                                    <th scope="col" style="width:90%">حذف المادة
+                                    </th>
                                   
                                 </tr>
                             </thead>

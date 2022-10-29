@@ -3,7 +3,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
   import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-  import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+  import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc, arrayRemove, arrayUnion   } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
   import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -37,16 +37,12 @@ var principalId;
 var classId;
 var globalTeachers;
 
-  export async function subjectTeacherForm(cid, aid){
-    const adminDocrefrence = doc(db, "Admin", aid);
-    const docSnap = await getDoc(adminDocrefrence);
-    const srefrence = doc(db, "School", docSnap.data().SchoolID);
-    principalId = docSnap.data().SchoolID;
-    const refrence = doc(db, "Class", cid);
-    const q = query(collection(db, "Teacher_Class"), where("ClassID", "==", refrence ));
-    
+  export async function subjectTeacherForm(cid, sid){
+    const classrefrence = doc(db, "School", sid, "Class", cid);
+    const q = collection(classrefrence, "Subject");
+    principalId = sid;
     //get all teacher documents that are in the school
-    const qteacher = query(collection(db, "Teacher"), where("SchoolID", "==", srefrence ));
+    const qteacher = collection(doc(db, "School", sid), "Teacher");
     const tacherQuerySnapshot = await getDocs(qteacher);
 
     //put all teachers in array
@@ -75,10 +71,10 @@ var i=0;
   querySnapshot.forEach((subjectdoc) => {
     
   i++;
-    var subject = subjectdoc.data().Subject;
+    var subject = subjectdoc.data().SubjectName;
 
     var tr = document.createElement('tr');
-    tr.id = subjectdoc.id;
+    tr.id = subjectdoc.ref.path;
     
 
     //teacher drop down
@@ -105,7 +101,7 @@ var i=0;
 
       }
       if(!teacherNotDeleted){
-        const subjectdocRef = doc(db, "Teacher_Class", subjectdoc.id);
+        const subjectdocRef = doc(db,subjectdoc.ref.path);
 
       const data = {
         TeacherID: ""
@@ -181,7 +177,7 @@ var i=0;
     var input = document.createElement('input');
     input.type = 'checkbox';
     input.value = subject;
-    input.name = 'chosen subjects';
+    input.name = 'chosensubjects[]';
 
     td.appendChild(input);
 
@@ -201,26 +197,44 @@ classId = cid;
  
 
   $(document).ready(function() {
+    
+
     $('#delete').click(function(){
          var arrId = [];
-         if(confirm(" هل أنت متأكد من حذف هذه المواد وجميع البيانات المتعلقة بها؟")){
-         $(':checkbox:checked').each(function(){
+         var deleted = false;
+        if($('input[name="chosensubjects[]"]:checked').length == 0){
+          alert("ليتم حذف المواد/المادة يجب النقر على مربع تحديد واحد أو أكثر ");
+          return;
+        }
+         if(confirm(" هل أنت متأكد من حذف هذه المواد/المادة وجميع البيانات المتعلقة بها؟")){
+         $(':checkbox:checked').each(async function(){
               var id = $(this).closest('tr').attr('id');
               arrId.push(id); 
               
-              const docRef = doc(db, "Teacher_Class", id);
-
+              const docRef = doc(db, id);
+              const teachercol = collection(doc(db, "School", principalId), "Teacher");
+              var teacher = await getDocs(query(teachercol, where("Subjects", "array-contains", docRef)));
+              teacher.forEach( (subjectdoc) => {
+                updateDoc(subjectdoc.ref, {
+                  Subjects: arrayRemove(docRef)
+              });
+              });
+           
              deleteDoc(docRef)
              .then(() => {
                 console.log("Entire Document has been deleted successfully.");
                 $(this).closest('tr').remove();
+                deleted = true;
                 })
             .catch(error => {
                 console.log(error);
+                deleted = false
             })
               
          })
-         alert("لقد تم حذف المواد");
+if(deleted){
+  alert("لقد تم حذف المواد");
+}
         }
           
       });
@@ -228,21 +242,22 @@ classId = cid;
       $('#add').click(function(){
         $('.loader').show();
         var subjectName = document.getElementById('sname').value;
-        const dbRef = collection(db, "Teacher_Class");
-        const refrence = doc(db, "Class", classId) ;
+        if(subjectName == ""){
+          alert("لإضافة مادة يجب أن يتم تعبأة حقل اسم المادة");
+          $('.loader').hide();
+        }
+        else{
+        const dbRef = collection(doc(db,"School",principalId,"Class",classId), "Subject");
 
   
 
         const data = {
-          ClassID: refrence,
-          Subject: subjectName,
+          SubjectName: subjectName,
           TeacherID: "" 
        };
        addDoc(dbRef, data)
         .then(docRef => {
-
-          var docid = docRef.id;
-          console.log(docRef.id);
+          
           alert(" تمت إضافة المادة بنجاح");
           document.getElementById('sname').value= "";
           //add it to the table 
@@ -259,7 +274,7 @@ classId = cid;
 
       
           var tr = document.createElement('tr');
-          tr.id = docid;
+          tr.id ="School/"+principalId+"/Class/"+classId+"/Subject/"+docRef.id;
       
           //teacher drop down
           var td2 = document.createElement('td');
@@ -294,7 +309,7 @@ classId = cid;
             var td3 = document.createElement('td');
             tr.appendChild(td3);
             var label = document.createElement('h4');
-            td3.innerText = data.Subject;
+            td3.innerText = data.SubjectName;
             td3.contentEditable  = true;
             tr.appendChild(td3);
       
@@ -305,8 +320,8 @@ classId = cid;
       
           var input = document.createElement('input');
           input.type = 'checkbox';
-          input.value = data.Subject;
-          input.name = 'chosen subjects';
+          input.value = data.SubjectName;
+          input.name = 'chosensubjects[]';
       
           td.appendChild(input);
       
@@ -317,14 +332,14 @@ classId = cid;
        .catch(error => {
         console.log(error);
         alert("حصل خطأ أثناء الإضافة، الرجاء المحاولة لاحقًا");
+        $('.loader').hide();
        })
       
-      });
+  }});
 
 
         $(window).keydown(function(event){
           if(event.keyCode == 13) {
-            alert("not submiting");
             event.preventDefault();
             return false;
           }
@@ -334,6 +349,7 @@ classId = cid;
 
         $("form").on("submit", function (e) {
           e.preventDefault();
+          var changed = true;
           if(confirm(" هل أنت متأكد من حفظ جميع التعديلات؟")){
           $("#codexpl tbody tr").each(function () {
             var rowid = $(this).attr('id');
@@ -341,35 +357,43 @@ classId = cid;
             var subjectName = $(this).find("td:eq(1)").text().trim();
             var selectObject = dropdowncell.find("select"); //grab the <select> tag assuming that there will be only single select box within that <td> 
             var teacherValue = selectObject.val(); // get the selected teacher id from current <tr>
-
+alert(teacherValue);
             var teacherRef ="";
 
             if(teacherValue != ""){
-               teacherRef = doc(db, "Teacher", teacherValue);
+               teacherRef = doc(db,"School",principalId, "Teacher", teacherValue);
             }
 
-            const docRef = doc(db, "Teacher_Class", rowid);
-
-            const classRef = doc(db, "Class", classId);
+            const docRef = doc(db, rowid);
             
 
             const data = {
-              ClassID: classRef,
-              Subject: subjectName,
+              SubjectName: subjectName,
               TeacherID: teacherRef
             };
 
             setDoc(docRef, data)
-             .then(docRef => {
+             .then(docref => {
               console.log("Entire Document has been updated successfully");
+              if(teacherValue != "")
+                updateDoc(teacherRef, {
+                Subjects: arrayUnion(docRef)
+            }).then(dicresfre =>{
+            })
+            
              })
              .catch(error => {
                 console.log(error);
-                alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+                changed = false;
               })
 
         })
-        alert("تم حفظ جميع التعديلات");
+        if(changed){
+          alert("تم حفظ جميع التعديلات");
+        }
+        else{
+          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+        }
       }
         
           

@@ -11,7 +11,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
             const uid=user.uid;
             var queryString = location.search.substring(1);
             var ids = queryString.split("|");
-            document.getElementsByTagName('body').onload = viewStudents(ids[0], ids[1]);
+            document.getElementsByTagName('body').onload = viewStudents(ids[0],ids[1]);
             console.log("the same user");
         }
         else{
@@ -36,11 +36,12 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
-
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <link href="students.css" rel="stylesheet">
 	
     <link rel="stylesheet" href="navbar.css"/>
-    <script src="navbar.js"></script>
+    
 
     
 </head>
@@ -60,7 +61,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
                 <li class="nav-item ">
                     <a class="nav-link" href="adminHomePage.php">الصفحة الرئيسية</a>
                 </li>
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link" href="students.php"> إصطحاب الطلاب</a>
                 </li>
                 <li class="nav-item">
@@ -85,9 +86,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
 <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
 <hr>
 <div class="container bootstrap snippets bootdey">
-<button class="button-36 topTitle" >إضافة طالب</button>
-<br>
-<br>
+
     <div class="row">
         <div class="col-lg-12">
             <div class="main-box no-header clearfix">
@@ -96,7 +95,6 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
                         <table class="table user-list">
                             <thead>
                                 <tr>
-                                <th><span>حذف </span></th>
                                 <th><span>نقل طالب لفصل آخر</span></th>
 
                                 <th><span>رقم تواصل ولي الأمر</span></th>
@@ -104,6 +102,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
                                 <th><span>البريد الإلكتروني لولي الأمر</span></th>
                                 
                                 <th><span>الأسم</span></th>
+                               <th> <button class="btn btn-danger rounded-0"  type="button" id='delete'><i class="fa fa-trash"></i></button> </th>
                                 </tr>
                             </thead>
                             <tbody id="schedule">
@@ -119,7 +118,9 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
             <div class="loader topTitle"></div>
         </div>
     </div>
-</div>
+    
 
+</div>
+<script src="navbar.js"></script>
 </body>
 </html>
