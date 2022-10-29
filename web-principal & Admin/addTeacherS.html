@@ -8,20 +8,24 @@
     <link rel="stylesheet" href="create.css">
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script type="module" src="addTeacherS.js"></script>
-    <title>إضافة قائمة معلمين</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>إضافة قائمة معلمون</title>
 </head>
 
 <body>
 
 
-
 <div class="center">
         <h1 class="text-center mt-4 mb-4">إضافة قائمة من المعلمون</h1>
         <div class="card">
-            <div class="card-header"><b>اختر ملف اكسل</b></div>
+            <div class="card-header"><b>اختر ملف اكسل*</b></div>
             <div class="card-body">
                 <input type="file" id="excel_file" />
             </div>
+<br>
+<button style="width: 50%; margin-left:25% ; " onclick="window.location.href='https://docs.google.com/spreadsheets/d/18osytXSG1AwjaaLBmSVOOh6pvuT8rb3NNUj1qbCVm8U/edit#gid=1002424693';"  style="font-size:24px">نموذج  الإضافة <i class="fa fa-file-excel-o" style="font-size:20px;color:green;"></i></button>
+<br>
+
         </div>
         <div id="excel_data" class="mt-5"></div>
         <div class="inputbox">
@@ -30,7 +34,32 @@
 
     </div>
     </div>
+    <div class="screen__background">
+        <div class="screen__background__shape screen__background__shape7"></div>
+        <div class="screen__background__shape screen__background__shape5"></div>
+        <div class="screen__background__shape screen__background__shape4"></div>
+        <div class="screen__background__shape screen__background__shape3"></div>		
+        <div class="screen__background__shape screen__background__shape2"></div>
+        <div class="screen__background__shape screen__background__shape1"></div>
+      </div>
 
+      <style>
+        .screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+
+
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+  background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+	top: 300px;
+	left: 700px;	
+    z-index: -1;
+	border-radius: 60px;
+}
+</style>
 </body>
 </html>
 

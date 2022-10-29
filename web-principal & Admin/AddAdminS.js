@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged ,  sendPasswordResetEmail
-
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 //
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
@@ -48,6 +47,7 @@ let authPrinID = "";
        }
    });
 
+   var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
 
 
   //get collection data
@@ -103,35 +103,34 @@ excel_file.addEventListener('change', (event) => {
         var sheet_name = work_book.SheetNames;
          sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
 
-             //view tabel//
-        if(sheet_data.length > 0)
-        {
-            var table_output = '<table class="table table-striped table-bordered">';
-
-            for(var row = 0; row < sheet_data.length; row++)
-            {
-                table_output += '<tr>';
-                for(var cell = 0; cell < sheet_data[row].length; cell++)
-                {
-                    if(row == 0)
-                    {
-                        table_output += '<th>'+sheet_data[row][cell]+'</th>';
-                    }
-                    else
-                    {
-                        table_output += '<td>'+sheet_data[row][cell]+'</td>';
-                    }
-                }
-                table_output += '</tr>';
+       //view tabel//
+    if (sheet_data.length > 0) {
+        var table_output = '<table id="table" class="table table-striped table-bordered">';
+  
+        for (var row = 0; row < sheet_data.length ; row++) {
+          table_output += '<tr id="row">';
+          for (var cell = 0; cell <  sheet_data[row].length; cell++) {
+            if (row == 0) {
+              table_output += '<th>' + sheet_data[row][cell] + '</th>';
             }
-            table_output += '</table>';
-            document.getElementById('excel_data').innerHTML = table_output;
+            else {
+              table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
+            }
+          }
+    
         }
-        excel_file.value = '';
+        table_output += '</table>';
+        document.getElementById('excel_data').innerHTML = table_output;
+      }
+      excel_file.value = '';
+     
+      table_output += '</tr >';
+      const table = document.getElementById("table");
 
   //Add in users
     if(sheet_data.length > 0)
        {    
+        //if not 5 does not work
              for(var row = 1; row <5;  row++)
            {  
             for(var cell = 0; cell < 3; cell++) {  
@@ -157,7 +156,9 @@ excel_file.addEventListener('change', (event) => {
                 }            
             }    
 	                registerPass = pass();        
-                     authAdminS (registerFname, registerlname,registerEmail, registerPass);
+                    //alert("#0");
+                     authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table);
+                    // alert("#1");
           }//end row  
         }
     }
@@ -166,29 +167,38 @@ excel_file.addEventListener('change', (event) => {
 
 
 
-  function authAdminS (registerFname, registerlname,registerEmail, registerPass){
-
+  function authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table){
+    //alert("in func");  
+   // alert(registerFname + " - " +registerlname + " - "  + registerEmail + " - " +schoolID );
     registerPass =  pass(); 
     createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
-    .then(  (userCredential) => {
+    .then( (userCredential) => {
         // Signed in 
-       // alert(" inn ");   
-        const user = userCredential.user;
-        sendPasswordResetEmail(authSec,registerEmail).then(() => {
-            // EmailSent
-           // alert("sent: " +registerEmail );
-          }) 
-      const res =  doc(db, 'School/'+authPrinID+'/Admin', user.uid)    
-      //alert(" in ");     
-      //add to documnet
-      setDoc(res, {
-       Email: user.email,
-       FirstName: registerFname,
-       LastName: registerlname,               
-     }) 
-         
-     }).catch((error) => {
-         const errorCode = error.code;
-         const errorMessage = error.message;
-       });
+       const user = userCredential.user;   
+     sendPasswordResetEmail(authSec,registerEmail).then(() => {
+      // EmailSent
+      //alert("sent");
+    })  
+    const res =  doc(db, 'School/'+authPrinID+'/Admin', user.uid)    
+    //alert(" in ");     
+    //add to documnet
+    var x = table.rows[row].insertCell(3);
+    x.innerHTML = "تمت الإضافة";
+    setDoc(res, {
+     Email: user.email,
+     FirstName: registerFname,
+     LastName: registerlname,               
+   }) 
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
+            var x = table.rows[row].insertCell(3);
+            x.innerHTML = " البريد الإلكتروني مستخدم من قبل";
+        }
+        var x = table.rows[row].insertCell(3);
+        x.innerHTML = "لم تتم الاضافة";
+      });
+       //alert("out func");
   }
