@@ -118,7 +118,7 @@ classForm.addEventListener('submit', async (e) => {
       })}
 
             });
-
+alert("تمت اضافة الفصل بنجاح");
         })
 
   

@@ -102,7 +102,7 @@ excel_file.addEventListener('change', (event) => {
     if (sheet_data.length > 0) {
       var table_output = '<table id="table" class="table table-striped table-bordered">';
 
-      for (var row = 0; row < sheet_data.length; row++) {
+      for (var row = 0; row < sheet_data.length ; row++) {
         table_output += '<tr id="row">';
         for (var cell = 0; cell <  sheet_data[row].length; cell++) {
           if (row == 0) {
@@ -112,15 +112,16 @@ excel_file.addEventListener('change', (event) => {
             table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
           }
         }
-        table_output += '</tr >';
+  
       }
       table_output += '</table>';
       document.getElementById('excel_data').innerHTML = table_output;
     }
     excel_file.value = '';
-
+   
+    table_output += '</tr >';
     const table = document.getElementById("table");
-
+   
     //Adding
     if (sheet_data.length > 0) {
 
@@ -134,7 +135,7 @@ excel_file.addEventListener('change', (event) => {
           else {
             if (cell == 0) {
               registerFname = sheet_data[row][cell];
-
+              alert(registerFname);               
             }
             if (cell == 1) {
               registerlname = sheet_data[row][cell];
