@@ -49,7 +49,7 @@ getDocs(colRefLevel)
             new_op.setAttribute("id", doc.id);
             document.getElementById("classes").appendChild(new_op);
         })
-        //console.log(levels)
+         //console.log(levels)
     })
 
 
@@ -114,9 +114,8 @@ classForm.addEventListener('submit', async (e) => {
       }).then(() => { 
         console.log("added")
       })}
-
-            });
-alert("تمت اضافة الفصل بنجاح");
+        });
+          alert("تمت اضافة الفصل بنجاح");
         })
 
       })

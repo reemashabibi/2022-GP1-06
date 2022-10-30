@@ -33,21 +33,25 @@ const firebaseConfig = {
   const authSec = getAuth(app2);
 
 
-//get principal ID 
+//Add class
+let uid;
+let email;
 let authPrin = getAuth();
-let user= authPrin.currentUser;
-let authPrinID = "";
-   onAuthStateChanged(authPrin, (user)=>{
-       if(user){
-         authPrinID =user.uid;
-           console.log("the same user");
-       }
-       else{
-           console.log("the  user changed");
-       }
-   });
 
-   var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
+onAuthStateChanged(authPrin, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+        uid = user.uid;
+        email = user.email
+        
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+   
+  let schoolID ;
 
 
   //get collection data
@@ -157,7 +161,7 @@ excel_file.addEventListener('change', (event) => {
             }    
 	                registerPass = pass();        
                     //alert("#0");
-                     authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table);
+                     authAdminS (registerFname, registerlname,registerEmail, registerPass,row,table);
                     // alert("#1");
           }//end row  
         }
@@ -167,9 +171,15 @@ excel_file.addEventListener('change', (event) => {
 
 
 
-  function authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table){
+  function authAdminS (registerFname, registerlname,registerEmail, registerPass,row,table){
     //alert("in func");  
    // alert(registerFname + " - " +registerlname + " - "  + registerEmail + " - " +schoolID );
+    const snapshot =  getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+    snapshot.forEach(async doc => {
+    const data = await getDoc(doc.ref.parent.parent);
+    schoolID = data.id;
+  
+   alert( schoolID)
     registerPass =  pass(); 
     createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
     .then( (userCredential) => {
@@ -179,7 +189,7 @@ excel_file.addEventListener('change', (event) => {
       // EmailSent
       //alert("sent");
     })  
-    const res =  doc(db, 'School/'+authPrinID+'/Teacher', user.uid)    
+    const res =  doc(db, 'School/'+schoolID+'/Teacher', user.uid)    
     //alert(" in ");     
     //add to documnet
     var x = table.rows[row].insertCell(3);
@@ -201,4 +211,5 @@ excel_file.addEventListener('change', (event) => {
         x.innerHTML = "لم تتم الاضافة";
       });
        //alert("out func");
+    })
   }

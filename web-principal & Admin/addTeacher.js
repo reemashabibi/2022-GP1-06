@@ -6,7 +6,7 @@ import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged , sendEmai
 //
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc, getDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -35,20 +35,25 @@ const firebaseConfig = {
   const authSec = getAuth(app2);
 
 
-//get principal ID 
+//Add class
+let uid;
+let email;
 let authPrin = getAuth();
-let user= authPrin.currentUser;
-let authPrinID = "";
-   onAuthStateChanged(authPrin, (user)=>{
-       if(user){
-         authPrinID =user.uid;
-           console.log("the same user");
-       }
-       else{
-           console.log("the  user changed");
-       }
-   });
 
+onAuthStateChanged(authPrin, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+        uid = user.uid;
+        email = user.email
+        
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+   
+  let schoolID ;
 
   //get collection data
   getDocs(colRef)
@@ -110,6 +115,12 @@ let authPrinID = "";
 
          const addTeacherForm = document.querySelector('.addTeacher')
          addTeacherForm.addEventListener('submit',  async (e) => {
+          const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+          snapshot.forEach(async doc => {
+          const data = await getDoc(doc.ref.parent.parent);
+          schoolID = data.id;
+        
+         alert( schoolID)
           // alert("in");
            if(validate()){
            // alert("in2");
@@ -127,7 +138,7 @@ let authPrinID = "";
               sendPasswordResetEmail(authSec,registerEmail).then(() => {
                // EmailSent
              })
-             setDoc(doc(db, 'School/'+authPrinID+'/Teacher', user.uid), {
+             setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
                Email: registerEmail,
                FirstName: registerFname,
                LastName: registerlname,     
@@ -150,4 +161,6 @@ let authPrinID = "";
            }//end if
            else{
            }
+
+          })//END SCHOOLid
          }); //The END
