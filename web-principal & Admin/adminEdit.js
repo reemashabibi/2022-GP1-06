@@ -53,7 +53,7 @@ export { query, orderBy, limit, where, onSnapshot };
 
   docRef.forEach( async doc => {
     console.log(doc.id, ' => ', doc.data());
-    await updateDoc(doc,{
+     updateDoc(doc,{
     FirstName: FirstName.value,
     LastName:LastName.value,
     Email: Email.value,
