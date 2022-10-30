@@ -1,6 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script type="module">
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+         const auth = getAuth();
+         const user= auth.currentUser
+            onAuthStateChanged(auth, (user)=>{
+                if(user){
+                    console.log("the same user");
+                }
+                else{
+                    window.location.href="index.html";
+                    console.log("the  user changed");
+                }
+        
+            })
+        
+        
+           
+        
+            const logout= document.getElementById("signout");
+        
+            logout.addEventListener('click',  async (e) => {
+              alert("lohhh");
+              e.preventDefault()
+              signOut(auth).then(() => {
+                alert("تم تسجيل الخروج بنجاح");
+                window.location.href="index.html";
+                }).catch((error) => {
+                console.log(error.message);
+                }); 
+        
+             }) 
+        </script>
+        
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

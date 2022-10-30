@@ -299,25 +299,55 @@ $(document).ready(function () {
       alert("ليتم حذف الطالب/الطلاب يجب النقر على مربع تحديد واحد أو أكثر ");
       return;
     }
-   var deleted = false;
+   var deleted = true;
     if(confirm("هل تأكد حذف الطالب/الطلاب وجميع البيانات المتعلقة به/بهم؟")){
       $(':checkbox:checked').each(async function(){
 
         var studentID = $(this).closest('tr').attr('id');
-        alert(studentID);
         const docRef = doc(db,studentID);
+        const studentData = await getDoc(docRef);
+        var parent = doc(db,"School",school, "Parent", studentData.data().parentID.id);
+        var parentData = await getDoc(parent);
         const oldClassRef = doc(db,"School", school,"Class", oldClass);
 
         updateDoc(oldClassRef, {
           Students: arrayRemove(docRef)
       });
+   ;
+      if(parentData.data().Students.length == 1){
+       await deleteDoc(parent).then(() => {
+         deleted = true;
+        
+       }).catch(error => {
+           console.log(error);
+           alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+           deleted = false;
+           return;
+         })
+     }else{
+      await updateDoc(parent, {
+        Students: arrayRemove(docRef)
+    }).then(() => {
+      deleted = true;
+      
+    })
+      .catch(error => {
+        console.log(error);
+        deleted = false;
+        alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+        return;
+      });
+     }
       deleteDoc(docRef).then(() => {
         $(this).closest('tr').remove();
         deleted = true;
+       
       })
         .catch(error => {
           console.log(error);
           deleted = false;
+          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+          return;
         })
 
 
@@ -326,7 +356,7 @@ $(document).ready(function () {
  if(deleted){
   alert("تم حذف الطالب/الطلاب");
  }else{
-  alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+  
  }
     }
   });

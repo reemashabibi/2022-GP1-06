@@ -41,7 +41,11 @@ $(".navbar-toggler").click(function(){
 });
 
 
-
+$('.dropdown-hoverable').hover(function(){
+    $(this).children('[data-toggle="dropdown"]').click();
+}, function(){
+    $(this).children('[data-toggle="dropdown"]').click();
+});
 // --------------add active class-on another-page move----------
 jQuery(document).ready(function($){
 	// Get current path and find target link

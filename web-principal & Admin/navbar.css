@@ -220,4 +220,8 @@ svg{
   
   }
 
+  /*dropdown*/
   
+  .navbar-nav li:hover .dropdown-menu {
+	display: block;
+} 
