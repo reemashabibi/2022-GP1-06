@@ -49,7 +49,7 @@ getDocs(colRefLevel)
             new_op.setAttribute("id", doc.id);
             document.getElementById("classes").appendChild(new_op);
         })
-        //console.log(levels)
+         //console.log(levels)
     })
 
 
@@ -82,7 +82,7 @@ const classForm = document.querySelector('.addClassForm');
 classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     
-    alert("Email   "+ email)
+
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
     snapshot.forEach(async doc => {
     const data = await getDoc(doc.ref.parent.parent);
@@ -114,9 +114,8 @@ classForm.addEventListener('submit', async (e) => {
       }).then(() => { 
         console.log("added")
       })}
-
-            });
-alert("تمت اضافة الفصل بنجاح");
+        });
+          alert("تمت اضافة الفصل بنجاح");
         })
 
       })
