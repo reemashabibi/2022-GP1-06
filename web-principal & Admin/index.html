@@ -92,26 +92,26 @@
            }
            const auth = getAuth();
            
-           /*if (userType.value=="principal"){
+           if (userType.value=="principal"){
               
-              const q = query(collection(db, "Principal"), where("Email", "==", Email.value));
+              const q = query(collection(db, "School"), where("Email", "==", Email.value));
               const querySnapshot = await getDocs(q);
               alert("hi");
               if(querySnapshot.empty){
                alert("لا يوجد مدير بهذه البيانات يرجى التحقق من البيانات المدخلة");
-               logInform.reset();
+               //logInform.reset();
             }
            
             }
             
             if ((userType.value=="admin")){
-              const q2 = query(collection(db, "Admin"), where("Email", "==", Email.value));
-              const querySnapshot = await getDocs(q2);
+              const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', aid)));
+              const querySnapshot = await getDocs(docSnap);
               if(querySnapshot.empty){
                alert("لا يوجد إداري بهذه البيانات يرجى التحقق من البيانات المدخلة");
                logInform.reset();
-            }*/
-            ///}
+            }
+            }
              
 
 
