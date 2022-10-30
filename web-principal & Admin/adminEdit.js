@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc , collectionGroup} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, setDoc , getDoc, updateDoc , doc , collectionGroup} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
@@ -53,7 +53,7 @@ export { query, orderBy, limit, where, onSnapshot };
 
   docRef.forEach( async doc => {
     console.log(doc.id, ' => ', doc.data());
-     updateDoc(doc,{
+     setDoc(doc,{
     FirstName: FirstName.value,
     LastName:LastName.value,
     Email: Email.value,
