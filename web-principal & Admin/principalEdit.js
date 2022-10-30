@@ -28,7 +28,7 @@ const user= auth.currentUser;
 
 
 
-const uid=auth.currentUser.uid;// "kfGIwTyclpNernBQqSpQhkclzhh1";
+  const uid=user.uid;// "kfGIwTyclpNernBQqSpQhkclzhh1";
        
   alert(uid);      
 
