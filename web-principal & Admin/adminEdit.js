@@ -51,7 +51,7 @@ export { query, orderBy, limit, where, onSnapshot };
      e.preventDefault();
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
-  docSnap.forEach( async doc => {
+  docRef.forEach( async doc => {
     updateProfile(auth.currentUser, {
       email:Email.value , password:Password.value
      }).then(() => {
