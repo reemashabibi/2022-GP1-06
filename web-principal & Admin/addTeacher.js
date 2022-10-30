@@ -9,7 +9,8 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase
 import { collection, getDocs, addDoc, Timestamp, deleteDoc, getDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import {  setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -53,22 +54,9 @@ onAuthStateChanged(authPrin, (user) => {
     }
   });
    
-  let schoolID ;
+ 
 
-  //get collection data
-  getDocs(colRef)
-    .then((snapshot) => {
-     let School = []
-     snapshot.docs.forEach((doc)=> {
-      School.push({...doc.data(), id: doc.id })
-     })
-     console.log(School)
-    })
-    .catch(err => {
-        console.log(err.mssage)
-    });
-
-
+  let schoolID  ="";
 
   //randomly generated pass
   function pass(){
@@ -103,7 +91,7 @@ onAuthStateChanged(authPrin, (user) => {
           var email = document.getElementById( "email" );
           var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
           if( !email.value.match(mailformat)){
-           alert("الرجاء إدحال بريد إلكتروني صحيح");
+           alert("الرجاء إدخال بريد إلكتروني صحيح");
            document.addAdmin.email.focus();
            return false;
           }
@@ -112,55 +100,63 @@ onAuthStateChanged(authPrin, (user) => {
             return true;
            }
          }
-
+         
          const addTeacherForm = document.querySelector('.addTeacher')
          addTeacherForm.addEventListener('submit',  async (e) => {
-          const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-          snapshot.forEach(async doc => {
-          const data = await getDoc(doc.ref.parent.parent);
-          schoolID = data.id;
-        
-         alert( schoolID)
-          // alert("in");
-           if(validate()){
-           // alert("in2");
-           e.preventDefault();
-          // alert("triggerd");
-           const registerFname = document.getElementById("firstName").value;
-           const registerlname = document.getElementById("lastName").value;
-           const registerEmail = document.getElementById("email").value;
-           const registerPass =  pass();         
-           createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
-           .then( (userCredential) => {
-               // Signed in 
-               const user = userCredential.user;
-              //send an email to reset password
-              sendPasswordResetEmail(authSec,registerEmail).then(() => {
-               // EmailSent
-             })
-             setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
-               Email: registerEmail,
-               FirstName: registerFname,
-               LastName: registerlname,     
-               Subjects : [],
-             });
-             
-            alert("تمت الإضافة بنجاح");     
-             })
-             .catch((error) => {
-               const errorCode = error.code;
-               const errorMessage = error.message;
-               if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
-                    alert("البريد الالكتروني مستخدم من قبل");}
-                    else
-               alert(errorMessage);
-               
-               addTeacherForm.reset();
-             });
-              addTeacherForm.reset();
-           }//end if
-           else{
+         e.preventDefault()
+         alert(email);
+         const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==" , email )));
+         alert("!$$!"); //true
+         snapshot.forEach(async doc => {
+           alert("!!");
+           const data = await getDoc(doc.ref.parent.parent);
+           schoolID = data.id;
+           alert(schoolID);
+           // alert("in");
+          }) 
+           if (validate()) {
+             // alert("in2");
+             // alert("triggerd");
+             const registerFname = document.getElementById("firstName").value;
+             const registerlname = document.getElementById("lastName").value;
+             const registerEmail = document.getElementById("email").value;
+             const registerPass = pass();
+             createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+               .then(async (userCredential) => {
+                 // Signed in 
+                 let user = userCredential.user;
+                 //send an email to reset password
+                 sendPasswordResetEmail(authSec, registerEmail).then(() => {
+                   // EmailSent
+                 });
+                 let userID =  user.uid;
+                 alert("School ID: "+schoolID);
+                 alert("User ID:"+userID);
+                 alert(" before ");
+                 setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
+                     Email: registerEmail,
+                     FirstName: registerFname,
+                     LastName: registerlname,
+                     Subjects: [],               
+                   })
+                 alert(" after ");
+                 alert("تمت الإضافة بنجاح");
+               })
+               .catch((error) => {
+                 const errorCode = error.code;
+                 const errorMessage = error.message;
+                 if (errorMessage == "Firebase: Error (auth/email-already-in-use).") {
+                   alert("البريد الالكتروني مستخدم من قبل");
+                 }
+                 else
+                   alert(errorMessage);
+                 addTeacherForm.reset();
+               });
+
+           } //end if
+           else {
            }
 
-          })//END SCHOOLid
+    
+         // addTeacherForm.reset();
          }); //The END
