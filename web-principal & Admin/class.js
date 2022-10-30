@@ -82,7 +82,7 @@ const classForm = document.querySelector('.addClassForm');
 classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     
-    alert("Email   "+ email)
+
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
     snapshot.forEach(async doc => {
     const data = await getDoc(doc.ref.parent.parent);

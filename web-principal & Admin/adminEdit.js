@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc , collectionGroup} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+//import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
 import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth();
 const user= auth.currentUser;
-const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
+//const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
 
 
 export { app, db, collection, getDocs, Timestamp, addDoc };
@@ -31,41 +31,43 @@ export { query, orderBy, limit, where, onSnapshot };
         const Password=document.getElementById("passInp");
 
         const db = getFirestore(app);
-        document.onload(fillData(uid));
-        async function fillData(uid){
-            const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', user.email)));
-            await getDoc(docRef)
-    .then((doc)=>{
-        console.log(doc.data(), doc.id);
-        
-        FirstName.value=doc.data().PrincipalFirstName;
-        LastName.value=doc.data().PrincipalLastName;
-        Email.value=doc.data().Email;
-        //Password.value=user.Password;
 
-    });
+        
+       export async function fillData(uid){
+            const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
+            
+            docSnap.forEach( async doc => {
+              console.log(doc.data(), doc.id);
+              FirstName.value=doc.data().FirstName;
+              LastName.value=doc.data().LastName;
+              Email.value=doc.data().Email;
+              Password.value=user.Password;
+          
+            })
     }
+
     const save = document.getElementById("subButton");
     save.addEventListener('click', async (e) => {
-  e.preventDefault();
+     e.preventDefault();
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', user.email)));
 
-  
+  docSnap.forEach( async doc => {
     updateProfile(auth.currentUser, {
       email:Email.value , password:Password.value
      }).then(() => {
         updateDoc(docRef,{
-    SchoolName:document.getElementById("snameInp").value,
-    PrincipalFirstName: FirstName.value,
-    PrincipalLastName:LastName.value,
+    
+    FirstName: FirstName.value,
+    LastName:LastName.value,
     Email: Email.value,
+  
   })
 
      });
-  
 
-
-})
+  })
+   
+    })
 
     
     

@@ -45,7 +45,15 @@ onAuthStateChanged(auth, async (user) => {
 
 
 
-var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
+var schoolID;
+// = "kfGIwTyclpNernBQqSpQhkclzhh1";
+
+const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+snapshot.forEach(async doc => {
+const data = await getDoc(doc.ref.parent.parent);
+schoolID = data.id;
+})
+alert(schoolID)
 export { app, db, collection, getDocs, Timestamp, addDoc };
 export { query, orderBy, limit, where, onSnapshot };
 
