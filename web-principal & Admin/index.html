@@ -99,15 +99,15 @@
               alert("hi");
               if(querySnapshot.empty){
                alert("لا يوجد مدير بهذه البيانات يرجى التحقق من البيانات المدخلة");
-               //logInform.reset();
+               logInform.reset();
             }
            
             }
             
             if ((userType.value=="admin")){
               const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', Email.value)));
-              const querySnapshot = await getDoc(docSnap);
-              if(querySnapshot.empty){
+
+              if(docSnap.empty){
                alert("لا يوجد إداري بهذه البيانات يرجى التحقق من البيانات المدخلة");
                logInform.reset();
             }
