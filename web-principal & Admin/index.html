@@ -130,7 +130,14 @@
         
            })
         .catch((error) =>{
-            alert("somethingis wrong"+error.message);
+          if(error.message=="Error (auth/wrong-password)"){
+            alert("هناك خطأ في البريد الإلكتروني أو كلمة المرور ");
+          }
+          else{
+            alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
+          }
+
+            console.log("somethingis wrong"+error.message);
         });
 
             

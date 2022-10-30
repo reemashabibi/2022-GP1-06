@@ -27,6 +27,7 @@
               
                 console.log("the same user");
                 console.log(auth.currentUser.uid);
+                document.getElementsByTagName('body').onload = fillData(uid);
                 
                  
             }
@@ -54,19 +55,19 @@
      </div>
      
      <div class="inputbox">
-        <input type="text" required="required" id="fnameInp"   >
+        <input type="text"  id="fnameInp"   >
         <span>الاسم الأول لمدير المدرسة</span>
      </div>
      <div class="inputbox">
-        <input type="text" required="required" id="lnameInp"  >
+        <input type="text"  id="lnameInp"  >
         <span>الاسم الأخير لمدير المدرسة</span>
      </div>
      <div class="inputbox">
-        <input type="email" required="required"  id="emailInp">
+        <input type="email"   id="emailInp">
         <span>البريد الإلكتروني</span>
       </div>
       <div class="inputbox">
-        <input type="password" required="required"  id="passInp">
+        <input type="password"   id="passInp">
         <span>كلمة السر</span>
       </div>
       
