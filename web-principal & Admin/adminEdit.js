@@ -51,14 +51,14 @@ export { query, orderBy, limit, where, onSnapshot };
      e.preventDefault();
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
-  docRef.forEach( async doc => {
-    alert(doc.id);
-    var schoolid= doc.ref.parent.parent;
+  docRef.forEach( async dooc => {
+    alert(dooc.id);
+    var schoolid= dooc.ref.parent.parent;
     const reference=doc(db,"School",schoolid,"Admin",doc.id);
     alert(reference)
     alert(schoolid)
     
-    console.log(doc.id, ' => ', doc.data());
+    console.log(dooc.id, ' => ', dooc.data());
      updateDoc(reference,{
     FirstName: FirstName.value,
     LastName:LastName.value,
