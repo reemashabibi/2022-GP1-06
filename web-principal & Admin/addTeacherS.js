@@ -131,7 +131,7 @@ excel_file.addEventListener('change', (event) => {
     if(sheet_data.length > 0)
        {    
         //if not 5 does not work
-             for(var row = 1; row <5;  row++)
+             for(var row = 1; row <1000;  row++)
            {  
             for(var cell = 0; cell < 3; cell++) {  
                 if(row == 0){
