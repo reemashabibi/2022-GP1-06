@@ -31,7 +31,7 @@ td{
 .button-9 {
   appearance: button;
   backface-visibility: hidden;
-  background-color: #405cf5;
+  background-color:  #3790ad;
   border-radius: 6px;
   border-width: 0;
   box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
@@ -56,7 +56,9 @@ td{
   touch-action: manipulation;
   width: 100%;
 }
-
+.addSubject{
+  background-color:  #50d4b1;
+}
 .button-9:disabled {
   cursor: default;
 }
@@ -88,4 +90,51 @@ td{
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+
+
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+  background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+	top: -20px;
+	left: 95%;	
+	border-radius: 72px 72px 72px 72px;
+  z-index: -1 ;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+	background: cadetblue;	
+	top: -120px;
+	left: 70%;	
+  z-index: -1;
+	border-radius: 32px;
+}
+
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+	top: 20px;
+  background: linear-gradient(45deg,#dfdade  0%, #abb0b3 100%);		
+z-index: -2;
+	left: -20;	
+	border-radius: 32px;
+}
+
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+  background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+	top: 500px;
+	left: -50px;	
+  z-index: -2;
+	border-radius: 60px;
 }

@@ -169,3 +169,49 @@ text-decoration:none;
 .button-9:focus {
   box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
 }
+
+
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+  background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+	top: -20px;
+	left: 95%;	
+	border-radius: 72px 72px 72px 72px;
+  z-index: -1 ;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+	background: cadetblue;	
+	top: -120px;
+	left: 70%;	
+  z-index: -1;
+	border-radius: 32px;
+}
+
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+	top: 20px;
+  background: linear-gradient(45deg,#dfdade  0%, #abb0b3 100%);		
+z-index: -2;
+	left: -20;	
+	border-radius: 32px;
+}
+
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+  background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+	top: 500px;
+	left: -50px;	
+  z-index: -2;
+	border-radius: 60px;
+}
