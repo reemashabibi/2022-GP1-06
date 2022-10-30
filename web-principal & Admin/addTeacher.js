@@ -104,14 +104,14 @@ onAuthStateChanged(authPrin, (user) => {
          const addTeacherForm = document.querySelector('.addTeacher')
          addTeacherForm.addEventListener('submit',  async (e) => {
          e.preventDefault()
-         alert(email);
+        // alert(email);
          const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==" , email )));
-         alert("!$$!"); //true
+        // alert("!$$!"); //true
          snapshot.forEach(async doc => {
-           alert("!!");
+          // alert("!!");
            const data = await getDoc(doc.ref.parent.parent);
            schoolID = data.id;
-           alert(schoolID);
+         //  alert(schoolID);
            // alert("in");
           }) 
            if (validate()) {
@@ -130,16 +130,16 @@ onAuthStateChanged(authPrin, (user) => {
                    // EmailSent
                  });
                  let userID =  user.uid;
-                 alert("School ID: "+schoolID);
-                 alert("User ID:"+userID);
-                 alert(" before ");
+                // alert("School ID: "+schoolID);
+                // alert("User ID:"+userID);
+                // alert(" before ");
                  setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
                      Email: registerEmail,
                      FirstName: registerFname,
                      LastName: registerlname,
                      Subjects: [],               
                    })
-                 alert(" after ");
+                // alert(" after ");
                  alert("تمت الإضافة بنجاح");
                })
                .catch((error) => {
