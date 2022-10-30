@@ -59,12 +59,24 @@ td{
 .addSubject{
   background-color:  #50d4b1;
 }
+.addSubject:hover{
+  background-color:  #ffffff;
+  color: #50d4b1;
+  border-style: solid;
+  border-color: #50d4b1;
+  transition-duration: .1s;
+}
+  
 .button-9:disabled {
   cursor: default;
 }
 
-.button-9:focus {
-  box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+.button-9:hover {
+  background-color:  #ffffff;
+  color: #3790ad;
+  border-style: solid;
+  border-color: #3790ad;
+  transition-duration: .1s;
 }
 
 .loader {

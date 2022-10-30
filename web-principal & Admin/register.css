@@ -217,3 +217,9 @@ z-index: -2;
     margin-left: 0%;
   }
 }
+form i {
+  
+  margin-left: -40px;
+  
+  cursor: pointer;
+}
