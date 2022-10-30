@@ -70,7 +70,7 @@
     import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
     import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
-    import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+    import { getAuth, createUserWithEmailAndPassword , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 
 
 
@@ -150,6 +150,10 @@
                 console.log(error);
                 alert(error);
               });
+
+              updateProfile(auth.currentUser, {
+            displayName:"Principal"
+           });
                
             
             signForm.reset();
@@ -164,7 +168,6 @@
             alert("حدث خطأ حاول مره أخرى");
             signForm.reset();
           });
-
 
 
         /* else {
