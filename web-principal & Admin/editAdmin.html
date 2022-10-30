@@ -14,26 +14,11 @@
 <body>
 <script type="module">
     
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-    import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+    import { fillData } from './adminEdit.js';
     import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
-      authDomain: "halaqa-89b43.firebaseapp.com",
-      projectId: "halaqa-89b43",
-      storageBucket: "halaqa-89b43.appspot.com",
-      messagingSenderId: "969971486820",
-      appId: "1:969971486820:web:40cc0abf19a909cc470f71",
-      measurementId: "G-PCYTHJF1SD"
-    };
+   
   
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    
     const auth = getAuth();
     const user= auth.currentUser;
     const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
@@ -41,6 +26,7 @@
         if(user){
             console.log("the same user");
             console.log(auth.currentUser);
+            document.getElementsByTagName('body').onload = fillData(uid);
             
         }
         else{
