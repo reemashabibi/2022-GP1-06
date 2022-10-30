@@ -40,7 +40,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>إضافة فصل</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
@@ -60,154 +60,232 @@
 
             <div class="inputbox" ">
       <select required=" true"
-                style="  margin-top: 15px; padding: 10px; background:#ccc; border: 2px solid #000; width:40%; height: 30px; text-align:center; "
+                style="  margin-left: 50px; margin-top: 15px; padding: 10px; background: #4ebfc1; border: 2px solid #000; width:40%; height: 30px; text-align:center; "
                 id="classes" name="classes">
                 <option id="non" value="" name="non">--مستوى الطالب--</option>
                 </select>
                 <span
                     style=" width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">المستوى</span>
             </div>
-
+            <div class="inputbox">
+                <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
+              </div>
             <div class="inputbox">
 
-                <button type="submit" id="btn" class="btn">إضافة</button>
+                <button type="submit" id="btn" class="button-36 topTitle">إضافة</button>
             </div>
         </form>
     </div>
-
+    <div class="screen__background">
+        <div class="screen__background__shape screen__background__shape7"></div>
+        <div class="screen__background__shape screen__background__shape5"></div>
+        <div class="screen__background__shape screen__background__shape4"></div>
+        <div class="screen__background__shape screen__background__shape3"></div>		
+        <div class="screen__background__shape screen__background__shape2"></div>
+        <div class="screen__background__shape screen__background__shape1"></div>
+      </div>
     <script type="module" src="class.js"></script>
     <!-- Add class style -->
     <style>
-    body {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        background: linear-gradient(45deg, rgb(233, 246, 247), #ccc);
-        font-family: "Sansita Swashed", cursive;
-    }
+body {
+  margin: 0;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 0;
+  box-sizing: border-box;
+  display:grid;
+  justify-content:center;
+  align-items: center;
+  background: #fff;
+  /*font-family: "Sansita Swashed", cursive;  */
+}
 
 
-    .center {
-        position: relative;
-        padding: 50px 50px;
-        background: #fff;
-        border-radius: 10px;
-    }
-
-    .center h1 {
-        font-size: 2em;
-        border-right: 5px solid rgb(2, 53, 105);
-        padding: 10px;
-        color: #000;
-        letter-spacing: 5px;
-        margin-bottom: 60px;
-        font-weight: bold;
-        padding-left: 10px;
-        text-align: right;
-    }
-
-    .center .inputbox {
-        position: relative;
-        width: 300px;
-        height: 50px;
-        margin-bottom: 50px;
-
-    }
-
-    .center .inputbox input {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        border: 2px solid #000;
-        outline: none;
-        background: none;
-        padding: 10px;
-        border-radius: 10px;
-        font-size: 1.2em;
-        text-align: right;
-    }
+.center {
+  display:inline;
+  margin-top: 100px;
+  position: relative;
+  padding: 50px 50px;
+  background: #fff;
+  border-radius: 10px;
+  margin-right: 50px;
+  margin-left: 50px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+}
+.center h1 {
+  font-size: 2em;
+  border-bottom: 5px solid #6ce5e8;
+  padding: 10px;
+  color: #000;
+  letter-spacing: 5px;
+  margin-bottom: 40px;
+  font-weight: bold;
+  padding-left: 10px;
+  text-align: center;
+}
+ 
+.center .inputbox {
+  position: relative;
+  width: 400px;
+  height: 50px;
+  margin-bottom: 40px;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+.center .inputbox input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 1px solid #000;
+  outline: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  text-align: right;
+  margin-left: 30px;
+}
 
     .center .inputbox:last-child {
         margin-bottom: 0;
     }
-
     .center .inputbox span {
-        position: absolute;
-        top: 14px;
-        right: 20px;
-        font-size: 1em;
-        transition: 0.6s;
-        font-family: sans-serif;
-
-    }
-
-    .center .inputbox input:focus~span,
-    .center .inputbox input:valid~span {
-        transform: translateX(-13px) translateY(-35px);
-        font-size: 1em;
-
-    }
-
-    .center .inputbox [type="button"] {
-        width: 50%;
-        background: #ccc;
-        color: #fff;
-        border: #fff;
-        text-align: center;
-    }
-
-    .center .inputbox:hover [type="button"] {
-        background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
-    }
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  font-size: 1em;
+  transition: 0.6s;
+  font-family: sans-serif;
+  
+}
+.center .inputbox input:focus ~ span,
+.center .inputbox input:valid ~ span,
+.center .inputbox input:disabled ~ span{
+  transform: translateX(-13px) translateY(-35px);
+  font-size: 1em;
+  
+}
+.center .inputbox [type="button"] {
+  width: 50%;
+  background: #ccc;
+  color: #fff;
+  border: #fff;
+  text-align: center;
+}
+.center .inputbox:hover [type="button"] {
+  background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
+}
 
 
-    /* Add some hover effects to buttons */
-    .center .btn:hover,
-    .open-button:hover {
-        opacity: 1;
-    }
+/* Add some hover effects to buttons */
+.center .btn:hover, .open-button:hover {
+  opacity: 1;
+}
 
 
-    /* Set a style for the submit/login button */
-    .center .btn {
-        border-radius: 10px;
-        background-color: #4ebfc1;
-        color: white;
-        padding: 16px 20px;
-        border: none;
-        cursor: pointer;
-        width: 100%;
-        margin-bottom: 10px;
-        opacity: 0.8;
-    }
+/* Set a style for the submit/login button */
+.center .btn {
+  border-radius: 10px;
+  background-color: #4ebfc1;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+.button-36 {
+  margin-left: 30px;
+  background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  height: 3rem;
+  width: 25rem;
+  padding: 16px 20px;
+  margin-right: 0px;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  box-align: right;
+}
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+  background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+	top: -20px;
+	left: 100px;	
+  z-index: -1;
+	border-radius: 72px 72px 72px 72px;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+  z-index: -1;
+	width: 220px;
+	background: cadetblue;	
+	top: -150px;
+	left: 0;	
+	border-radius: 32px;
+}
+
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+  z-index: -1;
+	top: 20px;
+  background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+	left: 80%;	
+	border-radius: 32px;
+}
+
+.screen__background__shape5 {
+	height: 540px;
+	width: 190px;
+	top: 25%;
+  z-index: -1;
+  background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+	left: 0;	
+	border-radius: 32px;
+}
+.screen__background__shape6 {
+	height: 520px;
+	width: 580px;
+  background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+	top: 45em;
+	left: 80%;	
+  z-index: -1;
+	border-radius: 72px 72px 72px 72px;
+}
+
+.screen__background__shape7 {
+	height: 440px;
+	width: 200px;
+  z-index: -1;
+	top: 90px;
+  background:linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+	left: 70%;	
+	border-radius: 32px;
+}
     </style>
     <script>
-    function validateForm() {
-        /*
- var fname = document.getElementById( "Fname" );
- var letters = /^[A-Za-z]+$/;
- if( !fname.value.match(letters) )
- {
-  alert('first name must have alphabet characters only');
-  document.querySelector('.add').Fname.focus();
  
-  return false;
- }
-
- var lname = document.getElementById( "Lname" );
- if( !lname.value.match(letters) )
- {
-  alert('last name must have alphabet characters only');
-  document.querySelector('.add').Lname.focus();
-  return false;
- }
-*/
-    }
     </script>
 </body>
 

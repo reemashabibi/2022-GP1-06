@@ -21,10 +21,7 @@
         <input type="text" required="required" id="snameInp">
         <span>اسم المدرسة </span>
       </div>
-      <div class="inputbox">
-        <input type="text" required="required" id="bnumInp">
-        <span>رقم/اسم الفرع </span>
-      </div>
+    
       <div class="inputbox">
         <input type="text" required="required" id="fnameInp">
         <span>الاسم الأول لمدير المدرسة</span>
@@ -105,7 +102,7 @@
 
     // save user input 
     const schoolName = document.getElementById("snameInp");
-    const BranchNumber = document.getElementById("bnumInp");
+    
     const FirstName = document.getElementById("fnameInp");
     const LastName = document.getElementById("lnameInp");
     const Email = document.getElementById("emailInp");
@@ -145,44 +142,16 @@
             const schoolref = doc(db, "School", user.uid);
             alert(schoolref);
             await setDoc(doc(db, "School", user.uid), {
-              Name: schoolName.value,
-              BranchNumber: BranchNumber.value,
+              schoolName: schoolName.value,
+              Email: Email.value,
+              PrincipalFirstName:FirstName.value,
+              PrincipalLastName: LastName.value,
             }).catch((error) => {
                 console.log(error);
                 alert(error);
               });
-               alert(" تسجيل  ");
-            await setDoc(doc(db, "Principal", user.uid), {
-              Email: Email.value,
-              FirstName: FirstName.value,
-              LastName: LastName.value,
-            }); alert("  المدرسة ");
-            const principaldocRef = doc(db, "Principal", user.uid);
-            const schooldocRef = doc(db, "School", user.uid);
-alert(principaldocRef.id);
-            const schooldata = {
-              PrincipalID: principaldocRef
-            };
-            const principaldata = {
-              SchoolID: schooldocRef
-            };
-alert("now add to firestore");
-            updateDoc(principaldocRef, principaldata)
-              .then((docRef) => {
-                console.log("A New Document Field has been added to an existing document");
-                alert("added");
-              })
-              .catch((error) => {
-                console.log(error);
-                alert(error);
-              });
-            updateDoc(schooldocRef, schooldata)
-              .then((docRef) => {
-                console.log("A New Document Field has been added to an existing document");
-              })
-              .catch((error) => {
-                console.log(error);
-              });
+               
+            
             signForm.reset();
             window.location.href = "principalHomePage.html";
             alert("تم تسجيل المدرسة بنجاح");
@@ -192,6 +161,7 @@ alert("now add to firestore");
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage);
+            alert("حدث خطأ حاول مره أخرى");
             signForm.reset();
           });
 
@@ -220,12 +190,12 @@ alert("now add to firestore");
     const Email1 = document.getElementById("emailInp");
     const password = document.getElementById("passInp");
     const schoolname = document.getElementById("snameInp");
-    const Branchnumber = document.getElementById("bnumInp");
+    
 
 
     function validate() {
 
-      if (Firstname.value == "" || Lastname.value == "" || schoolname.value == "" || Branchnumber.value == "" || password.value == "") {
+      if (Firstname.value == "" || Lastname.value == "" || schoolname.value == "" ||  password.value == "") {
         alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
         return false;
       }

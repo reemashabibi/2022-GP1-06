@@ -1,6 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged ,  sendPasswordResetEmail
-
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 //
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
@@ -32,7 +31,6 @@ const firebaseConfig = {
   const colRef = collection(db, 'School');
   const auth = getAuth(app);
   const authSec = getAuth(app2);
-  let analytics2 = getAnalytics();
 
 
 //get principal ID 
@@ -48,6 +46,8 @@ let authPrinID = "";
            console.log("the  user changed");
        }
    });
+
+   var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
 
 
   //get collection data
@@ -77,13 +77,15 @@ let authPrinID = "";
         return pass;
     }
 
+ 
     let  sheet_data ;
     let registerFname = "";
     let registerlname = "";
     let registerEmail = "";
     let registerPass = "";
+   
 
-///////////////////////////////////// Add  TeacherS //////////////////////////////////////////////////////
+///////////////////////////////////// Add TeacherS //////////////////////////////////////////////////////
 const excel_file = document.getElementById('excel_file');
 excel_file.addEventListener('change', (event) => {
     if(!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type))
@@ -92,102 +94,111 @@ excel_file.addEventListener('change', (event) => {
         excel_file.value = '';
         return false; //.xls .xlsx 
     }
-  
-
+ 
     var reader = new FileReader();
     reader.readAsArrayBuffer(event.target.files[0]);
-    reader.onload =  async function(event){
+    reader.onload = function(event){
         var data = new Uint8Array(reader.result);
         var work_book = XLSX.read(data, {type:'array'});
         var sheet_name = work_book.SheetNames;
          sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
 
-             //view tabel//
-        if(sheet_data.length > 0)
-        {
-            var table_output = '<table class="table table-striped table-bordered">';
-
-            for(var row = 0; row < sheet_data.length; row++)
-            {
-                table_output += '<tr>';
-                for(var cell = 0; cell < sheet_data[row].length; cell++)
-                {
-                    if(row == 0)
-                    {
-                        table_output += '<th>'+sheet_data[row][cell]+'</th>';
-                    }
-                    else
-                    {
-                        table_output += '<td>'+sheet_data[row][cell]+'</td>';
-                    }
-                }
-                table_output += '</tr>';
+       //view tabel//
+    if (sheet_data.length > 0) {
+        var table_output = '<table id="table" class="table table-striped table-bordered">';
+  
+        for (var row = 0; row < sheet_data.length ; row++) {
+          table_output += '<tr id="row">';
+          for (var cell = 0; cell <  sheet_data[row].length; cell++) {
+            if (row == 0) {
+              table_output += '<th>' + sheet_data[row][cell] + '</th>';
             }
-            table_output += '</table>';
-            document.getElementById('excel_data').innerHTML = table_output;
+            else {
+              table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
+            }
+          }
+    
         }
-        excel_file.value = '';
+        table_output += '</table>';
+        document.getElementById('excel_data').innerHTML = table_output;
+      }
+      excel_file.value = '';
+     
+      table_output += '</tr >';
+      const table = document.getElementById("table");
 
-
-        //Adding
+  //Add in users
     if(sheet_data.length > 0)
-       {
-            var i = 1;
+       {    
+        //if not 5 does not work
              for(var row = 1; row <5;  row++)
-           {
-
-            for(var cell = 0; cell < 3; cell++) {
-         
+           {  
+            for(var cell = 0; cell < 3; cell++) {  
                 if(row == 0){
                     //herders
+                   // table_output += sheet_data[row][cell];
                  }
                 else
                 {
                  if(cell==0){
                     registerFname  = sheet_data[row][cell];
+                    //alert(registerFname);
                  }
                  if(cell==1){
-                    registerlname = sheet_data[row][cell];               
+                    registerlname = sheet_data[row][cell];
+                   // alert(registerlname);                 
                 }
                 if(cell==2){
                     registerEmail = sheet_data[row][cell];
+                  //  alert(registerEmail);
+
                     }
                 }            
             }    
-                registerPass = pass();        
-                authTeacherS (registerFname, registerlname,registerEmail, registerPass);
+	                registerPass = pass();        
+                    //alert("#0");
+                     authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table);
+                    // alert("#1");
           }//end row  
-        }       
-   }
+        }
+    }
 });
 
 
 
- 
-function authTeacherS (registerFname, registerlname,registerEmail, registerPass){
 
+  function authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table){
+    //alert("in func");  
+   // alert(registerFname + " - " +registerlname + " - "  + registerEmail + " - " +schoolID );
     registerPass =  pass(); 
     createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
-    .then(  (userCredential) => {
+    .then( (userCredential) => {
         // Signed in 
-       // alert(" inn ");   
-        const user = userCredential.user;
-        sendPasswordResetEmail(authSec,registerEmail).then(() => {
-            // EmailSent
-           // alert("sent: " +registerEmail );
-          }) 
-      const res =  doc(db, 'School/'+authPrinID+'/Teacher', user.uid)    
-      //alert(" in ");     
-      //add to documnet
-      setDoc(res, {
-       Email: user.email,
-       FirstName: registerFname,
-       LastName: registerlname,               
-     }) 
-         
-     }).catch((error) => {
-         const errorCode = error.code;
-         const errorMessage = error.message;
-       });
+       const user = userCredential.user;   
+     sendPasswordResetEmail(authSec,registerEmail).then(() => {
+      // EmailSent
+      //alert("sent");
+    })  
+    const res =  doc(db, 'School/'+authPrinID+'/Teacher', user.uid)    
+    //alert(" in ");     
+    //add to documnet
+    var x = table.rows[row].insertCell(3);
+    x.innerHTML = "تمت الإضافة";
+    setDoc(res, {
+     Email: user.email,
+     FirstName: registerFname,
+     LastName: registerlname,               
+   }) 
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
+            var x = table.rows[row].insertCell(3);
+            x.innerHTML = " البريد الإلكتروني مستخدم من قبل";
+        }
+        var x = table.rows[row].insertCell(3);
+        x.innerHTML = "لم تتم الاضافة";
+      });
+       //alert("out func");
   }
- 
