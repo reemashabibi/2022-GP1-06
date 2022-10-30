@@ -4,7 +4,7 @@ import { getAuth, createUserWithEmailAndPassword , onAuthStateChanged ,  sendPas
 //
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc, getDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -51,7 +51,9 @@ onAuthStateChanged(authPrin, (user) => {
     }
   });
    
-  let schoolID ;
+ 
+
+  let schoolID  ="";
 
 
   //get collection data
@@ -171,34 +173,31 @@ excel_file.addEventListener('change', (event) => {
 
 
 
-  function authAdminS (registerFname, registerlname,registerEmail, registerPass,row,table){
-    //alert("in func");  
-   // alert(registerFname + " - " +registerlname + " - "  + registerEmail + " - " +schoolID );
-    const snapshot =  getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+  async function authAdminS (registerFname, registerlname,registerEmail, registerPass,row,table){
+    const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==" , email )));
     snapshot.forEach(async doc => {
-    const data = await getDoc(doc.ref.parent.parent);
-    schoolID = data.id;
-  
-   alert( schoolID)
+      const data = await getDoc(doc.ref.parent.parent);
+       schoolID = data.id;
+     }) 
     registerPass =  pass(); 
     createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
     .then( (userCredential) => {
         // Signed in 
-       const user = userCredential.user;   
-     sendPasswordResetEmail(authSec,registerEmail).then(() => {
+       let user = userCredential.user;   
+      sendPasswordResetEmail(authSec,registerEmail).then(() => {
       // EmailSent
-      //alert("sent");
-    })  
-    const res =  doc(db, 'School/'+schoolID+'/Teacher', user.uid)    
-    //alert(" in ");     
+     // alert("sent");
+    })     
     //add to documnet
     var x = table.rows[row].insertCell(3);
     x.innerHTML = "تمت الإضافة";
-    setDoc(res, {
-     Email: user.email,
-     FirstName: registerFname,
-     LastName: registerlname,               
-   }) 
+    setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
+      Email: registerEmail,
+      FirstName: registerFname,
+      LastName: registerlname,
+      Subjects: [],               
+    })
+
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -210,6 +209,4 @@ excel_file.addEventListener('change', (event) => {
         var x = table.rows[row].insertCell(3);
         x.innerHTML = "لم تتم الاضافة";
       });
-       //alert("out func");
-    })
   }
