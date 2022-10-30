@@ -47,7 +47,7 @@ const user= auth.currentUser;
         
         export async function fillData(uid){
         alert("docRef");
-        docRef= doc(db,"School",uid);
+        const docRef= doc(db,"School",uid);
         await getDoc(docRef)
         .then((doc)=>{
             console.log(doc.data(), doc.id);
