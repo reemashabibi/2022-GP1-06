@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const auth = getAuth();
 const user= auth.currentUser;
-const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
+//const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
 
 
 export { app, db, collection, getDocs, Timestamp, addDoc };

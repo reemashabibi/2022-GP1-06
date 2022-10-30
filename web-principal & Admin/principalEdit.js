@@ -46,8 +46,8 @@ const user= auth.currentUser;
 
         
         export async function fillData(uid){
-        alert("docRef");
-        docRef= doc(db,"School",uid);
+        
+        const docRef= doc(db,"School",uid);
         await getDoc(docRef)
         .then((doc)=>{
             console.log(doc.data(), doc.id);
@@ -65,7 +65,7 @@ const user= auth.currentUser;
       const docRef= doc(db,"School",auth.currentUser.uid);
       
         updateProfile(auth.currentUser, {
-          Email:Email.value , Password:Password.value
+          email:Email.value , password:Password.value
          }).then(() => {
             updateDoc(docRef,{
         SchoolName:document.getElementById("snameInp").value,
