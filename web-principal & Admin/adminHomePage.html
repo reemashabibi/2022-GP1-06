@@ -90,14 +90,6 @@ import { getAuth, onAuthStateChanged,signOut } from "https://www.gstatic.com/fir
                 </li>
               
                 <li class="nav-item ">
-                    <a class="nav-link " href="#"  > Dropdown link </a>
-                    <div class="dropdown-menu">
-                        <a class="" href="#">Action</a>
-                        <a class="dropdown-item" href="#">Another action</a>
-                        <a class="dropdown-item" href="#">Something else here</a>
-                    </div>
-                </li>
-                <li class="nav-item ">
                     <a class="nav-link" href="students.html"> إصطحاب الطلاب</a>
                 </li>
                 <li class="nav-item">
@@ -125,7 +117,17 @@ import { getAuth, onAuthStateChanged,signOut } from "https://www.gstatic.com/fir
 <!-- HTML !-->
 
 
-                        <button class="button-36 topTitle" onclick="location.href='class.html'"  >إضافة فصل</button>
+                        <button class="button-36 topTitle" onclick="location.href='class.html'"  style="width: 20%;">إضافة فصل</button>
+                        <div class="dropdownw3c">
+                            <button class="dropbtn">إضافة الطلاب</button>
+                            <div class="dropdown-contentw3c">
+                            <a href="addStudent.html">إضافة طالب</a>
+                            <a href="addStudents.html">إضافة طلاب</a>
+                           
+                            </div>
+                          </div>
+                          
+                          </div>
                         <div class="loader topTitle"></div>
                         
 
@@ -155,7 +157,15 @@ import { getAuth, onAuthStateChanged,signOut } from "https://www.gstatic.com/fir
                     <div class="section-title text-center ">
                     <h3 class="topTitle">قائمة المعلمين</h3>
 
-                        <button class="button-36 topTitle addTeacher" onclick="location.href='addTeacher.php'"  >إضافة معلم</button>
+                    <div class="dropdownw3c" >
+                        <button class="dropbtn" style="width:28rem;">إضافة المعلمين</button>
+                        <div class="dropdown-contentw3c" style="width:28rem;">
+                        <a href="addTeacher.html">إضافة معلم</a>
+                        <a href="addTeacherS.html">إضافة معلمين</a>
+                        </div>
+                      </div>
+                      
+                      </div>
                         <div class="loader topTitle"></div>
 
                        

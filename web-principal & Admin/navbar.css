@@ -222,6 +222,51 @@ svg{
 
   /*dropdown*/
   
-  .navbar-nav li:hover .dropdown-menu {
+  .dropbtn {
+	background-color:  #3790ad;
+	color: white;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
+	border-radius: 8px;
+	height: 3rem;
+	padding: 0 1.6rem;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  }
+  
+  .dropdownw3c {
+	position: relative;
+	display: inline-block;
+  }
+  
+  .dropdown-contentw3c {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+  }
+  
+  .dropdown-contentw3c a {
+	color: black;
+	padding: 12px 16px;
+	text-decoration: none;
 	display: block;
-} 
+  }
+  
+  .dropdown-contentw3c a:hover {background-color: #f1f1f1}
+  
+  .dropdownw3c:hover .dropdown-contentw3c {
+	display: block;
+  }
+  
+  .dropdownw3c:hover .dropbtn {
+	background-color:  #215465;
+  }
