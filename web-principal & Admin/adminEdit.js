@@ -52,8 +52,9 @@ export { query, orderBy, limit, where, onSnapshot };
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
   docRef.forEach( async doc => {
+    alert(doc.id);
     console.log(doc.id, ' => ', doc.data());
-     setDoc(doc,{
+     updateDoc(doc,{
     FirstName: FirstName.value,
     LastName:LastName.value,
     Email: Email.value,
