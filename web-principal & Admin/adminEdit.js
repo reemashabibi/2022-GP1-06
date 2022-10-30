@@ -53,8 +53,10 @@ export { query, orderBy, limit, where, onSnapshot };
 
   docRef.forEach( async doc => {
     alert(doc.id);
-    var reference=getDoc(doc.ref.path);
+    var schoolid= doc.ref.parent.parent;
+    const reference=doc(db,"School",schoolid,"Admin",doc.id);
     alert(reference)
+    alert(schoolid)
     
     console.log(doc.id, ' => ', doc.data());
      updateDoc(reference,{
