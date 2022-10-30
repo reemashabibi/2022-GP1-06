@@ -75,23 +75,21 @@ onAuthStateChanged(auth, (user) => {
   });
    
 
-var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
-//const docRefSchool = doc(db,"School",schoolID);
+let schoolID ;
 
-//const colRefClass = collection (db, "School",schoolID, "Class");
-// collection(db, "School").collection(db, "Class").doc(this.ClassName);
-//schoolID.collection(db, "Class");
 const classForm = document.querySelector('.addClassForm');
-//const refrence = doc(db, "School", prid);
+
 classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     
-   // const snapshot = await getDoc(doc(db, 'Admin', uid));
-    //const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-   // snapshot.docs.forEach(async doc => {
-    //const data = await getDoc(doc.ref.parent.parent);
-    //schoolID = data.id;
-    const colRefClass = collection (db, "School",schoolID, "Class");
+    alert("Email   "+ email)
+    const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+    snapshot.forEach(async doc => {
+    const data = await getDoc(doc.ref.parent.parent);
+    schoolID = data.id;
+  
+   alert( schoolID)
+   const colRefClass = collection (db, "School",schoolID, "Class");
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
         Level: parseInt(classForm.classes.value),
@@ -121,5 +119,5 @@ classForm.addEventListener('submit', async (e) => {
 alert("تمت اضافة الفصل بنجاح");
         })
 
-  
+      })
 });
