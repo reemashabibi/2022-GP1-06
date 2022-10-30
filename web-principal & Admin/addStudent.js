@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, setDoc, FieldValue, arrayUnion, updateDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs , getDoc, addDoc, Timestamp, setDoc, FieldValue, arrayUnion, updateDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
@@ -29,32 +29,45 @@ export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
 const authSec = getAuth(app2);
 
-var uid;
-var email;
-const auth = getAuth();
-var snapshot;
-onAuthStateChanged(auth, async (user) => {
 
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-       uid = user.uid;
-        email = user.email
-         snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-    } else {
-      // User is signed out
-      // ...
-    }
+  var schoolID ;
+  function school(id){
+    schoolID = id;
+  }
+
+export async  function fillData(email){
+  const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+  snapshot.forEach(async doc => {
+  const data = await getDoc(doc.ref.parent.parent);
+  schoolID = data.id;
+  const colRefClass = collection (db, "School",schoolID, "Class");
+  getDocs(colRefClass) 
+    .then(snapshot => {
+      
+      //console.log(snapshot.docs)
+      //let levels = []
+      snapshot.docs.forEach(doc => {
+        //levels.push({ ...doc.data(), id: doc.id })
+        const new_op = document.createElement("option");
+        new_op.innerHTML = doc.data().ClassName + ":فصل";
+        new_op.setAttribute("id", doc.id);
+        new_op.setAttribute("value", doc.data().ClassName);
+        document.getElementById("classes").appendChild(new_op);
+      })
+      //console.log(levels)
+    });
+  
   });
 
+}
+
 //add class to drop-down menu
-const schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
 
-/*snapshot.docs.forEach(async doc => {
-const data = await getDoc(doc.ref.parent.parent);
-schoolID = data.id;
 
-});*/
+ //= "kfGIwTyclpNernBQqSpQhkclzhh1";
+
+
+/*
 const colRefClass = collection (db, "School",schoolID, "Class");
 getDocs(colRefClass) 
   .then(snapshot => {
@@ -71,12 +84,11 @@ getDocs(colRefClass)
     })
     //console.log(levels)
   });
-
+*/
 
 
 //add student info
-
-const colRefStudent = collection(db, "School",schoolID,"Student");
+//const colRefStudent = collection(db, "School",schoolID,"Student");
 //const colRefParent = collection(db, "Parent");
 const selectedClass = document.getElementById("classes");
 const addStudentForm = document.querySelector('.add')
@@ -86,6 +98,7 @@ var filledCorrectly = false;
 
 
 addStudentForm.addEventListener('submit', async (e) => {
+  alert(schoolID)
   notValidated = false;
   var fname = document.getElementById("Fname");
   var letters = null ;
@@ -168,6 +181,7 @@ addStudentForm.addEventListener('submit', async (e) => {
     var parentId = "null";
     var docRef = "null";
     var docRefClass = "null";
+    const colRefStudent = collection(db, "School",schoolID,"Student");
 
     if (querySnapshot.empty) {
 
@@ -202,6 +216,7 @@ addStudentForm.addEventListener('submit', async (e) => {
             //schoolID?
           }).then(() => {
             docRef = doc(db, "School",schoolID,"Parent", res.id);
+            alert( selectedClass[selectedClass.selectedIndex].id)
             docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
             addDoc(colRefStudent, {
               FirstName: addStudentForm.Fname.value,
@@ -210,7 +225,7 @@ addStudentForm.addEventListener('submit', async (e) => {
               ParentID:docRef, 
             })
             .then(doc => {
-              StuRef = doc(db, "School",schoolID,"Student", doc.id);
+              var StuRef = doc(db, "School",schoolID,"Student", doc.id);
               updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
               .then(() => {
                   console.log("A New Document Field has been added to an existing document");
@@ -259,8 +274,8 @@ else{
         ClassID: docRefClass,
         ParentID:docRef, 
       })
-        .then(doc => {
-          StuRef = doc(db, "School",schoolID,"Student", doc.id);
+        .then(d => {
+          var StuRef = doc(db, "School",schoolID,"Student", d.id);
           updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
           .then(() => {
               console.log("A New Document Field has been added to an existing document");
@@ -286,7 +301,6 @@ else{
 
 
 $(".phone").change(async function () {
-
   var phoneNumber = parseInt(addStudentForm.phone.value);
 
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));

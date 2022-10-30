@@ -25,46 +25,33 @@ const db = getFirestore(app);
 const authSec = getAuth(app2);
 const analytics = getAnalytics(app);
 
-var uid;
-var email;
-const auth = getAuth();
-var snapshot;
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    uid = user.uid;
-    email = user.email
-    snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==", email)));
-
-  } else {
-    // User is signed out
-    // ...
-  }
-});
-
-
 
 var schoolID;
+
+function school(id){
+  schoolID = id;
+}
+export async  function SchoolID(email){
+  alert(schoolID)
+  const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+  snapshot.forEach(async doc => {
+  const data = await getDoc(doc.ref.parent.parent);
+  schoolID = data.id;
+  school(schoolID);
+
+  });
+
+}
+
+
+
 // = "kfGIwTyclpNernBQqSpQhkclzhh1";
 
-const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-snapshot.forEach(async doc => {
-const data = await getDoc(doc.ref.parent.parent);
-schoolID = data.id;
-})
-alert(schoolID)
 export { app, db, collection, getDocs, Timestamp, addDoc };
 export { query, orderBy, limit, where, onSnapshot };
 
 
-/*snapshot.docs.forEach(async doc => {
-const data = await getDoc(doc.ref.parent.parent);
-schoolID = data.id;
 
-});*/
-
-const colRefStudent = collection(db, "School", schoolID, "Student");
 
 
 //randomly generated pass
@@ -81,11 +68,14 @@ function pass() {
 ///////////////////////////////////// Add StudentS //////////////////////////////////////////////////////
 const excel_file = document.getElementById('excel_file');
 excel_file.addEventListener('change', (event) => {
+  alert(schoolID)
   if (!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type)) {
     document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">.xls او .xlsx يسمح فقط برفع ملف بصيغة </div>';
     excel_file.value = '';
     return false;
   }
+  const colRefStudent = collection(db, "School", schoolID, "Student");
+
   let registerFname = "";
   let registerlname = "";
   let registerClass = "";
@@ -264,6 +254,8 @@ excel_file.addEventListener('change', (event) => {
 let classId;
 let user ;
 let docRefClass;
+const colRefStudent = collection(db, "School", schoolID, "Student");
+
   registerPass = pass();
   createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass).then((userCredential) => {
 
