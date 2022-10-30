@@ -41,7 +41,7 @@ export { query, orderBy, limit, where, onSnapshot };
               FirstName.value=doc.data().FirstName;
               LastName.value=doc.data().LastName;
               Email.value=doc.data().Email;
-              Password.value=user.Password;
+              Password.value=auth.currentUser.Password;
           
             })
     }
@@ -49,7 +49,7 @@ export { query, orderBy, limit, where, onSnapshot };
     const save = document.getElementById("subButton");
     save.addEventListener('click', async (e) => {
      e.preventDefault();
-  const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', user.email)));
+  const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
   docSnap.forEach( async doc => {
     updateProfile(auth.currentUser, {
