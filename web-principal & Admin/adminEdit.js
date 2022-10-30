@@ -52,9 +52,7 @@ export { query, orderBy, limit, where, onSnapshot };
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
   docRef.forEach( async doc => {
-    updateProfile(auth.currentUser, {
-      email:Email.value , password:Password.value
-     }).then(() => {
+   
         updateDoc(docRef,{
     
     FirstName: FirstName.value,
@@ -64,10 +62,13 @@ export { query, orderBy, limit, where, onSnapshot };
   })
 
      });
+     updateProfile(auth.currentUser, {
+      email:Email.value , password:Password.value
+     })
 
   })
    
-    })
+    
 
     
     
