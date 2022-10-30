@@ -59,7 +59,7 @@ export async function callAdmins(sid){
     var email = data.Email
 
     const div1 = document.createElement("div");
-    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30";
+    div1.className = "job-box d-md-flex align-items-center justify-content-between  mb-30";
     document.getElementById("bigdiv").appendChild(div1);
     const div5 = document.createElement("div");
     div5.className="job-right my-4 flex-shrink-0";

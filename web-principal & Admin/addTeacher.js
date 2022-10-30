@@ -24,22 +24,40 @@ const firebaseConfig = {
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+  const app2 = initializeApp(firebaseConfig,"Secondary");
 
   export { app, db, collection, getDocs, Timestamp, addDoc };
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
 
-  const colRef = collection(db, 'Teacher');
+  const colRef = collection(db, 'School');
   const auth = getAuth(app);
+  const authSec = getAuth(app2);
+
+
+//get principal ID 
+let authPrin = getAuth();
+let user= authPrin.currentUser;
+let authPrinID = "";
+   onAuthStateChanged(authPrin, (user)=>{
+       if(user){
+         authPrinID =user.uid;
+           console.log("the same user");
+       }
+       else{
+           console.log("the  user changed");
+       }
+   });
+
 
   //get collection data
   getDocs(colRef)
     .then((snapshot) => {
-     let Teacher = []
+     let School = []
      snapshot.docs.forEach((doc)=> {
-      Teacher.push({...doc.data(), id: doc.id })
+      School.push({...doc.data(), id: doc.id })
      })
-     console.log(Teacher)
+     console.log(School)
     })
     .catch(err => {
         console.log(err.mssage)
@@ -90,70 +108,46 @@ const firebaseConfig = {
            }
          }
 
-
-           /* get schoolID
-           const authPrin = getAuth();
-           lest Schoo_lID = null;
-           onAuthStateChanged(authPrin, (user) => {
-           if (user) {
-              // User is signed in, see docs for a list of available properties
-             // https://firebase.google.com/docs/reference/js/firebase.User
-              Schoo_lID = user.uid;
-              // ...
-                } else {
-                 // User is signed out
-                 // ...
-                }
-            }); */
-
-
-
-            const addAdminForm = document.querySelector('.addTeacher')
-            addAdminForm.addEventListener('submit',  async (e) => {
-             // alert("in");
-              if(validate()){
-              //    alert("in2");
-              e.preventDefault()
-              alert("triggerd");
-              const registerFname = document.getElementById("firstName").value;
-              const registerlname = document.getElementById("lastName").value;
-              const registerEmail = document.getElementById("email").value;
-              const registerPass =  pass();
-              createUserWithEmailAndPassword(auth, registerEmail, registerPass)
-              .then(  (userCredential) => {
-                  // Signed in 
-                  const user = userCredential.user;
-                  
-                 //send an email to reset password
-                 sendPasswordResetEmail(auth,registerEmail).then(() => {
-                  // EmailSent
-                 // alert(registerEmail + " -- " + auth);
-                  alert("reset");
-                })
-
-                //add to the document
-                setDoc(doc(db, "Teacher", user.uid), {
-                  Email: registerEmail,
-                  FirstName: registerFname,
-                  LastName: registerlname, 
-                  password: "",
-                  //schoolID?
-                  schoolID: "/School/"+22,
-                });
-
-               alert("تم بنجاح");
-                 
-                })
-                .catch((error) => {
-                  const errorCode = error.code;
-                  const errorMessage = error.message;
-                 // alert("البريد الالكتروني مستخدم من قبل");
-                  alert(errorMessage);
-                  addAdminForm.reset();
-                });
-                addAdminForm.reset();
-              }//end if
-              else{
-                 // alert("return");
-              }
-            }); //The END
+         const addTeacherForm = document.querySelector('.addTeacher')
+         addTeacherForm.addEventListener('submit',  async (e) => {
+          // alert("in");
+           if(validate()){
+           // alert("in2");
+           e.preventDefault();
+          // alert("triggerd");
+           const registerFname = document.getElementById("firstName").value;
+           const registerlname = document.getElementById("lastName").value;
+           const registerEmail = document.getElementById("email").value;
+           const registerPass =  pass();         
+           createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+           .then( (userCredential) => {
+               // Signed in 
+               const user = userCredential.user;
+              //send an email to reset password
+              sendPasswordResetEmail(authSec,registerEmail).then(() => {
+               // EmailSent
+             })
+             setDoc(doc(db, 'School/'+authPrinID+'/Teacher', user.uid), {
+               Email: registerEmail,
+               FirstName: registerFname,
+               LastName: registerlname,     
+               Subjects : [],
+             });
+             
+            alert("تمت الإضافة بنجاح");     
+             })
+             .catch((error) => {
+               const errorCode = error.code;
+               const errorMessage = error.message;
+               if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
+                    alert("البريد الالكتروني مستخدم من قبل");}
+                    else
+               alert(errorMessage);
+               
+               addTeacherForm.reset();
+             });
+              addTeacherForm.reset();
+           }//end if
+           else{
+           }
+         }); //The END

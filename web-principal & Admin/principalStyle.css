@@ -185,7 +185,7 @@ margin-top: 5rem;
 
 /* CSS */
 .button-36 {
-  background-image: linear-gradient(92.88deg, #5aa4aa 9.16%, #5aa4aa 43.89%, #5aa4aa 64.72%);
+  background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
   border-radius: 8px;
   border-style: none;
   box-sizing: border-box;
@@ -319,4 +319,89 @@ div.content {
   from{ bottom:-100px; opacity:0 } 
   to{ bottom:0; opacity:1 }
 }
+html {
+  height:100%;
+}
 
+body {
+  margin:0;
+}
+
+.bg {
+  animation:slide 15s ease-in-out infinite alternate;
+  background-image: linear-gradient(-60deg, white 50%, #cff7f8
+
+ 50%);
+  bottom:0;
+  left:-50%;
+  opacity:.5;
+  position:fixed;
+  right:-50%;
+  top:0;
+  z-index:-1;
+}
+
+.bg2 {
+  animation-direction:alternate-reverse;
+  animation-duration:15s;
+}
+
+.bg3 {
+  animation-duration:15s;
+}
+
+
+
+@keyframes slide {
+  0% {
+    transform:translateX(-25%);
+  }
+  100% {
+    transform:translateX(25%);
+  }
+}
+
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+  background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+	top: -20px;
+	left: 95%;	
+	border-radius: 72px 72px 72px 72px;
+  z-index: -1 ;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+	background: cadetblue;	
+	top: -120px;
+	left: 70%;	
+  z-index: -1;
+	border-radius: 32px;
+}
+
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+	top: 20px;
+  background: linear-gradient(45deg,#dfdade  0%, #abb0b3 100%);		
+z-index: -2;
+	left: -20;	
+	border-radius: 32px;
+}
+
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+  background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+	top: 500px;
+	left: -50px;	
+  z-index: -2;
+	border-radius: 60px;
+}

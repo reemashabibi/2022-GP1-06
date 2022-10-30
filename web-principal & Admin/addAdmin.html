@@ -8,17 +8,18 @@
     <link rel="stylesheet" href="create.css">
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
     <script type="module" src="addAdmin.js"></script>
+
     <title>إضافة إداري</title>
 </head>
 
-<body>
 
+<body>
 
 <div class="center">
   <h1>إضافة إداري</h1>
 
   <form class="addAdmin" id="modal-signup">
-
+   
   <div class="inputbox">
       <input type="text" required="required" name ="firstName" id="firstName">
       <span>الاسم الأول</span>
@@ -35,32 +36,31 @@
       <span>البريد الإلكتروني</span>
     </div>
 
+  <div class="inputbox">
+    <span  style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
+  </div>
 
 
     <div class="inputbox">
-    <button  type="submit"  class="btn" id="reg-btn" >إضافة</button>
+    <button  type="submit"  class="button-36 topTitle" id="reg-btn" >إضافة</button>
     </div>
+
+
+<div class="inputbox">
+  <button class="button-36 topTitle" onclick="location.href='addAdmins.html'"  >إضافة قائمة إداريون</button>
+  </div>
+
   </form>
 </div>
+<div class="screen__background">
+  <div class="screen__background__shape screen__background__shape7"></div>
+  <div class="screen__background__shape screen__background__shape5"></div>
+  <div class="screen__background__shape screen__background__shape4"></div>
+  <div class="screen__background__shape screen__background__shape3"></div>		
+  <div class="screen__background__shape screen__background__shape2"></div>
+  <div class="screen__background__shape screen__background__shape1"></div>
+</div>
 
-
-
-<!-- add adminS -->
-<div class="center">
-        <h1 class="text-center mt-4 mb-4">إضافة قائمة من الإداريون</h1>
-        <div class="card">
-            <div class="card-header"><b>اختر ملف اكسل</b></div>
-            <div class="card-body">
-                <input type="file" id="excel_file" />
-            </div>
-        </div>
-        <div id="excel_data" class="mt-5"></div>
-        <div class="inputbox">
-        <div class="inputbox">
-    </div>
-
-    </div>
-    </div>
 
 </body>
 </html>

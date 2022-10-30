@@ -6,8 +6,7 @@ body {
   justify-content: center;
   align-items: center;
   
-  background: linear-gradient(-45deg, rgb(71, 129, 137),rgb(205, 225, 227), #ccc);
-  animation: gradient 10s ease infinite;
+  background: #fff;
   font-family: "Sansita Swashed", cursive;
 }
 @keyframes gradient {
@@ -23,10 +22,13 @@ body {
 }
 
 .center {
+  margin-left: 30%;
   position: relative;
   padding: 50px 50px;
   background: #fff;
   border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 50%;
 }
 .center h1 {
   font-size: 2em;
@@ -56,6 +58,8 @@ body {
   height: 50px;
   margin-bottom: 50px;
   padding-left: 50px;
+  margin-left: 40%;
+
   
 }
 .inputbox select {
@@ -131,8 +135,61 @@ body {
 .alink {
   text-decoration: none;
   color:cadetblue;
+  margin-left: 60%;
 }
 a:hover {
   border-bottom: 1px solid;
   color:darkcyan;
+}
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+  background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+	top: -20px;
+	left: 100px;	
+	border-radius: 72px 72px 72px 72px;
+  z-index: 0 ;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+	width: 220px;
+	background: cadetblue;	
+	top: -150px;
+	left: 0;	
+	border-radius: 32px;
+}
+
+.screen__background__shape3 {
+	height: 540px;
+	width: 190px;
+	top: 20px;
+  background: linear-gradient(45deg,#dfdade  0%, #abb0b3 100%);		
+
+z-index: -2;
+	left: -20;	
+	border-radius: 32px;
+}
+
+.screen__background__shape4 {
+	height: 400px;
+	width: 200px;
+  background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+	top: 500px;
+	left: 50px;	
+	border-radius: 60px;
+}
+.screen__background__shape5 {
+	height: 540px;
+	width: 190px;
+	top: 25%;
+  background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+z-index: -2;
+	left: 0;	
+	border-radius: 32px;
 }

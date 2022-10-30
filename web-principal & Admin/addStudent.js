@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, setDoc, FieldValue, arrayUnion, updateDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
@@ -21,38 +21,63 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const app2 = initializeApp(firebaseConfig,"Secondary");
 const db = getFirestore(app);
 
 export { app, db, collection, getDocs, Timestamp, addDoc };
 export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
+const authSec = getAuth(app2);
 
+var uid;
+var email;
+const auth = getAuth();
+var snapshot;
+onAuthStateChanged(auth, async (user) => {
 
-
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+       uid = user.uid;
+        email = user.email
+         snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
 
 //add class to drop-down menu
-const colRefClass = collection(db, "Class");
+const schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
 
-getDocs(colRefClass)
+/*snapshot.docs.forEach(async doc => {
+const data = await getDoc(doc.ref.parent.parent);
+schoolID = data.id;
+
+});*/
+const colRefClass = collection (db, "School",schoolID, "Class");
+getDocs(colRefClass) 
   .then(snapshot => {
+    
     //console.log(snapshot.docs)
     //let levels = []
     snapshot.docs.forEach(doc => {
       //levels.push({ ...doc.data(), id: doc.id })
       const new_op = document.createElement("option");
-      new_op.innerHTML = doc.data().ClassName + ":فصل:" + doc.data().Level + "مستوى";
+      new_op.innerHTML = doc.data().ClassName + ":فصل";
       new_op.setAttribute("id", doc.id);
       new_op.setAttribute("value", doc.data().ClassName);
       document.getElementById("classes").appendChild(new_op);
     })
     //console.log(levels)
-  })
+  });
 
 
 
 //add student info
-const colRefStudent = collection(db, "Student");
-const colRefParent = collection(db, "Parent");
+
+const colRefStudent = collection(db, "School",schoolID,"Student");
+//const colRefParent = collection(db, "Parent");
 const selectedClass = document.getElementById("classes");
 const addStudentForm = document.querySelector('.add')
 var notValidated = false;
@@ -129,42 +154,24 @@ addStudentForm.addEventListener('submit', async (e) => {
 });
 
 addStudentForm.addEventListener('submit', async (e) => {
-
   e.preventDefault();
-
   if (!notValidated) {
 
     ////////////////////////
 
+
+
+
     const phoneNumber = parseInt(addStudentForm.phone.value);
-    const q = query(collection(db, "Parent"), where("PhoneNumber", "==", phoneNumber));
+    const q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
     const querySnapshot = await getDocs(q);
     var parentId = "null";
     var docRef = "null";
     var docRefClass = "null";
-    if (!querySnapshot.empty) {
-      querySnapshot.forEach((doc) => {
-        if (!doc.empty)
-          parentId = doc.id;
 
-        else {
-          alert("ولي الأمر غير مسجل، يرجى إكمال البيانات");
-        }
-      })
+    if (querySnapshot.empty) {
 
-      docRef = doc(db, "Parent", parentId);
-      docRefClass = doc(db, "Class", selectedClass[selectedClass.selectedIndex].id);
-      addDoc(colRefStudent, {
-        FirstName: addStudentForm.Fname.value,
-        LastName: addStudentForm.Lname.value,
-        ClassID: docRefClass,
-        ParentID: docRef,
-      })
-        .then(() => {
-          addStudentForm.reset()
-        });
-    }
-    if (parentId == "null") {
+    
      // alert("triggerd");
       const registerFname = document.getElementById("FnameParent").value;
       const registerlname = document.getElementById("LnameParent").value;
@@ -172,37 +179,54 @@ addStudentForm.addEventListener('submit', async (e) => {
       const registerPhone = document.getElementById("phone").value;
       const registerPass = pass();
       const phoneNum = parseInt(registerPhone);
-      createUserWithEmailAndPassword(auth, registerEmail, registerPass)
+      createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
 
           //send an email to reset password
-          sendPasswordResetEmail(auth, registerEmail).then(() => {
+          sendPasswordResetEmail(authSec, registerEmail).then(() => {
             // EmailSent
             // alert(registerEmail + " -- " + auth);
           //  alert("reset");
           })
-          const res = doc(db, "Parent", user.uid)
+          const res = doc(db, "School",schoolID,"Parent", user.uid)
 
           //add to the document
-          setDoc(doc(db, "Parent", user.uid), {
+          setDoc(doc(db, "School",schoolID,"Parent", user.uid), {
             Email: registerEmail,
             FirstName: registerFname,
             LastName: registerlname,
-            password: "",
-            PhoneNumber: phoneNum,
+            Phonenumber: phoneNum,
+            Students: []
             //schoolID?
           }).then(() => {
-            docRef = doc(db, "Parent", res.id);
-            docRefClass = doc(db, "Class", selectedClass[selectedClass.selectedIndex].id);
+            docRef = doc(db, "School",schoolID,"Parent", res.id);
+            docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
             addDoc(colRefStudent, {
               FirstName: addStudentForm.Fname.value,
               LastName: addStudentForm.Lname.value,
               ClassID: docRefClass,
-              ParentID: docRef,
-            });
-            addStudentForm.reset();
+              ParentID:docRef, 
+            })
+            .then(doc => {
+              StuRef = doc(db, "School",schoolID,"Student", doc.id);
+              updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+              .then(() => {
+                  console.log("A New Document Field has been added to an existing document");
+              })
+              .catch(error => {
+                  console.log(error);
+              })
+              StuRef = doc(db, "School",schoolID,"Student", doc.id);
+              updateDoc(docRef, {Students: arrayUnion(StuRef) })
+              .then(() => {
+                  console.log("A New Document Field has been added to an existing document");
+              })
+              .catch(error => {
+                  console.log(error);
+              })
+              addStudentForm.reset();
           });
 
          // alert("تم");
@@ -214,20 +238,58 @@ addStudentForm.addEventListener('submit', async (e) => {
           addStudentForm.reset();
         });
       // addStudentForm.reset();
+      })
+    }
+else{
+    
+      querySnapshot.forEach((doc) => {
+        if (!doc.empty)
+          parentId = doc.id;
 
-    }//end if
+        else {
+          alert("ولي الأمر غير مسجل، يرجى إكمال البيانات");
+          document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">ولي الأمر غير مسجل، يرجى إكمال البيانات</div>';
+        }
+      })
+      docRef = doc(db, "School",schoolID,"Parent", parentId);
+      docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
+      addDoc(colRefStudent, {
+        FirstName: addStudentForm.Fname.value,
+        LastName: addStudentForm.Lname.value,
+        ClassID: docRefClass,
+        ParentID:docRef, 
+      })
+        .then(doc => {
+          StuRef = doc(db, "School",schoolID,"Student", doc.id);
+          updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+          .then(() => {
+              console.log("A New Document Field has been added to an existing document");
+          })
+          .catch(error => {
+              console.log(error);
+          })
+          updateDoc(docRef, {Students: arrayUnion( StuRef) })
+          .then(() => {
+              console.log("A New Document Field has been added to an existing document");
+          })
+          .catch(error => {
+              console.log(error);
+          })
+
+          addStudentForm.reset()
+        });
+    }
     alert("تمت إضافة الطالب بنجاح")
-
+  
   }
-
-
 });
+
 
 $(".phone").change(async function () {
 
   var phoneNumber = parseInt(addStudentForm.phone.value);
 
-  var q = query(collection(db, "Parent"), where("PhoneNumber", "==", phoneNumber));
+  var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
   var parentId = "null";
   if (!querySnapshot.empty) {
@@ -238,7 +300,10 @@ $(".phone").change(async function () {
         $("#FnameParent").val(doc.data().FirstName);
         $("#LnameParent").val(doc.data().LastName);
         $("#emailP").val(doc.data().Email);
-        $("#password").val(doc.data().Password);
+        document.getElementById("FnameParent").disabled = true;
+        document.getElementById("LnameParent").disabled = true;
+        document.getElementById("emailP").disabled = true;
+
       }
     })
   } else {
@@ -246,7 +311,9 @@ $(".phone").change(async function () {
     $("#FnameParent").val("");
     $("#LnameParent").val("");
     $("#emailP").val("");
-    $("#password").val("");
+    document.getElementById("FnameParent").disabled = false;
+    document.getElementById("LnameParent").disabled = false;
+    document.getElementById("emailP").disabled = false;
   }
 
 
@@ -257,7 +324,6 @@ $(".phone").change(async function () {
 //////////////////////parent auth///////////////////////////
 
 const colRef = collection(db, 'Parent');
-const auth = getAuth(app);
 
 
 //get collection data

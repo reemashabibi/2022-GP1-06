@@ -3,12 +3,12 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc, getDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-//import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { doc,  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 // import firebase from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-//import "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+//import "https://www.gstatic.com/firebasejs/9.12.1/firebase-database.js";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,6 +28,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+
 export { app, db, collection, getDocs, Timestamp, addDoc, doc };
 export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
@@ -35,9 +36,9 @@ const analytics = getAnalytics(app);
 
 
 //add class to drop-down menu
-const colRefClass = collection(db, "Level");
+const colRefLevel = collection(db, "Level");
 
-getDocs(colRefClass)
+getDocs(colRefLevel)
     .then(snapshot => {
         //console.log(snapshot.docs)
         //let levels = []
@@ -56,35 +57,61 @@ getDocs(colRefClass)
 
 
 //Add class
-var prid;
+var uid;
+var email;
+const auth = getAuth();
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+      // User is signed in, see docs for a list of available properties
+      // https://firebase.google.com/docs/reference/js/firebase.User
+       uid = user.uid;
+        email = user.email
+        
+    } else {
+      // User is signed out
+      // ...
+    }
+  });
+   
+
+var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
+//const docRefSchool = doc(db,"School",schoolID);
+
+//const colRefClass = collection (db, "School",schoolID, "Class");
+// collection(db, "School").collection(db, "Class").doc(this.ClassName);
+//schoolID.collection(db, "Class");
 const classForm = document.querySelector('.addClassForm');
-export async function addClass(pid) {
-    prid = pid;
-}
+//const refrence = doc(db, "School", prid);
 classForm.addEventListener('submit', async (e) => {
-    const colRefClass = collection(db, "Class");
-    const refrence = doc(db, "School", prid);
     e.preventDefault()
+    
+   // const snapshot = await getDoc(doc(db, 'Admin', uid));
+    //const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+   // snapshot.docs.forEach(async doc => {
+    //const data = await getDoc(doc.ref.parent.parent);
+    //schoolID = data.id;
+    const colRefClass = collection (db, "School",schoolID, "Class");
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
         Level: parseInt(classForm.classes.value),
-        SchoolID: refrence,
+        Students: [],
     })
     .then(async docRef => { 
+      alert( docRef.id)
       classForm.reset()
-      const refrence = doc(db, "Class",  docRef.id);
+      const refrence = doc(db, "School", schoolID, "Class", docRef.id);
       let currentClass = await getDoc(refrence);
       const levelID = currentClass.data().Level;
       const qc = query(collection(db, "Level"), where("Number", "==", levelID ));
       const querySnapshotc = await getDocs(qc);
      querySnapshotc.forEach((doc) =>{
-       alert(doc.data().Number)
-        const colRefTeacherClass = collection(db, "Teacher_Class");
+       
+        const colRefSubject = collection(db, "School",schoolID, "Class", docRef.id, "Subject");
         const subLength= doc.data().Subjects;
         for(let i = 0; i < subLength.length; i++){
-        addDoc(colRefTeacherClass, {
-        ClassID: refrence,
-        Subject: doc.data().Subjects[i],
+        addDoc(colRefSubject, {
+        SubjectName: doc.data().Subjects[i],
         TeacherID:  "",
       }).then(() => { 
         console.log("added")
@@ -93,4 +120,6 @@ classForm.addEventListener('submit', async (e) => {
             });
 
         })
+
+  
 });
