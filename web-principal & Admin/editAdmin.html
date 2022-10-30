@@ -22,12 +22,12 @@
     
     const auth = getAuth();
     const user= auth.currentUser;
-    const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
+ //   const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
     onAuthStateChanged(auth, (user)=>{
         if(user){
             console.log("the same user");
             console.log(auth.currentUser);
-            document.getElementsByTagName('body').onload = fillData(uid);
+            document.getElementsByTagName('body').onload = fillData(user.uid);
             
         }
         else{

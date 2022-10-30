@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc , doc , collectionGroup} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+//import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
 import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
@@ -34,15 +34,18 @@ export { query, orderBy, limit, where, onSnapshot };
 
         
        export async function fillData(uid){
-            const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', user.email)));
-            await getDoc(docRef)
-    .then((doc)=>{
+            const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
+            
+            docSnap.forEach( async doc => {
+              const data=await getDoc(auth.currentUser.uid);
+          
+            })
+             .then((doc)=>{
         console.log(doc.data(), doc.id);
-        
         FirstName.value=doc.data().PrincipalFirstName;
         LastName.value=doc.data().PrincipalLastName;
         Email.value=doc.data().Email;
-        //Password.value=user.Password;
+        Password.value=user.Password;
 
     });
     }
