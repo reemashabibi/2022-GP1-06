@@ -42,8 +42,8 @@ export { query, orderBy, limit, where, onSnapshot };
             })
              .then((doc)=>{
         console.log(doc.data(), doc.id);
-        FirstName.value=doc.data().PrincipalFirstName;
-        LastName.value=doc.data().PrincipalLastName;
+        FirstName.value=doc.data().FirstName;
+        LastName.value=doc.data().LastName;
         Email.value=doc.data().Email;
         Password.value=user.Password;
 
@@ -52,18 +52,23 @@ export { query, orderBy, limit, where, onSnapshot };
 
     const save = document.getElementById("subButton");
     save.addEventListener('click', async (e) => {
-  e.preventDefault();
+     e.preventDefault();
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', user.email)));
 
-  
+  docSnap.forEach( async doc => {
+    const data=await getDoc(auth.currentUser.uid);
+
+  })
+   .then((doc)=>{
     updateProfile(auth.currentUser, {
       email:Email.value , password:Password.value
      }).then(() => {
         updateDoc(docRef,{
-    SchoolName:document.getElementById("snameInp").value,
-    PrincipalFirstName: FirstName.value,
-    PrincipalLastName:LastName.value,
+    
+    FirstName: FirstName.value,
+    LastName:LastName.value,
     Email: Email.value,
+  
   })
 
      });
@@ -71,6 +76,7 @@ export { query, orderBy, limit, where, onSnapshot };
 
 
 })
+    })
 
     
     
