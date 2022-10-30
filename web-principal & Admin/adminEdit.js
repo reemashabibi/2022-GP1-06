@@ -31,8 +31,9 @@ export { query, orderBy, limit, where, onSnapshot };
         const Password=document.getElementById("passInp");
 
         const db = getFirestore(app);
-        document.onload(fillData(uid));
-        async function fillData(uid){
+
+        
+       export async function fillData(uid){
             const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', user.email)));
             await getDoc(docRef)
     .then((doc)=>{
@@ -45,6 +46,7 @@ export { query, orderBy, limit, where, onSnapshot };
 
     });
     }
+
     const save = document.getElementById("subButton");
     save.addEventListener('click', async (e) => {
   e.preventDefault();
