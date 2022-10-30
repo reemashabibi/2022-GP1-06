@@ -28,9 +28,9 @@ const user= auth.currentUser;
 
 
 
-  const uid=user.uid;// "kfGIwTyclpNernBQqSpQhkclzhh1";
+  //const uid=user.uid;// "kfGIwTyclpNernBQqSpQhkclzhh1";
        
-  alert(uid);      
+  //alert(uid);      
 
 
 
@@ -62,7 +62,7 @@ const user= auth.currentUser;
         const save = document.getElementById("subButton");
         save.addEventListener('click', async (e) => {
       e.preventDefault();
-      const docRef= doc(db,"School",uid);
+      const docRef= doc(db,"School",auth.currentUser.uid);
       
         updateProfile(auth.currentUser, {
           Email:Email.value , Password:Password.value
