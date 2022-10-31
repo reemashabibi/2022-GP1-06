@@ -77,6 +77,7 @@ excel_file.addEventListener('change', (event) => {
   let registerFname = "";
   let registerlname = "";
   let registerClass = "";
+  let registerLevel = "";
   let registerParentPhone = "";
   let registerParentFname = "";
   let registerParentlname = "";
@@ -131,41 +132,35 @@ excel_file.addEventListener('change', (event) => {
           else {
             if (cell == 0) {
               registerFname = sheet_data[row][cell];
-              alert(registerFname);               
             }
             if (cell == 1) {
               registerlname = sheet_data[row][cell];
-              //alert(registerlname);                 
             }
             if (cell == 2) {
               registerClass = sheet_data[row][cell];
 
-              //alert(registerClass);
             }
             if (cell == 3) {
-              registerParentPhone = parseInt(sheet_data[row][cell]);
-
-              // alert(registerParentPhone);
+              registerLevel = sheet_data[row][cell];
             }
             if (cell == 4) {
-              registerParentFname = sheet_data[row][cell];
-              // alert(registerParentFname);
+              registerParentPhone = parseInt(sheet_data[row][cell]);
             }
             if (cell == 5) {
-              registerParentlname = sheet_data[row][cell];
-              //alert(registerParentlname);
+              registerParentFname = sheet_data[row][cell];
             }
             if (cell == 6) {
+              registerParentlname = sheet_data[row][cell];
+            }
+            if (cell == 7) {
               registerParentEmail = sheet_data[row][cell];
-              // alert(registerParentEmail);
             }
           }
         }
-        // randomID = randID();
 
         const q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", registerParentPhone));
         const querySnapshot = await getDocs(q);
-        const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass));
+        const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
         const queryClassSnapshot = await getDocs(qClass);
         var parentId = "null";
         var classId = "null"
@@ -196,8 +191,7 @@ excel_file.addEventListener('change', (event) => {
             ClassID: docRefClass,
             parentID: docRef,
           }).then(docu => {
-            alert("added")
-            alert(docu.id)
+            
             const StuRef = doc(db, "School", schoolID, "Student", docu.id);
             updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
               .then(() => {
@@ -218,7 +212,7 @@ excel_file.addEventListener('change', (event) => {
             
           });
 
-          var x = table.rows[row].insertCell(7);
+          var x = table.rows[row].insertCell(8);
           x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
 
 
@@ -228,11 +222,10 @@ excel_file.addEventListener('change', (event) => {
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
         } else {
-          alert("no class     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
 
           alert("Class doesn't exsit")
-          var x = table.rows[row].insertCell(7);
-          x.innerHTML = "لم تتم الإضافة، يوجد خطأ باسم الفصل";
+          var x = table.rows[row].insertCell(8);
+          x.innerHTML = " لم تتم الإضافة، يوجد خطأ باسم الفصل أو رقم المستوى";
         }//end else class not exist
 
     
@@ -251,7 +244,6 @@ excel_file.addEventListener('change', (event) => {
 
 });
     function authParent(registerFname ,registerlname, registerClass, registerParentPhone, registerParentFname,registerParentlname,registerParentEmail,schoolID,registerPass,queryClassSnapshot,row,table){
-  alert("no parent     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
 let classId;
 let user ;
 let docRefClass;
@@ -264,13 +256,12 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
       // Signed in 
       user = userCredential.user;
     sendPasswordResetEmail(authSec, registerParentEmail).then(() => {
-       alert("reset")
+       
       })
 
       
      const res = doc(db, "School", schoolID, "Parent", user.uid)
      //add to the document
-     alert("1###"+registerParentEmail)
      setDoc(res, {
       Email: user.email ,
       FirstName: registerParentFname,
@@ -311,7 +302,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
           .catch(error => {
             console.log(error);
           })
-          var x = table.rows[row].insertCell(7);
+          var x = table.rows[row].insertCell(8);
           x.innerHTML = "تمت الإضافة";
       })// close then addDoc
 
@@ -321,10 +312,9 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
   }).catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      var x = table.rows[row].insertCell(7);
+      var x = table.rows[row].insertCell(8);
     x.innerHTML = "لم تتم الاضافة";
     });
      
-      alert("2###"+registerParentEmail)
 
   }
