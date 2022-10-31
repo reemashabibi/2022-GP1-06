@@ -28,11 +28,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-
 export { app, db, collection, getDocs, Timestamp, addDoc, doc };
 export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
-
 
 
 //add class to drop-down menu
@@ -40,8 +38,7 @@ const colRefLevel = collection(db, "Level");
 
 getDocs(colRefLevel)
     .then(snapshot => {
-        //console.log(snapshot.docs)
-        //let levels = []
+       
         snapshot.docs.forEach(doc => {
             //levels.push({ ...doc.data(), id: doc.id })
             const new_op = document.createElement("option");
@@ -49,7 +46,7 @@ getDocs(colRefLevel)
             new_op.setAttribute("id", doc.id);
             document.getElementById("classes").appendChild(new_op);
         })
-         //console.log(levels)
+        //console.log(levels)
     })
 
 
@@ -92,24 +89,16 @@ classForm.addEventListener('submit', async (e) => {
     const data = await getDoc(docSnap.ref.parent.parent);
     schoolID = data.id;
   
-   alert( schoolID);
-   const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("Level", "==", parseInt(classForm.classes.value)));
- 
-   const queryClassSnapshot = await getDocs(qClass);
-   if(!queryClassSnapshot.empty){
-    alert(" هذا الفصل مسجل مسبقًا");
-    classForm.reset();
-    return;
-   }
-
    const colRefClass = collection (db, "School",schoolID, "Class");
+   const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("Level", "==",parseInt(classForm.classes.value) ));
+   const queryClassSnapshot = await getDocs(qClass);
+    if(queryClassSnapshot.empty){
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
         Level: parseInt(classForm.classes.value),
         Students: [],
     })
     .then(async docRef => { 
-      alert( docRef.id)
       classForm.reset()
       const refrence = doc(db, "School", schoolID, "Class", docRef.id);
       let currentClass = await getDoc(refrence);
@@ -127,9 +116,13 @@ classForm.addEventListener('submit', async (e) => {
       }).then(() => { 
         console.log("added")
       })}
-        });
-          alert("تمت اضافة الفصل بنجاح");
-        })
 
+            });
+alert("تمت اضافة الفصل بنجاح");
+        })
+      }else{
+       alert("لم تتم الإضافة، يوجد فصل مُوافِق لاسم الفصل والمستوى")
+       classForm.reset();
+      }
       })
 });

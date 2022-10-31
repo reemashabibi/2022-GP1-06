@@ -38,7 +38,7 @@
 <body>
     <script type="module">
         import { fillData } from './principalEdit.js';
-        import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged , updateProfile, signOut} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
         
         
         const auth = getAuth();
@@ -64,7 +64,19 @@
        // const uid=user.uid;// "kfGIwTyclpNernBQqSpQhkclzhh1";
        
    
-
+       const logout= document.getElementById("signout");
+        
+        logout.addEventListener('click',  async (e) => {
+          alert("lohhh");
+          e.preventDefault()
+          signOut(auth).then(() => {
+            alert("تم تسجيل الخروج بنجاح");
+            window.location.href="index.html";
+            }).catch((error) => {
+            console.log(error.message);
+            }); 
+    
+         }) 
       
       </script>
 

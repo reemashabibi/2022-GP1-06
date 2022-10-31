@@ -38,13 +38,13 @@
 <script type="module">
     
     import { fillData } from './adminEdit.js';
-    import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+    import { getAuth, onAuthStateChanged , updateProfile, signOut} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
    
   
     
     const auth = getAuth();
     const user= auth.currentUser;
- //   const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
+    //const uid= user.uid;//"kfGIwTyclpNernBQqSpQhkclzhh1";
     onAuthStateChanged(auth, (user)=>{
         if(user){
             console.log("the same user");
@@ -58,13 +58,19 @@
         }
 
     });
-
+    const logout= document.getElementById("signout");
+        
+        logout.addEventListener('click',  async (e) => {
+          alert("lohhh");
+          e.preventDefault()
+          signOut(auth).then(() => {
+            alert("تم تسجيل الخروج بنجاح");
+            window.location.href="index.html";
+            }).catch((error) => {
+            console.log(error.message);
+            }); 
     
-
-
-
-   
-  
+         }) 
     
 
   
