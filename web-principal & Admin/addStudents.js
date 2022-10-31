@@ -45,15 +45,7 @@ onAuthStateChanged(auth, async (user) => {
 
 
 
-var schoolID;
-// = "kfGIwTyclpNernBQqSpQhkclzhh1";
-
-const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-snapshot.forEach(async doc => {
-const data = await getDoc(doc.ref.parent.parent);
-schoolID = data.id;
-})
-alert(schoolID)
+var schoolID = "kfGIwTyclpNernBQqSpQhkclzhh1";
 export { app, db, collection, getDocs, Timestamp, addDoc };
 export { query, orderBy, limit, where, onSnapshot };
 
@@ -180,7 +172,7 @@ excel_file.addEventListener('change', (event) => {
         const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass));
         const queryClassSnapshot = await getDocs(qClass);
         var parentId = "null";
-        var classId = "null"
+        var classId = "null";
         var docRef = "null";
         var docRefClass = "null";
 

@@ -82,13 +82,26 @@ const classForm = document.querySelector('.addClassForm');
 classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     
-
+    const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    if(classForm.Cname.value.match(specialChars))
+    {alert("اسم الفصل يجب ان يتكون من حروف فقط ");
+      return;
+    }
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
-    snapshot.forEach(async doc => {
-    const data = await getDoc(doc.ref.parent.parent);
+    snapshot.forEach(async docSnap => {
+    const data = await getDoc(docSnap.ref.parent.parent);
     schoolID = data.id;
   
-   alert( schoolID)
+   alert( schoolID);
+   const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("Level", "==", parseInt(classForm.classes.value)));
+ 
+   const queryClassSnapshot = await getDocs(qClass);
+   if(!queryClassSnapshot.empty){
+    alert(" هذا الفصل مسجل مسبقًا");
+    classForm.reset();
+    return;
+   }
+
    const colRefClass = collection (db, "School",schoolID, "Class");
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
