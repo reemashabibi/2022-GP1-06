@@ -301,6 +301,7 @@ else{
 
 
 $(".phone").change(async function () {
+
   var phoneNumber = parseInt(addStudentForm.phone.value);
 
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));

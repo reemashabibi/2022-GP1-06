@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs, addDoc, Timestamp, updateDoc, arrayUnion, setDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs,getDoc, addDoc, Timestamp, updateDoc, arrayUnion, setDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
@@ -31,8 +31,7 @@ var schoolID;
 function school(id){
   schoolID = id;
 }
-export async  function SchoolID(email){
-  alert(schoolID)
+export async  function school_ID(email){
   const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
   snapshot.forEach(async doc => {
   const data = await getDoc(doc.ref.parent.parent);
@@ -68,7 +67,6 @@ function pass() {
 ///////////////////////////////////// Add StudentS //////////////////////////////////////////////////////
 const excel_file = document.getElementById('excel_file');
 excel_file.addEventListener('change', (event) => {
-  alert(schoolID)
   if (!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type)) {
     document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">.xls او .xlsx يسمح فقط برفع ملف بصيغة </div>';
     excel_file.value = '';
@@ -189,19 +187,21 @@ excel_file.addEventListener('change', (event) => {
 
         if (!queryClassSnapshot.empty && !querySnapshot.empty) {
               alert("p and c     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
+          const colRefStudent = collection(db, "School", schoolID, "Student");
           docRef = doc(db, "School", schoolID, "Parent", parentId);
           docRefClass = doc(db, "School", schoolID, "Class", classId);
-
           addDoc(colRefStudent, {
             FirstName: registerFname,
             LastName: registerlname,
             ClassID: docRefClass,
             parentID: docRef,
-          }).then(d => {
-
-            const StuRef = doc(db, "School", schoolID, "Student", d.id);
+          }).then(docu => {
+            alert("added")
+            alert(docu.id)
+            const StuRef = doc(db, "School", schoolID, "Student", docu.id);
             updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
               .then(() => {
+                
                 console.log("A New Document Field has been added to an existing document");
               })
               .catch(error => {
@@ -209,6 +209,7 @@ excel_file.addEventListener('change', (event) => {
               })
             updateDoc(docRef, { Students: arrayUnion(StuRef) })
               .then(() => {
+                
                 console.log("A New Document Field has been added to an existing document");
               })
               .catch(error => {
@@ -231,7 +232,7 @@ excel_file.addEventListener('change', (event) => {
 
           alert("Class doesn't exsit")
           var x = table.rows[row].insertCell(7);
-          x.innerHTML = "    لم تتم الإضافة، أرجو التأكد من بيانات الفصل المذكور";
+          x.innerHTML = "لم تتم الإضافة، يوجد خطأ باسم الفصل";
         }//end else class not exist
 
     
