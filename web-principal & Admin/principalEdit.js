@@ -4,7 +4,7 @@ import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc ,
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
-import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged , updatePassword, updateEmail} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
   authDomain: "halaqa-89b43.firebaseapp.com",
@@ -64,15 +64,17 @@ const user= auth.currentUser;
       e.preventDefault();
       const docRef= doc(db,"School",auth.currentUser.uid);
       
-        updateProfile(auth.currentUser, {
-          email:Email.value , password:Password.value
-         }).then(() => {
+      updateEmail(auth.currentUser, Email.value).then(() => {
             updateDoc(docRef,{
         SchoolName:document.getElementById("snameInp").value,
         PrincipalFirstName: FirstName.value,
         PrincipalLastName:LastName.value,
         Email: Email.value,
       })
+
+      if (Password.value!=""){
+        updatePassword(auth.currentUser, Password.value);
+      }
   
          });
       

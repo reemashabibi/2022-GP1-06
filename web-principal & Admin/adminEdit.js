@@ -4,7 +4,7 @@ import { collection, getDocs, addDoc, Timestamp, setDoc , getDoc, updateDoc , do
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
-import { getAuth, onAuthStateChanged , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged , updateEmail, updatePassword} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
   authDomain: "halaqa-89b43.firebaseapp.com",
@@ -56,19 +56,22 @@ export { query, orderBy, limit, where, onSnapshot };
     var schoolid= dooc.ref.parent.parent.id;
 
     const reference=doc(db,"School",schoolid,"Admin",dooc.id);
-    updateProfile(auth.currentUser, {
-      email:Email.value , password:Password.value
-     }).then(async () => {
-   await updateDoc(reference,{
+   
+     updateEmail(auth.currentUser, Email.value).then(async () => {
+    await updateDoc(reference,{
     FirstName: FirstName.value,
     LastName:LastName.value,
     Email: Email.value,
   
   })
+  if (Password.value!=""){
+    updatePassword(auth.currentUser, Password.value);
+  }
 
      }).catch(()=>{
       alert("حصل خطأ، الرجاء المحاولة لاحقًا");
     })
+
     
 
   })
