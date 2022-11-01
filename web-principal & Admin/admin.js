@@ -228,7 +228,7 @@ export async function viewStudents(classId, schoolId){
  
   for(var j=0; j<CurrenrclassStudents.length;j++){
     var studentid = CurrenrclassStudents[j];
-    alert(studentid.id);
+    
   const d = await getDoc(studentid);
 
 
