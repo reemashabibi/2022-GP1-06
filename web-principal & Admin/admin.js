@@ -5,7 +5,7 @@ import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc,documentId,arrayUnion,arrayRemove } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-//import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
+import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 // import firebase from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
@@ -228,7 +228,7 @@ export async function viewStudents(classId, schoolId){
  
   for(var j=0; j<CurrenrclassStudents.length;j++){
     var studentid = CurrenrclassStudents[j];
-    alert(studentid.id);
+    
   const d = await getDoc(studentid);
 
 
@@ -421,22 +421,22 @@ $(document).ready(function () {
 $(document).ready(function () {
   $(document).on('click', '.deletebtn', async function () {
     var classID = $(this).attr('id');
-    const docRef = doc(db, "Class", classID);
-    const q = query(collection(db, "Student"), where("ClassID", "==", docRef ));
-    const querySnapshot = await getDocs(q);
-    if(querySnapshot.empty){
-      deleteDoc(docRef).then(() => {
+    const docRef = doc(db, classID);
+    var classDoc = await getDoc(docRef);
+    if(classDoc.data().Students.length == 0){
+      if(confirm(" هل أنت متأكد من حذف الفصل")){
+      deleteDoc(docRef).then(() =>{
         alert("تم حذف الفصل");
         window.location.reload(true);
       })
       .catch(error => {
         console.log(error);
       })
-    }
-    else{
+      }
+     }
+     else{
       alert("هذا الفصل يحتوي على طلاب. ليتم حذف الفصل يجب ألا يحتوي على أي طالب.");
-    }
-    
+  }
   
   });
 });
