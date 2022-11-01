@@ -7,6 +7,7 @@
   import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
   import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  // import firebase from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
   //import "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
   // TODO: Add SDKs for Firebase products that you want to use
@@ -31,6 +32,20 @@
   export { app, db, collection, getDocs, Timestamp, addDoc, doc };
   export { query, orderBy, limit, where, onSnapshot }; 
   const analytics = getAnalytics(app);
+
+
+  const auth = getAuth();
+const user= auth.currentUser
+   onAuthStateChanged(auth, (user)=>{
+       if(user){
+           console.log("the same user");
+       }
+       else{
+           window.location.href="index.html";
+           console.log("the  user changed");
+       }
+   })
+   
 //global var
 
 var principalId;

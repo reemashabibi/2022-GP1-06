@@ -2,19 +2,11 @@
 <html lang="en">
 <head>
   <script type="module">
-   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-    const auth = getAuth();
-    const user= auth.currentUser
-       onAuthStateChanged(auth, (user)=>{
-           if(user){
-               console.log("the same user");
-           }
-           else{
-               window.location.href="index.html";
-               console.log("the  user changed");
-           }
-   
-       })
+  import{checkUser} from "./admin.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+   const auth = getAuth();
+
+   checkUser();
    
    
       
@@ -86,7 +78,11 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ml-auto">
-   
+            <div class="hori-selector" style="background-color: white;"><div class="left" style="background-color: white;"></div><div class="right" style="background-color: white;"></div></div>
+            <li class="nav-item active">
+                <a class="nav-link" href="javascript:void(0);"></a>
+            </li>
+
               <li class="nav-item active">
                   <a class="nav-link" href="adminHomePage.html">الصفحة الرئيسية</a>
               </li>

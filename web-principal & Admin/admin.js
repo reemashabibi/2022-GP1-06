@@ -7,6 +7,7 @@ import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, get
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 // import firebase from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 //import "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -32,7 +33,19 @@ export { app, db, collection, getDocs, Timestamp, addDoc, doc };
 export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
 
-
+export async function checkUser(){
+const auth = getAuth();
+const user= auth.currentUser
+   onAuthStateChanged(auth, (user)=>{
+       if(user){
+           console.log("the same user");
+       }
+       else{
+           window.location.href="index.html";
+           console.log("the  user changed");
+       }
+   })
+}
 export async function viewTachersAndClasses(aid){
   const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', aid)));
   var sid = "";
@@ -215,6 +228,7 @@ export async function viewStudents(classId, schoolId){
  
   for(var j=0; j<CurrenrclassStudents.length;j++){
     var studentid = CurrenrclassStudents[j];
+    alert(studentid.id);
   const d = await getDoc(studentid);
 
 
@@ -224,7 +238,7 @@ export async function viewStudents(classId, schoolId){
     var phone = 0;
     var email = "";
      
-      let data = await getDoc(d.data().parentID);
+      let data = await getDoc(d.data().ParentID);
         phone = data.data().Phonenumber;
         email = data.data().Email;
 

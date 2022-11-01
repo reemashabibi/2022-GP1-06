@@ -189,7 +189,7 @@ excel_file.addEventListener('change', (event) => {
             FirstName: registerFname,
             LastName: registerlname,
             ClassID: docRefClass,
-            parentID: docRef,
+            ParentID: docRef,
           }).then(docu => {
             
             const StuRef = doc(db, "School", schoolID, "Student", docu.id);

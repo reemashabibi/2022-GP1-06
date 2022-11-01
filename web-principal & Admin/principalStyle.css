@@ -179,7 +179,7 @@ ul {
 
 .topTitle {
 text-align: center;
-margin-top: 5rem;
+margin-top: 5%;
 }
 
 
@@ -281,7 +281,7 @@ div.content {
 .loader {
   position: absolute;
   left: 50%;
-  top:23em;
+  top:5em;
   z-index: 1;
   width: 120px;
   height: 120px;
