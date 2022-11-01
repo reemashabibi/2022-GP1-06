@@ -57,7 +57,7 @@ export { query, orderBy, limit, where, onSnapshot };
 
     const reference=doc(db,"School",schoolid,"Admin",dooc.id);
    
-     updateEmail(auth.currentUser, Email.value).then(async () => {
+   updateEmail(auth.currentUser, Email.value).then(async () => {
     await updateDoc(reference,{
     FirstName: FirstName.value,
     LastName:LastName.value,
