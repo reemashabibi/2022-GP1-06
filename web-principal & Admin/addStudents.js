@@ -123,7 +123,7 @@ excel_file.addEventListener('change', (event) => {
     if (sheet_data.length > 0) {
 
       for (var row = 1; row < sheet_data[row].length; await row++) {
-        for (var cell = 0; cell < 7; cell++) {
+        for (var cell = 0; cell < 8; cell++) {
 
           if (row == 0) {
             //herders
@@ -157,7 +157,6 @@ excel_file.addEventListener('change', (event) => {
             }
           }
         }
-
         const q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", registerParentPhone));
         const querySnapshot = await getDocs(q);
         const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
@@ -166,21 +165,54 @@ excel_file.addEventListener('change', (event) => {
         var classId = "null";
         var docRef = "null";
         var docRefClass = "null";
-
-
+        var studentParentExist = false;
+        /// class id if exist
+        if (!queryClassSnapshot.empty){
         queryClassSnapshot.forEach((doc) => {
           if (!doc.empty)
             classId = doc.id;
         })
+      }
+        //paret id if exist
         if (!querySnapshot.empty) {
-          querySnapshot.forEach((d) => {
+          querySnapshot.forEach(async (d) => {
             if (!d.empty)
               parentId = d.id;
+              
+
           })
         }
-      
 
-        if (!queryClassSnapshot.empty && !querySnapshot.empty) {
+            //no parent for the same child
+          var ref = doc(db, "School",schoolID,"Parent",parentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));        
+          var snapshot = await getDocs(Query);
+          if (!snapshot.empty) {
+            snapshot.forEach(async (docu) => {
+              var FName = docu.data().FirstName;
+              if(FName == registerFname){
+                studentParentExist = true;
+              }//if(FName != table.rows[row].insertCell(0) )
+            })//    snapshot.forEach(async (docu)
+          }// if (!snapshot.empty)
+          if(snapshot.empty){
+            let data = await getDoc(ref);
+            var student = data.data().Students[0];
+            const docSnap = await getDoc(student);
+            if( docSnap.data().FirstName == registerFname )
+            studentParentExist = true;
+          }
+
+          if(studentParentExist){    
+            alert("الطالب مسجل بالنظام")
+          var x = table.rows[row].insertCell(8);
+           x.innerHTML = " لم تتم الإضافة، الطالب مسجل بالنظام مسبقاً";
+                   }//end if studentParentExist
+
+
+        
+      
+        if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
               alert("p and c     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
           const colRefStudent = collection(db, "School", schoolID, "Student");
           docRef = doc(db, "School", schoolID, "Parent", parentId);
@@ -191,21 +223,12 @@ excel_file.addEventListener('change', (event) => {
             ClassID: docRefClass,
             ParentID: docRef,
           }).then(docu => {
-            
             const StuRef = doc(db, "School", schoolID, "Student", docu.id);
             updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
-              .then(() => {
-                
-                console.log("A New Document Field has been added to an existing document");
-              })
               .catch(error => {
                 console.log(error);
               })
             updateDoc(docRef, { Students: arrayUnion(StuRef) })
-              .then(() => {
-                
-                console.log("A New Document Field has been added to an existing document");
-              })
               .catch(error => {
                 console.log(error);
               })
@@ -215,13 +238,12 @@ excel_file.addEventListener('change', (event) => {
           var x = table.rows[row].insertCell(8);
           x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
 
-
         }//if parent and class exist/
 
-        else if (!queryClassSnapshot.empty && querySnapshot.empty  ) {
+        else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
-        } else {
+        } else if(queryClassSnapshot.empty ) {
 
           alert("Class doesn't exsit")
           var x = table.rows[row].insertCell(8);

@@ -1,3 +1,5 @@
+
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import {
   getAuth, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, updatePassword, sendPasswordResetEmail, fetchSignInMethodsForEmail
@@ -96,7 +98,7 @@ var filledCorrectly = false;
 
 
 addStudentForm.addEventListener('submit', async (e) => {
- 
+
   notValidated = false;
   var fname = document.getElementById("Fname");
   var letters = null ;
@@ -152,7 +154,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   }
 
   var emailP = document.getElementById("emailP");
-  var mailformat = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
+  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (!emailP.value.match(mailformat)) {
     alert("الرجاء إدحال بريد إلكتروني صحيح");
     emailP.focus();
@@ -182,10 +184,9 @@ addStudentForm.addEventListener('submit', async (e) => {
     var docRefClass = "null";
     const colRefStudent = collection(db, "School",schoolID,"Student");
 
-    if (querySnapshot.empty) {
-
+    if (querySnapshot.empty) {//adding new parent to the system 
     
-     // alert("triggerd");
+      
       const registerFname = document.getElementById("FnameParent").value;
       const registerlname = document.getElementById("LnameParent").value;
       const registerEmail = document.getElementById("emailP").value;
@@ -214,8 +215,7 @@ addStudentForm.addEventListener('submit', async (e) => {
             Students: []
             //schoolID?
           }).then(() => {
-            docRef = doc(db, "School",schoolID,"Parent", res.id);
-       
+            docRef = doc(db, "School",schoolID,"Parent", user.uid);
             docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
             addDoc(colRefStudent, {
               FirstName: addStudentForm.Fname.value,
@@ -223,79 +223,94 @@ addStudentForm.addEventListener('submit', async (e) => {
               ClassID: docRefClass,
               ParentID:docRef, 
             })
-            .then( doc => {
-              var StuRef = doc(db, "School",schoolID,"Student", doc.id);
+            .then( d => {
+              
+              var StuRef = doc(db, "School",schoolID,"Student", d.id);
               updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
-              .then(() => {
-                  console.log("A New Document Field has been added to an existing document");
-              })
               .catch(error => {
                   console.log(error);
               })
-              StuRef = doc(db, "School",schoolID,"Student", doc.id);
               updateDoc(docRef, {Students: arrayUnion(StuRef) })
-              .then(() => {
-                  console.log("A New Document Field has been added to an existing document");
-              })
               .catch(error => {
                   console.log(error);
               })
+              alert("تمت الإضافة بنجاح")
               addStudentForm.reset();
           });
-
          // alert("تم");
         }).catch((error) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           // alert("البريد الالكتروني مستخدم من قبل");
-          console.log(errorMessage);
+          alert(errorMessage);
           addStudentForm.reset();
         });
       // addStudentForm.reset();
       })
     }
 else{
-    
-      querySnapshot.forEach((doc) => {
-        if (!doc.empty)
-          parentId = doc.id;
+  
+      querySnapshot.forEach(async (d) => {
+        if (!d.empty){
+          parentId = d.id;
+          //no parent for the same child
+          var ref = doc(db, "School",schoolID,"Parent",parentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
+          var snapshot = await getDocs(Query);
+          if (!snapshot.empty) {
+            snapshot.forEach(async (docu) => {
+            var FName = docu.data().FirstName;
+              if(FName != addStudentForm.Fname.value ){
 
-        else {
-          alert("ولي الأمر غير مسجل، يرجى إكمال البيانات");
-          document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">ولي الأمر غير مسجل، يرجى إكمال البيانات</div>';
-        }
-      })
-      docRef = doc(db, "School",schoolID,"Parent", parentId);
-      docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
-      addDoc(colRefStudent, {
-        FirstName: addStudentForm.Fname.value,
-        LastName: addStudentForm.Lname.value,
-        ClassID: docRefClass,
-        ParentID:docRef, 
-      })
-        .then(d => {
-          var StuRef = doc(db, "School",schoolID,"Student", d.id);
-          updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
-          .then(() => {
-              console.log("A New Document Field has been added to an existing document");
-          })
-          .catch(error => {
-              console.log(error);
-          })
-          updateDoc(docRef, {Students: arrayUnion( StuRef) })
-          .then(() => {
-              console.log("A New Document Field has been added to an existing document");
-          })
-          .catch(error => {
-              console.log(error);
-          })
-          alert("تمت إضافة الطالب بنجاح")
-          addStudentForm.reset()
-        });
-    }
-  
-  
-  }
+              
+                docRef = doc(db, "School",schoolID,"Parent", parentId);
+                docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
+                addDoc(colRefStudent, {
+                  FirstName: addStudentForm.Fname.value,
+                  LastName: addStudentForm.Lname.value,
+                  ClassID: docRefClass,
+                  ParentID:docRef, 
+                })
+                  .then(d => {
+                    
+                    var StuRef = doc(db, "School",schoolID,"Student", d.id);
+                    updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+                    .then(() => {
+                        console.log("A New Document Field has been added to an existing document");
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+                    updateDoc(docRef, {Students: arrayUnion( StuRef) })
+                    .then(() => {
+                        console.log("A New Document Field has been added to an existing document");
+                    })
+                    .catch(error => {
+                        console.log(error);
+                    })
+                    alert("تمت إضافة الطالب بنجاح")
+                    addStudentForm.reset()
+                  });
+
+
+
+
+              }//if(FName != addStudentForm.Fname.value )
+              else{
+                alert("الطالب مسجل بالنظام")
+                addStudentForm.Fname.focus();
+
+              }
+            })//snapshot.forEach(async (doc)
+            }//if (!snapshot.empty) 
+
+            }// if not doc.empty
+
+          })//  querySnapshot.forEach((doc)
+    
+        }//else 
+
+      }// if validation 
 });
 
 
@@ -324,25 +339,44 @@ $(".phone").change(async function () {
 
   }
 
+
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
   var parentId = "null";
+
+
   if (!querySnapshot.empty) {
-    querySnapshot.forEach((doc) => {
-      if (!doc.empty) {
-        parentId = doc.id;
+    querySnapshot.forEach(async (d) => {
+      if (!d.empty) {
+        parentId = d.id;
 
-        $("#FnameParent").val(doc.data().FirstName);
-        $("#LnameParent").val(doc.data().LastName);
-        $("#emailP").val(doc.data().Email);
-       
+        //no parent for the same child
+        var ref = doc(db, "School",schoolID,"Parent",parentId);
+        
+        var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
+        var snapshot = await getDocs(Query);
+ 
+      
+        if (!snapshot.empty) {
+          snapshot.forEach(async (doc) => {
+          var FName = doc.data().FirstName;
+            if(FName != addStudentForm.Fname.value ){
 
+        $("#FnameParent").val(d.data().FirstName);
+        $("#LnameParent").val(d.data().LastName);
+        $("#emailP").val(d.data().Email);
+            } else{
+              alert("الطالب مسجل بالنظام")
+              addStudentForm.Fname.focus();
+            }//else  if(FName != addStudentForm.Fname.value )
+          })//forEach
+        }//if snapshot not empty
       }
     })
   }
 
 
-});
+});//end on change phone number function 
 
 
 //////////////////////parent auth///////////////////////////
@@ -363,6 +397,9 @@ getDocs(colRef)
     console.log(err.mssage)
   });
 
+
+
+
 //randomly generated pass
 function pass() {
   var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -374,6 +411,3 @@ function pass() {
   }
   return pass;
 }
-
-
-

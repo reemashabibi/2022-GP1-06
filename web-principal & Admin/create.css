@@ -76,12 +76,12 @@
   
 }
 .center .inputbox input:focus ~ span,
-.center .inputbox input:valid ~ span,
-.center .inputbox input:disabled ~ span{
+.center .inputbox input:valid ~ span{
   transform: translateX(-13px) translateY(-35px);
   font-size: 1em;
   
 }
+
 .center .inputbox [type="button"] {
   width: 50%;
   background: #ccc;
