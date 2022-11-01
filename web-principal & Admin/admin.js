@@ -304,7 +304,6 @@ tr.id = d.ref.path;
 }
 
 
-//put the delete student code here or it wil not work!!!!!!!!!!!! the same for delete class
 $(document).ready(function () {
   $(document).on('click', '#delete', function () {
     if($('input[name="chosenstudents[]"]:checked').length == 0){
