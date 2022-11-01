@@ -83,6 +83,10 @@ let authPrinID = "";
     let registerlname = "";
     let registerEmail = "";
     let registerPass = "";
+    //***********/  
+    let validate1 = false;
+    let validate2 = false;
+    let validate3 = false;
    
 
 ///////////////////////////////////// Add AdminS //////////////////////////////////////////////////////
@@ -102,11 +106,11 @@ excel_file.addEventListener('change', (event) => {
         var work_book = XLSX.read(data, {type:'array'});
         var sheet_name = work_book.SheetNames;
          sheet_data = XLSX.utils.sheet_to_json(work_book.Sheets[sheet_name[0]], {header:1});
+         var validate = true;
 
        //view tabel//
     if (sheet_data.length > 0) {
         var table_output = '<table id="table" class="table table-striped table-bordered">';
-  
         for (var row = 0; row < sheet_data.length ; row++) {
           table_output += '<tr id="row">';
           for (var cell = 0; cell <  sheet_data[row].length; cell++) {
@@ -117,26 +121,85 @@ excel_file.addEventListener('change', (event) => {
               table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
             }
           }
-    
-        }
+      
+        }     
         table_output += '</table>';
         document.getElementById('excel_data').innerHTML = table_output;
       }
       excel_file.value = '';
-     
       table_output += '</tr >';
+
+
+      //***********/  
+      //validate
+      if (sheet_data.length > 0) {
+        for (var row = 0; row < 1; row++) {
+          for (var cell = 0; cell <  3; cell++) {
+             registerFname = sheet_data[0][0];
+             registerlname = sheet_data[0][1];
+             registerEmail = sheet_data[0][2];
+            if (row == 0) { 
+              //does not ignore whie sapces in Arabic
+            //   if (registerFname.replaceAll("\\s+","").equals("الإسم الأول".replaceAll("\\s+",""))  ||  registerFname.replaceAll("\\s+","").equals("الإسم الاول".replaceAll("\\s+","")) ||  registerFname.replaceAll("\\s+","").equals("الاسم الأول".replaceAll("\\s+","")) || registerFname.replaceAll("\\s+","").equals("الاسم الاول".replaceAll("\\s+","")) )
+            if (registerFname == "الإسم الأول" || registerFname == "الإسم الاول" || registerFname == "الاسم الأول"|| registerFname == "الاسم الاول")
+               {
+                validate1 = true;
+                //break;
+                }
+              //  if ( registerlname.replaceAll("\\s+","").equals("الإسم الأخير".replaceAll("\\s+",""))  ||  registerlname.replaceAll("\\s+","").equals("الإسم الاخير".replaceAll("\\s+","")) ||  registerlname.replaceAll("\\s+","").equals("الاسم الاخير".replaceAll("\\s+","")) || registerlname.replaceAll("\\s+","").equals("الاسم الأخير".replaceAll("\\s+","")) )
+              if (registerlname == "الإسم الأخير" || registerlname == "الإسم الاخير" || registerlname == "الاسم الاخير"|| registerlname == "الاسم الأخير")
+                {
+                  validate2 = true;
+               // break;
+                 }
+         
+               //  if ( registerEmail.replaceAll("\\s+","").equals("البريد الإلكتروني".replaceAll("\\s+","")) || registerEmail.replaceAll("\\s+","").equals("البريد الالكترني".replaceAll("\\s+","")) )
+               if (registerEmail == "البريد الإلكتروني" || registerEmail =="البريد الالكتروني")
+                 {
+                  validate3 = true;
+                 // break;
+                  }     
+            }
+          }       
+        }        
+      }
+
+     
+
+       //***********/       
+      if (validate1 == false){
+        alert(" الخانة الأولى يجب أن تحتوي على الاسم الأول، يرجى تحميل نموذج الإضافة ورفعه ");
+       // break;
+       }
+       if(validate2 == false){ 
+        alert("الخانة الثانية يجب أن تحتوي على الاسم الأخير، يرجى تحميل نموذج الإضافة ورفعه ");
+       // break;
+       }
+       if(validate3 == false){
+        alert("الخانة الثالثة يجب أن تحتوي على البريد الإلكتروني، يرجى تحميل نموذج الإضافة ورفعه");
+       // break;
+       }
+
+
+       //***********/  
+      if(validate1 && validate2 && validate3){
+        alert("true");
       const table = document.getElementById("table");
+      var x = table.rows[0].insertCell(3);
+      x.innerHTML = "حالة الإضافة";
+      }
+
 
   //Add in users
+  //***********/  
+  if(validate1 && validate2 && validate3){
     if(sheet_data.length > 0)
        {    
-        //if not 5 does not work
              for(var row = 1; row <1000; await row++)
            {  
-            for(var cell = 0; cell < 3; cell++) {  
+            for(var cell = 0; cell < 4; cell++) {  
                 if(row == 0){
                     //herders
-                   // table_output += sheet_data[row][cell];
                  }
                 else
                 {
@@ -155,13 +218,15 @@ excel_file.addEventListener('change', (event) => {
                     }
                 }            
             }    
-	                registerPass = pass();        
+	                  registerPass = pass();        
                     //alert("#0");
                      authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table);
                     // alert("#1");
           }//end row  
         }
-    }
+    
+  }
+}
 });
 
 
@@ -195,10 +260,8 @@ excel_file.addEventListener('change', (event) => {
         const errorMessage = error.message;
         if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
             var x = table.rows[row].insertCell(3);
-            x.innerHTML = " البريد الإلكتروني مستخدم من قبل";
+            x.innerHTML = "لم تتم الاضافة";
         }
-        var x = table.rows[row].insertCell(3);
-        x.innerHTML = "لم تتم الاضافة";
       });
        //alert("out func");
   }
