@@ -43,7 +43,7 @@
         
         const auth = getAuth();
         const user= auth.currentUser;
-        alert(user);
+        
        
         onAuthStateChanged(auth, (user)=>{
             if(user){
@@ -67,7 +67,7 @@
        const logout= document.getElementById("signout");
         
         logout.addEventListener('click',  async (e) => {
-          alert("lohhh");
+          
           e.preventDefault()
           signOut(auth).then(() => {
             alert("تم تسجيل الخروج بنجاح");

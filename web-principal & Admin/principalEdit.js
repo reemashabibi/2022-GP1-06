@@ -55,7 +55,7 @@ const user= auth.currentUser;
             FirstName.value=doc.data().PrincipalFirstName;
             LastName.value=doc.data().PrincipalLastName;
             Email.value=doc.data().Email;
-            //Password.value=user.Password;
+            Password.value=auth.currentUser.Password;;
 
         });
         }
