@@ -75,7 +75,7 @@ export async function callAdmins(sid){
     const a1= document.createElement('button');
     a1.className="btn btn-danger rounded-0 deletebtn";
     a1.type = "button"
-    a1.setAttribute('id', doc.id);
+    a1.setAttribute('id', doc.ref.path);
     const i = document.createElement('i');
     i.className="fa fa-trash";
     a1.appendChild(i);
@@ -119,7 +119,7 @@ export async function callAdmins(sid){
 $(document).ready(function () {
   $(document).on('click', '.deletebtn', async function () {
     var adminID = $(this).attr('id');
-    const docRef = doc(db, "Admin", adminID);
+    const docRef = doc(db, adminID);
     if(confirm("هل تأكد حذف الإداري وجميع البيانات المتعلقة به؟")){
     deleteDoc(docRef).then(() => {
       alert("تم حذف الإداري");
