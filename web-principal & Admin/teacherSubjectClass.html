@@ -2,6 +2,7 @@
 
 
  <script type='module'>
+    $(".loader").hide();
  import { subjectTeacherForm } from './SubjectTeacher.js';
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
@@ -22,17 +23,17 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 
     const logout= document.getElementById("signout");
 
-logout.addEventListener('click',  async (e) => {
-  alert("lohhh");
-  e.preventDefault()
-  signOut(auth).then(() => {
-    alert("تم تسجيل الخروج بنجاح");
-    window.location.href="index.html";
-    }).catch((error) => {
-    console.log(error.message);
-    }); 
-
- }) 
+    logout.addEventListener('click',  async (e) => {
+      e.preventDefault()
+      if(confirm("هل تُأكد تسجيل الخروج من الحساب؟")){
+      signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        window.location.href="index.html";
+        }).catch((error) => {
+        console.log(error.message);
+        }); 
+    }
+     }); 
 </script>
 
 <html lang="en">
@@ -112,7 +113,7 @@ logout.addEventListener('click',  async (e) => {
 <div class="container text-center text-white">
     <div class="row pt-5">
         <div class="col-lg-8 mx-auto">
-            <h1 class="display-4">مواد الفصل</h1>
+            <h1 class="display-4" id="title">مواد </h1>
             <div class="loader topTitle"></div>
                 </a>
             </p>

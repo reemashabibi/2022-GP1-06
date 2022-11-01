@@ -50,7 +50,7 @@ const user= auth.currentUser;
         const docRef= doc(db,"School",uid);
         await getDoc(docRef)
         .then((doc)=>{
-            console.log(doc.data(), doc.id);
+          
             document.getElementById("snameInp").value=doc.data().schoolName;
             FirstName.value=doc.data().PrincipalFirstName;
             LastName.value=doc.data().PrincipalLastName;
@@ -75,7 +75,7 @@ const user= auth.currentUser;
       if (Password.value!=""){
         updatePassword(auth.currentUser, Password.value);
       }
-  
+  alert("تم حفظ التعديلات بنجاح");
          });
       
     

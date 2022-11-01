@@ -45,15 +45,18 @@ const user= auth.currentUser
            console.log("the  user changed");
        }
    })
-   
+
 //global var
 
 var principalId;
 var classId;
 var globalTeachers;
-
+var currentSubjects =[];
   export async function subjectTeacherForm(cid, sid){
     const classrefrence = doc(db, "School", sid, "Class", cid);
+    const classData = await getDoc(classrefrence);
+    var titleName= document.createTextNode(classData.data().ClassName+"-"+classData.data().Level);
+    document.getElementById('title').appendChild(titleName);
     const q = collection(classrefrence, "Subject");
     principalId = sid;
     //get all teacher documents that are in the school
@@ -87,7 +90,7 @@ var i=0;
     
   i++;
     var subject = subjectdoc.data().SubjectName;
-
+currentSubjects.push(subject);
     var tr = document.createElement('tr');
     tr.id = subjectdoc.ref.path;
     
@@ -261,6 +264,11 @@ if(deleted){
           alert("لإضافة مادة يجب أن يتم تعبأة حقل اسم المادة");
           $('.loader').hide();
         }
+        else if(currentSubjects.indexOf(subjectName) !== -1){
+          alert("تمت إضافة هذه المادة مسبقًا للفصل");
+          $('.loader').hide();
+          document.getElementById('sname').value="";
+        }
         else{
         const dbRef = collection(doc(db,"School",principalId,"Class",classId), "Subject");
 
@@ -372,7 +380,7 @@ if(deleted){
             var subjectName = $(this).find("td:eq(1)").text().trim();
             var selectObject = dropdowncell.find("select"); //grab the <select> tag assuming that there will be only single select box within that <td> 
             var teacherValue = selectObject.val(); // get the selected teacher id from current <tr>
-alert(teacherValue);
+
             var teacherRef ="";
 
             if(teacherValue != ""){

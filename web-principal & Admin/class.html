@@ -7,24 +7,24 @@
 
    checkUser();
      
-  
-      const logout= document.getElementById("signout");
-  
-      logout.addEventListener('click',  async (e) => {
-        e.preventDefault()
-        signOut(auth).then(() => {
-          alert("تم تسجيل الخروج بنجاح");
-          window.location.href="index.html";
-          }).catch((error) => {
-          console.log(error.message);
-          }); 
-  
-       }); 
+   const logout= document.getElementById("signout");
+
+   logout.addEventListener('click',  async (e) => {
+      e.preventDefault()
+      if(confirm("هل تُأكد تسجيل الخروج من الحساب؟")){
+      signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        window.location.href="index.html";
+        }).catch((error) => {
+        console.log(error.message);
+        }); 
+    }
+     }); 
   </script>
 <html lang="en">
 
 <head>
- 
+
     <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
    
@@ -60,11 +60,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
 
+
 </head>
 
 
 <body>
-
+  
     <!--start of nav -->
     <nav class="navbar navbar-expand-custom navbar-mainbg">
       <a class="navbar-brand navbar-logo" href="#"><img src="navbarlogo.png" alt="logo" height="66"></a>
@@ -110,7 +111,7 @@
   <main>
     <div class="center">
         <h1>إضافة فصل</h1>
-
+        <div class="loader topTitle" style="top: 20em;"></div>
         <form class="addClassForm">
 
 
@@ -169,7 +170,7 @@
   border-bottom: 5px solid #6ce5e8;
   padding: 10px;
   color: #000;
-  letter-spacing: 5px;
+
   margin-bottom: 40px;
   font-weight: bold;
   padding-left: 10px;
@@ -333,6 +334,33 @@
   background:linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
 	left: 70%;	
 	border-radius: 32px;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top:5em;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #6ce5e8;
+  border-right: 16px solid #6ce5e8;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  visibility: hidden;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
     </style>
 

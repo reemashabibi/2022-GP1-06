@@ -33,14 +33,20 @@ body {
 }
 .center h1 {
   font-size: 2em;
-  border-right: 5px solid rgb(2, 53, 105);
+
   padding: 10px;
   color: #000;
-  letter-spacing: 5px;
+
   margin-bottom: 60px;
   font-weight: bold;
   padding-left: 10px;
   text-align: right;
+}
+.sideLogo{
+  float:inline-end;
+  float: right;
+  margin-top: 15px;
+  margin-left: 1%;
 }
 .center h4 {
   font-size: 0.76em;
@@ -222,4 +228,31 @@ form i {
   margin-left: -40px;
   
   cursor: pointer;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top:5em;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #6ce5e8;
+  border-right: 16px solid #6ce5e8;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  visibility: hidden;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

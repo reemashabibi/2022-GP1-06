@@ -66,17 +66,17 @@
    
        const logout= document.getElementById("signout");
         
-        logout.addEventListener('click',  async (e) => {
-          
-          e.preventDefault()
-          signOut(auth).then(() => {
-            alert("تم تسجيل الخروج بنجاح");
-            window.location.href="index.html";
-            }).catch((error) => {
-            console.log(error.message);
-            }); 
-    
-         }) 
+       logout.addEventListener('click',  async (e) => {
+      e.preventDefault()
+      if(confirm("هل تُأكد تسجيل الخروج من الحساب؟")){
+      signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        window.location.href="index.html";
+        }).catch((error) => {
+        console.log(error.message);
+        }); 
+    }
+     }); 
       
       </script>
 
@@ -101,21 +101,9 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="adminHomePage.html">الصفحة الرئيسية</a>
+                    <a class="nav-link" href="principalHomePage.html">الصفحة الرئيسية</a>
                 </li>
              
-                <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0);"> إصطحاب الطلاب</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);"></i>الإعلانات</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);">الأحداث</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);">المستندات</a>
-                </li>
   
             </ul>
         </div>
@@ -148,7 +136,7 @@
         <span>كلمة السر</span>
       </div>
       
-      <div class="inputbox">
+      <div class="inputbox" style="margin-left: 15%;">
         <button type="text" id="subButton" class="btn"  >حفظ</button>
     </div>
     </form>

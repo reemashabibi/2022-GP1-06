@@ -123,9 +123,6 @@ export async function viewTachersAndClasses(aid){
   //view teachers
   const querySnapshot2 = await getDocs(qTeacher);
 
-  if (querySnapshot2.empty) {
-    alert("empty");
-  }
   querySnapshot2.forEach((doc2) => {
     // doc.data() is never undefined for query doc snapshots
 
@@ -209,7 +206,8 @@ export async function viewStudents(classId, schoolId){
   classes.push(CurrentClassid);
   classes.push(CurrenrclassName);
   classes.push(Currentlevel);
-
+ var titleName= document.createTextNode(CurrenrclassName+"-"+Currentlevel);
+  document.getElementById('className').appendChild(titleName);
   const querySnapshotc = await getDocs(qc);
   querySnapshotc.forEach((doc) => {
     if (doc.id == classId) return;
@@ -320,7 +318,7 @@ $(document).ready(function () {
         var studentID = $(this).closest('tr').attr('id');
         const docRef = doc(db,studentID);
         const studentData = await getDoc(docRef);
-        var parent = doc(db,"School",school, "Parent", studentData.data().parentID.id);
+        var parent = doc(db,"School",school, "Parent", studentData.data().ParentID.id);
         var parentData = await getDoc(parent);
         const oldClassRef = doc(db,"School", school,"Class", oldClass);
 
@@ -379,7 +377,7 @@ $(document).ready(function () {
     var teacherID = $(this).attr('id');
     const docRef = doc(db, teacherID);
     if(confirm("هل تأكد حذف المعلم وجميع البيانات المتعلقة به؟")){
-      var deleted =false;
+      var deleted =true;
       const d = await getDoc(docRef);
       if(d.data().Subjects.length >0){
         for(var s=0; s<d.data().Subjects.length; s++ ){
@@ -400,6 +398,7 @@ $(document).ready(function () {
         if(deleted){
           deleteDoc(docRef).then(() => {
             alert("تم حذف المعلم");
+            window.location.reload(true);
           })
             .catch(error => {
               deleted= false;

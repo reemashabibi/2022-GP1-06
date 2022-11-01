@@ -138,6 +138,8 @@ onAuthStateChanged(authPrin, (user) => {
                    })
                 // alert(" after ");
                  alert("تمت الإضافة بنجاح");
+                 addTeacherForm.reset();
+
                })
                .catch((error) => {
                  const errorCode = error.code;

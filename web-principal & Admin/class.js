@@ -93,6 +93,7 @@ classForm.addEventListener('submit', async (e) => {
    const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("Level", "==",parseInt(classForm.classes.value) ));
    const queryClassSnapshot = await getDocs(qClass);
     if(queryClassSnapshot.empty){
+      $('.loader').show();
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
         Level: parseInt(classForm.classes.value),
@@ -118,6 +119,7 @@ classForm.addEventListener('submit', async (e) => {
       })}
 
             });
+            $('.loader').hide();
 alert("تمت اضافة الفصل بنجاح");
         })
       }else{

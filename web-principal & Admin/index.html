@@ -8,7 +8,8 @@
     <link href="register.css" rel="stylesheet" >
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
 
-    
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
     
   
 </head>
@@ -16,8 +17,11 @@
 
 
     <div class="center">
-        <h1 class="">تسجيل الدخول</h1>
+      <a class="navbar-brand navbar-logo sideLogo" href="#"><img src="navbarlogo.png" alt="logo" height="66"></a>
+        <h1 class="">تسجيل الدخول </h1>
+        
         <form id="logIn">
+          <div class="loader topTitle"></div>
         <div class="inputbox">
             <input type="email" required="required"  id="emailInp">
             <span>البريد الإلكتروني</span>
@@ -88,6 +92,7 @@
 
 
            submit.addEventListener('click',  async (e) => {
+            $('.loader').show();
            e.preventDefault();
            if(!validate()){
             return false;
@@ -95,24 +100,32 @@
            }
            const auth = getAuth();
            
+           
            if (userType.value=="principal"){
               
               const q = query(collection(db, "School"), where("Email", "==", Email.value));
+             
               const querySnapshot = await getDocs(q);
-              alert("hi");
+             
               if(querySnapshot.empty){
                alert("لا يوجد مدير بهذه البيانات يرجى التحقق من البيانات المدخلة");
+               $('.loader').hide();
+
                logInform.reset();
+               return;
             }
            
             }
             
             if ((userType.value=="admin")){
+              $('.loader').show();
               const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', Email.value)));
 
               if(docSnap.empty){
+                $('.loader').hide();
                alert("لا يوجد إداري بهذه البيانات يرجى التحقق من البيانات المدخلة");
                logInform.reset();
+               return;
             }
             }
              
@@ -122,11 +135,13 @@
            .then((userCredential) => {
           // Signed in 
            const user = userCredential.user;
-           alert("userlogedin");
+         
            if(document.getElementById("userType").value=="principal"){
+            $('.loader').hide();
             window.location.href="principalHomePage.html";
            }
            else if(userType.value=="admin"){
+            $('.loader').hide();
             window.location.href="adminHomePage.html";
 
            }
@@ -134,9 +149,13 @@
            })
         .catch((error) =>{
           if(error.message=="Error (auth/wrong-password)"){
+            $('.loader').hide();
+
             alert("هناك خطأ في البريد الإلكتروني أو كلمة المرور ");
           }
           else{
+            $('.loader').hide();
+
             alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
           }
 

@@ -137,7 +137,7 @@ let authPrinID = "";
                alert("تمت الإضافة بنجاح");    
                sendPasswordResetEmail(authSec,registerEmail).then(() => {
                 // EmailSent
-                alert("sent");
+             
               })  
                 })
 
@@ -147,7 +147,7 @@ let authPrinID = "";
                   if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
                        alert("البريد الالكتروني مستخدم من قبل");}
                        else
-                  alert(errorMessage);
+                  alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
                   
                   addAdminForm.reset();
                 });

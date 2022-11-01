@@ -121,6 +121,7 @@ $(document).ready(function () {
     var adminID = $(this).attr('id');
     const docRef = doc(db, adminID);
     if(confirm("هل تأكد حذف الإداري وجميع البيانات المتعلقة به؟")){
+      $('.loader').show();
     deleteDoc(docRef).then(() => {
       alert("تم حذف الإداري");
       window.location.reload(true);

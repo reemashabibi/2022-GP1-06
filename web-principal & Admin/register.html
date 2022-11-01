@@ -15,6 +15,7 @@
 <body>
 
   <div class="center">
+    <a class="navbar-brand navbar-logo sideLogo" href="#"><img src="navbarlogo.png" alt="logo" height="66"></a>
     <h1>سجل مدرستك في حلقة</h1>
     <form id="signForm">
       <div class="inputbox">
@@ -146,9 +147,9 @@
           .then(async (userCredential) => {
             // Signed in 
             const user = userCredential.user;
-            alert(user.uid);
+            
             const schoolref = doc(db, "School", user.uid);
-            alert(schoolref);
+        
             await setDoc(doc(db, "School", user.uid), {
               schoolName: schoolName.value,
               Email: Email.value,

@@ -1,5 +1,3 @@
-
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import {
   getAuth, createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, updatePassword, sendPasswordResetEmail, fetchSignInMethodsForEmail
@@ -98,7 +96,7 @@ var filledCorrectly = false;
 
 
 addStudentForm.addEventListener('submit', async (e) => {
-  alert(schoolID)
+ 
   notValidated = false;
   var fname = document.getElementById("Fname");
   var letters = null ;
@@ -126,15 +124,16 @@ addStudentForm.addEventListener('submit', async (e) => {
 
 
 
-
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
   if ((!phoneNo.value.match(phoneno))) {
     alert('يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية');
     phoneNo.focus();
     notValidated = true;
+
   }
 
+ 
 
 
   var FnameParent = document.getElementById("FnameParent");
@@ -153,7 +152,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   }
 
   var emailP = document.getElementById("emailP");
-  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  var mailformat = /^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/;
   if (!emailP.value.match(mailformat)) {
     alert("الرجاء إدحال بريد إلكتروني صحيح");
     emailP.focus();
@@ -216,7 +215,7 @@ addStudentForm.addEventListener('submit', async (e) => {
             //schoolID?
           }).then(() => {
             docRef = doc(db, "School",schoolID,"Parent", res.id);
-            alert( selectedClass[selectedClass.selectedIndex].id)
+       
             docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
             addDoc(colRefStudent, {
               FirstName: addStudentForm.Fname.value,
@@ -224,7 +223,7 @@ addStudentForm.addEventListener('submit', async (e) => {
               ClassID: docRefClass,
               ParentID:docRef, 
             })
-            .then(doc => {
+            .then( doc => {
               var StuRef = doc(db, "School",schoolID,"Student", doc.id);
               updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
               .then(() => {
@@ -249,7 +248,7 @@ addStudentForm.addEventListener('submit', async (e) => {
           const errorCode = error.code;
           const errorMessage = error.message;
           // alert("البريد الالكتروني مستخدم من قبل");
-          alert(errorMessage);
+          console.log(errorMessage);
           addStudentForm.reset();
         });
       // addStudentForm.reset();
@@ -290,11 +289,11 @@ else{
           .catch(error => {
               console.log(error);
           })
-
+          alert("تمت إضافة الطالب بنجاح")
           addStudentForm.reset()
         });
     }
-    alert("تمت إضافة الطالب بنجاح")
+  
   
   }
 });
@@ -303,6 +302,27 @@ else{
 $(".phone").change(async function () {
 
   var phoneNumber = parseInt(addStudentForm.phone.value);
+
+  var phoneNo = document.getElementById("phone");
+  var phoneno = /^\d{10}$/;
+  if ((!phoneNo.value.match(phoneno))) {
+    alert('يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية');
+    phoneNo.focus();
+    notValidated = true;
+    document.getElementById("FnameParent").disabled = true;
+    document.getElementById("LnameParent").disabled = true;
+    document.getElementById("emailP").disabled = true;
+    $("#FnameParent").val("");
+    $("#LnameParent").val("");
+    $("#emailP").val("");
+    return;
+  }else{
+
+    document.getElementById("FnameParent").disabled = false;
+    document.getElementById("LnameParent").disabled = false;
+    document.getElementById("emailP").disabled = false;
+
+  }
 
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
@@ -315,22 +335,11 @@ $(".phone").change(async function () {
         $("#FnameParent").val(doc.data().FirstName);
         $("#LnameParent").val(doc.data().LastName);
         $("#emailP").val(doc.data().Email);
-        document.getElementById("FnameParent").disabled = true;
-        document.getElementById("LnameParent").disabled = true;
-        document.getElementById("emailP").disabled = true;
+       
 
       }
     })
-  } else {
-    alert("ولي الأمر غير مسجل، يرجى اكمال البيانات");
-    $("#FnameParent").val("");
-    $("#LnameParent").val("");
-    $("#emailP").val("");
-    document.getElementById("FnameParent").disabled = false;
-    document.getElementById("LnameParent").disabled = false;
-    document.getElementById("emailP").disabled = false;
   }
-
 
 
 });
