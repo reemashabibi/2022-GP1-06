@@ -51,7 +51,7 @@ const user= auth.currentUser;
         await getDoc(docRef)
         .then((doc)=>{
             console.log(doc.data(), doc.id);
-            document.getElementById("snameInp").value=doc.data().SchoolName;
+            document.getElementById("snameInp").value=doc.data().schoolName;
             FirstName.value=doc.data().PrincipalFirstName;
             LastName.value=doc.data().PrincipalLastName;
             Email.value=doc.data().Email;
@@ -66,7 +66,7 @@ const user= auth.currentUser;
       
       updateEmail(auth.currentUser, Email.value).then(() => {
             updateDoc(docRef,{
-        SchoolName:document.getElementById("snameInp").value,
+        schoolName:document.getElementById("snameInp").value,
         PrincipalFirstName: FirstName.value,
         PrincipalLastName:LastName.value,
         Email: Email.value,
