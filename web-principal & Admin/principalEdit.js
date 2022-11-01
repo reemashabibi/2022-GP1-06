@@ -50,34 +50,55 @@ const user= auth.currentUser;
         const docRef= doc(db,"School",uid);
         await getDoc(docRef)
         .then((doc)=>{
-          
-            document.getElementById("snameInp").value=doc.data().schoolName;
+            console.log(doc.data(), doc.id);
+            document.getElementById("snameInp").value=doc.data().SchoolName;
             FirstName.value=doc.data().PrincipalFirstName;
             LastName.value=doc.data().PrincipalLastName;
             Email.value=doc.data().Email;
             Password.value=auth.currentUser.Password;;
 
         });
+        
         }
         const save = document.getElementById("subButton");
         save.addEventListener('click', async (e) => {
+          
+          if(!validate()){
+            return false;
+          }
       e.preventDefault();
       const docRef= doc(db,"School",auth.currentUser.uid);
-      
-      updateEmail(auth.currentUser, Email.value).then(() => {
-            updateDoc(docRef,{
-        schoolName:document.getElementById("snameInp").value,
+      updateDoc(docRef,{
+        SchoolName:document.getElementById("snameInp").value,
         PrincipalFirstName: FirstName.value,
         PrincipalLastName:LastName.value,
         Email: Email.value,
-      })
+      }).then(() => {
+        if(Email.value!=auth.currentUser.email){
+         updateEmail(auth.currentUser, Email.value);
+        }   
 
-      if (Password.value!=""){
+      if (Password.value!="undefined"){
         updatePassword(auth.currentUser, Password.value);
       }
-  alert("تم حفظ التعديلات بنجاح");
+      alert("تم حفظ التعديلات بنجاح");
          });
       
     
     
-    })
+    });
+    function validate() {
+  
+      if(Email.value==""||Password.value==""){
+        alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+        return false;
+      }
+      else if (password.value.length < 6) {
+        alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+        return false;
+      }
+    
+      else {
+        return true;
+       }
+     }

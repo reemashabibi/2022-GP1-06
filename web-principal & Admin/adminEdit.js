@@ -49,6 +49,10 @@ export { query, orderBy, limit, where, onSnapshot };
     const save = document.getElementById("subButton");
     save.addEventListener('click', async (e) => {
      e.preventDefault();
+     
+     if(!validate()){
+      return;
+     }
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
   docRef.forEach( dooc => {
@@ -56,7 +60,7 @@ export { query, orderBy, limit, where, onSnapshot };
     var schoolid= dooc.ref.parent.parent.id;
 
     const reference=doc(db,"School",schoolid,"Admin",dooc.id);
-   
+    if(Email.value!=auth.currentUser.email){
    updateEmail(auth.currentUser, Email.value).then(async () => {
     await updateDoc(reference,{
     FirstName: FirstName.value,
@@ -64,20 +68,48 @@ export { query, orderBy, limit, where, onSnapshot };
     Email: Email.value,
   
   })
-  if (Password.value!=""){
+  if (Password.value!="undefined"){
     updatePassword(auth.currentUser, Password.value);
   }
+  alert("تم حفظ التعديلات بنجاح");
 
      }).catch(()=>{
       alert("حصل خطأ، الرجاء المحاولة لاحقًا");
     })
-
+  }
+  else{
+    if (Password.value!="undefined"){
+      updatePassword(auth.currentUser, Password.value);
+    }
+    updateDoc(reference,{
+      FirstName: FirstName.value,
+      LastName:LastName.value,
+      Email: Email.value,
+    
+    })
+    alert("تم حفظ التعديلات بنجاح");
+  }
     
 
   })
 
 
    });
+   function validate() {
+  
+    if(Email.value==""||Password.value==""){
+      alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+      return false;
+    }
+    else if (password.value.length < 6) {
+      alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+      return false;
+    }
+  
+    else {
+      return true;
+     }
+   }
     
 
     

@@ -142,7 +142,7 @@ body {
 .alink {
   text-decoration: none;
   color:cadetblue;
-  margin-left: 60%;
+  margin-left: 70%;
 }
 a:hover {
   border-bottom: 1px solid;
@@ -256,3 +256,4 @@ form i {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+

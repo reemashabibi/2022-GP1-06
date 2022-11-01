@@ -3,12 +3,13 @@
 import { callAdmins } from './principal.js';
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
- const user= auth.currentUser
+ const user= auth.currentUser;
     onAuthStateChanged(auth, (user)=>{
         if(user){
             const uid=user.uid;
             document.getElementsByTagName('body').onload = callAdmins(uid);
             console.log("the same user");
+            console.log(auth.currentUser);
         }
         else{
             window.location.href="index.html";
