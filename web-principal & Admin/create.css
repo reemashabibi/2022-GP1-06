@@ -191,10 +191,10 @@
 }
 
 .screen__background__shape4 {
-	height: 900px;
-	width: 250px;
+	height: 320px;
+	width: 200px;
   background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
-	top: 700px;
+	top: 500px;
 	left: 70px;	
   z-index: -1;
 	border-radius: 60px 72px;
@@ -227,4 +227,31 @@
   background:linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
 	left: 75%;	
 	border-radius: 32px;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top:25vmax;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #6ce5e8;
+  border-right: 16px solid #6ce5e8;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }

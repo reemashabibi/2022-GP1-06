@@ -316,6 +316,7 @@ $(document).ready(function () {
    var deleted = true;
     if(confirm("هل تأكد حذف الطالب/الطلاب وجميع البيانات المتعلقة به/بهم؟")){
       $(':checkbox:checked').each(async function(){
+        $(".loader").show();
 
         var studentID = $(this).closest('tr').attr('id');
         const docRef = doc(db,studentID);
@@ -334,6 +335,7 @@ $(document).ready(function () {
         
        }).catch(error => {
            console.log(error);
+           $(".loader").hide();
            alert("حصل خطأ، الرجاء المحاولة لاحقًا");
            deleted = false;
            return;
@@ -348,6 +350,7 @@ $(document).ready(function () {
       .catch(error => {
         console.log(error);
         deleted = false;
+        $(".loader").hide();
         alert("حصل خطأ، الرجاء المحاولة لاحقًا");
         return;
       });
@@ -360,6 +363,7 @@ $(document).ready(function () {
         .catch(error => {
           console.log(error);
           deleted = false;
+          $(".loader").hide();
           alert("حصل خطأ، الرجاء المحاولة لاحقًا");
           return;
         })
@@ -368,6 +372,8 @@ $(document).ready(function () {
    })
 
  if(deleted){
+  $(".loader").hide();
+
   alert("تم حذف الطالب/الطلاب");
  }else{
   
@@ -379,6 +385,7 @@ $(document).ready(function () {
     var teacherID = $(this).attr('id');
     const docRef = doc(db, teacherID);
     if(confirm("هل تأكد حذف المعلم وجميع البيانات المتعلقة به؟")){
+      $(".loader").show();
       var deleted =true;
       const d = await getDoc(docRef);
       if(d.data().Subjects.length >0){
@@ -399,6 +406,7 @@ $(document).ready(function () {
       
         if(deleted){
           deleteDoc(docRef).then(() => {
+            $(".loader").hide();
             alert("تم حذف المعلم");
             window.location.reload(true);
           })
@@ -409,6 +417,7 @@ $(document).ready(function () {
           
         }
         else{
+          $(".loader").hide();
           alert("حصل خطأ، الرجاء المحاولة لاحقًا.");
         }
     }
@@ -425,12 +434,15 @@ $(document).ready(function () {
     const docRef = doc(db, classID);
     var classDoc = await getDoc(docRef);
     if(classDoc.data().Students.length == 0){
-      if(confirm(" هل أنت متأكد من حذف الفصل")){
+      if(confirm(" هل أنت تأكد حذف الفصل")){
+        $(".loader").show();
       deleteDoc(docRef).then(() =>{
+        $(".loader").hide();
         alert("تم حذف الفصل");
         window.location.reload(true);
       })
       .catch(error => {
+        $(".loader").hide();
         console.log(error);
       })
       }
@@ -453,7 +465,8 @@ $(document).ready(function () {
     const refrence =  doc(db,"School", school,"Class", classId);
     const oldClassRef = doc(db,"School", school,"Class", oldClass);
     if (confirm("هل تُأكد نقل الطالب إلى فصلٍ آخر؟")) {
-      
+      $(".loader").show();
+
       const data = {
         ClassID: refrence
       };
@@ -467,6 +480,7 @@ $(document).ready(function () {
         updateDoc(oldClassRef, {
           Students: arrayRemove(studentID)
       });
+      $(".loader").hide();
           $(this).closest('tr').remove();
         })
         .catch(error => {

@@ -54,7 +54,7 @@ export async  function fillData(email){
         new_op.setAttribute("value", doc.data().ClassName);
         document.getElementById("classes").appendChild(new_op);
       })
-      //console.log(levels)
+      $(".loader").hide();
     });
   
   });
@@ -172,6 +172,7 @@ addStudentForm.addEventListener('submit', async (e) => {
   if (!notValidated) {
 
     ////////////////////////
+    $(".loader").show();
 
 
 
@@ -179,7 +180,7 @@ addStudentForm.addEventListener('submit', async (e) => {
     const phoneNumber = parseInt(addStudentForm.phone.value);
     const q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
     const querySnapshot = await getDocs(q);
-    var parentId = "null";
+    var ParentId = "null";
     var docRef = "null";
     var docRefClass = "null";
     const colRefStudent = collection(db, "School",schoolID,"Student");
@@ -234,11 +235,13 @@ addStudentForm.addEventListener('submit', async (e) => {
               .catch(error => {
                   console.log(error);
               })
+              $(".loader").hide();
               alert("تمت الإضافة بنجاح")
               addStudentForm.reset();
           });
          // alert("تم");
         }).catch((error) => {
+          $(".loader").hide();
           const errorCode = error.code;
           const errorMessage = error.message;
           // alert("البريد الالكتروني مستخدم من قبل");
@@ -252,10 +255,10 @@ else{
   
       querySnapshot.forEach(async (d) => {
         if (!d.empty){
-          parentId = d.id;
+          ParentId = d.id;
           //no parent for the same child
-          var ref = doc(db, "School",schoolID,"Parent",parentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));
+          var ref = doc(db, "School",schoolID,"Parent",ParentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
@@ -263,7 +266,7 @@ else{
               if(FName != addStudentForm.Fname.value ){
 
               
-                docRef = doc(db, "School",schoolID,"Parent", parentId);
+                docRef = doc(db, "School",schoolID,"Parent", ParentId);
                 docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
                 addDoc(colRefStudent, {
                   FirstName: addStudentForm.Fname.value,
@@ -288,6 +291,7 @@ else{
                     .catch(error => {
                         console.log(error);
                     })
+                    $(".loader").hide();
                     alert("تمت إضافة الطالب بنجاح")
                     addStudentForm.reset()
                   });
@@ -298,6 +302,7 @@ else{
               }//if(FName != addStudentForm.Fname.value )
               else{
                 alert("الطالب مسجل بالنظام")
+                $(".loader").hide();
                 addStudentForm.Fname.focus();
                 //return;
 
@@ -316,6 +321,7 @@ else{
 
 
 $(".phone").change(async function () {
+  alert("chang")
 
   var phoneNumber = parseInt(addStudentForm.phone.value);
 
@@ -339,20 +345,20 @@ $(".phone").change(async function () {
     document.getElementById("emailP").disabled = false;
 
   }
+  $(".loader").show();
 
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
-  var parentId = "null";
+  var ParentId = "null";
 
 
   if (!querySnapshot.empty) {
     querySnapshot.forEach(async (d) => {
       if (!d.empty) {
-        parentId = d.id;
-
+        ParentId = d.id;
         //no parent for the same child
-        var ref = doc(db, "School",schoolID,"Parent",parentId);
-        var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));
+        var ref = doc(db, "School",schoolID,"Parent",ParentId);
+        var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
         var snapshot = await getDocs(Query);
  
      
@@ -364,7 +370,10 @@ $(".phone").change(async function () {
         $("#FnameParent").val(d.data().FirstName);
         $("#LnameParent").val(d.data().LastName);
         $("#emailP").val(d.data().Email);
+        $(".loader").hide();
             } else{
+              $(".loader").hide();
+
               alert("الطالب مسجل بالنظام")
               addStudentForm.phone.value = "";
               addStudentForm.Fname.value = "";

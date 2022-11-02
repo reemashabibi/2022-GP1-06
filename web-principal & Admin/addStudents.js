@@ -27,7 +27,7 @@ const analytics = getAnalytics(app);
 
 
 var schoolID;
-$('.loader').show();
+
 function school(id){
   schoolID = id;
   $('.loader').hide();
@@ -61,6 +61,8 @@ export { query, orderBy, limit, where, onSnapshot };
     let validate6 = false;
     let validate7 = false;
     let validate8 = false;
+    var studentAdded   = [];
+    var parentNumAdded   = [];
 
 
 //randomly generated pass
@@ -252,8 +254,10 @@ excel_file.addEventListener('change', (event) => {
    
     //Adding
     if(validate1 && validate2 && validate3 && validate4 && validate5 && validate6 && validate7 && validate8){
-
+      studentAdded   = [];
+      parentNumAdded   = [];
     if (sheet_data.length > 0) {
+     
 
       for (var row = 1; row < sheet_data[row].length; await row++) {
         for (var cell = 0; cell < 8; cell++) {
@@ -294,7 +298,7 @@ excel_file.addEventListener('change', (event) => {
         const querySnapshot = await getDocs(q);
         const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
         const queryClassSnapshot = await getDocs(qClass);
-        var parentId = "null";
+        var ParentId = "null";
         var classId = "null";
         var docRef = "null";
         var docRefClass = "null";
@@ -310,15 +314,15 @@ excel_file.addEventListener('change', (event) => {
         if (!querySnapshot.empty) {
           querySnapshot.forEach(async (d) => {
             if (!d.empty)
-              parentId = d.id;
+              ParentId = d.id;
               
 
           })
         }
 
             //no parent for the same child
-          var ref = doc(db, "School",schoolID,"Parent",parentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));        
+          var ref = doc(db, "School",schoolID,"Parent",ParentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));        
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
@@ -329,16 +333,14 @@ excel_file.addEventListener('change', (event) => {
             })//    snapshot.forEach(async (docu)
           }// if (!snapshot.empty)
           if(snapshot.empty){
-            let data = await getDoc(ref);
-            if(data.exists()){
-            var student = data.data().Students[0];
-            const docSnap = await getDoc(student);
-            if( docSnap.data().FirstName == registerFname )
-            studentParentExist = true;
+            if(studentAdded.length > 0){
+              for( i  = 0 ; i < studentAdded.length ; i++ ){
+                if(studentAdded[i] == registerFname && parentNumAdded[i] == registerParentPhone)
+                studentParentExist = true;
+              }
             }
           }
-
-          if(studentParentExist){    
+     if(studentParentExist){    
           var x = table.rows[row].insertCell(8);
            x.innerHTML = " لم تتم الإضافة، الطالب مسجل بالنظام مسبقاً";
                    }//end if studentParentExist
@@ -347,7 +349,7 @@ excel_file.addEventListener('change', (event) => {
         
         if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
           const colRefStudent = collection(db, "School", schoolID, "Student");
-          docRef = doc(db, "School", schoolID, "Parent", parentId);
+          docRef = doc(db, "School", schoolID, "Parent", ParentId);
           docRefClass = doc(db, "School", schoolID, "Class", classId);
           addDoc(colRefStudent, {
             FirstName: registerFname,
@@ -421,7 +423,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
       Phonenumber: registerParentPhone,
       Students: [],})
       .then(() => {
-
+        parentNumAdded.push(registerParentPhone);
       queryClassSnapshot.forEach((doc) => {
         if (!doc.empty)
           classId = doc.id;
@@ -433,8 +435,9 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
         FirstName: registerFname,
         LastName: registerlname,
         ClassID: docRefClass,
-        parentID: res,
+        ParentID: res,
       }).then(d => {
+        studentAdded.push(registerFname);
 
 
 

@@ -233,7 +233,7 @@ form i {
 .loader {
   position: absolute;
   left: 50%;
-  top:5em;
+  top:17vmax;
   z-index: 1;
   width: 120px;
   height: 120px;
@@ -244,7 +244,7 @@ form i {
   border-right: 16px solid #6ce5e8;
   -webkit-animation: spin 2s linear infinite;
   animation: spin 2s linear infinite;
-  visibility: hidden;
+
 }
 
 @-webkit-keyframes spin {
