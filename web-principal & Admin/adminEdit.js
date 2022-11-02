@@ -77,33 +77,26 @@ export { query, orderBy, limit, where, onSnapshot };
     LastName:LastName.value,
     Email: Email.value,
   
-  })
+  }).then(() => {
+    if(Email.value!=auth.currentUser.email){
+     updateEmail(auth.currentUser, Email.value);
+    }   
+    
   if (Password.value!="undefined"){
     updatePassword(auth.currentUser, Password.value);
   }
   alert("تم حفظ التعديلات بنجاح");
-
+  document.getElementById("myForm").style.display = "none";
      }).catch(()=>{
-      alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+      alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
+      document.getElementById("myForm").style.display = "none";
     })
-  }
-  else{
-    if (Password.value!="undefined"){
-      updatePassword(auth.currentUser, Password.value);
-    }
-    updateDoc(reference,{
-      FirstName: FirstName.value,
-      LastName:LastName.value,
-      Email: Email.value,
-    
-    })
-    alert("تم حفظ التعديلات بنجاح");
-  }
-    
-
+  })
+  
    })
 
   });
+});
    function validate() {
   
     if(Email.value==""||Password.value==""){

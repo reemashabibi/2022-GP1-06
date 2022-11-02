@@ -65,57 +65,59 @@ const user= auth.currentUser;
         const change =document.getElementById("change");
 
         save.addEventListener('click', async (e) => {
-          $(".loader").show();
-
           e.preventDefault();
-
-          reauthenticateWithCredential(auth.currentUser, credential).then(() => {
-  // User re-authenticated.
-       }).catch((error) => {
-  // An error ocurred
-  // ...
-          });
-
+          $(".loader").show();
           if(!validate()){
             return false;
           }
-          
-           //check if school exitsts
-  
-      const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
-      const snapshot = await getDocs(q);
-      var SchoolExist = false;
-      if(!snapshot.empty){
-        snapshot.forEach((doc) => {
-          if(doc.data().Email != auth.currentUser.email){
-            alert("المدرسة مسجلة مسبقاً")
-            SchoolExist = true ;
-            return;
-          }
-         //   exist = true;
-        });
-        if(SchoolExist){
-          return;
-        }
-     
-      }
 
-      const docRef= doc(db,"School",auth.currentUser.uid);
-      updateDoc(docRef,{
-        schoolName:document.getElementById("snameInp").value,
-        PrincipalFirstName: FirstName.value,
-        PrincipalLastName:LastName.value,
-        Email: Email.value,
-      }).then(() => {
-        if(Email.value!=auth.currentUser.email){
-         updateEmail(auth.currentUser, Email.value);
-        }   
-        
-      if (Password.value!="undefined"){
-        updatePassword(auth.currentUser, Password.value);
-      }
-      alert("تم حفظ التعديلات بنجاح");
-         });
+          reauthenticateWithCredential(auth.currentUser, credential).then(async () => {
+            const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
+            const snapshot = await getDocs(q);
+            var SchoolExist = false;
+            if(!snapshot.empty){
+              snapshot.forEach((doc) => {
+                if(doc.data().Email != auth.currentUser.email){
+                  alert("المدرسة مسجلة مسبقاً")
+                  SchoolExist = true ;
+                  return;
+                }
+               //   exist = true;
+              });
+              if(SchoolExist){
+                return;
+              }
+           
+            }
+      
+            const docRef= doc(db,"School",auth.currentUser.uid);
+            updateDoc(docRef,{
+              schoolName:document.getElementById("snameInp").value,
+              PrincipalFirstName: FirstName.value,
+              PrincipalLastName:LastName.value,
+              Email: Email.value,
+            }).then(() => {
+              if(Email.value!=auth.currentUser.email){
+               updateEmail(auth.currentUser, Email.value);
+              }   
+              
+            if (Password.value!="undefined"){
+              updatePassword(auth.currentUser, Password.value);
+            }
+            alert("تم حفظ التعديلات بنجاح");
+            document.getElementById("myForm").style.display = "none";
+               });
+  
+       }).catch((error) => {
+        alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
+        document.getElementById("myForm").style.display = "none";
+          });
+
+          
+          
+           
+  
+     
       
     
     
