@@ -191,10 +191,10 @@
 }
 
 .screen__background__shape4 {
-	height: 900px;
-	width: 250px;
+	height: 320px;
+	width: 200px;
   background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
-	top: 700px;
+	top: 500px;
 	left: 70px;	
   z-index: -1;
 	border-radius: 60px 72px;
