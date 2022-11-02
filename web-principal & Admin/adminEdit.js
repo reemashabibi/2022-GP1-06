@@ -4,7 +4,7 @@ import { collection, getDocs, addDoc, Timestamp, setDoc , getDoc, updateDoc , do
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 //import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
-import { getAuth, onAuthStateChanged , updateEmail, updatePassword} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged , updateEmail, updatePassword, EmailAuthProvider ,reauthenticateWithCredential} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 const firebaseConfig = {
   apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
   authDomain: "halaqa-89b43.firebaseapp.com",
@@ -47,61 +47,70 @@ export { query, orderBy, limit, where, onSnapshot };
     }
 
     const save = document.getElementById("subButton");
+    const change =document.getElementById("change");
     save.addEventListener('click', async (e) => {
      e.preventDefault();
-     
+     change.addEventListener('click', async (e) => {
+      e.preventDefault();
      if(!validate()){
       return;
      }
+     const oldPass= document.getElementById("authPass").value;
+     
+     const credential = await EmailAuthProvider.credential(auth.currentUser.email, oldPass);
+          
+
+    await reauthenticateWithCredential(auth.currentUser, credential).then(async (e) => {
+           
   const docRef= await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
 
-  docRef.forEach( dooc => {
+  docRef.forEach(async dooc => {
 
     var schoolid= dooc.ref.parent.parent.id;
 
     const reference=doc(db,"School",schoolid,"Admin",dooc.id);
-    if(Email.value!=auth.currentUser.email){
-   updateEmail(auth.currentUser, Email.value).then(async () => {
+    
+   
     await updateDoc(reference,{
     FirstName: FirstName.value,
     LastName:LastName.value,
     Email: Email.value,
-  
-  })
-  if (Password.value!="undefined"){
-    updatePassword(auth.currentUser, Password.value);
-  }
-  alert("تم حفظ التعديلات بنجاح");
-
-     }).catch(()=>{
-      alert("حصل خطأ، الرجاء المحاولة لاحقًا");
-    })
-  }
-  else{
+    }).then(() => {
+      if(Email.value!=auth.currentUser.email){
+       updateEmail(auth.currentUser, Email.value);
+      }   
+      
     if (Password.value!="undefined"){
       updatePassword(auth.currentUser, Password.value);
     }
-    updateDoc(reference,{
-      FirstName: FirstName.value,
-      LastName:LastName.value,
-      Email: Email.value,
-    
-    })
     alert("تم حفظ التعديلات بنجاح");
-  }
-    
-
-  })
-
+    document.getElementById("myForm").style.display = "none";
+       }).catch((error) => {
+ alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
+ document.getElementById("myForm").style.display = "none";
 
    });
+}).catch((error) => {
+  alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
+  document.getElementById("myForm").style.display = "none";
+
+    });
+     }).catch((error) => {
+      alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
+      document.getElementById("myForm").style.display = "none";
+     
+        });
+
+   })
+
+  });
    function validate() {
   
     if(Email.value==""||Password.value==""){
       alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
       return false;
     }
-    else if (password.value.length < 6) {
+    else if (Password.value.length < 6) {
       alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
       return false;
     }

@@ -206,16 +206,15 @@
         }
         </style>
     <div class="form-popup" id="myForm">
-        <form action="/action_page.php" class="form-container">
+        <form  class="form-container">
           <h1>تسجيل الدخول</h1>
       
-          <label for="email"><b>البريد الإلكتروني</b></label>
-          <input type="text" placeholder="ادخل البريد الإلكتروني " name="email" required>
+          <h6>لحفظ المعلومات يرجى إدخال كلمة المرور قبل التعديل إن وجد  </h6>
       
           <label for="psw"><b>كلمة المرور</b></label>
-          <input type="password" placeholder="ادخل كلمة المرور"  name="psw" required>
+          <input type="password" name="psw" id="authPass"required>
       
-          <button type="submit" class="btn">تسجيل</button>
+          <button type="text" id="change" class="btn">تسجيل</button>
           <button type="button" class="btn cancel" onclick="closeForm()">إغلاق</button>
         </form>
       </div>
