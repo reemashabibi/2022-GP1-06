@@ -31,7 +31,6 @@ export { query, orderBy, limit, where, onSnapshot };
         const Password=document.getElementById("passInp");
 
         const db = getFirestore(app);
-
         
        export async function fillData(uid){
             const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
@@ -44,12 +43,14 @@ export { query, orderBy, limit, where, onSnapshot };
               Password.value=auth.currentUser.Password;
           
             })
+            $(".loader").hide();
     }
 
     const save = document.getElementById("subButton");
     save.addEventListener('click', async (e) => {
      e.preventDefault();
-     
+     $(".loader").show();
+
      if(!validate()){
       return;
      }
@@ -71,9 +72,11 @@ export { query, orderBy, limit, where, onSnapshot };
   if (Password.value!="undefined"){
     updatePassword(auth.currentUser, Password.value);
   }
+  $(".loader").hide();
   alert("تم حفظ التعديلات بنجاح");
 
      }).catch(()=>{
+      $(".loader").hide();
       alert("حصل خطأ، الرجاء المحاولة لاحقًا");
     })
   }
@@ -87,6 +90,7 @@ export { query, orderBy, limit, where, onSnapshot };
       Email: Email.value,
     
     })
+    $(".loader").hide();
     alert("تم حفظ التعديلات بنجاح");
   }
     
