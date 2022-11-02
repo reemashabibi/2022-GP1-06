@@ -330,10 +330,12 @@ excel_file.addEventListener('change', (event) => {
           }// if (!snapshot.empty)
           if(snapshot.empty){
             let data = await getDoc(ref);
+            if(data.exists()){
             var student = data.data().Students[0];
             const docSnap = await getDoc(student);
             if( docSnap.data().FirstName == registerFname )
             studentParentExist = true;
+            }
           }
 
           if(studentParentExist){    
@@ -343,7 +345,6 @@ excel_file.addEventListener('change', (event) => {
 
 
         
-      
         if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
           const colRefStudent = collection(db, "School", schoolID, "Student");
           docRef = doc(db, "School", schoolID, "Parent", parentId);
@@ -370,7 +371,6 @@ excel_file.addEventListener('change', (event) => {
           x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
 
         }//if parent and class exist/
-
         else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
@@ -404,7 +404,6 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
 
   registerPass = pass();
   createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass).then((userCredential) => {
-
 
       // Signed in 
       user = userCredential.user;
@@ -466,7 +465,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
       const errorCode = error.code;
       const errorMessage = error.message;
       var x = table.rows[row].insertCell(8);
-    x.innerHTML = "لم تتم الاضافة";
+    x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
     });
      
 
