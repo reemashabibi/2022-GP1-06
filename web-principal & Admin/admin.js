@@ -49,9 +49,12 @@ const user= auth.currentUser
 export async function viewTachersAndClasses(aid){
   const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', aid)));
   var sid = "";
+
   docSnap.forEach((doc) => {
+
    sid = doc.ref.parent.parent.id;
   });
+
   const refrence = doc(db, "School", sid);
   const q = collection(refrence, "Class");
   

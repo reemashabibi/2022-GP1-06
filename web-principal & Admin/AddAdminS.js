@@ -183,7 +183,7 @@ excel_file.addEventListener('change', (event) => {
 
        //***********/  
       if(validate1 && validate2 && validate3){
-        alert("true");
+        
       const table = document.getElementById("table");
       var x = table.rows[0].insertCell(3);
       x.innerHTML = "حالة الإضافة";
@@ -260,7 +260,11 @@ excel_file.addEventListener('change', (event) => {
         const errorMessage = error.message;
         if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
             var x = table.rows[row].insertCell(3);
-            x.innerHTML = "لم تتم الاضافة";
+            x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
+        }
+        else{
+          var x = table.rows[row].insertCell(3);
+          x.innerHTML = "لم تتم الاضافة";
         }
       });
        //alert("out func");

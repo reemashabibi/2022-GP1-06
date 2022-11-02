@@ -129,7 +129,7 @@ let authPrinID = "";
      
                 setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
                // setDoc(doc(db, 'School/'+"kfGIwTyclpNernBQqSpQhkclzhh1"+'/Admin', user.uid), {
-                  Email: registerEmail,
+                  Email: registerEmail.toLowerCase(),
                   FirstName: registerFname,
                   LastName: registerlname,               
                 })

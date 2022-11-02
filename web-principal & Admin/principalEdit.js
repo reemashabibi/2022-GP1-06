@@ -51,25 +51,47 @@ const user= auth.currentUser;
         await getDoc(docRef)
         .then((doc)=>{
             console.log(doc.data(), doc.id);
-            document.getElementById("snameInp").value=doc.data().SchoolName;
+            //document.getElementById("snameInp").value=doc.data().schoolName;
+            schoolName.value = doc.data().schoolName;
             FirstName.value=doc.data().PrincipalFirstName;
             LastName.value=doc.data().PrincipalLastName;
             Email.value=doc.data().Email;
-            Password.value=auth.currentUser.Password;;
+            Password.value=auth.currentUser.Password;
 
         });
         
         }
         const save = document.getElementById("subButton");
         save.addEventListener('click', async (e) => {
-          
+          e.preventDefault();
+
           if(!validate()){
             return false;
           }
-      e.preventDefault();
+          
+           //check if school exitsts
+  
+      const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
+      const snapshot = await getDocs(q);
+      var SchoolExist = false;
+      if(!snapshot.empty){
+        snapshot.forEach((doc) => {
+          if(doc.data().Email != auth.currentUser.email){
+            alert("المدرسة مسجلة مسبقاً")
+            SchoolExist = true ;
+            return;
+          }
+         //   exist = true;
+        });
+        if(SchoolExist){
+          return;
+        }
+     
+      }
+
       const docRef= doc(db,"School",auth.currentUser.uid);
       updateDoc(docRef,{
-        SchoolName:document.getElementById("snameInp").value,
+        schoolName:document.getElementById("snameInp").value,
         PrincipalFirstName: FirstName.value,
         PrincipalLastName:LastName.value,
         Email: Email.value,
@@ -77,7 +99,7 @@ const user= auth.currentUser;
         if(Email.value!=auth.currentUser.email){
          updateEmail(auth.currentUser, Email.value);
         }   
-
+        
       if (Password.value!="undefined"){
         updatePassword(auth.currentUser, Password.value);
       }
@@ -93,7 +115,7 @@ const user= auth.currentUser;
         alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
         return false;
       }
-      else if (password.value.length < 6) {
+      else if (Password.value.length < 6) {
         alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
         return false;
       }

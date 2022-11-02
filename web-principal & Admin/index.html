@@ -93,13 +93,16 @@
            const analytics = getAnalytics(app);
 
            const userType=document.getElementById("userType");
-           const Email=document.getElementById("emailInp");
+           var Email=document.getElementById("emailInp");
            const Password=document.getElementById("passInp");
            const submit=document.getElementById("subButton");
            const logInform=document.getElementById("logIn");
+          
 
+         
 
            submit.addEventListener('click',  async (e) => {
+            Email = Email.value.toLowerCase();
             $('.loader').show();
            e.preventDefault();
            if(!validate()){
@@ -111,7 +114,7 @@
            
            if (userType.value=="principal"){
               
-              const q = query(collection(db, "School"), where("Email", "==", Email.value));
+              const q = query(collection(db, "School"), where("Email", "==", Email));
              
               const querySnapshot = await getDocs(q);
              
@@ -127,7 +130,8 @@
             
             if ((userType.value=="admin")){
               $('.loader').show();
-              const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', Email.value)));
+              const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', Email)));
+             
 
               if(docSnap.empty){
                 $('.loader').hide();
@@ -139,7 +143,7 @@
              
 
 
-           signInWithEmailAndPassword(auth,Email.value,Password.value)
+           signInWithEmailAndPassword(auth,Email,Password.value)
            .then((userCredential) => {
           // Signed in 
            const user = userCredential.user;

@@ -299,6 +299,7 @@ else{
               else{
                 alert("الطالب مسجل بالنظام")
                 addStudentForm.Fname.focus();
+                return;
 
               }
             })//snapshot.forEach(async (doc)

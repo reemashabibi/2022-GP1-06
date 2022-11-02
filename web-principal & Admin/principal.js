@@ -93,7 +93,7 @@ export async function callAdmins(sid){
     div4.className= "job-content";
     div2.appendChild(div4);
     const h5 = document.createElement('h5');
-    h5.className="text-center text-md-left";
+    h5.className="text-center text-md-right";
     h5.appendChild( document.createTextNode(firstName+" "+lastName));
     div4.appendChild(h5);
    

@@ -119,7 +119,7 @@
     
     const FirstName = document.getElementById("fnameInp");
     const LastName = document.getElementById("lnameInp");
-    const Email = document.getElementById("emailInp");
+    var Email = document.getElementById("emailInp");
     const Password = document.getElementById("passInp");
     const submit = document.getElementById("subButton");
     const signForm = document.getElementById('signForm');
@@ -127,14 +127,15 @@
 
 
 
-
     submit.addEventListener('click', async (e) => {
+      Email = Email.value.toLowerCase();
+
       e.preventDefault()
       if (!validate()) {
         return false;
       }
       //check if school exitsts
-      const q = query(collection(db, "School"), where("Name", "==", schoolName.value));
+      const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
       const querySnapshot = await getDocs(q);
       var exist = false;
       querySnapshot.forEach((doc) => {
@@ -148,7 +149,7 @@
 
 
         const auth = getAuth();
-        createUserWithEmailAndPassword(auth, Email.value, Password.value)
+        createUserWithEmailAndPassword(auth, Email, Password.value)
           .then(async (userCredential) => {
             // Signed in 
             const user = userCredential.user;
@@ -157,7 +158,7 @@
         
             await setDoc(doc(db, "School", user.uid), {
               schoolName: schoolName.value,
-              Email: Email.value,
+              Email: Email,
               PrincipalFirstName:FirstName.value,
               PrincipalLastName: LastName.value,
             }).catch((error) => {
@@ -179,7 +180,10 @@
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorMessage);
-            alert("حدث خطأ حاول مره أخرى");
+            if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
+           alert("البريد الالكتروني مستخدم من قبل")}
+           else
+           alert("حدث خطأ حاول مره أخرى");
             signForm.reset();
           });
 
