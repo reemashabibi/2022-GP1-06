@@ -318,7 +318,7 @@ excel_file.addEventListener('change', (event) => {
 
             //no parent for the same child
           var ref = doc(db, "School",schoolID,"Parent",parentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));        
+          var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));        
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {

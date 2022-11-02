@@ -255,7 +255,7 @@ else{
           parentId = d.id;
           //no parent for the same child
           var ref = doc(db, "School",schoolID,"Parent",parentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
+          var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
@@ -299,7 +299,7 @@ else{
               else{
                 alert("الطالب مسجل بالنظام")
                 addStudentForm.Fname.focus();
-                return;
+                //return;
 
               }
             })//snapshot.forEach(async (doc)
@@ -340,7 +340,6 @@ $(".phone").change(async function () {
 
   }
 
-
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
   var parentId = "null";
@@ -353,11 +352,10 @@ $(".phone").change(async function () {
 
         //no parent for the same child
         var ref = doc(db, "School",schoolID,"Parent",parentId);
-        
-        var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
+        var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));
         var snapshot = await getDocs(Query);
  
-      
+     
         if (!snapshot.empty) {
           snapshot.forEach(async (doc) => {
           var FName = doc.data().FirstName;
@@ -368,6 +366,8 @@ $(".phone").change(async function () {
         $("#emailP").val(d.data().Email);
             } else{
               alert("الطالب مسجل بالنظام")
+              addStudentForm.phone.value = "";
+              addStudentForm.Fname.value = "";
               addStudentForm.Fname.focus();
             }//else  if(FName != addStudentForm.Fname.value )
           })//forEach
