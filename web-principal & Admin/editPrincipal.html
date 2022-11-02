@@ -137,7 +137,7 @@
       </div>
       
       <div class="inputbox" style="margin-left: 15%;">
-        <button type="text" id="subButton" class="btn"  >حفظ</button>
+        <button type="text" id="subButton" class="btn" onclick="openForm();" >حفظ</button>
     </div>
     </form>
     <br>
@@ -152,7 +152,7 @@
 
         /* The popup form - hidden by default */
         .form-popup {
-        /*  display: none;*/
+          display: none;
           position: fixed;
           bottom: 0;
           right: 15px;
@@ -184,7 +184,7 @@
         
         /* Set a style for the submit/login button */
         .form-container .btn {
-          background-color: #04AA6D;
+          background-color:rgb(55, 151, 203);
           color: white;
           padding: 16px 20px;
           border: none;
@@ -196,7 +196,7 @@
         
         /* Add a red background color to the cancel button */
         .form-container .cancel {
-          background-color: red;
+          background-color:rgb(228, 68, 68);
         }
         
         /* Add some hover effects to buttons */
@@ -206,16 +206,16 @@
         </style>
     <div class="form-popup" id="myForm">
         <form action="/action_page.php" class="form-container">
-          <h1>Login</h1>
+          <h1>تسجيل الدخول</h1>
       
-          <label for="email"><b>Email</b></label>
-          <input type="text" placeholder="Enter Email" name="email" required>
+          <label for="email"><b>البريد الإلكتروني</b></label>
+          <input type="text" placeholder="ادخل البريد الإلكتروني " name="email" required>
       
-          <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="psw" required>
+          <label for="psw"><b>كلمة المرور</b></label>
+          <input type="password" placeholder="ادخل كلمة المرور"  name="psw" required>
       
-          <button type="submit" class="btn">Login</button>
-          <button type="button" class="btn cancel" onclick="closeForm()">Close</button>
+          <button type="submit" class="btn">تسجيل</button>
+          <button type="button" class="btn cancel" onclick="closeForm()">إغلاق</button>
         </form>
       </div>
       
