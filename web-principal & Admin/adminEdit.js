@@ -31,7 +31,6 @@ export { query, orderBy, limit, where, onSnapshot };
         const Password=document.getElementById("passInp");
 
         const db = getFirestore(app);
-
         
        export async function fillData(uid){
             const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
@@ -44,6 +43,7 @@ export { query, orderBy, limit, where, onSnapshot };
               Password.value=auth.currentUser.Password;
           
             })
+            $(".loader").hide();
     }
 
     const save = document.getElementById("subButton");
@@ -52,6 +52,7 @@ export { query, orderBy, limit, where, onSnapshot };
      e.preventDefault();
      change.addEventListener('click', async (e) => {
       e.preventDefault();
+      $(".loader").show();
      if(!validate()){
       return;
      }
@@ -75,31 +76,30 @@ export { query, orderBy, limit, where, onSnapshot };
     FirstName: FirstName.value,
     LastName:LastName.value,
     Email: Email.value,
-    }).then(() => {
-      if(Email.value!=auth.currentUser.email){
-       updateEmail(auth.currentUser, Email.value);
-      }   
-      
+  
+  })
+  if (Password.value!="undefined"){
+    updatePassword(auth.currentUser, Password.value);
+  }
+  alert("تم حفظ التعديلات بنجاح");
+
+     }).catch(()=>{
+      alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+    })
+  }
+  else{
     if (Password.value!="undefined"){
       updatePassword(auth.currentUser, Password.value);
     }
+    updateDoc(reference,{
+      FirstName: FirstName.value,
+      LastName:LastName.value,
+      Email: Email.value,
+    
+    })
     alert("تم حفظ التعديلات بنجاح");
-    document.getElementById("myForm").style.display = "none";
-       }).catch((error) => {
- alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
- document.getElementById("myForm").style.display = "none";
-
-   });
-}).catch((error) => {
-  alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
-  document.getElementById("myForm").style.display = "none";
-
-    });
-     }).catch((error) => {
-      alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
-      document.getElementById("myForm").style.display = "none";
-     
-        });
+  }
+    
 
    })
 

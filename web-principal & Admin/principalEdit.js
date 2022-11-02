@@ -59,74 +59,65 @@ const user= auth.currentUser;
             Password.value=auth.currentUser.Password;
 
         });
-        
+        $(".loader").hide();
         }
         const save = document.getElementById("subButton");
         const change =document.getElementById("change");
 
         save.addEventListener('click', async (e) => {
-         
+          $(".loader").show();
+
           e.preventDefault();
 
-          change.addEventListener('click', async (e) => {
-            e.preventDefault();
-            if(!validate()){
-              return false;
-            }
-            const oldPass= document.getElementById("authPass").value;
-           
-          const credential = await EmailAuthProvider.credential(auth.currentUser.email, oldPass);
-          
-
-          await reauthenticateWithCredential(auth.currentUser, credential).then(async (e) => {
-           
-           const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
-           const snapshot = await getDocs(q);
-           var SchoolExist = false;
-           if(!snapshot.empty){
-             snapshot.forEach((doc) => {
-               if(doc.data().Email != auth.currentUser.email){
-                 alert("المدرسة مسجلة مسبقاً")
-                 SchoolExist = true ;
-                 return;
-               }
-              //   exist = true;
-             });
-             if(SchoolExist){
-               return;
-             }
-          
-           }
-     
-           const docRef= doc(db,"School",auth.currentUser.uid);
-           updateDoc(docRef,{
-             schoolName:document.getElementById("snameInp").value,
-             PrincipalFirstName: FirstName.value,
-             PrincipalLastName:LastName.value,
-             Email: Email.value,
-           }).then(() => {
-             if(Email.value!=auth.currentUser.email){
-              updateEmail(auth.currentUser, Email.value);
-             }   
-             
-           if (Password.value!="undefined"){
-             updatePassword(auth.currentUser, Password.value);
-           }
-           alert("تم حفظ التعديلات بنجاح");
-           document.getElementById("myForm").style.display = "none";
-              });
+          reauthenticateWithCredential(auth.currentUser, credential).then(() => {
+  // User re-authenticated.
        }).catch((error) => {
-        alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق" );
-        document.getElementById("myForm").style.display = "none";
-  
+  // An error ocurred
+  // ...
           });
 
+          if(!validate()){
+            return false;
+          }
           
-          
+           //check if school exitsts
   
-     
-      
+      const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
+      const snapshot = await getDocs(q);
+      var SchoolExist = false;
+      if(!snapshot.empty){
+        snapshot.forEach((doc) => {
+          if(doc.data().Email != auth.currentUser.email){
+            alert("المدرسة مسجلة مسبقاً")
+            SchoolExist = true ;
+            return;
+          }
+         //   exist = true;
         });
+        if(SchoolExist){
+          return;
+        }
+     
+      }
+
+      const docRef= doc(db,"School",auth.currentUser.uid);
+      updateDoc(docRef,{
+        schoolName:document.getElementById("snameInp").value,
+        PrincipalFirstName: FirstName.value,
+        PrincipalLastName:LastName.value,
+        Email: Email.value,
+      }).then(() => {
+        if(Email.value!=auth.currentUser.email){
+         updateEmail(auth.currentUser, Email.value);
+        }   
+        
+      if (Password.value!="undefined"){
+        updatePassword(auth.currentUser, Password.value);
+      }
+      alert("تم حفظ التعديلات بنجاح");
+         });
+      
+    
     
     });
     function validate() {
