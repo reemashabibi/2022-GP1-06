@@ -264,15 +264,16 @@ excel_file.addEventListener('change', (event) => {
     return;
       })
       .catch((error) => {
-        if (!error.epmty) {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
             var x = table.rows[row].insertCell(3);
-            x.innerHTML = "لم تتم الاضافة";
+            x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
         }
-      
-      }
-      });
+        else{
+          var x = table.rows[row].insertCell(3);
+          x.innerHTML = "لم تتم الاضافة";
+        }
+      });      
   
   }
