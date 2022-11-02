@@ -250,7 +250,7 @@ excel_file.addEventListener('change', (event) => {
        let user = userCredential.user;   
       sendPasswordResetEmail(authSec,registerEmail).then(() => {
       // EmailSent
-     // alert("sent");
+     alert("sent");
     })     
     //add to documnet
     var x = table.rows[row].insertCell(3);

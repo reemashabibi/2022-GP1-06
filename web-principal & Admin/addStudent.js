@@ -179,7 +179,7 @@ addStudentForm.addEventListener('submit', async (e) => {
     const phoneNumber = parseInt(addStudentForm.phone.value);
     const q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
     const querySnapshot = await getDocs(q);
-    var parentId = "null";
+    var ParentId = "null";
     var docRef = "null";
     var docRefClass = "null";
     const colRefStudent = collection(db, "School",schoolID,"Student");
@@ -252,10 +252,10 @@ else{
   
       querySnapshot.forEach(async (d) => {
         if (!d.empty){
-          parentId = d.id;
+          ParentId = d.id;
           //no parent for the same child
-          var ref = doc(db, "School",schoolID,"Parent",parentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));
+          var ref = doc(db, "School",schoolID,"Parent",ParentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
@@ -263,7 +263,7 @@ else{
               if(FName != addStudentForm.Fname.value ){
 
               
-                docRef = doc(db, "School",schoolID,"Parent", parentId);
+                docRef = doc(db, "School",schoolID,"Parent", ParentId);
                 docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
                 addDoc(colRefStudent, {
                   FirstName: addStudentForm.Fname.value,
@@ -316,6 +316,7 @@ else{
 
 
 $(".phone").change(async function () {
+  alert("chang")
 
   var phoneNumber = parseInt(addStudentForm.phone.value);
 
@@ -342,17 +343,16 @@ $(".phone").change(async function () {
 
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
-  var parentId = "null";
+  var ParentId = "null";
 
 
   if (!querySnapshot.empty) {
     querySnapshot.forEach(async (d) => {
       if (!d.empty) {
-        parentId = d.id;
-
+        ParentId = d.id;
         //no parent for the same child
-        var ref = doc(db, "School",schoolID,"Parent",parentId);
-        var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));
+        var ref = doc(db, "School",schoolID,"Parent",ParentId);
+        var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
         var snapshot = await getDocs(Query);
  
      

@@ -294,7 +294,7 @@ excel_file.addEventListener('change', (event) => {
         const querySnapshot = await getDocs(q);
         const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
         const queryClassSnapshot = await getDocs(qClass);
-        var parentId = "null";
+        var ParentId = "null";
         var classId = "null";
         var docRef = "null";
         var docRefClass = "null";
@@ -310,15 +310,15 @@ excel_file.addEventListener('change', (event) => {
         if (!querySnapshot.empty) {
           querySnapshot.forEach(async (d) => {
             if (!d.empty)
-              parentId = d.id;
+              ParentId = d.id;
               
 
           })
         }
 
             //no parent for the same child
-          var ref = doc(db, "School",schoolID,"Parent",parentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("parentID", "==", ref));        
+          var ref = doc(db, "School",schoolID,"Parent",ParentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));        
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
@@ -332,6 +332,7 @@ excel_file.addEventListener('change', (event) => {
             let data = await getDoc(ref);
             if(data.exists()){
             var student = data.data().Students[0];
+            alert(student)
             const docSnap = await getDoc(student);
             if( docSnap.data().FirstName == registerFname )
             studentParentExist = true;
@@ -347,7 +348,7 @@ excel_file.addEventListener('change', (event) => {
         
         if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
           const colRefStudent = collection(db, "School", schoolID, "Student");
-          docRef = doc(db, "School", schoolID, "Parent", parentId);
+          docRef = doc(db, "School", schoolID, "Parent", ParentId);
           docRefClass = doc(db, "School", schoolID, "Class", classId);
           addDoc(colRefStudent, {
             FirstName: registerFname,
@@ -433,7 +434,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
         FirstName: registerFname,
         LastName: registerlname,
         ClassID: docRefClass,
-        parentID: res,
+        ParentID: res,
       }).then(d => {
 
 
