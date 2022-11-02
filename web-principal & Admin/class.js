@@ -46,7 +46,7 @@ getDocs(colRefLevel)
             new_op.setAttribute("id", doc.id);
             document.getElementById("classes").appendChild(new_op);
         })
-        //console.log(levels)
+        $(".loader").hide();
     })
 
 
@@ -84,16 +84,17 @@ classForm.addEventListener('submit', async (e) => {
     {alert("اسم الفصل يجب ان يتكون من حروف فقط ");
       return;
     }
+    $('.loader').show();
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
     snapshot.forEach(async docSnap => {
     const data = await getDoc(docSnap.ref.parent.parent);
     schoolID = data.id;
-  
+ 
    const colRefClass = collection (db, "School",schoolID, "Class");
    const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("Level", "==",parseInt(classForm.classes.value) ));
    const queryClassSnapshot = await getDocs(qClass);
     if(queryClassSnapshot.empty){
-      $('.loader').show();
+     
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
         Level: parseInt(classForm.classes.value),
@@ -123,6 +124,7 @@ classForm.addEventListener('submit', async (e) => {
 alert("تمت اضافة الفصل بنجاح");
         })
       }else{
+        $(".loader").hide();
        alert("لم تتم الإضافة، يوجد فصل مُطابِق لاسم الفصل والمستوى")
        classForm.reset();
       }

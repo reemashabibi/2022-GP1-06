@@ -27,7 +27,7 @@ const analytics = getAnalytics(app);
 
 
 var schoolID;
-$('.loader').show();
+
 function school(id){
   schoolID = id;
   $('.loader').hide();

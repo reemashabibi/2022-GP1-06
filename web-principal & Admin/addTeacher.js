@@ -54,7 +54,8 @@ onAuthStateChanged(authPrin, (user) => {
     }
   });
    
- 
+  $(".loader").hide();
+
 
   let schoolID  ="";
 
@@ -104,7 +105,8 @@ onAuthStateChanged(authPrin, (user) => {
          const addTeacherForm = document.querySelector('.addTeacher')
          addTeacherForm.addEventListener('submit',  async (e) => {
          e.preventDefault()
-        // alert(email);
+         $(".loader").show();
+
          const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==" , email )));
         // alert("!$$!"); //true
          snapshot.forEach(async doc => {
@@ -137,11 +139,13 @@ onAuthStateChanged(authPrin, (user) => {
                      Subjects: [],               
                    })
                 // alert(" after ");
+                $(".loader").hide();
                  alert("تمت الإضافة بنجاح");
                  addTeacherForm.reset();
 
                })
                .catch((error) => {
+                $(".loader").hide();
                  const errorCode = error.code;
                  const errorMessage = error.message;
                  if (errorMessage == "Firebase: Error (auth/email-already-in-use).") {

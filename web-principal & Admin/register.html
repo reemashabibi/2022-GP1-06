@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>التسجيل</title>
   <link href="register.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
 
 
@@ -17,6 +18,7 @@
   <div class="center">
     <a class="navbar-brand navbar-logo sideLogo" href="#"><img src="navbarlogo.png" alt="logo" height="66"></a>
     <h1>سجل مدرستك في حلقة</h1>
+    <div class="loader topTitle" style="top: 25vmax;"></div>
     <form id="signForm">
       <div class="inputbox">
         <span class="req" style="color: red;">جميع الحقول مطلوبة*</span>
@@ -126,10 +128,11 @@
 
 
 
+    $(".loader").hide();
 
     submit.addEventListener('click', async (e) => {
       Email = Email.value.toLowerCase();
-
+      $(".loader").show();
       e.preventDefault()
       if (!validate()) {
         return false;
@@ -163,6 +166,7 @@
               PrincipalLastName: LastName.value,
             }).catch((error) => {
                 console.log(error);
+                $(".loader").hide();
                 alert(error);
               });
 
@@ -170,10 +174,10 @@
               displayName:"Principal"
            });
                
-            
+           alert("تم تسجيل المدرسة بنجاح");
             signForm.reset();
             window.location.href = "principalHomePage.html";
-            alert("تم تسجيل المدرسة بنجاح");
+            
 
           })
           .catch((error) => {
@@ -181,10 +185,13 @@
             const errorMessage = error.message;
             console.log(errorMessage);
             if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
+              $(".loader").hide();
            alert("البريد الالكتروني مستخدم من قبل")}
-           else
+           else{
+            $(".loader").hide();
            alert("حدث خطأ حاول مره أخرى");
             signForm.reset();
+          }
           });
 
 
@@ -194,6 +201,7 @@
 
       }
       else {
+        $(".loader").hide();
         alert("المدرسة مسجلة مسبقاً");
         signForm.reset();
       }
