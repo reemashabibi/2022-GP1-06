@@ -27,9 +27,10 @@ const analytics = getAnalytics(app);
 
 
 var schoolID;
-
+$('.loader').show();
 function school(id){
   schoolID = id;
+  $('.loader').hide();
 }
 export async  function school_ID(email){
   const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
@@ -51,6 +52,15 @@ export { query, orderBy, limit, where, onSnapshot };
 
 
 
+    //***********/  
+    let validate1 = false;
+    let validate2 = false;
+    let validate3 = false;
+    let validate4 = false;
+    let validate5 = false;
+    let validate6 = false;
+    let validate7 = false;
+    let validate8 = false;
 
 
 //randomly generated pass
@@ -115,15 +125,138 @@ excel_file.addEventListener('change', (event) => {
       document.getElementById('excel_data').innerHTML = table_output;
     }
     excel_file.value = '';
-   
     table_output += '</tr >';
     const table = document.getElementById("table");
+
+
+
+           //validate
+            //***********/  
+            if (sheet_data.length > 0) {
+              for (var row = 0; row < 1; row++) {
+                for (var cell = 0; cell < 8 ; cell++) {
+                   registerFname = sheet_data[0][0];
+                   registerlname = sheet_data[0][1];
+                   registerClass =  sheet_data[0][2];
+                   registerLevel =  sheet_data[0][3];
+                   registerParentPhone =  sheet_data[0][4];
+                   registerParentFname =  sheet_data[0][5];
+                   registerParentlname =  sheet_data[0][6];
+                   registerParentEmail = sheet_data[0][7];
+                  if (row == 0) { 
+                    //does not ignore whie sapces in Arabic
+                  //   if (registerFname.replaceAll("\\s+","").equals("الإسم الأول".replaceAll("\\s+",""))  ||  registerFname.replaceAll("\\s+","").equals("الإسم الاول".replaceAll("\\s+","")) ||  registerFname.replaceAll("\\s+","").equals("الاسم الأول".replaceAll("\\s+","")) || registerFname.replaceAll("\\s+","").equals("الاسم الاول".replaceAll("\\s+","")) )
+                  if (registerFname == "الإسم الأول للطالب" || registerFname == "الاسم الأول للطالب" || registerFname == "الإسم الاول للطالب"|| registerFname == "الاسم الاول للطالب")
+                     {
+                      validate1 = true;
+                      //break;
+                      }
+                    //  if ( registerlname.replaceAll("\\s+","").equals("الإسم الأخير".replaceAll("\\s+",""))  ||  registerlname.replaceAll("\\s+","").equals("الإسم الاخير".replaceAll("\\s+","")) ||  registerlname.replaceAll("\\s+","").equals("الاسم الاخير".replaceAll("\\s+","")) || registerlname.replaceAll("\\s+","").equals("الاسم الأخير".replaceAll("\\s+","")) )
+                    if (registerlname == "الإسم الأخير للطالب" || registerlname == "الإسم الاخير للطالب" || registerlname == "الاسم الأخير للطالب"|| registerlname == "الاسم الأخير للطالب")
+                      {
+                        validate2 = true;
+                     // break;
+                       }
+                       if (registerClass == "اسم الفصل" || registerClass == "الفصل" || registerClass == "إسم الفصل"|| registerClass == "الصف")
+                      {
+                        validate3 = true;
+                     // break;
+                       }
+                       if (registerLevel == "المستوى" || registerLevel == "المستوي" || registerLevel == "رقم المستوى"|| registerLevel == "مستوى")
+                       {
+                         validate4 = true;
+                      // break;
+                        }
+                        if (registerParentPhone == "رقم هاتف ولي الأمر" || registerParentPhone == "رقم جوال ولي الأمر" || registerParentPhone == "رقم الجوال"|| registerParentPhone == "رقم الهاتف"|| registerParentPhone == "الهاتف"|| registerParentPhone == "جوال")
+                       {
+                         validate5 = true;
+                      // break;
+                        }
+                     if (registerParentFname =="الإسم الأول لولي الأمر" || registerParentFname =="الاسم الأول لولي الأمر"|| registerParentFname =="الاسم الأول لولي الامر"|| registerParentFname =="الاسم الاول لولي الأمر")
+                     {
+                      validate6 = true;
+                     // break;
+                      } 
+                      if (registerParentlname =="الإسم الأخير لولي الأمر" || registerParentlname =="الاسم الاخير لولي الأمر"|| registerParentlname =="الاسم الاخير لولي الامر"|| registerParentlname =="الاسم الأخير لولي الأمر")
+                      {
+                       validate7 = true;
+                      // break;
+                       } 
+                     if (registerParentEmail == "البريد الإلكتروني لولي الأمر" || registerParentEmail =="البريد الإلكتروني لولي الامر" || registerParentEmail =="البريد الالكتروني لولي الامر"|| registerParentEmail =="البريد الالكتروني لولي الأمر")
+                       {
+                        validate8 = true;
+                       // break;
+                        }     
+                  }
+                }       
+              }        
+            }
+
+
+
+
+
+
+
+
+             //***********/  
+             if (validate1 == false){
+              alert(" الخانة الأولى يجب أن تحتوي على الاسم الأول للطالب، يرجى تحميل نموذج الإضافة ورفعه ");
+             // break;
+             }
+             if(validate2 == false){ 
+              alert("الخانة الثانية يجب أن تحتوي على الاسم الأخير للطالب، يرجى تحميل نموذج الإضافة ورفعه ");
+             // break;
+             }
+             if(validate3 == false){
+              alert("الخانة الثالثة يجب أن تحتوي على اسم الفصل، يرجى تحميل نموذج الإضافة ورفعه");
+             // break;
+             }
+             if(validate4 == false){
+              alert("الخانة الرابعة يجب أن تحتوي على رقم المستوى، يرجى تحميل نموذج الإضافة ورفعه");
+             // break;
+             }
+             if(validate5 == false){
+              alert("الخانة الخامسة يجب أن تحتوي على رقم هاتف ولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+             // break;
+             }
+             if(validate6 == false){
+              alert("الخانة السادسة يجب أن تحتوي على الاسم الأول لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+             // break;
+             }
+             if(validate7 == false){
+              alert("الخانة السابعة يجب أن تحتوي على الاسم الأخير لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+             // break;
+             }
+             if(validate8 == false){
+              alert("الخانة الثامنة يجب أن تحتوي على البريد الإلكتروني لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+             // break;
+             }
+      
+
+
+
+
+               //***********/  
+            if(validate1 && validate2 && validate3 && validate4 && validate5 && validate6 && validate7 && validate8){
+              // alert("true");
+             var x = table.rows[0].insertCell(8);
+             x.innerHTML = "حالة الإضافة";
+             }
+ 
+
+
+
+
+
    
     //Adding
+    if(validate1 && validate2 && validate3 && validate4 && validate5 && validate6 && validate7 && validate8){
+
     if (sheet_data.length > 0) {
 
       for (var row = 1; row < sheet_data[row].length; await row++) {
-        for (var cell = 0; cell < 7; cell++) {
+        for (var cell = 0; cell < 8; cell++) {
 
           if (row == 0) {
             //herders
@@ -157,7 +290,6 @@ excel_file.addEventListener('change', (event) => {
             }
           }
         }
-
         const q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", registerParentPhone));
         const querySnapshot = await getDocs(q);
         const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
@@ -166,22 +298,54 @@ excel_file.addEventListener('change', (event) => {
         var classId = "null";
         var docRef = "null";
         var docRefClass = "null";
-
-
+        var studentParentExist = false;
+        /// class id if exist
+        if (!queryClassSnapshot.empty){
         queryClassSnapshot.forEach((doc) => {
           if (!doc.empty)
             classId = doc.id;
         })
+      }
+        //paret id if exist
         if (!querySnapshot.empty) {
-          querySnapshot.forEach((d) => {
+          querySnapshot.forEach(async (d) => {
             if (!d.empty)
               parentId = d.id;
+              
+
           })
         }
-      
 
-        if (!queryClassSnapshot.empty && !querySnapshot.empty) {
-              alert("p and c     "+registerFname + "   "+ registerlname + "   "+registerClass+ "   "+ registerParentPhone+ "   "+registerParentFname+ "   "+registerParentEmail)
+            //no parent for the same child
+          var ref = doc(db, "School",schoolID,"Parent",parentId);
+          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));        
+          var snapshot = await getDocs(Query);
+          if (!snapshot.empty) {
+            snapshot.forEach(async (docu) => {
+              var FName = docu.data().FirstName;
+              if(FName == registerFname){
+                studentParentExist = true;
+              }//if(FName != table.rows[row].insertCell(0) )
+            })//    snapshot.forEach(async (docu)
+          }// if (!snapshot.empty)
+          if(snapshot.empty){
+            let data = await getDoc(ref);
+            if(data.exists()){
+            var student = data.data().Students[0];
+            const docSnap = await getDoc(student);
+            if( docSnap.data().FirstName == registerFname )
+            studentParentExist = true;
+            }
+          }
+
+          if(studentParentExist){    
+          var x = table.rows[row].insertCell(8);
+           x.innerHTML = " لم تتم الإضافة، الطالب مسجل بالنظام مسبقاً";
+                   }//end if studentParentExist
+
+
+        
+        if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
           const colRefStudent = collection(db, "School", schoolID, "Student");
           docRef = doc(db, "School", schoolID, "Parent", parentId);
           docRefClass = doc(db, "School", schoolID, "Class", classId);
@@ -191,21 +355,12 @@ excel_file.addEventListener('change', (event) => {
             ClassID: docRefClass,
             ParentID: docRef,
           }).then(docu => {
-            
             const StuRef = doc(db, "School", schoolID, "Student", docu.id);
             updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
-              .then(() => {
-                
-                console.log("A New Document Field has been added to an existing document");
-              })
               .catch(error => {
                 console.log(error);
               })
             updateDoc(docRef, { Students: arrayUnion(StuRef) })
-              .then(() => {
-                
-                console.log("A New Document Field has been added to an existing document");
-              })
               .catch(error => {
                 console.log(error);
               })
@@ -215,15 +370,12 @@ excel_file.addEventListener('change', (event) => {
           var x = table.rows[row].insertCell(8);
           x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
 
-
         }//if parent and class exist/
-
-        else if (!queryClassSnapshot.empty && querySnapshot.empty  ) {
+        else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
-        } else {
+        } else if(queryClassSnapshot.empty ) {
 
-          alert("Class doesn't exsit")
           var x = table.rows[row].insertCell(8);
           x.innerHTML = " لم تتم الإضافة، يوجد خطأ باسم الفصل أو رقم المستوى";
         }//end else class not exist
@@ -241,6 +393,7 @@ excel_file.addEventListener('change', (event) => {
 
     }
   }
+}
 
 });
     function authParent(registerFname ,registerlname, registerClass, registerParentPhone, registerParentFname,registerParentlname,registerParentEmail,schoolID,registerPass,queryClassSnapshot,row,table){
@@ -251,7 +404,6 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
 
   registerPass = pass();
   createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass).then((userCredential) => {
-
 
       // Signed in 
       user = userCredential.user;
@@ -313,7 +465,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
       const errorCode = error.code;
       const errorMessage = error.message;
       var x = table.rows[row].insertCell(8);
-    x.innerHTML = "لم تتم الاضافة";
+    x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
     });
      
 

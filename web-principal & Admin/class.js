@@ -123,7 +123,7 @@ classForm.addEventListener('submit', async (e) => {
 alert("تمت اضافة الفصل بنجاح");
         })
       }else{
-       alert("لم تتم الإضافة، يوجد فصل مُوافِق لاسم الفصل والمستوى")
+       alert("لم تتم الإضافة، يوجد فصل مُطابِق لاسم الفصل والمستوى")
        classForm.reset();
       }
       })
