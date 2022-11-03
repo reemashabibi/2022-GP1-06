@@ -52,10 +52,10 @@ export { query, orderBy, limit, where, onSnapshot };
      e.preventDefault();
      change.addEventListener('click', async (e) => {
       e.preventDefault();
-      $(".loader").show();
      if(!validate()){
       return;
      }
+     $(".loader").show();
      const oldPass= document.getElementById("authPass").value;
      
      const credential = await EmailAuthProvider.credential(auth.currentUser.email, oldPass);
@@ -87,9 +87,13 @@ export { query, orderBy, limit, where, onSnapshot };
   }
   alert("تم حفظ التعديلات بنجاح");
   document.getElementById("myForm").style.display = "none";
+  $(".loader").hide();
+
      }).catch(()=>{
       alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
       document.getElementById("myForm").style.display = "none";
+      $(".loader").hide();
+
     })
   })
   

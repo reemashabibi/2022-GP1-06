@@ -66,11 +66,10 @@ const user= auth.currentUser;
 
         save.addEventListener('click', async (e) => {
           e.preventDefault();
-          $(".loader").show();
           if(!validate()){
             return false;
           }
-
+          $(".loader").show();
           reauthenticateWithCredential(auth.currentUser, credential).then(async () => {
             const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
             const snapshot = await getDocs(q);
@@ -78,6 +77,7 @@ const user= auth.currentUser;
             if(!snapshot.empty){
               snapshot.forEach((doc) => {
                 if(doc.data().Email != auth.currentUser.email){
+                  $(".loader").hide();
                   alert("المدرسة مسجلة مسبقاً")
                   SchoolExist = true ;
                   return;
@@ -106,11 +106,13 @@ const user= auth.currentUser;
             }
             alert("تم حفظ التعديلات بنجاح");
             document.getElementById("myForm").style.display = "none";
+            $(".loader").hide();
                });
   
        }).catch((error) => {
         alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
         document.getElementById("myForm").style.display = "none";
+        $(".loader").hide();
           });
 
           
