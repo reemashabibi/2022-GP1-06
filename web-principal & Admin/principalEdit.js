@@ -69,8 +69,15 @@ const user= auth.currentUser;
           if(!validate()){
             return false;
           }
-          $(".loader").show();
-          reauthenticateWithCredential(auth.currentUser, credential).then(async () => {
+          change.addEventListener('click', async (e) => {
+            e.preventDefault();
+            $(".loader").show();
+            const oldPass= document.getElementById("authPass").value;
+          const credential = await EmailAuthProvider.credential(auth.currentUser.email, oldPass);
+          
+          
+          await reauthenticateWithCredential(auth.currentUser, credential).then(async () => {
+           
             const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
             const snapshot = await getDocs(q);
             var SchoolExist = false;
@@ -121,7 +128,7 @@ const user= auth.currentUser;
           document.getElementById("myForm").style.display = "none";
           $(".loader").hide();}
       
-        
+          })
           });
 
           
