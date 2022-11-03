@@ -138,7 +138,7 @@
   </div>
   
   <div class="inputbox">
-    <button type="text" id="subButton" class="btn"  style="margin-left: 8%;" >حفظ</button>
+    <button type="text" id="subButton" class="btn"  style="margin-left: 8%;" onclick="openForm();" >حفظ</button>
 </div>
 </form>
 <br>
@@ -146,6 +146,87 @@
 
 </div>
 </main>
+<style>
+
+
+  /* The popup form - hidden by default */
+  .form-popup {
+    display: none;
+    position: fixed;
+    bottom: 10%;
+    right: 30%;
+    border: 3px solid #f1f1f1;
+    z-index: 9;
+    text-align: right;
+  }
+  
+  /* Add styles to the form container */
+  .form-container {
+    max-width: 500px;
+    padding: 10px;
+    background-color: white;
+  }
+  
+  /* Full-width input fields */
+  .form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    border: none;
+    background: #f1f1f1;
+  }
+  
+  /* When the inputs get focus, do something */
+  .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+  }
+  
+  /* Set a style for the submit/login button */
+  .form-container .btn {
+    background-color:rgb(55, 151, 203);
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  
+  /* Add a red background color to the cancel button */
+  .form-container .cancel {
+    background-color:rgb(228, 68, 68);
+  }
+  
+  /* Add some hover effects to buttons */
+  .form-container .btn:hover, .open-button:hover {
+    opacity: 1;
+  }
+  </style>
+<div class="form-popup" id="myForm">
+  <form  class="form-container">
+    <h1>تسجيل الدخول</h1>
+
+    <h6>لحفظ المعلومات يرجى إدخال كلمة المرور قبل التعديل إن وجد  </h6>
+
+    <label for="psw"><b>كلمة المرور</b></label>
+    <input type="password" name="psw" id="authPass"required>
+
+    <button type="text" id="change" class="btn">تسجيل</button>
+    <button type="button" class="btn cancel" onclick="closeForm()">إغلاق</button>
+  </form>
+</div>
+
+<script>
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
+</script>
 <div class="screen__background">
        
   <div class="screen__background__shape screen__background__shape4"></div>

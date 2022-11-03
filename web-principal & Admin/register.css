@@ -173,13 +173,14 @@ a:hover {
 }
 
 .screen__background__shape3 {
-	height: 540px;
+	height: 400px;
 	width: 190px;
-	top: 20px;
+	top: 10px;
   background: linear-gradient(45deg,#dfdade  0%, #abb0b3 100%);		
 
 z-index: -2;
-	left: -20;	
+	left: 80;	
+  right:5%;
 	border-radius: 32px;
 }
 
@@ -218,6 +219,12 @@ z-index: -2;
   }
   .screen__background__shape4 {
    z-index: -1;
+   height: 300px;
+    width: 200px;
+    background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);
+    top: 500px;
+    left: 50px;
+    border-radius: 60px;
   }
   .center{
     margin-left: 0%;

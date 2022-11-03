@@ -6,7 +6,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, getDocs , getDoc, addDoc, Timestamp, setDoc, FieldValue, arrayUnion, updateDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, getDocs, getDoc, addDoc, Timestamp, setDoc, FieldValue, arrayUnion, updateDoc, collectionGroup } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 
@@ -21,7 +21,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const app2 = initializeApp(firebaseConfig,"Secondary");
+const app2 = initializeApp(firebaseConfig, "Secondary");
 const db = getFirestore(app);
 
 export { app, db, collection, getDocs, Timestamp, addDoc };
@@ -30,13 +30,13 @@ const analytics = getAnalytics(app);
 const authSec = getAuth(app2);
 
 
-  var schoolID ;
-  function school(id){
-    schoolID = id;
-  }
+var schoolID;
+function school(id) {
+  schoolID = id;
+}
 
-export async  function fillData(email){
-  const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+export async function fillData(email) {
+  const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==", email)));
   snapshot.forEach(async doc => {
   const data = await getDoc(doc.ref.parent.parent);
   schoolID = data.id;
@@ -44,10 +44,7 @@ export async  function fillData(email){
   getDocs(colRefClass) 
     .then(snapshot => {
       
-      //console.log(snapshot.docs)
-      //let levels = []
       snapshot.docs.forEach(doc => {
-        //levels.push({ ...doc.data(), id: doc.id })
         const new_op = document.createElement("option");
         new_op.innerHTML = doc.data().Level+ " :مستوى"+" / "+ doc.data().ClassName + " :فصل";
         new_op.setAttribute("id", doc.id);
@@ -61,35 +58,6 @@ export async  function fillData(email){
 
 }
 
-//add class to drop-down menu
-
-
- //= "kfGIwTyclpNernBQqSpQhkclzhh1";
-
-
-/*
-const colRefClass = collection (db, "School",schoolID, "Class");
-getDocs(colRefClass) 
-  .then(snapshot => {
-    
-    //console.log(snapshot.docs)
-    //let levels = []
-    snapshot.docs.forEach(doc => {
-      //levels.push({ ...doc.data(), id: doc.id })
-      const new_op = document.createElement("option");
-      new_op.innerHTML = doc.data().ClassName + ":فصل";
-      new_op.setAttribute("id", doc.id);
-      new_op.setAttribute("value", doc.data().ClassName);
-      document.getElementById("classes").appendChild(new_op);
-    })
-    //console.log(levels)
-  });
-*/
-
-
-//add student info
-//const colRefStudent = collection(db, "School",schoolID,"Student");
-//const colRefParent = collection(db, "Parent");
 const selectedClass = document.getElementById("classes");
 const addStudentForm = document.querySelector('.add')
 var notValidated = false;
@@ -101,7 +69,7 @@ addStudentForm.addEventListener('submit', async (e) => {
 
   notValidated = false;
   var fname = document.getElementById("Fname");
-  var letters = null ;
+  var letters = null;
   if (fname.value == "") {
     alert('يجب أن لا يكون  الاسم الأول للطالب فارغًا');
     fname.focus();
@@ -135,7 +103,7 @@ addStudentForm.addEventListener('submit', async (e) => {
 
   }
 
- 
+
 
 
   var FnameParent = document.getElementById("FnameParent");
@@ -178,16 +146,16 @@ addStudentForm.addEventListener('submit', async (e) => {
 
 
     const phoneNumber = parseInt(addStudentForm.phone.value);
-    const q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
+    const q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", phoneNumber));
     const querySnapshot = await getDocs(q);
     var ParentId = "null";
     var docRef = "null";
     var docRefClass = "null";
-    const colRefStudent = collection(db, "School",schoolID,"Student");
+    const colRefStudent = collection(db, "School", schoolID, "Student");
 
     if (querySnapshot.empty) {//adding new parent to the system 
-    
-      
+
+
       const registerFname = document.getElementById("FnameParent").value;
       const registerlname = document.getElementById("LnameParent").value;
       const registerEmail = document.getElementById("emailP").value;
@@ -202,27 +170,24 @@ addStudentForm.addEventListener('submit', async (e) => {
           //send an email to reset password
           sendPasswordResetEmail(authSec, registerEmail).then(() => {
             // EmailSent
-            // alert(registerEmail + " -- " + auth);
-          //  alert("reset");
           })
-          const res = doc(db, "School",schoolID,"Parent", user.uid)
+          const res = doc(db, "School", schoolID, "Parent", user.uid)
 
           //add to the document
-          setDoc(doc(db, "School",schoolID,"Parent", user.uid), {
+          setDoc(doc(db, "School", schoolID, "Parent", user.uid), {
             Email: registerEmail,
             FirstName: registerFname,
             LastName: registerlname,
             Phonenumber: phoneNum,
             Students: []
-            //schoolID?
           }).then(() => {
-            docRef = doc(db, "School",schoolID,"Parent", user.uid);
-            docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
+            docRef = doc(db, "School", schoolID, "Parent", user.uid);
+            docRefClass = doc(db, "School", schoolID, "Class", selectedClass[selectedClass.selectedIndex].id);
             addDoc(colRefStudent, {
               FirstName: addStudentForm.Fname.value,
               LastName: addStudentForm.Lname.value,
               ClassID: docRefClass,
-              ParentID:docRef, 
+              ParentID: docRef,
             })
             .then( d => {
               
@@ -239,56 +204,54 @@ addStudentForm.addEventListener('submit', async (e) => {
               alert("تمت الإضافة بنجاح")
               addStudentForm.reset();
           });
-         // alert("تم");
         }).catch((error) => {
           $(".loader").hide();
           const errorCode = error.code;
           const errorMessage = error.message;
-          // alert("البريد الالكتروني مستخدم من قبل");
-          alert(errorMessage);
+          if (errorMessage == "Firebase: Error (auth/email-already-in-use).")
+              alert("البريد الالكتروني مستخدم من قبل");
           addStudentForm.reset();
         });
-      // addStudentForm.reset();
       })
     }
-else{
-  
+    else {
+
       querySnapshot.forEach(async (d) => {
-        if (!d.empty){
+        if (!d.empty) {
           ParentId = d.id;
           //no parent for the same child
-          var ref = doc(db, "School",schoolID,"Parent",ParentId);
-          var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
+          var ref = doc(db, "School", schoolID, "Parent", ParentId);
+          var Query = query(collection(db, "School", schoolID, "Student"), where("ParentID", "==", ref));
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
-            var FName = docu.data().FirstName;
-              if(FName != addStudentForm.Fname.value ){
+              var FName = docu.data().FirstName;
+              if (FName != addStudentForm.Fname.value) {
 
-              
-                docRef = doc(db, "School",schoolID,"Parent", ParentId);
-                docRefClass = doc(db, "School",schoolID,"Class", selectedClass[selectedClass.selectedIndex].id);
+
+                docRef = doc(db, "School", schoolID, "Parent", ParentId);
+                docRefClass = doc(db, "School", schoolID, "Class", selectedClass[selectedClass.selectedIndex].id);
                 addDoc(colRefStudent, {
                   FirstName: addStudentForm.Fname.value,
                   LastName: addStudentForm.Lname.value,
                   ClassID: docRefClass,
-                  ParentID:docRef, 
+                  ParentID: docRef,
                 })
                   .then(d => {
-                    
-                    var StuRef = doc(db, "School",schoolID,"Student", d.id);
-                    updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
-                    .then(() => {
+
+                    var StuRef = doc(db, "School", schoolID, "Student", d.id);
+                    updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
+                      .then(() => {
                         console.log("A New Document Field has been added to an existing document");
-                    })
-                    .catch(error => {
+                      })
+                      .catch(error => {
                         console.log(error);
-                    })
-                    updateDoc(docRef, {Students: arrayUnion( StuRef) })
-                    .then(() => {
+                      })
+                    updateDoc(docRef, { Students: arrayUnion(StuRef) })
+                      .then(() => {
                         console.log("A New Document Field has been added to an existing document");
-                    })
-                    .catch(error => {
+                      })
+                      .catch(error => {
                         console.log(error);
                     })
                     $(".loader").hide();
@@ -300,7 +263,7 @@ else{
 
 
               }//if(FName != addStudentForm.Fname.value )
-              else{
+              else {
                 alert("الطالب مسجل بالنظام")
                 $(".loader").hide();
                 addStudentForm.Fname.focus();
@@ -308,23 +271,20 @@ else{
 
               }
             })//snapshot.forEach(async (doc)
-            }//if (!snapshot.empty) 
+          }//if (!snapshot.empty) 
 
-            }// if not doc.empty
+        }// if not doc.empty
 
-          })//  querySnapshot.forEach((doc)
-    
-        }//else 
+      })//  querySnapshot.forEach((doc)
 
-      }// if validation 
+    }//else 
+
+  }// if validation 
 });
 
 
 $(".phone").change(async function () {
-  alert("chang")
-
   var phoneNumber = parseInt(addStudentForm.phone.value);
-
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
   if ((!phoneNo.value.match(phoneno))) {
@@ -338,34 +298,29 @@ $(".phone").change(async function () {
     $("#LnameParent").val("");
     $("#emailP").val("");
     return;
-  }else{
-
+  } else {
     document.getElementById("FnameParent").disabled = false;
     document.getElementById("LnameParent").disabled = false;
     document.getElementById("emailP").disabled = false;
-
   }
   $(".loader").show();
 
   var q = query(collection(db, "School",schoolID,"Parent"), where("Phonenumber", "==", phoneNumber));
   var querySnapshot = await getDocs(q);
   var ParentId = "null";
-
-
   if (!querySnapshot.empty) {
     querySnapshot.forEach(async (d) => {
       if (!d.empty) {
         ParentId = d.id;
         //no parent for the same child
-        var ref = doc(db, "School",schoolID,"Parent",ParentId);
-        var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));
+        var ref = doc(db, "School", schoolID, "Parent", ParentId);
+        var Query = query(collection(db, "School", schoolID, "Student"), where("ParentID", "==", ref));
         var snapshot = await getDocs(Query);
- 
-     
+
         if (!snapshot.empty) {
           snapshot.forEach(async (doc) => {
-          var FName = doc.data().FirstName;
-            if(FName != addStudentForm.Fname.value ){
+            var FName = doc.data().FirstName;
+            if (FName != addStudentForm.Fname.value) {
 
         $("#FnameParent").val(d.data().FirstName);
         $("#LnameParent").val(d.data().LastName);
