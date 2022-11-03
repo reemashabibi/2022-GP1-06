@@ -87,9 +87,11 @@ export { query, orderBy, limit, where, onSnapshot };
   }
   alert("تم حفظ التعديلات بنجاح");
   document.getElementById("myForm").style.display = "none";
+  $(".loader").hide();
      }).catch(()=>{
       alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
       document.getElementById("myForm").style.display = "none";
+      $(".loader").hide();
     })
   })
   
