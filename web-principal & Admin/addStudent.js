@@ -335,11 +335,13 @@ $(".phone").change(async function () {
               addStudentForm.Fname.focus();
             }//else  if(FName != addStudentForm.Fname.value )
           })//forEach
-        }//if snapshot not empty
+        }
+       
+        //if snapshot not empty
       }
     })
   }
-
+  $(".loader").hide();
 
 });//end on change phone number function 
 
