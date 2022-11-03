@@ -87,26 +87,10 @@ ul {
   margin-bottom: 0;
 }
 
-.job-box .img-holder {
-  height: 65px;
-  width: 65px;
-  background-color: #4e63d7;
-  background-image: -webkit-gradient(linear, left top, right top, from(#6ce5e8), to(#6586c9));
-  background-image: linear-gradient(to right, #6ce5e8 0%, #6586c9 100%);
-  font-family: "Open Sans", sans-serif;
-  color: #fff;
-  font-size: 22px;
-  font-weight: 700;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-  border-radius: 65px;
+.job-box  {
+
+  background-color: #ffffff;
+
 }
 
 .career-title {
@@ -370,24 +354,15 @@ body {
 }
 
 .screen__background__shape1 {
-	height: 520px;
-	width: 520px;
+	height: 300px;
+	width:300px;
   background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
-	top: -20px;
-	left: 95%;	
+	top: 150px;
+	left: 3%;	
 	border-radius: 72px 72px 72px 72px;
   z-index: -1 ;
 }
 
-.screen__background__shape2 {
-	height: 220px;
-	width: 220px;
-	background: cadetblue;	
-	top: -120px;
-	left: 70%;	
-  z-index: -1;
-	border-radius: 32px;
-}
 
 .screen__background__shape3 {
 	height: 540px;

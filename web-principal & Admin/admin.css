@@ -31,11 +31,7 @@ span::after {
   background-color: white;
 }
 
-.theTab:hover 
-{
-    background :#7dc5c7;   
-
-}    
+   
 .deleteClass{
   margin-top: 5%;
   background : #a4a2a2; 
