@@ -70,7 +70,7 @@
 
     <!--start of nav -->
     <nav class="navbar navbar-expand-custom navbar-mainbg">
-        <a class="navbar-brand navbar-logo" href="#"><img src="navbarlogo.png" alt="logo" height="66"></a>
+        <a class="navbar-brand navbar-logo" href="principalHomePage.html"><img src="navbarlogo.png" alt="logo" height="66"></a>
         <svg viewBox="0 0 512 512" width="30" title="sign-out-alt" id="signout">
   <path d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z" />
   </svg>
@@ -104,12 +104,16 @@
         <h1 class="text-center mt-4 mb-4">إضافة قائمة من الإداريون</h1>
         <div class="card">
             <div class="card-header"><b>اختر ملف اكسل*</b></div>
+            <span style="color: rgb(157, 48, 48);" class="req">.١. قم بتنزيل نموذج الإضافة</span>
+            <span style="color: rgb(157, 48, 48);" class="req">.٢. قم بتعبئة النموذج بالبيانات</span>
+            <span style="color: rgb(157, 48, 48);" class="req">.٣. قم برفع الملف لإتمام الإضافة</span>
+            <br>
+            <button style="width: 50%; margin-left:25% ; border-radius: 60px; " onclick="window.location.href='https://docs.google.com/spreadsheets/d/1A3cA3xSH264LBHsqbNOztb2RCnpl8c95KsSG_0RUld8/edit#gid=948700460'"  style="font-size:24px">نموذج الإضافة <i class="fa fa-file-excel-o" style="font-size:20px;color:green;"></i></button>
+
             <div class="card-body">
                 <input type="file" id="excel_file" />
             </div>
-<br>
-<button style="width: 50%; margin-left:25% ; border-radius: 60px; " onclick="window.location.href='https://docs.google.com/spreadsheets/d/1A3cA3xSH264LBHsqbNOztb2RCnpl8c95KsSG_0RUld8/edit#gid=948700460'"  style="font-size:24px">نموذج الإضافة <i class="fa fa-file-excel-o" style="font-size:20px;color:green;"></i></button>
-<br>
+
 
         </div>
         <div id="excel_data" class="mt-5"></div>
