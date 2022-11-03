@@ -96,7 +96,18 @@ export { query, orderBy, limit, where, onSnapshot };
     })
   })
   
-   })
+   }).catch((error)=>{
+    if(error.message=="Firebase: Error (auth/wrong-password)."){
+      $('.loader').hide();
+
+      alert("هناك خطأ في البريد الإلكتروني أو كلمة المرور ");
+    }
+    else{
+    alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
+    document.getElementById("myForm").style.display = "none";
+    $(".loader").hide();}
+
+  })
 
   });
 });
