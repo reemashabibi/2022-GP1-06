@@ -164,7 +164,7 @@ excel_file.addEventListener('change', (event) => {
                         validate3 = true;
                      // break;
                        }
-                       if (registerLevel == "المستوى" || registerLevel == "المستوي" || registerLevel == "رقم المستوى"|| registerLevel == "مستوى")
+                       if (registerLevel == "المرحلة" || registerLevel == "المرحله" || registerLevel == "رقم المرحلة الدراسية"|| registerLevel == "رقم المرحلة الدراسيه"|| registerLevel == "رقم المرحله الدراسية")
                        {
                          validate4 = true;
                       // break;
