@@ -46,7 +46,7 @@ export async function fillData(email) {
       
       snapshot.docs.forEach(doc => {
         const new_op = document.createElement("option");
-        new_op.innerHTML = doc.data().Level+ " :مستوى"+" / "+ doc.data().ClassName + " :فصل";
+        new_op.innerHTML = doc.data().Level+ " :المرحلة"+" / "+ doc.data().ClassName + " :فصل";
         new_op.setAttribute("id", doc.id);
         new_op.setAttribute("value", doc.data().ClassName);
         document.getElementById("classes").appendChild(new_op);
