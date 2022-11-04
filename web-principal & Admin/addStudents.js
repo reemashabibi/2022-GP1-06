@@ -215,7 +215,7 @@ excel_file.addEventListener('change', (event) => {
              // break;
              }
              if(validate4 == false){
-              alert("الخانة الرابعة يجب أن تحتوي على رقم المستوى، يرجى تحميل نموذج الإضافة ورفعه");
+              alert("الخانة الرابعة يجب أن تحتوي على رقم المرحلة الدراسية، يرجى تحميل نموذج الإضافة ورفعه");
              // break;
              }
              if(validate5 == false){
