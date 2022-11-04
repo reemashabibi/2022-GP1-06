@@ -347,44 +347,33 @@ excel_file.addEventListener('change', (event) => {
 
 
         
-        if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
-          const colRefStudent = collection(db, "School", schoolID, "Student");
-          var docRef = doc(db, "School", schoolID, "Parent", parentId);
-          var docRefClass = doc(db, "School", schoolID, "Class", classId);
+   
+                   if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
+                    const colRefStudent = collection(db, "School", schoolID, "Student");
+                    var docRef = doc(db, "School", schoolID, "Parent", parentId);
+                    var docRefClass = doc(db, "School", schoolID, "Class", classId);
+                    addDoc(colRefStudent, {
+                      FirstName: registerFname,
+                      LastName: registerlname,
+                      ClassID: docRefClass,
+                      ParentID: docRef,
+                    }).then(docu => {
+                      const StuRef = doc(db, "School", schoolID, "Student", docu.id);
+                      updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
+                        .catch(error => {
+                          console.log(error);
+                        })
+                      updateDoc(docRef, { Students: arrayUnion(StuRef) })
+                        .catch(error => {
+                          console.log(error);
+                        })
+                      
+                    });
           
-          addDoc(colRefStudent, {
-            FirstName: registerFname,
-            LastName: registerlname,
-            ClassID: docRefClass,
-            ParentID: docRef,
-          }) .catch(error => {
-            console.log(error);
-          })
-
-          var studentID;
-          var QR = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", docRef ));        
-          var snap = await getDocs(QR);
-          if (!snap.empty) {
-            snap.forEach(async (docu) => {
-              studentID = docu.id
-            })
-         } 
-         const StuRef = doc(db, "School", schoolID, "Student", studentID );
-         updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
-           .catch(error => {
-             console.log(error);
-           })
-           updateDoc(docRef, { Students: arrayUnion(StuRef) })
-           .catch(error => {
-             console.log(error);
-           })
-
-
-          var x = table.rows[row].insertCell(8);
-          x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
-        
-
-        }//if parent and class exist/
+                    var x = table.rows[row].insertCell(8);
+                    x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
+          
+                  }//if parent and class exist/
         else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
