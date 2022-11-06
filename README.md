@@ -27,7 +27,7 @@ Developed using:
 
 ## Launching Instructions
 
-- If you do not have a localhost downloaded, then download one first
--  install code.
-- Run the code starting with index.html file.
+1. If you do not have a localhost downloaded, then download one first
+2.  install code.
+3. Run the code starting with index.html file.
 
