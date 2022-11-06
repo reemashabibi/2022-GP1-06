@@ -1,4 +1,4 @@
-### 2022-GP1-06
+#### 2022-GP1-06
 # Halaqa - حلقة
 ### A web based application that target schools and student parents, who need a means of easier communication methods between them.
 
@@ -19,7 +19,7 @@ Languages,libraries, services and tools  that we used to build our project:
 * CSS
 * jQuery
 * Firebase firestore 9
-* Firebase Authentication.
+* Firebase Authentication
  
 Developed using:
 * Visual Studio
@@ -29,6 +29,6 @@ Developed using:
 
 1. If you do not have a localhost downloaded, then download one first.
 3. Internet connection.
-2. install code.
+2. Install code.
 3. Run the code starting with index.html file.
 
