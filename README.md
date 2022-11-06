@@ -1,6 +1,6 @@
 ### 2022-GP1-06
 # Halaqa - حلقة
-### a web based application that target schools and student parents, who need a means of easier communication methods between them.
+### A web based application that target schools and student parents, who need a means of easier communication methods between them.
 
 
 ## Introduction
