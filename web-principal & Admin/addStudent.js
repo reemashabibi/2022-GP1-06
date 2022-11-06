@@ -143,8 +143,6 @@ addStudentForm.addEventListener('submit', async (e) => {
     $(".loader").show();
 
 
-
-
     const phoneNumber = parseInt(addStudentForm.phone.value);
     const q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", phoneNumber));
     const querySnapshot = await getDocs(q);
@@ -212,7 +210,14 @@ addStudentForm.addEventListener('submit', async (e) => {
               alert("البريد الالكتروني مستخدم من قبل");
           addStudentForm.reset();
         });
-      })
+      }).catch((error) => {
+        $(".loader").hide();
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        if (errorMessage == "Firebase: Error (auth/email-already-in-use).")
+            alert("البريد الالكتروني مستخدم من قبل");
+        addStudentForm.reset();
+      });
     }
     else {
 
