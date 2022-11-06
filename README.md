@@ -14,7 +14,7 @@
 
 ## Technology
 
-languages,libraries, services and tools  that we used to build our project:
+Languages,libraries, services and tools  that we used to build our project:
 * HTML
 * JavaScript
 * CSS
@@ -26,3 +26,4 @@ Developed using:
 
 
 ## Launching Instructions
+
