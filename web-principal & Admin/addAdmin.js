@@ -96,13 +96,13 @@ let authPrinID = "";
              return false;
             }
            
-            var email = document.getElementById( "email" );
-            var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-            if( !email.value.match(mailformat)){
-             alert("الرجاء إدحال بريد إلكتروني صحيح");
-             document.addAdmin.email.focus();
-             return false;
-            }
+         //   var email = document.getElementById( "email" );
+          //  var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        //    if( !email.value.match(mailformat)){
+          //   alert("الرجاء إدحال بريد إلكتروني صحيح");
+         //   document.addAdmin.email.focus();
+         //   return false;
+      //      }
            
             else {
               return true;

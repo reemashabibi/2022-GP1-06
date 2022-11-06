@@ -164,7 +164,7 @@ excel_file.addEventListener('change', (event) => {
                         validate3 = true;
                      // break;
                        }
-                       if (registerLevel == "المستوى" || registerLevel == "المستوي" || registerLevel == "رقم المستوى"|| registerLevel == "مستوى")
+                       if (registerLevel == "المرحلة" || registerLevel == "المرحله" || registerLevel == "رقم المرحلة الدراسية"|| registerLevel == "رقم المرحلة الدراسيه"|| registerLevel == "رقم المرحله الدراسية")
                        {
                          validate4 = true;
                       // break;
@@ -215,7 +215,7 @@ excel_file.addEventListener('change', (event) => {
              // break;
              }
              if(validate4 == false){
-              alert("الخانة الرابعة يجب أن تحتوي على رقم المستوى، يرجى تحميل نموذج الإضافة ورفعه");
+              alert("الخانة الرابعة يجب أن تحتوي على رقم المرحلة الدراسية، يرجى تحميل نموذج الإضافة ورفعه");
              // break;
              }
              if(validate5 == false){
@@ -294,14 +294,14 @@ excel_file.addEventListener('change', (event) => {
             }
           }
         }
-        const q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", registerParentPhone));
-        const querySnapshot = await getDocs(q);
-        const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
-        const queryClassSnapshot = await getDocs(qClass);
-        var ParentId = "null";
+        var q = query(collection(db, "School", schoolID, "Parent"), where("Phonenumber", "==", registerParentPhone));
+        var querySnapshot = await getDocs(q);
+        var qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", registerClass), where("Level", "==",registerLevel ));
+        var queryClassSnapshot = await getDocs(qClass);
+        var parentId = "null";
         var classId = "null";
-        var docRef = "null";
-        var docRefClass = "null";
+        //var docRef = "null";
+        //var docRefClass = "null";
         var studentParentExist = false;
         /// class id if exist
         if (!queryClassSnapshot.empty){
@@ -314,14 +314,14 @@ excel_file.addEventListener('change', (event) => {
         if (!querySnapshot.empty) {
           querySnapshot.forEach(async (d) => {
             if (!d.empty)
-              ParentId = d.id;
+              parentId = d.id;
               
 
           })
         }
 
             //no parent for the same child
-          var ref = doc(db, "School",schoolID,"Parent",ParentId);
+          var ref = doc(db, "School",schoolID,"Parent",parentId);
           var Query = query(collection(db, "School",schoolID,"Student"), where("ParentID", "==", ref));        
           var snapshot = await getDocs(Query);
           if (!snapshot.empty) {
@@ -334,7 +334,7 @@ excel_file.addEventListener('change', (event) => {
           }// if (!snapshot.empty)
           if(snapshot.empty){
             if(studentAdded.length > 0){
-              for( i  = 0 ; i < studentAdded.length ; i++ ){
+              for( var i  = 0 ; i < studentAdded.length ; i++ ){
                 if(studentAdded[i] == registerFname && parentNumAdded[i] == registerParentPhone)
                 studentParentExist = true;
               }
@@ -347,32 +347,33 @@ excel_file.addEventListener('change', (event) => {
 
 
         
-        if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
-          const colRefStudent = collection(db, "School", schoolID, "Student");
-          docRef = doc(db, "School", schoolID, "Parent", ParentId);
-          docRefClass = doc(db, "School", schoolID, "Class", classId);
-          addDoc(colRefStudent, {
-            FirstName: registerFname,
-            LastName: registerlname,
-            ClassID: docRefClass,
-            ParentID: docRef,
-          }).then(docu => {
-            const StuRef = doc(db, "School", schoolID, "Student", docu.id);
-            updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
-              .catch(error => {
-                console.log(error);
-              })
-            updateDoc(docRef, { Students: arrayUnion(StuRef) })
-              .catch(error => {
-                console.log(error);
-              })
-            
-          });
-
-          var x = table.rows[row].insertCell(8);
-          x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
-
-        }//if parent and class exist/
+   
+                   if (!queryClassSnapshot.empty && !querySnapshot.empty && !studentParentExist) {
+                    const colRefStudent = collection(db, "School", schoolID, "Student");
+                    var docRef = doc(db, "School", schoolID, "Parent", parentId);
+                    var docRefClass = doc(db, "School", schoolID, "Class", classId);
+                    addDoc(colRefStudent, {
+                      FirstName: registerFname,
+                      LastName: registerlname,
+                      ClassID: docRefClass,
+                      ParentID: docRef,
+                    }).then(docu => {
+                      const StuRef = doc(db, "School", schoolID, "Student", docu.id);
+                      updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
+                        .catch(error => {
+                          console.log(error);
+                        })
+                      updateDoc(docRef, { Students: arrayUnion(StuRef) })
+                        .catch(error => {
+                          console.log(error);
+                        })
+                      
+                    });
+          
+                    var x = table.rows[row].insertCell(8);
+                    x.innerHTML = "تمت الإضافة لولي أمر مسجل بالنظام";
+          
+                  }//if parent and class exist/
         else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
@@ -423,12 +424,12 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
       Phonenumber: registerParentPhone,
       Students: [],})
       .then(() => {
-        parentNumAdded.push(registerParentPhone);
+      parentNumAdded.push(registerParentPhone);
+      studentAdded.push(registerFname);
       queryClassSnapshot.forEach((doc) => {
         if (!doc.empty)
           classId = doc.id;
       })
-
       //docRef = doc(db, "School",schoolID, "Parent", res.id);
       docRefClass = doc(db, "School", schoolID, "Class", classId);
       addDoc(colRefStudent, {
@@ -437,10 +438,6 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
         ClassID: docRefClass,
         ParentID: res,
       }).then(d => {
-        studentAdded.push(registerFname);
-
-
-
         //docRef = doc(db, "School",schoolID, "Parent", res.id);
         const StuRef = doc(db, "School", schoolID, "Student", d.id);
         updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
