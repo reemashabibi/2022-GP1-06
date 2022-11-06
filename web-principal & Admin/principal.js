@@ -35,7 +35,22 @@
 
  // const db = firebase.firestore();
   //db.settings({ timestampsInSnapshots: true});
-
+  export async function checkUser(){
+    const auth = getAuth();
+    const user= auth.currentUser
+       onAuthStateChanged(auth, (user)=>{
+        if(user.displayName!="Principal"){
+          window.location.href="index.html";
+          }
+           if(user){
+               console.log("the same user");
+           }
+           else{
+               window.location.href="index.html";
+               console.log("the  user changed");
+           }
+       })
+    }
 
 
   const auth = getAuth();

@@ -44,9 +44,11 @@
         const auth = getAuth();
         const user= auth.currentUser;
         
-       
         onAuthStateChanged(auth, (user)=>{
             if(user){
+              if(user.displayName!="Principal"){
+            window.location.href="index.html";
+            }
               
                 console.log("the same user");
                 console.log(auth.currentUser.uid);

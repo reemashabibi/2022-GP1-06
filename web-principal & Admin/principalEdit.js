@@ -120,7 +120,7 @@ const user= auth.currentUser;
         
           if(error.message=="Firebase: Error (auth/wrong-password)."){
             $('.loader').hide();
-      
+    
             alert("هناك خطأ في البريد الإلكتروني أو كلمة المرور ");
           }
           else{
