@@ -149,6 +149,8 @@ addStudentForm.addEventListener('submit', async (e) => {
     var ParentId = "null";
     var docRef = "null";
     var docRefClass = "null";
+    var emailP = document.getElementById("emailP");
+
     const colRefStudent = collection(db, "School", schoolID, "Student");
 
     if (querySnapshot.empty) {//adding new parent to the system 
@@ -216,7 +218,7 @@ addStudentForm.addEventListener('submit', async (e) => {
         const errorMessage = error.message;
         if (errorMessage == "Firebase: Error (auth/email-already-in-use).")
             alert("البريد الالكتروني مستخدم من قبل");
-        addStudentForm.reset();
+        addStudentForm.emailP.focus();
       });
     }
     else {
