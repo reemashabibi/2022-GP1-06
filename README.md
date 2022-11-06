@@ -20,7 +20,8 @@ Languages,libraries, services and tools  that we used to build our project:
 * CSS
 * jQuery
 * Firebase firestore 9
-
+* Firebase Authentication.
+ 
 Developed using:
 * Visual Studio
 
