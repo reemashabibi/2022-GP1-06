@@ -195,7 +195,7 @@ excel_file.addEventListener('change', (event) => {
   if(validate1 && validate2 && validate3){
     if(sheet_data.length > 0)
        {    
-             for(var row = 1; row <1000; await row++)
+             for(var row = 1; row < 1000; await row++)
            {  
             for(var cell = 0; cell < 4; cell++) {  
                 if(row == 0){
@@ -263,6 +263,7 @@ excel_file.addEventListener('change', (event) => {
             x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
         }
         else{
+          
           var x = table.rows[row].insertCell(3);
           x.innerHTML = "لم تتم الاضافة";
         }

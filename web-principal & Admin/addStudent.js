@@ -294,7 +294,7 @@ $(".phone").change(async function () {
   var phoneNumber = parseInt(addStudentForm.phone.value);
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
-  if ((!phoneNo.value.match(phoneno))) {
+  if ((!phoneNo.value.match(phoneno))) {// validate Phone Number
     alert('يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية');
     phoneNo.focus();
     notValidated = true;
@@ -317,7 +317,7 @@ $(".phone").change(async function () {
   var ParentId = "null";
   if (!querySnapshot.empty) {
     querySnapshot.forEach(async (d) => {
-      if (!d.empty) {
+      if (!d.empty) {// the parent is registered in the system previously
         ParentId = d.id;
         //no parent for the same child
         var ref = doc(db, "School", schoolID, "Parent", ParentId);
@@ -327,7 +327,8 @@ $(".phone").change(async function () {
         if (!snapshot.empty) {
           snapshot.forEach(async (doc) => {
             var FName = doc.data().FirstName;
-            if (FName != addStudentForm.Fname.value) {
+            if (FName != addStudentForm.Fname.value) { 
+              // to check if the admin has added the same student for the parent same parent before
 
         $("#FnameParent").val(d.data().FirstName);
         $("#LnameParent").val(d.data().LastName);
@@ -342,14 +343,11 @@ $(".phone").change(async function () {
               addStudentForm.Fname.focus();
             }//else  if(FName != addStudentForm.Fname.value )
           })//forEach
-        }
-       
-        //if snapshot not empty
-      }
-    })
-  }
+      }//if snapshot not empty
+     }
+   })
+ }
   $(".loader").hide();
-
 });//end on change phone number function 
 
 
