@@ -121,7 +121,9 @@ onAuthStateChanged(authPrin, (user) => {
              // alert("triggerd");
              const registerFname = document.getElementById("firstName").value;
              const registerlname = document.getElementById("lastName").value;
-             const registerEmail = document.getElementById("email").value;
+             var registerEmail = document.getElementById("email").value;
+             registerEmail = registerEmail.toLowerCase();
+
              const registerPass = pass();
              createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
                .then(async (userCredential) => {

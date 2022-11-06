@@ -158,7 +158,8 @@ addStudentForm.addEventListener('submit', async (e) => {
 
       const registerFname = document.getElementById("FnameParent").value;
       const registerlname = document.getElementById("LnameParent").value;
-      const registerEmail = document.getElementById("emailP").value;
+      var registerEmail = document.getElementById("emailP").value;
+      registerEmail = registerEmail.toLowerCase();
       const registerPhone = document.getElementById("phone").value;
       const registerPass = pass();
       const phoneNum = parseInt(registerPhone);

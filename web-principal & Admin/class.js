@@ -79,7 +79,7 @@ const classForm = document.querySelector('.addClassForm');
 classForm.addEventListener('submit', async (e) => {
     e.preventDefault()
     
-    const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if(classForm.Cname.value.match(specialChars))
     {alert("اسم الفصل يجب ان يتكون من حروف فقط ");
       return;
