@@ -195,9 +195,9 @@ excel_file.addEventListener('change', (event) => {
   if(validate1 && validate2 && validate3){
     if(sheet_data.length > 0)
        {    
-             for(var row = 1; row <1000; await row++)
+             for(var row = 1; row <sheet_data[row].length; await row++)
            {  
-            for(var cell = 0; cell < 4; cell++) {  
+            for(var cell = 0; cell < 3; cell++) {  
                 if(row == 0){
                     //herders
                  }
@@ -264,6 +264,8 @@ excel_file.addEventListener('change', (event) => {
         }
         else{
           var x = table.rows[row].insertCell(3);
+         // alert(errorMessage);
+       //  alert(registerFname + " - " +registerlname + " - "  + registerEmail );
           x.innerHTML = "لم تتم الاضافة";
         }
       });
