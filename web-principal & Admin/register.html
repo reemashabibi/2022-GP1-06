@@ -232,12 +232,7 @@
 
 
 
-      var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-      if (!Email1.value.match(mailformat)) {
-        alert("يرجى إدخال بريد إلكتروني صحيح ");
-        document.getElementById("emailInp").focus();
-        return false;
-      }
+     
 
       if (password.value.length < 6) {
         alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
