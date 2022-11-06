@@ -9,7 +9,9 @@ import { getAuth, onAuthStateChanged,signOut } from "https://www.gstatic.com/fir
         if(user){
             const uid=user.uid;
             const uemail = user.email;
-            
+            if(user.displayName=="Principal"){
+            window.location.href="index.html";
+            }
             document.getElementsByTagName('body').onload = viewTachersAndClasses(uemail);
             console.log("the same user");
         }

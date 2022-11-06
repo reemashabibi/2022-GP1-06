@@ -37,6 +37,9 @@ export async function checkUser(){
 const auth = getAuth();
 const user= auth.currentUser
    onAuthStateChanged(auth, (user)=>{
+    if(user.displayName=="Principal"){
+      window.location.href="index.html";
+      }
        if(user){
            console.log("the same user");
        }
