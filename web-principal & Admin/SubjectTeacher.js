@@ -84,6 +84,7 @@ var currentSubjects =[];
 
   if(querySnapshot.empty){
     alert('لا توجد مواد');
+    $(".loader").hide();
 }
 var i=0;
   querySnapshot.forEach((subjectdoc) => {
@@ -205,9 +206,9 @@ document.getElementById('content').appendChild(tr);
 classId = cid;
   });
 
-  $('.loader').hide();
   }
 
+  $('.loader').hide();
 
 
 
