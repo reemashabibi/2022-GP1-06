@@ -125,11 +125,11 @@ let authPrinID = "";
 
               const registerPass =  pass();         
               createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
-              .then( (userCredential) => {
+              .then( async (userCredential) => {
                   // Signed in 
                  const user = userCredential.user;
      
-                setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
+                await setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
                // setDoc(doc(db, 'School/'+"kfGIwTyclpNernBQqSpQhkclzhh1"+'/Admin', user.uid), {
                   Email: registerEmail.toLowerCase(),
                   FirstName: registerFname,
