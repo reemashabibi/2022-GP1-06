@@ -247,7 +247,7 @@ excel_file.addEventListener('change', (event) => {
      }) 
     registerPass =  pass(); 
     createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
-    .then( (userCredential) => {
+    .then( async (userCredential) => {
         // Signed in 
        let user = userCredential.user;   
       sendPasswordResetEmail(authSec,registerEmail).then(() => {
@@ -257,7 +257,7 @@ excel_file.addEventListener('change', (event) => {
     //add to documnet
     var x = table.rows[row].insertCell(3);
     x.innerHTML = "تمت الإضافة";
-    setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
+   await setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
       Email: registerEmail,
       FirstName: registerFname,
       LastName: registerlname,

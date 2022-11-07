@@ -291,7 +291,7 @@ excel_file.addEventListener('change', (event) => {
             }
             if (cell == 7) {
               registerParentEmail = sheet_data[row][cell];
-              registerEmail = registerEmail.toLowerCase();
+              registerParentEmail = registerParentEmail.toLowerCase();
 
             }
           }

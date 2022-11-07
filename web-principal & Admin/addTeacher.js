@@ -134,7 +134,7 @@ onAuthStateChanged(authPrin, (user) => {
                    // EmailSent
                  });
                  let userID =  user.uid;
-                 setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
+                 await setDoc(doc(db, 'School/'+schoolID+'/Teacher', user.uid), {
                      Email: registerEmail,
                      FirstName: registerFname,
                      LastName: registerlname,
