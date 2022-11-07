@@ -195,11 +195,9 @@ excel_file.addEventListener('change', (event) => {
   if(validate1 && validate2 && validate3){
     if(sheet_data.length > 0)
        {    
-<<<<<<< HEAD
-             for(var row = 1; row <sheet_data[row].length; await row++)
-=======
+
+
              for(var row = 1; row < 1000; await row++)
->>>>>>> 3d99ff056b3f5396aafa6f1a3621aefb228c037b
            {  
             for(var cell = 0; cell < 3; cell++) {  
                 if(row == 0){
