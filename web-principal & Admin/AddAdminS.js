@@ -138,6 +138,7 @@ excel_file.addEventListener('change', (event) => {
              registerFname = sheet_data[0][0];
              registerlname = sheet_data[0][1];
              registerEmail = sheet_data[0][2];
+
             if (row == 0) { 
               //does not ignore whie sapces in Arabic
             //   if (registerFname.replaceAll("\\s+","").equals("الإسم الأول".replaceAll("\\s+",""))  ||  registerFname.replaceAll("\\s+","").equals("الإسم الاول".replaceAll("\\s+","")) ||  registerFname.replaceAll("\\s+","").equals("الاسم الأول".replaceAll("\\s+","")) || registerFname.replaceAll("\\s+","").equals("الاسم الاول".replaceAll("\\s+","")) )
@@ -216,6 +217,8 @@ excel_file.addEventListener('change', (event) => {
                 if(cell==2){
                     registerEmail = sheet_data[row][cell];
                   //  alert(registerEmail);
+                    registerEmail = registerEmail.toLowerCase();
+
 
                     }
                 }            

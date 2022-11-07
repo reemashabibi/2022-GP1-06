@@ -220,6 +220,8 @@ excel_file.addEventListener('change', (event) => {
                 if(cell==2){
                     registerEmail = sheet_data[row][cell];
                   //  alert(registerEmail);
+                  registerEmail = registerEmail.toLowerCase();
+
 
                     }
                 }            
