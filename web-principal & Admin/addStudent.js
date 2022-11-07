@@ -34,7 +34,7 @@ var schoolID;
 function school(id) {
   schoolID = id;
 }
-
+$(".loader").hide();
 export async function fillData(email) {
   const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email", "==", email)));
   snapshot.forEach(async doc => {
@@ -51,7 +51,7 @@ export async function fillData(email) {
         new_op.setAttribute("value", doc.data().ClassName);
         document.getElementById("classes").appendChild(new_op);
       })
-      $(".loader").hide();
+     $(".loader").hide();
     });
   
   });
