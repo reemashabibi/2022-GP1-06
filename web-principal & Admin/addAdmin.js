@@ -123,8 +123,32 @@ let authPrinID = "";
               var registerEmail = document.getElementById("email").value;
               registerEmail = registerEmail.toLowerCase();
 
-              const registerPass =  pass();         
-              createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+              const registerPass =  pass(); 
+        /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+              $.post("/addUser",
+              {
+                 email: registerEmail,
+                 password: registerPass
+              },
+             async function (data, status) {
+                if(status == 200){
+                  await setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
+                       Email: registerEmail.toLowerCase(),
+                       FirstName: registerFname,
+                       LastName: registerlname,               
+                     })
+                     
+                    alert("تمت الإضافة بنجاح"); 
+                    sendPasswordResetEmail(auth,registerEmail).then(() => {
+                      // EmailSent
+                   
+                    })  
+                }
+                 console.log(data);
+              });
+          // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+
+            /*  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
               .then( async (userCredential) => {
                   // Signed in 
                  const user = userCredential.user;
@@ -152,7 +176,8 @@ let authPrinID = "";
                   alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
                   
                   addAdminForm.reset();
-                });
+                });*/
+                //End of remove comment
                  addAdminForm.reset();
               }//end if
               else{
