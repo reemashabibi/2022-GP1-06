@@ -29,15 +29,22 @@ router.get('/',(req, res) => {
     res.sendfile('index.html');
     });
 
+    // Parse URL-encoded bodies (as sent by HTML forms)
+app.use(express.urlencoded({
+    extended: true
+}));
+
+// Parse JSON bodies (as sent by API clients)
+app.use(express.json());
+
 // Add user
-app.post('/addUser', jsonParser, async (req, res) => {
+app.post('/addUser', async (req, res) => {
     const userData = req.body;
     console.log(userData);
 
     getAuth()
     .createUser({
       email: userData.email,
-      emailVerified: true,
       password: 'secretPassword',
       disabled: false,
     })

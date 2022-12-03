@@ -126,7 +126,7 @@ let authPrinID = "";
               const registerPass =  pass(); 
         /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
               $.post("http://localhost:8080/addUser",
-              {
+               {
                  email: registerEmail,
                  password: registerPass
               },
