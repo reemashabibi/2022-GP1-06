@@ -54,12 +54,13 @@ app.post('/addUser', async (req, res) => {
       res.json({"status": "Successfull" , "uid": userRecord.uid});
     })
     .catch((error) => {
+        console.log(error.code);
         const errorCode = error.code;
         const errorMessage = error.message;
-        if (errorMessage =="Firebase: Error (auth/email-already-exists)."){
+        if (errorCode =="auth/email-already-exists"){
             res.json({"status":'used'});}
         else
-        res.end('error');;
+        res.end('error');
         
       console.log('Error creating new user:', error);
     });
@@ -79,7 +80,7 @@ app.post('/addUser', async (req, res) => {
 
 
 // Delete user
-  app.post('/deleteUser', jsonParser, async (req, res) => {
+  app.post('/deleteUser',  async (req, res) => {
     const userData = req.body;
     console.log(userData);
 
@@ -87,9 +88,11 @@ app.post('/addUser', async (req, res) => {
   .deleteUser(userData.uid)
   .then(() => {
     console.log('Successfully deleted user');
+    res.json({"status": "Successfull" })
   })
   .catch((error) => {
     console.log('Error deleting user:', error);
+    res.end('error');
   });
   })
 
