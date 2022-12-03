@@ -125,14 +125,14 @@ let authPrinID = "";
 
               const registerPass =  pass(); 
         /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
-              $.post("/addUser",
+              $.post("http://localhost:8080/addUser",
               {
                  email: registerEmail,
                  password: registerPass
               },
-             async function (data, status) {
-                if(status == 200){
-                  await setDoc(doc(db, 'School/'+authPrinID+'/Admin', user.uid), {
+              function (data, stat) {
+                if(data.status == 'Successfull'){
+                   setDoc(doc(db, 'School/'+authPrinID+'/Admin', data.uid), {
                        Email: registerEmail.toLowerCase(),
                        FirstName: registerFname,
                        LastName: registerlname,               
@@ -143,6 +143,14 @@ let authPrinID = "";
                       // EmailSent
                    
                     })  
+                }
+                else{
+                  if(data.status == 'used')
+                  alert("البريد الالكتروني مستخدم من قبل");
+                  else if (data == 'error')
+                  alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+                  else
+                  alert("???");
                 }
                  console.log(data);
               });

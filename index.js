@@ -2,13 +2,16 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require("cors")
-const route = process.env.PORT || 3000;
-
+const route = process.env.PORT || 8080;
+const router = express.Router();
 const { initializeApp } = require('firebase-admin/app');
+const { getAuth } = require('firebase-admin/auth');
+// add router in express app
+app.use("/",router);
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("./halaqa-89b43-firebase-adminsdk-j33v0-b62f3d0f88.json");
+var serviceAccount = require("C:/Users/ree4m/Downloads/halaqa-89b43-firebase-adminsdk-j33v0-0d2cef029f.json");
 
 // Intialize the firebase-admin project/account
 admin.initializeApp({
@@ -22,6 +25,9 @@ app.get("/status", (req, res) => {
     res.send("ckeck Status");
 });
 
+router.get('/',(req, res) => {
+    res.sendfile('index.html');
+    });
 
 // Add user
 app.post('/addUser', jsonParser, async (req, res) => {
@@ -38,14 +44,15 @@ app.post('/addUser', jsonParser, async (req, res) => {
     .then((userRecord) => {
       // See the UserRecord reference doc for the contents of userRecord.
       console.log('Successfully created new user:', userRecord.uid);
+      res.json({"status": "Successfull" , "uid": userRecord.uid});
     })
     .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         if (errorMessage =="Firebase: Error (auth/email-already-exists)."){
-             alert("البريد الالكتروني مستخدم من قبل");}
+            res.json({"status":'used'});}
         else
-             alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+        res.end('error');;
         
       console.log('Error creating new user:', error);
     });
@@ -78,3 +85,7 @@ app.post('/addUser', jsonParser, async (req, res) => {
     console.log('Error deleting user:', error);
   });
   })
+
+  app.listen(8080,() => {
+    console.log("Started on PORT 8080");
+    })
