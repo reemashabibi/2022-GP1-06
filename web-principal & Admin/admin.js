@@ -328,12 +328,40 @@ $(document).ready(function () {
         var parentData = await getDoc(parent);
         const oldClassRef = doc(db,"School", school,"Class", oldClass);
 
-        updateDoc(oldClassRef, {
-          Students: arrayRemove(docRef)
-      });
-   ;
+
       if(parentData.data().Students.length == 1){
-       await deleteDoc(parent).then(() => {
+
+        /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+        $.post("http://localhost:8080/deleteUser",
+        {
+          uid: parent.id,
+       },
+       function (data, stat) {
+         if(data.status == 'Successfull'){
+           deleteDoc(parent).then(() => {
+            deleted = true;
+            updateDoc(oldClassRef, {
+              Students: arrayRemove(docRef)
+          });
+       ;
+           }).catch(error => {
+            console.log(error);
+            $(".loader").hide();
+            alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+            deleted = false;
+            return;
+          })
+         }
+         else{
+          deleted = false;
+          $(".loader").hide();
+          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+         }
+
+       
+       });///End of new code
+
+   /*    await deleteDoc(parent).then(() => {
          deleted = true;
         
        }).catch(error => {
@@ -342,13 +370,16 @@ $(document).ready(function () {
            alert("حصل خطأ، الرجاء المحاولة لاحقًا");
            deleted = false;
            return;
-         })
+         })*/
      }else{
       await updateDoc(parent, {
         Students: arrayRemove(docRef)
     }).then(() => {
       deleted = true;
-      
+      updateDoc(oldClassRef, {
+        Students: arrayRemove(docRef)
+    });
+ ;
     })
       .catch(error => {
         console.log(error);
@@ -408,7 +439,31 @@ $(document).ready(function () {
       }
       
         if(deleted){
-          deleteDoc(docRef).then(() => {
+
+            /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+         $.post("http://localhost:8080/deleteUser",
+         {
+           uid: docRef.id,
+        },
+        function (data, stat) {
+          if(data.status == 'Successfull'){
+            deleteDoc(docRef).then(() => {
+              $(".loader").hide();
+              alert("تم حذف المعلم");
+              window.location.reload(true);
+            })
+              .catch(error => {
+                deleted= false;
+                console.log(error);
+              })
+          }
+          else{
+            $(".loader").hide();
+            alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+          }
+        });///End of new code
+
+         /* deleteDoc(docRef).then(() => {
             $(".loader").hide();
             alert("تم حذف المعلم");
             window.location.reload(true);
@@ -416,7 +471,7 @@ $(document).ready(function () {
             .catch(error => {
               deleted= false;
               console.log(error);
-            })
+            })*/
           
         }
         else{
