@@ -145,7 +145,7 @@ excel_file.addEventListener('change', (event) => {
                    registerlname = sheet_data[0][1];
                    registerEmail = sheet_data[0][2];
                   if (row == 0) { 
-                    //does not ignore whie sapces in Arabic
+                    //does not ignore white sapces in Arabic
                   //   if (registerFname.replaceAll("\\s+","").equals("الإسم الأول".replaceAll("\\s+",""))  ||  registerFname.replaceAll("\\s+","").equals("الإسم الاول".replaceAll("\\s+","")) ||  registerFname.replaceAll("\\s+","").equals("الاسم الأول".replaceAll("\\s+","")) || registerFname.replaceAll("\\s+","").equals("الاسم الاول".replaceAll("\\s+","")) )
                   if (registerFname == "الإسم الأول" || registerFname == "الإسم الاول" || registerFname == "الاسم الأول"|| registerFname == "الاسم الاول")
                      {
@@ -246,7 +246,43 @@ excel_file.addEventListener('change', (event) => {
        schoolID = data.id;
      }) 
     registerPass =  pass(); 
-    createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+
+        /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+        $.post("http://localhost:8080/addUser",
+        {
+          email: registerEmail,
+          password: registerPass
+       },
+       function (data, stat) {
+         if(data.status == 'Successfull'){
+          var x = table.rows[row].insertCell(3);
+          x.innerHTML = "تمت الإضافة";
+          setDoc(doc(db, 'School/'+schoolID+'/Teacher', data.uid), {
+            Email: registerEmail,
+            FirstName: registerFname,
+            LastName: registerlname,
+            Subjects: [],               
+          })
+             sendPasswordResetEmail(auth,registerEmail).then(() => {
+               // EmailSent
+            
+             })  
+         }
+         else{
+           if(data.status == 'used'){
+           var x = table.rows[row].insertCell(3);
+           x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
+           }
+           else if (data == 'error'){
+           var x = table.rows[row].insertCell(3);
+           x.innerHTML = "لم تتم الاضافة";}
+
+         }
+          console.log(data);
+       });
+   // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+
+  /*  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
     .then( async (userCredential) => {
         // Signed in 
        let user = userCredential.user;   
@@ -276,6 +312,6 @@ excel_file.addEventListener('change', (event) => {
           var x = table.rows[row].insertCell(3);
           x.innerHTML = "لم تتم الاضافة";
         }
-      });      
+      });   */   
   
   }

@@ -241,7 +241,46 @@ excel_file.addEventListener('change', (event) => {
     //alert("in func");  
    // alert(registerFname + " - " +registerlname + " - "  + registerEmail + " - " +schoolID );
     registerPass =  pass(); 
-    createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+
+      /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+      $.post("http://localhost:8080/addUser",
+      {
+        email: registerEmail,
+        password: registerPass
+     },
+     function (data, stat) {
+       if(data.status == 'Successfull'){
+          setDoc(doc(db, 'School/'+authPrinID+'/Admin', data.uid), {
+              Email: registerEmail.toLowerCase(),
+              FirstName: registerFname,
+              LastName: registerlname,               
+            })
+            
+            var x = table.rows[row].insertCell(3);
+    x.innerHTML = "تمت الإضافة"; 
+           sendPasswordResetEmail(auth,registerEmail).then(() => {
+             // EmailSent
+          
+           })  
+       }
+       else{
+         if(data.status == 'used'){
+         var x = table.rows[row].insertCell(3);
+         x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
+        }
+         else if (data == 'error')
+         
+         var x = table.rows[row].insertCell(3);
+         // alert(errorMessage);
+       //  alert(registerFname + " - " +registerlname + " - "  + registerEmail );
+          x.innerHTML = "لم تتم الاضافة";
+
+       }
+        console.log(data);
+     });
+ // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!  
+
+  /*  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
     .then( async (userCredential) => {
         // Signed in 
        const user = userCredential.user;   
@@ -274,6 +313,6 @@ excel_file.addEventListener('change', (event) => {
        //  alert(registerFname + " - " +registerlname + " - "  + registerEmail );
           x.innerHTML = "لم تتم الاضافة";
         }
-      });
+      });*/
        //alert("out func");
   }

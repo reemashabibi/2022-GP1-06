@@ -249,15 +249,25 @@ classId = cid;
                 console.log(error);
                 deleted = false
             })
-              
+
+            const index = currentSubjects.indexOf($(this).val());
+            if (index > -1) { // only splice array when item is found
+              currentSubjects.splice(index, 1); // 2nd parameter means remove one item only
+              } 
+
          })
 if(deleted){
   alert("لقد تم حذف المواد");
 }
+
         }
           
       });
-
+currentSubjectsWithoutSomeChar = [];
+for (var l; l<currentSubjects.length; l++){
+ var str = currentSubjects[l].slice(2);
+ currentSubjectsWithoutSomeChar.push(str);
+}
       $('#add').click(function(){
         $('.loader').show();
         var subjectName = document.getElementById('sname').value;
@@ -265,10 +275,11 @@ if(deleted){
           alert("لإضافة مادة يجب أن يتم تعبأة حقل اسم المادة");
           $('.loader').hide();
         }
-        else if(currentSubjects.indexOf(subjectName) !== -1){
+        else if(currentSubjects.indexOf(subjectName) !== -1 || currentSubjectsWithoutSomeChar.indexOf(subjectName) !== -1){
           alert("تمت إضافة هذه المادة مسبقًا للفصل");
           $('.loader').hide();
           document.getElementById('sname').value="";
+          
         }
         else{
         const dbRef = collection(doc(db,"School",principalId,"Class",classId), "Subject");
@@ -281,7 +292,7 @@ if(deleted){
        };
        addDoc(dbRef, data)
         .then(docRef => {
-          
+          currentSubjects.push(subjectName);
           alert(" تمت إضافة المادة بنجاح");
           document.getElementById('sname').value= "";
           //add it to the table 

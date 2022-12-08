@@ -137,13 +137,32 @@ $(document).ready(function () {
     const docRef = doc(db, adminID);
     if(confirm("هل تأكد حذف الإداري وجميع البيانات المتعلقة به؟")){
       $('.loader').show();
-    deleteDoc(docRef).then(() => {
+         /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+         $.post("http://localhost:8080/deleteUser",
+         {
+           uid: docRef.id,
+        },
+        function (data, stat) {
+          if(data.status == 'Successfull'){
+            deleteDoc(docRef).then(() => {
+              alert("تم حذف الإداري");
+              window.location.reload(true);
+            })
+              .catch(error => {
+                console.log(error);
+              })
+          }
+          else{
+            alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+          }
+        });///End of new code
+ /*   deleteDoc(docRef).then(() => {
       alert("تم حذف الإداري");
       window.location.reload(true);
     })
       .catch(error => {
         console.log(error);
-      })
+      })*/
     }
   
   });
