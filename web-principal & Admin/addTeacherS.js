@@ -145,7 +145,7 @@ excel_file.addEventListener('change', (event) => {
                    registerlname = sheet_data[0][1];
                    registerEmail = sheet_data[0][2];
                   if (row == 0) { 
-                    //does not ignore white sapces in Arabic
+                    //does not ignore whie sapces in Arabic
                   //   if (registerFname.replaceAll("\\s+","").equals("الإسم الأول".replaceAll("\\s+",""))  ||  registerFname.replaceAll("\\s+","").equals("الإسم الاول".replaceAll("\\s+","")) ||  registerFname.replaceAll("\\s+","").equals("الاسم الأول".replaceAll("\\s+","")) || registerFname.replaceAll("\\s+","").equals("الاسم الاول".replaceAll("\\s+","")) )
                   if (registerFname == "الإسم الأول" || registerFname == "الإسم الاول" || registerFname == "الاسم الأول"|| registerFname == "الاسم الاول")
                      {

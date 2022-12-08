@@ -3,7 +3,7 @@
 export "FLUTTER_ROOT=/Users/maca7/flutter"
 export "FLUTTER_APPLICATION_PATH=/Users/maca7/Desktop/2022-GP1-06/halaqa_app"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
-export "FLUTTER_TARGET=/Users/maca7/Desktop/2022-GP1-06/halaqa_app/lib/main.dart"
+export "FLUTTER_TARGET=/Users/maca7/Desktop/2022-GP1-06/halaqa_app/lib/screens/main.dart"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
 export "FLUTTER_BUILD_NUMBER=1"

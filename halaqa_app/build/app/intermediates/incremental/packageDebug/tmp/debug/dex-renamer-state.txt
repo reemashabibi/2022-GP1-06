@@ -1,4 +1,4 @@
-#Thu Dec 08 16:58:49 AST 2022
+#Thu Dec 08 20:59:01 AST 2022
 base.2=/Users/maca7/Desktop/2022-GP1-06/halaqa_app/build/app/intermediates/dex/debug/mergeDexDebug/classes3.dex
 path.2=classes3.dex
 base.1=/Users/maca7/Desktop/2022-GP1-06/halaqa_app/build/app/intermediates/dex/debug/mergeDexDebug/classes2.dex
