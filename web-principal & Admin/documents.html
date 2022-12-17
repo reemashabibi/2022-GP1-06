@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 
-
   <script type='module'>
-    import { viewStudents } from './admin.js';
+    import { viewDocuments } from './documents.js';
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
  const auth = getAuth();
  const user= auth.currentUser;
     onAuthStateChanged(auth, (user)=>{
         if(user){
             const uid=user.uid;
-            var queryString = location.search.substring(1);
-            var ids = queryString.split("|");
-            document.getElementsByTagName('body').onload = viewStudents(ids[0],ids[1]);
+
+            document.getElementsByTagName('body').onload = viewDocuments();
             console.log("the same user");
         }
         else{
@@ -57,6 +55,16 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
     
     <title>الطلاب</title>
     
+    <style>
+        th {text-align: center;}
+       
+        td {text-align: right; }
+        .tdContent{margin-right: 10%;}
+        th, td {border-bottom: 1px solid #ddd;}
+        table{width: 100% }
+        .deleteCell{text-align: left;}
+      
+    </style>
 </head>
 <body>
 
@@ -113,49 +121,28 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
            <div class="section-title text-center ">
            <h3 class="topTitle" id="className" style="margin-top:5%;"></h3>
 
+
               
            </div>
        </div>
    </div>
 
-<div class="container bootstrap snippets bootdey">
+<div class="container bootstrap snippets bootdey" id = "allTabelsDiv">
 
     <div class="row">
         <div class="col-lg-12">
             <div class="main-box no-header clearfix">
-                <div class="main-box-body clearfix">
-                    <div class="table-responsive">
-                        <table class="table user-list">
-                            <thead>
-                                <tr>
-                                <th><span>تحضير الطالب</span></th>
-
-                                <th><span>نقل طالب لفصل آخر</span></th>
-
-                                <th><span>رقم تواصل ولي الأمر</span></th>
-                                
-                                <th><span>البريد الإلكتروني لولي الأمر</span></th>
-                                
-                                <th><span> أسم الطالب</span></th>
-                               <th> <button class="btn btn-danger rounded-0"  type="button" id='delete'><i class="fa fa-trash"></i></button> </th>
-                                </tr>
-                            </thead>
-                            <tbody id="schedule">
-  
-                               
-                                    
-                               
-                            </tbody>
-                        </table>
+                <div class="main-box-body clearfix " >
+                    <div class="table-responsive" id = "tableArea">
+                      
+                   
                     </div>
                 </div>
             </div>
             <div class="loader topTitle"></div>
         </div>
     </div>
-    <div id = 'button-container'>
-    <button class="button-5" role="button" id ="saveAttendence"><span>تسجيل الحضور</span></button>
-    </div>>
+    
 
 </div>
   

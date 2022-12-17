@@ -99,6 +99,7 @@ classForm.addEventListener('submit', async (e) => {
         ClassName: classForm.Cname.value,
         Level: parseInt(classForm.classes.value),
         Students: [],
+        Documents: [],
     })
     .then(async docRef => { 
       classForm.reset()

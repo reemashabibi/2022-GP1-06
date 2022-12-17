@@ -263,11 +263,12 @@ if(deleted){
         }
           
       });
-currentSubjectsWithoutSomeChar = [];
-for (var l; l<currentSubjects.length; l++){
- var str = currentSubjects[l].slice(2);
- currentSubjectsWithoutSomeChar.push(str);
+var currentSubjectsWithoutSomeChar =[];
+for (var l=0; l<currentSubjects.length; l++){
+ //var str = currentSubjects[l].slice(2);
+ currentSubjectsWithoutSomeChar.push(currentSubjects[l]);
 }
+console.log(currentSubjectsWithoutSomeChar);
       $('#add').click(function(){
         $('.loader').show();
         var subjectName = document.getElementById('sname').value;

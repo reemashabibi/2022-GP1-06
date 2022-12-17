@@ -191,9 +191,11 @@ $("#bigdiv > .theTab").sort(function(a, b) {
 }
 
 
-
+// view students
 var school = null;
 var oldClass = null;
+var date = new Date().toJSON().slice(0,10);
+console.log(date);
 export async function viewStudents(classId, schoolId){
   const refrence = doc(db,"School", schoolId,"Class", classId);
   school = schoolId;
@@ -252,6 +254,23 @@ export async function viewStudents(classId, schoolId){
 tr.id = d.ref.path;
 
     
+   var tdAbcense = document.createElement('td');
+   tr.appendChild(tdAbcense);
+   var abcenseBtn = document.createElement("button");
+   abcenseBtn.className = "button-5";
+   abcenseBtn.role = "button";
+
+ 
+   tdAbcense.appendChild(abcenseBtn);
+   abcenseBtn.textContent = "حاضر";
+   tdAbcense.className = "in abcenseBtn";
+   var abcense = await getDoc(doc(db, d.ref.path+'/Absence', date))
+    if (abcense.exists()) {
+      abcenseBtn.style.backgroundColor = "#fb8332";
+      abcenseBtn.textContent = 'غائب';
+      tdAbcense.className = "abcenseBtn out";
+    }
+
 
 
     var td5 = document.createElement('td');
@@ -285,9 +304,35 @@ tr.id = d.ref.path;
     tr.appendChild(td3);
 
     var td4 = document.createElement('td');
+   td4.className = 'notify';
     var a4 = document.createElement('a');
-    a4.className = 'tdContent';
-    a4.innerHTML = firstName + " " + lastName;
+    a4.className = 'tdContent notification';
+    var spanName = document.createElement('span');
+    spanName.innerHTML = firstName + " " + lastName;
+    a4.href = 'studentDocuments.html?'+d.id+"|";
+    a4.appendChild(spanName);
+
+    // notfication badge
+    const colRef = collection (db, "School",schoolId, "Student", d.id, 'FilledDocuments');
+    const docsFilled = await getDocs(colRef);
+    var numOfNewDocs = 0;
+    if(docsFilled.docs.length > 0) {
+      docsFilled.forEach( async (doc) => {
+  //loop through documents of the student
+      if(doc.data().Viewed == false){
+        numOfNewDocs++;
+      }
+    });
+  }
+
+      if(numOfNewDocs >0){
+
+    var spanNotfiy = document.createElement('span');
+    spanNotfiy.className = "badge";
+    spanNotfiy.innerHTML= ""+numOfNewDocs;
+    a4.appendChild(spanNotfiy);
+      }
+
     td4.appendChild(a4);
     tr.appendChild(td4);
     
@@ -306,6 +351,7 @@ tr.id = d.ref.path;
 
 
   };
+ 
   $('.loader').hide();
 }
 
@@ -510,6 +556,45 @@ $(document).ready(function () {
   }
   
   });
+  // check Absence
+  $(document).on('click', '#saveAttendence', async function () {
+   
+
+    $('#schedule tr').each( async function() {
+      var refre =  $(this).attr('id');
+      var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
+        if (abcense.exists()) {
+
+          alert("لقد تم نسجيل الحضور مسبقًا لهذا الفصل");
+          return;
+        }
+
+      var status = $(this).find("td:first").attr('class');
+      if(status == "abcenseBtn out"){
+
+       await setDoc(doc(db, refre+'/Absence', date), {
+          excuse: "jj",  
+     });
+      }
+              });
+              alert("تم نسجيل الحضور");
+              console.log(date);
+  });
+  
+  $(document).on('click', '.abcenseBtn', async function () {
+    var abcenseBtn = $(this);
+    if($(this).text() == "حاضر"){
+      $(this).find('button').css({backgroundColor: "#fb8332"});
+      $(this).find('button').text('غائب');
+      $(this).removeClass('in').addClass('out');
+    }
+    else{
+      $(this).find('button').css({backgroundColor: "#9efa00"});
+      $(this).find('button').text('حاضر'); 
+      $(this).removeClass('out').addClass('in');
+    }
+  } );
+   
 });
 
 
@@ -552,4 +637,5 @@ $(document).ready(function () {
 
   });
 });
+
 

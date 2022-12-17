@@ -21,13 +21,13 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const app2 = initializeApp(firebaseConfig, "Secondary");
+
 const db = getFirestore(app);
 
 export { app, db, collection, getDocs, Timestamp, addDoc };
 export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
-const authSec = getAuth(app2);
+
 const auth = getAuth(app);
 
 
@@ -205,6 +205,10 @@ addStudentForm.addEventListener('submit', async (e) => {
                       console.log(error);
                   })
                   $(".loader").hide();
+                  sendPasswordResetEmail(auth,registerEmail).then(() => {
+                    // EmailSent
+                 
+                  });  
                   alert("تمت الإضافة بنجاح")
                   addStudentForm.reset();
               });
