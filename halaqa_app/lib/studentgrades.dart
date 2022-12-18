@@ -9,7 +9,7 @@ class studentGrades extends StatefulWidget {
   final DocumentReference stRef;
   final DocumentReference classRef;
 
-  @override 
+  @override
   _EditProfilePageState createState() => _EditProfilePageState();
 }
 
@@ -65,7 +65,27 @@ class _EditProfilePageState extends State<studentGrades> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 76, 170, 175),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MyWidget(
+                  ref: widget.classRef,
+                ),
+              ),
+            );
+          },
+        ),
+        actions: [],
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[

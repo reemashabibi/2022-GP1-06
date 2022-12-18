@@ -1,10 +1,7 @@
-//container
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:decider/services/auth_service.dart'
-//import 'var.dart' as globals;
+
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
@@ -22,34 +19,44 @@ class _teacherHPState extends State<teacherHP> {
   var className = "";
   var level = "";
   late List _SubjectList;
-  late List _SubjectsNameList = [""];
+  late List _SubjectsNameList;
   late List _SubjectsRefList;
   late List _ClassNameList;
-  late List _LevelNameList ;
+  late List _LevelNameList;
+  var x = 0;
+  var v = 0;
+
   var numOfSubjects;
-  var schoolID="xx";
+  var schoolID = "xx";
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
+  getData() {
+    _ClassNameList = ["يتم التحميل...."];
+    _LevelNameList = ["يتم التحميل...."];
+    _SubjectList = [""];
+    _SubjectsNameList = [""];
+    _SubjectsRefList = [""];
+    x++;
+  }
 
-  Future <void>getSubjects() async {
-    print('in1');
+  getSubjects() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
-    
-    //_SubjectsNameList = [];
-    //print(uid);
-   // DocumentReference docRef = await FirebaseFirestore.instance.doc(user!.uid);
-    // setState(() {});
+    User? user = FirebaseAuth.instance.currentUser;
 
+    var col = FirebaseFirestore.instance
+        .collectionGroup('Teacher')
+        .where('Email', isEqualTo: user!.email);
+    var snapshot = await col.get();
+    for (var doc in snapshot.docs) {
+      schoolID = doc.reference.parent.parent!.id;
+      break;
+    }
 
- getSchoolID();
-DocumentReference docRef = await FirebaseFirestore.instance.doc('School/'+ '$schoolID'+'/Teacher/'+user!.uid);
+    DocumentReference docRef = await FirebaseFirestore.instance
+        .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid);
+
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
-      _ClassNameList = ["يتم التحميل...."];
-      _LevelNameList = ["يتم التحميل...."];
-      _SubjectList = [""];
-      _SubjectsNameList = [""];
-      _SubjectsRefList = [""];
 
       numOfSubjects = ds['Subjects'].length;
 
@@ -75,29 +82,36 @@ DocumentReference docRef = await FirebaseFirestore.instance.doc('School/'+ '$sch
         });
       }
       setState(() {
-        _SubjectsNameList.removeAt(0);
-        _ClassNameList.removeAt(0);
-        _LevelNameList.removeAt(0);
-        _SubjectsRefList.removeAt(0);
+        if (_SubjectsNameList.length > 1) {
+          _SubjectsNameList.removeAt(0);
+          _ClassNameList.removeAt(0);
+          _LevelNameList.removeAt(0);
+          _SubjectsRefList.removeAt(0);
+        }
       });
+      if (_SubjectsNameList[0] == "") {
+        v++;
+      }
     });
   }
 
-Future<void> getSchoolID() async {
+  Future<void> getSchoolID() async {
     User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance.collectionGroup('Teacher').where('Email', isEqualTo: user!.email);
-     var snapshot = await col.get();
-     for (var doc in snapshot.docs) {
-       schoolID = doc.reference.parent.parent!.id;
-       break;
+    var col = FirebaseFirestore.instance
+        .collectionGroup('Teacher')
+        .where('Email', isEqualTo: user!.email);
+    var snapshot = await col.get();
+    for (var doc in snapshot.docs) {
+      schoolID = doc.reference.parent.parent!.id;
+      break;
     }
   }
-  remove() {}
 
   @override
   void initState() {
     getSubjects();
     getSchoolID();
+    // getSchoolID();
     //remove();
 
     super.initState();
@@ -105,11 +119,12 @@ Future<void> getSchoolID() async {
 
   @override
   Widget build(BuildContext context) {
+    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-
       //appBar: AppBar(title: const Text("Teacher")),
-            appBar: AppBar(
-        title: Text("Teacher"),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
         actions: [
           IconButton(
             onPressed: () {
@@ -118,34 +133,34 @@ Future<void> getSchoolID() async {
             },
             icon: Icon(
               Icons.logout,
+              color: Colors.black,
             ),
           ),
-
-            IconButton(
+          IconButton(
             onPressed: () {
-             // Navigator.pushReplacement(
+              // Navigator.pushReplacement(
               //context,
               //MaterialPageRoute(
-             // builder: (context) => EditProfilePage()
+              // builder: (context) => EditProfilePage()
               // ),
-           //  );
-                  Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const EditProfilePage()),
-                );
+              //  );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const EditProfilePage()),
+              );
             },
             icon: Icon(
               Icons.account_circle_rounded,
+              color: Colors.black,
             ),
           )
         ],
       ),
 
-      body: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .doc(
-                  "School/NS1CyESQA9VK6RkFuRN7pjC73VW2/Teacher/jSMmsmAqeTl67VrotFoV")
-              .snapshots(),
+      body: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
+              .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -154,8 +169,13 @@ Future<void> getSchoolID() async {
             }
 
             //Check if data arrived
-            if (snapshot.hasData) {
-              _SubjectList = snapshot.data!['Subjects'];
+            if (x == 0) {
+              getData();
+            }
+
+            if (snapshot.hasData && _SubjectsNameList[0] != "") {
+              //  dataGet();
+              // _SubjectList = snapshot.data!['Subjects'];
 
               return Container(
                   child: ListView(
@@ -208,63 +228,68 @@ Future<void> getSchoolID() async {
                 }).toList(),
               ));
             }
+            if (_SubjectsNameList.length == 0 && x == 0) {
+              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+            }
+            if (_SubjectsNameList[0] == "" && v == 1) {
+              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+            }
             return Center(child: CircularProgressIndicator());
           }),
     );
   }
-  
-  
 
   Future<void> logout(BuildContext context) async {
-   showAlertDialog(BuildContext context ) {};
+    showAlertDialog(BuildContext context) {}
+    ;
   }
 
-  Future<void> showAlertDialog(BuildContext context )async {
-   // set up the buttons
-  Widget continueButton = TextButton( //continueButton
-    child: Text("نعم"),
-    onPressed:  () async {
-   CircularProgressIndicator();
-    await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-      builder: (context) => LoginScreen(),
-      ),
+  Future<void> showAlertDialog(BuildContext context) async {
+    // set up the buttons
+    Widget continueButton = TextButton(
+      //continueButton
+      child: Text("نعم"),
+      onPressed: () async {
+        CircularProgressIndicator();
+        await FirebaseAuth.instance.signOut();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      },
     );
-    },
-  );
 
-  Widget cancelButton = TextButton(//cancelButton
-     child: Text("إلغاء",
-       style: TextStyle(
+    Widget cancelButton = TextButton(
+      //cancelButton
+      child: Text("إلغاء",
+          style: TextStyle(
             color: Colors.red,
           )),
-    onPressed:  () {
-     Navigator.of(context).pop();
-    },
-  );
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    //title: Text("AlertDialog"),
-    content: Text("هل تأكد تسجيل الخروج؟",
-    textAlign: TextAlign.center ,
-    ),
-    actions: [
-      continueButton,
-      cancelButton
-    ],
-  );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      //title: Text("AlertDialog"),
+      content: Text(
+        "هل تأكد تسجيل الخروج؟",
+        textAlign: TextAlign.center,
+      ),
+      actions: [continueButton, cancelButton],
+    );
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-   }//end method
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  } //end method
 
 }
 
@@ -279,21 +304,24 @@ class _MyWidgetState extends State<MyWidget> {
   late List _StudentList;
   late List _StudenNameList;
   late List _StudentsRefList;
+  var x = 0;
+  var v = 0;
 
   var numOfStudents;
 
+  getData() {
+    _StudentList = [""];
+    _StudentsRefList = [""];
+    _StudenNameList = [""];
+    x++;
+  }
+
   getStudents() async {
-    setState(() {
-      _StudentList = [""];
-      _StudentsRefList = [""];
-      _StudenNameList = ["يتم تحميل الطلاب....."];
-    });
     DocumentReference docRef =
         widget.ref.parent.parent as DocumentReference<Object?>;
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
-      print(widget.ref.toString());
 
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
@@ -307,10 +335,15 @@ class _MyWidgetState extends State<MyWidget> {
       }
 
       setState(() {
-        _StudentList.removeAt(0);
-        _StudenNameList.removeAt(0);
-        _StudentsRefList.removeAt(0);
+        if (_StudenNameList.length > 1) {
+          _StudentList.removeAt(0);
+          _StudenNameList.removeAt(0);
+          _StudentsRefList.removeAt(0);
+        }
       });
+      if (_StudenNameList[0] == "") {
+        v++;
+      }
     });
   }
 
@@ -324,11 +357,28 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     DocumentReference ref = widget.ref;
-    DocumentReference s = FirebaseFirestore.instance.doc(
-        "School/NS1CyESQA9VK6RkFuRN7pjC73VW2/Class/AcHYASkjczRWPhGWhCbO/Subject/2NG55SpgBc1M4lmlEhiu");
+
     DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 76, 170, 175),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => teacherHP(),
+              ),
+            );
+          },
+        ),
+        actions: [],
+      ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: widget.ref.parent.parent?.snapshots(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -338,7 +388,10 @@ class _MyWidgetState extends State<MyWidget> {
             }
 
             //Check if data arrived
-            if (snapshot.hasData && numOfStudents != 0) {
+            if (x == 0) {
+              getData();
+            }
+            if (snapshot.hasData && _StudenNameList[0] != "") {
               //Display the list
 
               return Container(
@@ -388,17 +441,14 @@ class _MyWidgetState extends State<MyWidget> {
                 }).toList(),
               ));
             }
-
-            return Center(child: Text(".لم تتم اضافة اي طالب بالفصل"));
+            if (_StudenNameList.length == 0 && x == 0) {
+              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+            }
+            if (_StudenNameList[0] == "" && v == 1) {
+              return Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
+            }
+            return Center(child: CircularProgressIndicator());
           }),
     );
-
-    
-
   }
-
-
-
-
-  
 }
