@@ -41,8 +41,7 @@ body {
         .responsive-table .table-header {
         display: none;
       }
-      .responsive-table .table-row {
-      }
+      
       .responsive-table li {
         display: block;
         text-align: center;
