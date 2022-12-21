@@ -195,7 +195,7 @@ $("#bigdiv > .theTab").sort(function(a, b) {
 var school = null;
 var oldClass = null;
 var date = new Date().toJSON().slice(0,10);
-console.log(date);
+
 export async function viewStudents(classId, schoolId){
   const refrence = doc(db,"School", schoolId,"Class", classId);
   school = schoolId;
@@ -558,25 +558,31 @@ $(document).ready(function () {
   });
   // check Absence
   $(document).on('click', '#saveAttendence', async function () {
-   
+   var abenceTaken = false;
 
     $('#schedule tr').each( async function() {
       var refre =  $(this).attr('id');
       var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
         if (abcense.exists()) {
-
+          abenceTaken = true;
+          breakOut = true;
           alert("لقد تم نسجيل الحضور مسبقًا لهذا الفصل");
-          return;
+          return false;
         }
 
       var status = $(this).find("td:first").attr('class');
       if(status == "abcenseBtn out"){
 
        await setDoc(doc(db, refre+'/Absence', date), {
-          excuse: "jj",  
+          excuse: "",  
      });
       }
               });
+              if(breakOut) {
+                breakOut = false;
+                return false;
+            } 
+              if(abenceTaken == false)
               alert("تم نسجيل الحضور");
               console.log(date);
   });

@@ -146,6 +146,7 @@ export async function viewDocuments(){
                     var tableBody
 
               if (classDocs.length >0 && classDocs[0] != "") {
+                tableBody = document.createElement('tbody');
                 //loop through documents of the class
                 for(var j=0; j<classDocs.length;j++){
                     var ADocument = classDocs[j];
@@ -155,13 +156,15 @@ export async function viewDocuments(){
                     
                     var fileName = theDocOfClass.data().FileName;
                     var filepath = fileName+"@"+theDocOfClass.id;
+                    var displayName = theDocOfClass.data().DisplayName;
 
 
                     
 
-                     tableBody = document.createElement('tbody');
+                    
 
                     var tr = document.createElement('tr');
+                    
                     tableBody.appendChild(tr);
 
                      //delete button
@@ -169,18 +172,20 @@ export async function viewDocuments(){
                     td.className = 'deleteCell';
                     td.innerHTML = "<button class='btn btn-danger rounded-0 deletebtn' type='button' id='"+theDocOfClass.id+"'><i class='fa fa-trash'></i></button>";
                     tr.appendChild(td);
+                    
 
                     // file 
                         var td2 = document.createElement('td');
                         tr.appendChild(td2);
+                        
           
                         var a = document.createElement('a');
                         a.className = 'tdContent';
-                        getDownloadURL(ref(storage, filepath))
+                       await getDownloadURL(ref(storage, filepath))
                         .then((url) => {
                             
                         // `url` is the download URL for the file
-                        a.innerHTML = fileName;
+                        a.innerHTML = displayName;
                         a.href = url;
                        })
                       .catch((error) => {
@@ -333,7 +338,7 @@ export async function viewDocuments(){
       var classesRef = documentDoc.data().Classes;
         //get file name
         var fileName = $(this).closest('tr').find(".tdContent").html();
-        alert(fileName);
+
         if(confirm(" هل أنت تأكد حذف المستند؟")){
           $(".loader").show();
         deleteDoc(docRef).then(async () =>{
@@ -346,7 +351,7 @@ export async function viewDocuments(){
        const fileRef = ref(storage, fileName+"@"+docID);
 
        // Delete the file
-        deleteObject(fileRef).then(() => {
+       await deleteObject(fileRef).then(() => {
         // File deleted successfully
       }).catch((error) => {
       // Uh-oh, an error occurred!
@@ -369,7 +374,13 @@ $(document).on('submit', 'form', async function (e){
     const classDocForm = document.querySelector('.classForm');
 
     e.preventDefault()
-
+    var selectedClass = document.getElementById("classes");
+    var selectedClassIn = selectedClass[selectedClass.selectedIndex].value;
+    if (selectedClassIn == "non") {
+      document.getElementById('alertContainer').innerHTML='<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يرجى اختيار فصل  </p> </div>';
+      document.querySelector('.add').non.focus();
+      return;
+    }
 
     $('.loader').show();
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
@@ -381,18 +392,25 @@ $(document).on('submit', 'form', async function (e){
     const DocsRef = collection(db, 'School', schoolID, 'Documents' );
 
     var file = document.getElementById("file").files[0];
+    var format = /[@]/;
+    if(format.test(file.name)){
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">@ يجب أن لا يحتوي اسم الملف على الرمز </p> </div>';
+      $(".loader").hide();
+      return;
+    }
 
     var data = {
        Classes:  arrayUnion(classRef),
        FileName: file.name,
+       DisplayName: classDocForm.Dname.value
     
      };
      
     await addDoc(DocsRef, data)
    .then(docRef => {
-   alert(docRef.id);
+
     const storageRef = ref(storage, file.name+"@"+docRef.id);
-    alert('hi');
+ 
     uploadBytes(storageRef, file).then(async (snapshot) => {
         
       await  updateDoc(classRef, {Documents: arrayUnion( doc(db, 'School', schoolID, 'Documents', docRef.id)) })
@@ -403,11 +421,13 @@ $(document).on('submit', 'form', async function (e){
    
     });
     $(".loader").hide();
-    alert("uploaded");
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح</p> </div>';
 })
    .catch(error => {
     $(".loader").hide();
     console.log(error);
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
+
   })
 
       
