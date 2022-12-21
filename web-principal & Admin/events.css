@@ -1,0 +1,10 @@
+.center {
+    display:inline-block;
+    position: relative;
+    background: #fff;
+    align-content: center;
+  
+}
+.paragraphStyle {
+    text-align: center;
+}

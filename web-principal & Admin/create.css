@@ -63,6 +63,20 @@
   text-align: right;
   margin-left: 30px;
 }
+.center .inputbox textarea {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 1px solid #000;
+  outline: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  text-align: right;
+  margin-left: 30px;
+}
 .center .inputbox:last-child {
   margin-bottom: 0;
 }
