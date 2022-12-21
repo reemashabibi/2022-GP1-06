@@ -37,6 +37,7 @@ const analytics = getAnalytics(app);
 
 
 export async function viewStudents(email){
+  $(".loader").show();
     const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', email)));
     var schoolId = "";
 
@@ -46,33 +47,46 @@ export async function viewStudents(email){
     });
     const reference = doc(db, "School", schoolId);
     const q = await collection(reference, "Student");
+    const ul=document.getElementById("1");
+    onSnapshot(q,(querySnapshot)=>{
+    //const querySnapshot = await getDocs(q);
+   
 
-    const querySnapshot = await getDocs(q);
+while (ul.hasChildNodes()) {
+  ul.removeChild(ul.firstChild);
+}
 querySnapshot.forEach((doc)  => {
   if (doc.data().picked=="no"){
-    const div1 = document.createElement("div");
-    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab ";
-    div1.id = doc.data().id;
+    const li = document.createElement("li");
+    li.className = "table-row";
+    li.id = doc.data().time;
+    
   
 
-    document.getElementById("bigdiv").appendChild(div1);
+    ul.appendChild(li);
 
-    const div5 = document.createElement("div");
-    div5.className = "job-right my-4 flex-shrink-0";
-    div1.appendChild(div5);
-    const div2 = document.createElement("div");
-    div2.className = "job-left my-4 d-md-flex align-items-center flex-wrap";
- 
-    div1.appendChild(div2);
+    const div1 = document.createElement("div");
+    div1.className = "col col-1";
+    div1.appendChild(document.createTextNode(doc.data().FirstName + " " + doc.data().LastName));
+    div1.setAttribute('style','text-align:center; ')
+    li.appendChild(div1);
+    
+    //alert(doc.data().time);
+    const currentDate = new Date();
+     const timestamp = Math.floor(Date.now() /1000); 
+     
+     var dat= Math.abs(doc.data().time.seconds-timestamp);
+        if (dat<1000){
+         let myInterval= setInterval(function () {li.setAttribute('style','background-color:green;')}, 100);
+         
+    }
+    else{
+      li.setAttribute('style','background-color:white;')
+    }
 
-    const div4 = document.createElement("div");
-    div4.className = "job-content";
-    div2.appendChild(div4);
-    const classlink = document.createElement('p');
-    classlink.className = "text-center text-md-left";
-    classlink.appendChild(document.createTextNode(doc.data().FirstName + " " + doc.data().LastName));
-    classlink.id = "className";
-    div4.appendChild(classlink);
+     
+
+    
     
     //div1.appendChild(document.createElement('hr'));
 
@@ -80,4 +94,10 @@ querySnapshot.forEach((doc)  => {
 
 
 })
+$(".loader").hide();
+});
+
 }
+
+
+

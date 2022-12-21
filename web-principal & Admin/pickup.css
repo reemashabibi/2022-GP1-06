@@ -1,0 +1,63 @@
+body {
+    font-family: "lato", sans-serif;
+  }
+  .container {
+    max-width: 70%;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: center;
+  }
+  
+  h2 {
+    font-size: 26px;
+    margin: 20px 0;
+    text-align: center;
+    color: rgb(40, 87, 111);
+   
+  }
+  
+  
+    .responsive-table li {
+      border-radius: 3px;
+      padding: 25px 30px;
+      display: flex;
+      margin-bottom: 25px;
+      align-content: right;
+    }
+    
+    .responsive-table .table-row {
+      background-color: #ffffff;
+      text-align: center;
+      align-content: center;
+      box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    }
+    .responsive-table .col-1 {
+      flex-basis: 100%;
+    }
+  
+     @media all and (max-width: 500px) {
+        .responsive-table .table-header {
+        display: none;
+      }
+      .responsive-table .table-row {
+      }
+      .responsive-table li {
+        display: block;
+        text-align: center;
+      }
+      .responsive-table .col {
+        flex-basis: 100%;
+        text-align: center;
+      }
+      .responsive-table .col {
+        display: flex;
+        padding: 10px 0;
+        text-align: center;
+      }
+    }
+  
+  
+  
+  
