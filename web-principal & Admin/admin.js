@@ -70,6 +70,7 @@ export async function viewTachersAndClasses(aid){
 
     var className = doc.data().ClassName;
     var level = doc.data().Level;
+    var levelName = doc.data().LevelName;
 
     const div1 = document.createElement("div");
     div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab ";
@@ -113,7 +114,7 @@ export async function viewTachersAndClasses(aid){
     div2.appendChild(div4);
     const classlink = document.createElement('a');
     classlink.className = "text-center text-md-left";
-    classlink.appendChild(document.createTextNode(className + "-" + level));
+    classlink.appendChild(document.createTextNode(levelName + "-" + className));
     classlink.href="students.html?"+doc.id+"|"+sid;
     classlink.id = "className";
     div4.appendChild(classlink);
@@ -208,24 +209,24 @@ export async function viewStudents(classId, schoolId){
 
   let currentClass = await getDoc(refrence);
   var CurrenrclassName = currentClass.data().ClassName;
-  var Currentlevel = currentClass.data().Level;
+  var Currentlevel = currentClass.data().LevelName;
   var CurrentClassid = currentClass.id;
   var CurrenrclassStudents = currentClass.data().Students;
   classes.push(CurrentClassid);
-  classes.push(CurrenrclassName);
   classes.push(Currentlevel);
- var titleName= document.createTextNode(CurrenrclassName+"-"+Currentlevel);
+  classes.push(CurrenrclassName);
+ var titleName= document.createTextNode(currentClass.data().LevelName+"-"+CurrenrclassName);
   document.getElementById('className').appendChild(titleName);
   const querySnapshotc = await getDocs(qc);
   querySnapshotc.forEach((doc) => {
     if (doc.id == classId) return;
 
     var className = doc.data().ClassName;
-    var level = doc.data().Level;
+    var level = doc.data().LevelName;
     var id = doc.id;
     classes.push(id);
-    classes.push(className);
     classes.push(level);
+    classes.push(className);
   });
   //end of dropdown data
   if (CurrenrclassStudents.length <=0) {

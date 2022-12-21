@@ -42,7 +42,7 @@ getDocs(colRefLevel)
         snapshot.docs.forEach(doc => {
             //levels.push({ ...doc.data(), id: doc.id })
             const new_op = document.createElement("option");
-            new_op.innerHTML = doc.id;
+            new_op.innerHTML = doc.data().LevelName;
             new_op.setAttribute("id", doc.id);
             document.getElementById("classes").appendChild(new_op);
         })
@@ -91,22 +91,25 @@ classForm.addEventListener('submit', async (e) => {
     schoolID = data.id;
  
    const colRefClass = collection (db, "School",schoolID, "Class");
-   const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("Level", "==",parseInt(classForm.classes.value) ));
+   const qClass = query(collection(db, "School", schoolID, "Class"), where("ClassName", "==", classForm.Cname.value), where("LevelName", "==",classForm.classes.value ));
    const queryClassSnapshot = await getDocs(qClass);
     if(queryClassSnapshot.empty){
-     
+      var options = document.getElementById('classes').options;
+      var levelId = options[options.selectedIndex].id;
+      
     addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
-        Level: parseInt(classForm.classes.value),
+        LevelName: classForm.classes.value,
+        Level: parseInt(levelId),
         Students: [],
         Documents: [],
     })
     .then(async docRef => { 
-      classForm.reset()
+      classForm.reset();
       const refrence = doc(db, "School", schoolID, "Class", docRef.id);
       let currentClass = await getDoc(refrence);
-      const levelID = currentClass.data().Level;
-      const qc = query(collection(db, "Level"), where("Number", "==", levelID ));
+      const levelName = currentClass.data().Level;
+      const qc = query(collection(db, "Level"), where("LevelName", "==", levelName ));
       const querySnapshotc = await getDocs(qc);
      querySnapshotc.forEach((doc) =>{
        

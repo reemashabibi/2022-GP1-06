@@ -103,7 +103,7 @@ export async function viewDocuments(){
             var i=0;
            docsSnap.forEach( async (doc) => {
               var classDocs = doc.data().Documents;
-              var className = doc.data().Level+"/المرحلة "+doc.data().ClassName+"/اسم الفصل";
+              var className = doc.data().LevelName+"-"+doc.data().ClassName;
 
 
               
@@ -259,7 +259,7 @@ export async function viewDocuments(){
                     var trHead = document.createElement('tr');
                     var th =  document.createElement('th');
                     var thSpan =  document.createElement('span');
-                    thSpan.innerHTML = " مستندات الطالب "+stuName;
+                    thSpan.innerHTML = " مستندات من ولي أمر الطالب "+stuName;
                     
 
                     th.appendChild(thSpan);
