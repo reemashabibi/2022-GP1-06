@@ -70,6 +70,7 @@ export async function viewTachersAndClasses(aid){
 
     var className = doc.data().ClassName;
     var level = doc.data().Level;
+    var levelName = doc.data().LevelName;
 
     const div1 = document.createElement("div");
     div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab ";
@@ -113,7 +114,7 @@ export async function viewTachersAndClasses(aid){
     div2.appendChild(div4);
     const classlink = document.createElement('a');
     classlink.className = "text-center text-md-left";
-    classlink.appendChild(document.createTextNode(className + "-" + level));
+    classlink.appendChild(document.createTextNode(levelName + "-" + className));
     classlink.href="students.html?"+doc.id+"|"+sid;
     classlink.id = "className";
     div4.appendChild(classlink);
@@ -195,7 +196,7 @@ $("#bigdiv > .theTab").sort(function(a, b) {
 var school = null;
 var oldClass = null;
 var date = new Date().toJSON().slice(0,10);
-console.log(date);
+
 export async function viewStudents(classId, schoolId){
   const refrence = doc(db,"School", schoolId,"Class", classId);
   school = schoolId;
@@ -208,24 +209,24 @@ export async function viewStudents(classId, schoolId){
 
   let currentClass = await getDoc(refrence);
   var CurrenrclassName = currentClass.data().ClassName;
-  var Currentlevel = currentClass.data().Level;
+  var Currentlevel = currentClass.data().LevelName;
   var CurrentClassid = currentClass.id;
   var CurrenrclassStudents = currentClass.data().Students;
   classes.push(CurrentClassid);
-  classes.push(CurrenrclassName);
   classes.push(Currentlevel);
- var titleName= document.createTextNode(CurrenrclassName+"-"+Currentlevel);
+  classes.push(CurrenrclassName);
+ var titleName= document.createTextNode(currentClass.data().LevelName+"-"+CurrenrclassName);
   document.getElementById('className').appendChild(titleName);
   const querySnapshotc = await getDocs(qc);
   querySnapshotc.forEach((doc) => {
     if (doc.id == classId) return;
 
     var className = doc.data().ClassName;
-    var level = doc.data().Level;
+    var level = doc.data().LevelName;
     var id = doc.id;
     classes.push(id);
-    classes.push(className);
     classes.push(level);
+    classes.push(className);
   });
   //end of dropdown data
   if (CurrenrclassStudents.length <=0) {
@@ -558,25 +559,31 @@ $(document).ready(function () {
   });
   // check Absence
   $(document).on('click', '#saveAttendence', async function () {
-   
+   var abenceTaken = false;
 
     $('#schedule tr').each( async function() {
       var refre =  $(this).attr('id');
       var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
         if (abcense.exists()) {
-
+          abenceTaken = true;
+          breakOut = true;
           alert("لقد تم نسجيل الحضور مسبقًا لهذا الفصل");
-          return;
+          return false;
         }
 
       var status = $(this).find("td:first").attr('class');
       if(status == "abcenseBtn out"){
 
        await setDoc(doc(db, refre+'/Absence', date), {
-          excuse: "jj",  
+          excuse: "",  
      });
       }
               });
+              if(breakOut) {
+                breakOut = false;
+                return false;
+            } 
+              if(abenceTaken == false)
               alert("تم نسجيل الحضور");
               console.log(date);
   });

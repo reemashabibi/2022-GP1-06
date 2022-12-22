@@ -56,7 +56,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
 <script src="navbar.js"></script>
-    <title>إضافة فصل</title>
+    <title>إضافة مستند</title>
 
     <style>
       main {
@@ -108,7 +108,7 @@
                   <a class="nav-link" href="javascript:void(0);">الأحداث</a>
               </li>
               <li class="nav-item">
-                  <a class="nav-link" href="javascript:void(0);">المستندات</a>
+                  <a class="nav-link" href="documents.html">المستندات</a>
               </li>
 
               <li class="nav-item ">
@@ -124,23 +124,31 @@
 
   <main>
     <div class="center">
-        <h1>إضافة فصل</h1>
+        <h1>إضافة مستند</h1>
         <div class="loader topTitle"></div>
         <form class="classForm">
 
             <div class="inputbox">
       <select required=" true"
-                style="  margin-left: 50px; margin-top: 15px; padding: 10px; background: #4ebfc1; border: 2px solid #000; width:40%; height: 30px; text-align:center; "
+                style="  margin-left: 50px; margin-top: 15px; padding: 10px; border: 2px solid #000; width:50%; height: 50px; text-align:center; "
                 id="classes" name="classes">
+                <option id="non" value="" name="non">--اختر الفصل--</option>
+
                 </select>
                 <span
-                    style=" width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; ">المرحلة</span>
+                    style=" width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; margin-top: 15px; font-size: 20px;">الفصل</span>
             </div>
+
             <div class="inputbox">
-                <input style="align-items: center ;" type="file" id="file" />
+              <input type="text" required="required" name="Dname" id="Dname">
+              <span>اسم المستند</span>
+          </div>
+
+            <div class="inputbox">
+                <input style="align-items: center ;" type="file" id="file" required=" true" />
             </div>
             
-            <div class="inputbox">
+            <div class="inputbox" id="alertContainer">
                 <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
               </div>
             <div class="inputbox">

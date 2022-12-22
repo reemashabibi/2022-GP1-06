@@ -53,12 +53,12 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
     <link rel="stylesheet" href="navbar.css"/>
     <script src="navbar.js"></script>
     
-    <title>الطلاب</title>
+    <title>المستندات</title>
     
     <style>
         th {text-align: center;}
-       
-        td {text-align: right; }
+        
+        td {text-align: right;}
         .tdContent{margin-right: 10%;}
         th, td {border-bottom: 1px solid #ddd;}
         table{width: 100% }
@@ -97,15 +97,12 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);">الأحداث</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);">المستندات</a>
+                <li class="nav-item active">
+                    <a class="nav-link" href="documents.html">المستندات</a>
                 </li>
                 <li class="nav-item ">
                     <a class="nav-link" href="adminHomePage.html">الصفحة الرئيسية</a>
                 </li>  
-                <li class="nav-item active">
-                    <a class="nav-link" href="javascript:void(0);"></a>
-                </li>
             </ul>
         </div>
     </nav>
@@ -116,13 +113,10 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
     <!--end of breadcrumb-->
 
 
-    <div class="row">
+    <div class="row topTitle">
         <div class="col-lg-10 mx-auto mb-4">
            <div class="section-title text-center ">
-           <h3 class="topTitle" id="className" style="margin-top:5%;"></h3>
-
-
-              
+              <button type="button" class="button-5" id="addDoc" onclick="location.href='uploadDocument.html'">إضافة مستند</button>
            </div>
        </div>
    </div>
