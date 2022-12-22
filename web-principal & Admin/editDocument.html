@@ -124,36 +124,21 @@
 
   <main>
     <div class="center">
-        <h1>إضافة مستند</h1>
+        <h1>تعديل مستند</h1>
         <div class="loader topTitle"></div>
-        <form class="docForm">
+        <form class="newDocNameForm">
 
             <div class="inputbox">
-      <select required=" true"
-                style="  margin-left: 50px; margin-top: 15px; padding: 10px; border: 2px solid #000; width:50%; height: 50px; text-align:center; "
-                id="classes" name="classes">
-                <option id="non" value="" name="non">--اختر الفصل--</option>
-
-                </select>
-                <span
-                    style=" width:40%;  text-align:center; border-radius: 10px; font-size: 1.2em; position: absolute; margin-top: 15px; font-size: 20px;">الفصل</span>
-            </div>
-
-            <div class="inputbox">
-              <input type="text" required="required" name="Dname" id="Dname">
-              <span>اسم المستند</span>
+              <input type="text" required="required" name="NewDocname" id="NewDocname">
+              <span>اسم المستندالجديد</span>
           </div>
-
-            <div class="inputbox">
-                <input style="align-items: center ;" type="file" id="file" required=" true" />
-            </div>
             
             <div class="inputbox" id="alertContainer">
                 <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
               </div>
             <div class="inputbox">
 
-                <button type="submit" id="btn" class="button-36 topTitle">إضافة</button>
+                <button type="submit" name="changeNameSubmit" class="button-36 topTitle">تعديل</button>
             </div>
         </form>
     </div>

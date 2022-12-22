@@ -341,7 +341,7 @@ export async function viewDocuments(){
 
         if(confirm(" هل أنت تأكد حذف المستند؟")){
           $(".loader").show();
-        deleteDoc(docRef).then(async () =>{
+       await deleteDoc(docRef).then(async () =>{
             for(var r=0; r<classesRef.length; r++){
             await updateDoc(classesRef[r], {
                 Documents: arrayRemove(docRef)
@@ -433,6 +433,29 @@ $(document).on('submit', 'form', async function (e){
       
       })
 });
+$(document).on('click', 'changeNameSubmit',async function () {
+  $('.loader').show();
+  const DocForm = document.querySelector('.newDocNameForm');
+    const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
+    snapshot.forEach(async docSnap => {
+    const school = await getDoc(docSnap.ref.parent.parent);
+    schoolID = school.id;
+    
+    const docRef = doc(db, 'School', schoolID, 'Documents', $('.inputbox input').attr('id'));
+
+    await updateDoc(docRef, {DisplayName: DocForm.NewDocname.value})
+    .then(docRef => {
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم التغيير بنجاح</p> </div>';
+
+   })
+   .catch(error => {
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
+
+   })
+
+
+})
+})
 
 
   });
