@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -153,7 +154,7 @@ class _teacherHPState extends State<teacherHP> {
               Icons.account_circle_rounded,
               color: Colors.black,
             ),
-          )
+          ),
         ],
       ),
 
@@ -180,8 +181,7 @@ class _teacherHPState extends State<teacherHP> {
               return Container(
                   child: ListView(
                 children: _SubjectsNameList.map((e) {
-                  return InkWell(
-                    child: Container(
+                  return Container(
                       decoration: BoxDecoration(
                           color: Color.fromARGB(255, 244, 247, 253),
                           border: Border.all(
@@ -189,29 +189,88 @@ class _teacherHPState extends State<teacherHP> {
                             width: 2.0,
                           ),
                           borderRadius: BorderRadius.circular(10.0),
-                          gradient: LinearGradient(colors: [
-                            Color.fromARGB(255, 123, 211, 217),
-                            Color.fromARGB(255, 209, 213, 216)
-                          ]),
+                          gradient: LinearGradient(
+                            colors: [
+                              (Color.fromARGB(255, 170, 243, 250)),
+                              Color.fromARGB(255, 195, 196, 196)
+                            ],
+                          ),
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.grey,
                                 blurRadius: 2.0,
                                 offset: Offset(2.0, 2.0))
                           ]),
-                      child: Text(
-                          e +
-                              "\nالفصل: " +
-                              _ClassNameList[_SubjectsNameList.indexOf(e)] +
-                              "\nالمرحلة: " +
-                              _LevelNameList[_SubjectsNameList.indexOf(e)],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(13),
-                      // color: Color.fromARGB(255, 222, 227, 234),
-                    ),
+                      child: new Column(children: [
+                        new Container(
+                          child: Text(
+                              e +
+                                  "\nالفصل: " +
+                                  _ClassNameList[_SubjectsNameList.indexOf(e)] +
+                                  "\nالمرحلة: " +
+                                  _LevelNameList[_SubjectsNameList.indexOf(e)],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          margin: EdgeInsets.all(4),
+                          padding: EdgeInsets.all(2),
+                        ),
+                        new Container(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            IconButton(
+                              onPressed: () {
+                                if (_SubjectsRefList[0] != "") {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => viewStudents(
+                                              ref: _SubjectsRefList[
+                                                  _SubjectsNameList.indexOf(e)],
+                                            )),
+                                  );
+                                }
+                              },
+                              icon: Image.asset(
+                                "images/studentsIcon.png",
+                                width: 44,
+                                height: 44,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => grades(
+                                            subRef: _SubjectsRefList[
+                                                _SubjectsNameList.indexOf(e)],
+                                          )),
+                                );
+                              },
+                              icon: Image.asset(
+                                "images/gradesIcon.png",
+                                width: 44,
+                                height: 44,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Image.asset(
+                                "images/chatIcon.png",
+                                width: 44,
+                                height: 44,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ],
+                        ))
+
+                        // color: Color.fromARGB(255, 222, 227, 234),
+                      ])); /*
                     onTap: () {
                       if (_SubjectsRefList[0] != "") {
                         Navigator.push(
@@ -223,8 +282,7 @@ class _teacherHPState extends State<teacherHP> {
                                   )),
                         );
                       }
-                    },
-                  );
+                    },*/
                 }).toList(),
               ));
             }
@@ -293,19 +351,21 @@ class _teacherHPState extends State<teacherHP> {
 
 }
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key, required this.ref});
+class viewStudents extends StatefulWidget {
+  const viewStudents({super.key, required this.ref});
   final DocumentReference ref;
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<viewStudents> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _MyWidgetState extends State<viewStudents> {
   late List _StudentList;
   late List _StudenNameList;
   late List _StudentsRefList;
   var x = 0;
   var v = 0;
+  var className;
+  var levelName;
 
   var numOfStudents;
 
@@ -322,6 +382,8 @@ class _MyWidgetState extends State<MyWidget> {
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
+      className = ds['ClassName'];
+      levelName = ds['Level'];
 
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
@@ -359,6 +421,7 @@ class _MyWidgetState extends State<MyWidget> {
     DocumentReference ref = widget.ref;
 
     DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -395,50 +458,68 @@ class _MyWidgetState extends State<MyWidget> {
               //Display the list
 
               return Container(
-                  child: ListView(
-                children: _StudenNameList.map((e) {
-                  return InkWell(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 244, 247, 253),
-                          border: Border.all(
-                            color: Color.fromARGB(255, 130, 126, 126),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                          gradient: LinearGradient(colors: [
-                            Color.fromARGB(255, 123, 211, 217),
-                            Color.fromARGB(255, 209, 213, 216)
-                          ]),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 2.0,
-                                offset: Offset(2.0, 2.0))
-                          ]),
-                      child: Text(e,
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(15),
-                      //   color: Color.fromARGB(255, 222, 227, 234),
+                  child: new Column(
+                children: [
+                  new Container(
+                    child: Text(
+                      className + " " + levelName.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 80, 80, 80),
+                        fontSize: 30,
+                      ),
                     ),
-                    onTap: () {
-                      if (_StudentsRefList[0] != "") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => studentGrades(
-                                    stRef: _StudentsRefList[
-                                        _StudenNameList.indexOf(e)],
-                                    classRef: ref,
-                                  )),
+                  ),
+                  new Container(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: _StudenNameList.map((e) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 244, 247, 253),
+                              border: Border.all(
+                                color: Color(0xffEEEEEE),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  (Color.fromARGB(255, 170, 243, 250)),
+                                  Color.fromARGB(255, 195, 196, 196)
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 2.0,
+                                    offset: Offset(2.0, 2.0))
+                              ]),
+                          child: Text(e,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          margin: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(15),
+                          //   color: Color.fromARGB(255, 222, 227, 234),
                         );
-                      }
-                    },
-                  );
-                }).toList(),
+                        /*
+                          onTap: () {
+                            if (_StudentsRefList[0] != "") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => studentGrades(
+                                          stRef: _StudentsRefList[
+                                              _StudenNameList.indexOf(e)],
+                                          classRef: ref,
+                                        )),
+                              );
+                            }
+                          },*/
+                      }).toList(),
+                    ),
+                  )
+                ],
               ));
             }
             if (_StudenNameList.length == 0 && x == 0) {
