@@ -412,7 +412,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
           /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
           $.post("http://localhost:8080/addUser",
           {
-            email: registerEmail,
+            email: registerParentEmail,
             password: registerPass
          },
          function (data, stat) {
