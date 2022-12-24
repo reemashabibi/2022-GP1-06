@@ -47,14 +47,20 @@ export async function viewStudents(email){
     });
     const reference = doc(db, "School", schoolId);
     const q = await collection(reference, "Student");
-    const ul=document.getElementById("1");
+    const ul1=document.getElementById("1");
+    const ul2=document.getElementById("2");
+    
     onSnapshot(q,(querySnapshot)=>{
     //const querySnapshot = await getDocs(q);
    
-
-while (ul.hasChildNodes()) {
-  ul.removeChild(ul.firstChild);
+    $(".loader").show();
+while (ul1.hasChildNodes()) {
+  ul1.removeChild(ul1.firstChild);
 }
+while (ul2.hasChildNodes()) {
+  ul2.removeChild(ul2.firstChild);
+}
+var i=1;
 querySnapshot.forEach((doc)  => {
   if (doc.data().picked=="no"){
     const li = document.createElement("li");
@@ -62,26 +68,38 @@ querySnapshot.forEach((doc)  => {
     li.id = doc.data().time;
     
   
-
-    ul.appendChild(li);
-
-    const div1 = document.createElement("div");
+    if (i==1){
+    ul1.appendChild(li);
+    i=2;
+    }
+    if (i==2){
+      ul2.appendChild(li);
+    i=1;
+    }
+    /*const div1 = document.createElement("div");
     div1.className = "col col-1";
     div1.appendChild(document.createTextNode(doc.data().FirstName + " " + doc.data().LastName));
     div1.setAttribute('style','text-align:center; ')
-    li.appendChild(div1);
-    
+    li.appendChild(div1);*/
+    const span1 = document.createElement("div");
+    span1.appendChild(document.createTextNode(doc.data().FirstName + " " + doc.data().LastName));
+    span1.setAttribute('style','text-align:center; ');
+    //span1.className = "col col-1";
+    li.appendChild(span1);
+    //li.appendChild(document.createElement("br"));
+
+
     //alert(doc.data().time);
     const currentDate = new Date();
      const timestamp = Math.floor(Date.now() /1000); 
      
      var dat= Math.abs(doc.data().time.seconds-timestamp);
         if (dat<1000){
-         let myInterval= setInterval(function () {li.setAttribute('style','background-color:green;')}, 100);
+         let myInterval= setInterval(function () {li.setAttribute('style','background-color:green; color:white;')}, 100);
          
     }
     else{
-      li.setAttribute('style','background-color:white;')
+      li.setAttribute('style','background-color:white; color:black;')
     }
 
      
@@ -94,9 +112,9 @@ querySnapshot.forEach((doc)  => {
 
 
 })
-$(".loader").hide();
-});
 
+});
+$(".loader").hide();
 }
 
 
