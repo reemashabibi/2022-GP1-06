@@ -559,8 +559,8 @@ $(document).ready(function () {
   });
   // check Absence
   $(document).on('click', '#saveAttendence', async function () {
-   var abenceTaken = false;
-
+   var abenceTaken = true;
+   var breakOut;
     $('#schedule tr').each( async function() {
       var refre =  $(this).attr('id');
       var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
@@ -570,7 +570,13 @@ $(document).ready(function () {
           alert("لقد تم نسجيل الحضور مسبقًا لهذا الفصل");
           return false;
         }
-
+        else{
+          abenceTaken = false;
+        }
+   if(breakOut) {
+                breakOut = false;
+                return false;
+            } 
       var status = $(this).find("td:first").attr('class');
       if(status == "abcenseBtn out"){
 
@@ -579,10 +585,7 @@ $(document).ready(function () {
      });
       }
               });
-              if(breakOut) {
-                breakOut = false;
-                return false;
-            } 
+           
               if(abenceTaken == false)
               alert("تم نسجيل الحضور");
               console.log(date);
