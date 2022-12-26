@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "969971486820",
+    "project_id": "halaqa-89b43",
+    "storage_bucket": "halaqa-89b43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969971486820:android:6729a20b1b9d518a470f71",
+        "android_client_info": {
+          "package_name": "com.example.halaqa_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969971486820-p2s6a544q3qe7225ingb90dnl5f8i7q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4nBdCBA88ooTsLKbFHBCIOzdlkKzdTqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969971486820-p2s6a544q3qe7225ingb90dnl5f8i7q1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "969971486820-h8go4ucgvopbvhed4m4evrcncs5740ud.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.halaqa.halaqaApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:969971486820:android:78606f3f9e9b8e60470f71",
+        "android_client_info": {
+          "package_name": "com.halaqa.halaqa_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "969971486820-p2s6a544q3qe7225ingb90dnl5f8i7q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4nBdCBA88ooTsLKbFHBCIOzdlkKzdTqM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "969971486820-p2s6a544q3qe7225ingb90dnl5f8i7q1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "969971486820-h8go4ucgvopbvhed4m4evrcncs5740ud.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.halaqa.halaqaApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

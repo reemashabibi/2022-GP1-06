@@ -70,6 +70,7 @@ export async function viewTachersAndClasses(aid){
 
     var className = doc.data().ClassName;
     var level = doc.data().Level;
+    var levelName = doc.data().LevelName;
 
     const div1 = document.createElement("div");
     div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab ";
@@ -113,7 +114,7 @@ export async function viewTachersAndClasses(aid){
     div2.appendChild(div4);
     const classlink = document.createElement('a');
     classlink.className = "text-center text-md-left";
-    classlink.appendChild(document.createTextNode(className + "-" + level));
+    classlink.appendChild(document.createTextNode(levelName + "-" + className));
     classlink.href="students.html?"+doc.id+"|"+sid;
     classlink.id = "className";
     div4.appendChild(classlink);
@@ -191,9 +192,11 @@ $("#bigdiv > .theTab").sort(function(a, b) {
 }
 
 
-
+// view students
 var school = null;
 var oldClass = null;
+var date = new Date().toJSON().slice(0,10);
+
 export async function viewStudents(classId, schoolId){
   const refrence = doc(db,"School", schoolId,"Class", classId);
   school = schoolId;
@@ -206,24 +209,24 @@ export async function viewStudents(classId, schoolId){
 
   let currentClass = await getDoc(refrence);
   var CurrenrclassName = currentClass.data().ClassName;
-  var Currentlevel = currentClass.data().Level;
+  var Currentlevel = currentClass.data().LevelName;
   var CurrentClassid = currentClass.id;
   var CurrenrclassStudents = currentClass.data().Students;
   classes.push(CurrentClassid);
-  classes.push(CurrenrclassName);
   classes.push(Currentlevel);
- var titleName= document.createTextNode(CurrenrclassName+"-"+Currentlevel);
+  classes.push(CurrenrclassName);
+ var titleName= document.createTextNode(currentClass.data().LevelName+"-"+CurrenrclassName);
   document.getElementById('className').appendChild(titleName);
   const querySnapshotc = await getDocs(qc);
   querySnapshotc.forEach((doc) => {
     if (doc.id == classId) return;
 
     var className = doc.data().ClassName;
-    var level = doc.data().Level;
+    var level = doc.data().LevelName;
     var id = doc.id;
     classes.push(id);
-    classes.push(className);
     classes.push(level);
+    classes.push(className);
   });
   //end of dropdown data
   if (CurrenrclassStudents.length <=0) {
@@ -252,6 +255,23 @@ export async function viewStudents(classId, schoolId){
 tr.id = d.ref.path;
 
     
+   var tdAbcense = document.createElement('td');
+   tr.appendChild(tdAbcense);
+   var abcenseBtn = document.createElement("button");
+   abcenseBtn.className = "button-5";
+   abcenseBtn.role = "button";
+
+ 
+   tdAbcense.appendChild(abcenseBtn);
+   abcenseBtn.textContent = "حاضر";
+   tdAbcense.className = "in abcenseBtn";
+   var abcense = await getDoc(doc(db, d.ref.path+'/Absence', date))
+    if (abcense.exists()) {
+      abcenseBtn.style.backgroundColor = "#fb8332";
+      abcenseBtn.textContent = 'غائب';
+      tdAbcense.className = "abcenseBtn out";
+    }
+
 
 
     var td5 = document.createElement('td');
@@ -285,9 +305,35 @@ tr.id = d.ref.path;
     tr.appendChild(td3);
 
     var td4 = document.createElement('td');
+   td4.className = 'notify';
     var a4 = document.createElement('a');
-    a4.className = 'tdContent';
-    a4.innerHTML = firstName + " " + lastName;
+    a4.className = 'tdContent notification';
+    var spanName = document.createElement('span');
+    spanName.innerHTML = firstName + " " + lastName;
+    a4.href = 'studentDocuments.html?'+d.id+"|";
+    a4.appendChild(spanName);
+
+    // notfication badge
+    const colRef = collection (db, "School",schoolId, "Student", d.id, 'FilledDocuments');
+    const docsFilled = await getDocs(colRef);
+    var numOfNewDocs = 0;
+    if(docsFilled.docs.length > 0) {
+      docsFilled.forEach( async (doc) => {
+  //loop through documents of the student
+      if(doc.data().Viewed == false){
+        numOfNewDocs++;
+      }
+    });
+  }
+
+      if(numOfNewDocs >0){
+
+    var spanNotfiy = document.createElement('span');
+    spanNotfiy.className = "badge";
+    spanNotfiy.innerHTML= ""+numOfNewDocs;
+    a4.appendChild(spanNotfiy);
+      }
+
     td4.appendChild(a4);
     tr.appendChild(td4);
     
@@ -306,6 +352,7 @@ tr.id = d.ref.path;
 
 
   };
+ 
   $('.loader').hide();
 }
 
@@ -328,12 +375,40 @@ $(document).ready(function () {
         var parentData = await getDoc(parent);
         const oldClassRef = doc(db,"School", school,"Class", oldClass);
 
-        updateDoc(oldClassRef, {
-          Students: arrayRemove(docRef)
-      });
-   ;
+
       if(parentData.data().Students.length == 1){
-       await deleteDoc(parent).then(() => {
+
+        /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+        $.post("http://localhost:8080/deleteUser",
+        {
+          uid: parent.id,
+       },
+       function (data, stat) {
+         if(data.status == 'Successfull'){
+           deleteDoc(parent).then(() => {
+            deleted = true;
+            updateDoc(oldClassRef, {
+              Students: arrayRemove(docRef)
+          });
+       ;
+           }).catch(error => {
+            console.log(error);
+            $(".loader").hide();
+            alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+            deleted = false;
+            return;
+          })
+         }
+         else{
+          deleted = false;
+          $(".loader").hide();
+          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+         }
+
+       
+       });///End of new code
+
+   /*    await deleteDoc(parent).then(() => {
          deleted = true;
         
        }).catch(error => {
@@ -342,13 +417,16 @@ $(document).ready(function () {
            alert("حصل خطأ، الرجاء المحاولة لاحقًا");
            deleted = false;
            return;
-         })
+         })*/
      }else{
       await updateDoc(parent, {
         Students: arrayRemove(docRef)
     }).then(() => {
       deleted = true;
-      
+      updateDoc(oldClassRef, {
+        Students: arrayRemove(docRef)
+    });
+ ;
     })
       .catch(error => {
         console.log(error);
@@ -408,7 +486,31 @@ $(document).ready(function () {
       }
       
         if(deleted){
-          deleteDoc(docRef).then(() => {
+
+            /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+         $.post("http://localhost:8080/deleteUser",
+         {
+           uid: docRef.id,
+        },
+        function (data, stat) {
+          if(data.status == 'Successfull'){
+            deleteDoc(docRef).then(() => {
+              $(".loader").hide();
+              alert("تم حذف المعلم");
+              window.location.reload(true);
+            })
+              .catch(error => {
+                deleted= false;
+                console.log(error);
+              })
+          }
+          else{
+            $(".loader").hide();
+            alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+          }
+        });///End of new code
+
+         /* deleteDoc(docRef).then(() => {
             $(".loader").hide();
             alert("تم حذف المعلم");
             window.location.reload(true);
@@ -416,7 +518,7 @@ $(document).ready(function () {
             .catch(error => {
               deleted= false;
               console.log(error);
-            })
+            })*/
           
         }
         else{
@@ -455,6 +557,54 @@ $(document).ready(function () {
   }
   
   });
+  // check Absence
+  $(document).on('click', '#saveAttendence', async function () {
+   var abenceTaken = true;
+   var breakOut;
+    $('#schedule tr').each( async function() {
+      var refre =  $(this).attr('id');
+      var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
+        if (abcense.exists()) {
+          abenceTaken = true;
+          breakOut = true;
+          alert("لقد تم نسجيل الحضور مسبقًا لهذا الفصل");
+          return false;
+        }
+        else{
+          abenceTaken = false;
+        }
+   if(breakOut) {
+                breakOut = false;
+                return false;
+            } 
+      var status = $(this).find("td:first").attr('class');
+      if(status == "abcenseBtn out"){
+
+       await setDoc(doc(db, refre+'/Absence', date), {
+          excuse: "",  
+     });
+      }
+              });
+           
+              if(abenceTaken == false)
+              alert("تم نسجيل الحضور");
+              console.log(date);
+  });
+  
+  $(document).on('click', '.abcenseBtn', async function () {
+    var abcenseBtn = $(this);
+    if($(this).text() == "حاضر"){
+      $(this).find('button').css({backgroundColor: "#fb8332"});
+      $(this).find('button').text('غائب');
+      $(this).removeClass('in').addClass('out');
+    }
+    else{
+      $(this).find('button').css({backgroundColor: "#9efa00"});
+      $(this).find('button').text('حاضر'); 
+      $(this).removeClass('out').addClass('in');
+    }
+  } );
+   
 });
 
 
@@ -497,4 +647,5 @@ $(document).ready(function () {
 
   });
 });
+
 

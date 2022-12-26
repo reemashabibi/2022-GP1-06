@@ -21,13 +21,14 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const app2 = initializeApp(firebaseConfig, "Secondary");
+
 const db = getFirestore(app);
 
 export { app, db, collection, getDocs, Timestamp, addDoc };
 export { query, orderBy, limit, where, onSnapshot };
 const analytics = getAnalytics(app);
-const authSec = getAuth(app2);
+
+const auth = getAuth(app);
 
 
 var schoolID;
@@ -163,7 +164,75 @@ addStudentForm.addEventListener('submit', async (e) => {
       const registerPhone = document.getElementById("phone").value;
       const registerPass = pass();
       const phoneNum = parseInt(registerPhone);
-      createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+
+            /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+            $.post("http://localhost:8080/addUser",
+            {
+              email: registerEmail,
+              password: registerPass
+           },
+           function (data, stat) {
+             if(data.status == 'Successfull'){
+              const res = doc(db, "School", schoolID, "Parent", data.uid)
+
+              //add to the document
+              setDoc(doc(db, "School", schoolID, "Parent", data.uid), {
+                Email: registerEmail,
+                FirstName: registerFname,
+                LastName: registerlname,
+                Phonenumber: phoneNum,
+                Students: []
+              }).then(() => {
+                docRef = doc(db, "School", schoolID, "Parent", data.uid);
+                docRefClass = doc(db, "School", schoolID, "Class", selectedClass[selectedClass.selectedIndex].id);
+                addDoc(colRefStudent, {
+                  FirstName: addStudentForm.Fname.value,
+                  LastName: addStudentForm.Lname.value,
+                  ClassID: docRefClass,
+                  ParentID: docRef,
+                })
+                .then( d => {
+                  
+                  var StuRef = doc(db, "School",schoolID,"Student", d.id);
+                  updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+                  .catch(error => {
+                    $(".loader").hide();
+                      console.log(error);
+                  })
+                  updateDoc(docRef, {Students: arrayUnion(StuRef) })
+                  .catch(error => {
+                    $(".loader").hide();
+                      console.log(error);
+                  })
+                  $(".loader").hide();
+                  sendPasswordResetEmail(auth,registerEmail).then(() => {
+                    // EmailSent
+                 
+                  });  
+                  alert("تمت الإضافة بنجاح")
+                  addStudentForm.reset();
+              });
+            }).catch((error) => {
+              $(".loader").hide();
+
+              alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+            });
+          }
+
+             else{
+               if(data.status == 'used'){
+                $(".loader").hide();
+               alert("البريد الالكتروني مستخدم من قبل");
+               addStudentForm.emailP.focus();}
+               else if (data == 'error'){
+                $(".loader").hide();
+               alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+              }
+             }
+
+           });
+       // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+    /*  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
         .then((userCredential) => {
           // Signed in 
           const user = userCredential.user;
@@ -172,6 +241,9 @@ addStudentForm.addEventListener('submit', async (e) => {
           sendPasswordResetEmail(authSec, registerEmail).then(() => {
             // EmailSent
           })
+
+
+
           const res = doc(db, "School", schoolID, "Parent", user.uid)
 
           //add to the document
@@ -220,7 +292,7 @@ addStudentForm.addEventListener('submit', async (e) => {
         if (errorMessage == "Firebase: Error (auth/email-already-in-use).")
             alert("البريد الالكتروني مستخدم من قبل");
         addStudentForm.emailP.focus();
-      });
+      });*/
     }
     else {
 

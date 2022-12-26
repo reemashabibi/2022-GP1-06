@@ -55,7 +55,7 @@ var currentSubjects =[];
   export async function subjectTeacherForm(cid, sid){
     const classrefrence = doc(db, "School", sid, "Class", cid);
     const classData = await getDoc(classrefrence);
-    var titleName= document.createTextNode(classData.data().ClassName+"-"+classData.data().Level);
+    var titleName= document.createTextNode(classData.data().LevelName+"-"+classData.data().ClassName);
     document.getElementById('title').appendChild(titleName);
     const q = collection(classrefrence, "Subject");
     principalId = sid;
@@ -263,11 +263,12 @@ if(deleted){
         }
           
       });
-currentSubjectsWithoutSomeChar = [];
-for (var l; l<currentSubjects.length; l++){
- var str = currentSubjects[l].slice(2);
- currentSubjectsWithoutSomeChar.push(str);
+var currentSubjectsWithoutSomeChar =[];
+for (var l=0; l<currentSubjects.length; l++){
+ //var str = currentSubjects[l].slice(2);
+ currentSubjectsWithoutSomeChar.push(currentSubjects[l]);
 }
+console.log(currentSubjectsWithoutSomeChar);
       $('#add').click(function(){
         $('.loader').show();
         var subjectName = document.getElementById('sname').value;

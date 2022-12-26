@@ -1,7 +1,8 @@
 th span{
-    font-size: 15px; 
-    margin-right: 7em;
-    text-align: center;
+    font-size: 1.2em; 
+    
+    text-align: right;
+   
 }
 .main-box {
     background: #FFFFFF;
@@ -41,7 +42,7 @@ th span{
 
 
 .table thead tr th {
-    text-transform: uppercase;
+
     font-size: 0.875em;
 }
 .table thead tr th {
@@ -214,3 +215,80 @@ z-index: -2;
   z-index: -2;
 	border-radius: 60px;
 }
+
+/* abcense button */
+
+
+/* CSS */
+.button-5 {
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #9efa00;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1;
+  margin: 0;
+  min-height: 1rem;
+  padding: calc(.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+
+
+
+
+
+.notification {
+
+  padding: 15px 26px;
+  position: relative;
+  display: inline-block;
+
+}
+
+
+
+.notification .badge {
+  position: absolute;
+  top: 15px;
+  right: -10px;
+  padding: 5px 10px;
+  border-radius: 50%;
+  background-color: red;
+  color: white;
+}
+#saveAttendence, #addDoc{
+ 
+  background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
+}
+#saveAttendence:hover, #addDoc:hover{
+  background-image: linear-gradient(92.88deg, white 9.16%, white 43.89%, white 64.72%);
+  color: #3790ad;
+  border-color: #3498db;
+}
+
+
+#button-container {
+  margin-top: 100px;
+  text-align: center;
+}
+
+.topTitle {
+  text-align: center;
+  margin-top: 3%;
+  }

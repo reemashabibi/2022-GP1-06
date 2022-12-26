@@ -24,7 +24,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const authSec = getAuth(app2);
 const analytics = getAnalytics(app);
-
+const auth = getAuth(app);
 
 var schoolID;
 
@@ -408,7 +408,78 @@ let docRefClass;
 const colRefStudent = collection(db, "School", schoolID, "Student");
 
   registerPass = pass();
-  createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass).then((userCredential) => {
+
+          /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+          $.post("http://localhost:8080/addUser",
+          {
+            email: registerParentEmail,
+            password: registerPass
+         },
+         function (data, stat) {
+           if(data.status == 'Successfull'){
+            sendPasswordResetEmail(auth, registerParentEmail).then(() => {
+       
+            })
+      
+           const res = doc(db, "School", schoolID, "Parent", data.uid)
+           //add to the document
+           setDoc(res, {
+            Email: registerParentEmail ,
+            FirstName: registerParentFname,
+            LastName: registerParentlname,
+            Phonenumber: registerParentPhone,
+            Students: [],})
+            .then(() => {
+            parentNumAdded.push(registerParentPhone);
+            studentAdded.push(registerFname);
+            queryClassSnapshot.forEach((doc) => {
+              if (!doc.empty)
+                classId = doc.id;
+            })
+            //docRef = doc(db, "School",schoolID, "Parent", res.id);
+            docRefClass = doc(db, "School", schoolID, "Class", classId);
+            addDoc(colRefStudent, {
+              FirstName: registerFname,
+              LastName: registerlname,
+              ClassID: docRefClass,
+              ParentID: res,
+            }).then(d => {
+              //docRef = doc(db, "School",schoolID, "Parent", res.id);
+              const StuRef = doc(db, "School", schoolID, "Student", d.id);
+              updateDoc(docRefClass, { Students: arrayUnion(StuRef) })
+                .then(() => {
+                  console.log("A New Document Field has been added to an existing document");
+                })
+                .catch(error => {
+                  console.log(error);
+                })
+              updateDoc(res, { Students: arrayUnion(StuRef) })
+                .then(() => {
+                  console.log("A New Document Field has been added to an existing document");
+                })
+                .catch(error => {
+                  console.log(error);
+                })
+                var x = table.rows[row].insertCell(8);
+                x.innerHTML = "تمت الإضافة";
+            })// close then addDoc
+      
+          }) 
+           }
+           else{
+             if(data.status == 'used'){
+             var x = table.rows[row].insertCell(8);
+             x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
+             }
+             else if (data == 'error'){
+             var x = table.rows[row].insertCell(8);
+             x.innerHTML = "لم تتم الاضافة";}
+
+           }
+         });
+     // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!  
+
+ /* createUserWithEmailAndPassword(authSec, registerParentEmail, registerPass).then((userCredential) => {
 
       // Signed in 
       user = userCredential.user;
@@ -468,7 +539,7 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
       const errorMessage = error.message;
       var x = table.rows[row].insertCell(8);
     x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
-    });
+    });*/
      
 
   }

@@ -157,6 +157,40 @@ let authPrinID = "";
           // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!     
 
             /*  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+              const registerPass =  pass(); 
+        /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+              $.post("http://localhost:8080/addUser",
+               {
+                 email: registerEmail,
+                 password: registerPass
+              },
+              function (data, stat) {
+                if(data.status == 'Successfull'){
+                   setDoc(doc(db, 'School/'+authPrinID+'/Admin', data.uid), {
+                       Email: registerEmail.toLowerCase(),
+                       FirstName: registerFname,
+                       LastName: registerlname,               
+                     })
+                     
+                    alert("تمت الإضافة بنجاح"); 
+                    sendPasswordResetEmail(auth,registerEmail).then(() => {
+                      // EmailSent
+                   
+                    })  
+                }
+                else{
+                  if(data.status == 'used')
+                  alert("البريد الالكتروني مستخدم من قبل");
+                  else if (data == 'error')
+                  alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+                  else
+                  alert("???");
+                }
+                 console.log(data);
+              });
+          // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+
+            /*  createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
               .then( async (userCredential) => {
                   // Signed in 
                  const user = userCredential.user;

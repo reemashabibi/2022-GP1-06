@@ -125,7 +125,44 @@ onAuthStateChanged(authPrin, (user) => {
              registerEmail = registerEmail.toLowerCase();
 
              const registerPass = pass();
-             createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
+
+              /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
+              $.post("http://localhost:8080/addUser",
+               {
+                 email: registerEmail,
+                 password: registerPass
+              },
+              function (data, stat) {
+                if(data.status == 'Successfull'){
+                  setDoc(doc(db, 'School/'+schoolID+'/Teacher', data.uid), {
+                    Email: registerEmail,
+                    FirstName: registerFname,
+                    LastName: registerlname,
+                    Subjects: [],               
+                  })
+               // alert(" after ");
+               $(".loader").hide();
+                alert("تمت الإضافة بنجاح");
+                addTeacherForm.reset();
+                    sendPasswordResetEmail(auth,registerEmail).then(() => {
+                      // EmailSent
+                   
+                    })  
+                }
+                else{
+                  if(data.status == 'used'){
+                  $(".loader").hide();
+                  alert("البريد الالكتروني مستخدم من قبل");
+                }
+                  else if (data == 'error'){
+                  $(".loader").hide();
+                  alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+                  }
+                }
+              });
+          // End of new code (remove comment from below to return to old code)!!!!!!!!!!!!!!!!!!!!!!!!!!!     
+
+            /* createUserWithEmailAndPassword(authSec, registerEmail, registerPass)
                .then(async (userCredential) => {
                  // Signed in 
                  let user = userCredential.user;
@@ -156,7 +193,7 @@ onAuthStateChanged(authPrin, (user) => {
                  else
                    alert(errorMessage);
                  addTeacherForm.reset();
-               });
+               });*/
 
            } //end if
            else {
