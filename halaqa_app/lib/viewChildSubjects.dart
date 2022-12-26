@@ -156,7 +156,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                   new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      className + "\n" + widget.studentName,
+                      widget.studentName + "\n" + className,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
