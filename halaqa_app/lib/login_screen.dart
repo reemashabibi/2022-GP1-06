@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:halaqa_app/teacher.dart';
 import 'package:halaqa_app/forgot_pw_screen.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'package:halaqa_app/parentHP.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -314,9 +315,9 @@ class StartState extends State<LoginScreen> {
                             maintainState: true,
                             visible: visible,
                             child: Container(
-                               // child: CircularProgressIndicator(
-                             // color: Color.fromARGB(255, 160, 241, 250),
-                            //)
+                                child: CircularProgressIndicator(
+                              color: Color.fromARGB(255, 160, 241, 250),
+                            )
                             )
                             ),
                       ],
@@ -333,6 +334,8 @@ class StartState extends State<LoginScreen> {
   }
 
   Future<void> route(String email) async {
+    ///////// Getting SchoolID ////////
+    ///***************////
    var schoolID ="x";
    User? user = FirebaseAuth.instance.currentUser;
    if(role == "معلم"){
@@ -341,8 +344,9 @@ class StartState extends State<LoginScreen> {
      for (var doc in snapshot.docs) {
        schoolID = doc.reference.parent.parent!.id;
        print(doc.reference.parent.parent?.id);
-       break;
+     //  break;
     }
+    ///******* END *******////
     var kk = FirebaseFirestore.instance
             .collection('School/'+schoolID+'/Teacher')
             .doc(user!.uid)
@@ -365,27 +369,54 @@ class StartState extends State<LoginScreen> {
                  content: Text("لا يوجد معلّم بهذه البيانات يرجى التحقق من البيانات المدخلة",
                   style: TextStyle(
                  color: Colors.red,
+                 
           ),
           ),
+     
                );
             }
          );
         print('Document does not exist on the database');
         print(user!.uid);
+         setState(() {
+                 visible = false;
+                });
       }
     });
 
-/*
-     var col = FirebaseFirestore.instance.collectionGroup('Teacher').where('Email', isEqualTo: email);
-     print("in1");
+}//end "Teacher"
+
+else if (role == "ولي أمر"){
+     var schoolID ="x";
+   User? user = FirebaseAuth.instance.currentUser;
+   if(role == "ولي أمر"){
+   var col = FirebaseFirestore.instance.collectionGroup('Parent').where('Email', isEqualTo: user!.email);
      var snapshot = await col.get();
-     print("in2");
-     if( snapshot == null){
-             showDialog(
+     for (var doc in snapshot.docs) {
+       schoolID = doc.reference.parent.parent!.id;
+       print(doc.reference.parent.parent?.id);
+       break;
+    }
+    var kk = FirebaseFirestore.instance
+            .collection('School/'+schoolID+'/Parent')
+            .doc(user!.uid)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        if (documentSnapshot.get('Email') == user?.email) {
+           Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>  parentHP(),
+          ),
+        );
+        }
+      } else {
+           showDialog(
            context: context,
            builder: (context) {
               return AlertDialog(
-                 content: Text("لا يوجد معلّم بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                 content: Text("لا يوجد ولي أمر بهذه البيانات يرجى التحقق من البيانات المدخلة",
                   style: TextStyle(
                  color: Colors.red,
           ),
@@ -393,28 +424,19 @@ class StartState extends State<LoginScreen> {
                );
             }
          );
-     print("Document does not exist on the database");
-     }else{
-     for (var doc in snapshot.docs) {
-        Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>  Teacher(),
-          ),
-        );
-       print(doc.reference.parent.parent?.id);// Prints document1, document2
-    }
-    }*/
-
-}//end "Teacher"
-
-else if (role == "ولي أمر"){
-  //next sprint
+        print('Document does not exist on the database');
+        print(user!.uid);
+         setState(() {
+                 visible = false;
+                });
+      }
+    });
+   }
 }//end "Parent"
 
 else if (role =="وسيط"){
   //next sprint
-}//emd "Com"
+}//end "Com"
 
 }//end rout
 
@@ -443,6 +465,9 @@ else if (role =="وسيط"){
                );
             }
          );
+          setState(() {
+                 visible = false;
+                });
         } else if (e.code == 'wrong-password') { 
           print('Wrong password provided for that user.');
          showDialog(
@@ -457,7 +482,9 @@ else if (role =="وسيط"){
                );
             }
          );
-
+     setState(() {
+                 visible = false;
+                });
 
         }
       }
