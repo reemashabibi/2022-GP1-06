@@ -208,7 +208,7 @@ collection.doc(user!.uid).snapshots().listen((docSnapshot) {
                                         return "الاسم يجب أن لا يزيد عن 20 حرف";
                                       }
                                       if (value.length <= 2) {
-                                        return "الايم يجب أن لا يقل عن 2 حرف";
+                                        return "الاسم يجب أن لا يقل عن 2 حرف";
                                       } else {
                                         return null;
                                       }
@@ -221,11 +221,18 @@ collection.doc(user!.uid).snapshots().listen((docSnapshot) {
                         ),
                                    TextFormField(
                                    // maxLength: 20,
+                                   minLines: 2,
+                                   maxLines: 5,
+                                   keyboardType: TextInputType.multiline,
                                     onChanged: (newText) {
                                       NewOH = newText;
                                     },
                                     controller: officeHoursController,
                                     decoration: InputDecoration(
+                                      hintText: 'اليوم - مِن: - إلى:',
+                                      hintStyle: TextStyle(
+                                         color: Colors.grey
+                                       ),
                                       labelText: "الساعات المكتبية",
                                       //hintText: "EnterF Name",
                                       border: OutlineInputBorder(
@@ -453,6 +460,7 @@ getSchoolID();
     'FirstName': fNm ,
     'LastName': lN,
     'OfficeHours': OH,
+    //'OfficeHours': Timestamp.now()
     });   
 
   showDialog(

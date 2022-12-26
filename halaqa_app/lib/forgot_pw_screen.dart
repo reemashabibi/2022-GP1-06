@@ -89,7 +89,7 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
                         margin: EdgeInsets.only(right: 20, top: 40),
                         alignment: Alignment.bottomRight,
                         child: Text(
-                          "يرجى إدخال بريدك الإلكتروني وسيتم إرسال رابط لإعادة تعيين كلمة المرور *",
+                          "*يرجى إدخال بريدك الإلكتروني وسيتم إرسال رابط لإعادة تعيين كلمة المرور ",
                           style: TextStyle(
                               fontSize: 14,
                               color: Color.fromARGB(255, 117, 116, 116)
