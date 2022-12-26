@@ -4,15 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/teacherHP.dart';
-import 'package:halaqa_app/viewStudentsForGrades.dart';
 
-class studentGrades extends StatefulWidget {
-  const studentGrades({super.key, required this.stRef, required this.classRef});
-  final DocumentReference stRef;
-  final DocumentReference classRef;
+class classGrades extends StatefulWidget {
+  const classGrades({super.key, required this.subjectRef});
+
+  final DocumentReference subjectRef;
 
   @override
-  _EditProfilePageState createState() => _EditProfilePageState();
+  _classGradesState createState() => _classGradesState();
 }
 
 class assessment {
@@ -35,15 +34,12 @@ class assessment {
   }
 }
 
-class _EditProfilePageState extends State<studentGrades> {
-  bool _isObscure3 = true;
-  bool visible = false;
+class _classGradesState extends State<classGrades> {
+  final _formkey = GlobalKey<FormState>();
   List<assessment> assessmentsList = [];
   List<assessment> studentAssessmentsList = [];
   List<String> assessmentNamesList = [];
   List<int> assessmentStudentGradesList = [];
-
-  final _formkey = GlobalKey<FormState>();
 
   bool customized = false;
   var numOfAssess = 6;
@@ -52,16 +48,40 @@ class _EditProfilePageState extends State<studentGrades> {
   var gradeID;
   var x = 0;
   var y = 0;
-
   getData() {
-    studentAssessmentsList.add(assessment("", 0));
     assessmentsList.add(assessment("", 0));
+    studentAssessmentsList.add(assessment("", 0));
     x++;
   }
 
+  notCustomized() async {
+    setState(() {
+      assessmentsList.add(assessment("درجة الحضور", 10));
+      assessmentsList.add(assessment("درجة المشاركة", 10));
+      assessmentsList.add(assessment("درجة الواجبات", 5));
+      assessmentsList.add(assessment("درجة المشاريع", 15));
+      assessmentsList.add(assessment("درجة الاختبار الشهري", 20));
+      assessmentsList.add(assessment("درجة الاختبار النهائي", 40));
+    });
+    for (int i = 0; i < assessmentsList.length; i++) {
+      studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
+    }
+
+    await widget.subjectRef.update({
+      'customized': true,
+    });
+    assessmentsList.forEach((assessment) async {
+      await widget.subjectRef.update(({
+        'assessments': FieldValue.arrayUnion([
+          {'name': assessment.name, 'grade': assessment.grade}
+        ])
+      }));
+    });
+  }
+
   checkCustomization() async {
-    DocumentReference doc = await widget.classRef;
-    await widget.classRef.get().then((value) async {
+    DocumentReference doc = await widget.subjectRef;
+    await widget.subjectRef.get().then((value) async {
       setState(() {
         customized = value['customized'];
       });
@@ -76,127 +96,39 @@ class _EditProfilePageState extends State<studentGrades> {
             final snapshots = await Future.wait(
                 [doc.get().then((value) => value['assessments'][i])]);
             return snapshots
-                .map((snapshot) =>
-                    assessment(snapshot['name'], snapshot['grade']))
+                .map((snapshot) => assessment(snapshot['name'], 0))
                 .toList();
           }
 
           assessments = await getAssessment();
           // assessments2 = await getData();
           setState(() {
-            // studentAssessmentsList.addAll(assessments);
             assessmentsList.addAll(assessments);
+            studentAssessmentsList.addAll(assessments);
           });
-        }
-
-        var stRef = await widget.stRef
-            .collection("Grades")
-            .where('subjectID', isEqualTo: widget.classRef)
-            .get();
-        if (stRef.docs.length > 0) {
-          var stRef = await widget.stRef
-              .collection("Grades")
-              .where('subjectID', isEqualTo: widget.classRef)
-              .get()
-              .then((querySnapshot) {
-            querySnapshot.docs.map((DocumentSnapshot document) {
-              setState(() {
-                gradeID = document.id;
-              });
-            }).toList();
-          });
-
-          print("in if");
-          DocumentReference docu =
-              await widget.stRef.collection("Grades").doc(gradeID);
-          print(gradeID);
-
+          /*
           for (int i = 0; i < numOfAssess; i++) {
-            Future<List<assessment>> getAssess() async {
-              final snapshots = await Future.wait(
-                  [docu.get().then((value) => value['assessments'][i])]);
-              return snapshots
-                  .map((snapshot) =>
-                      assessment(snapshot['name'], snapshot['grade']))
-                  .toList();
-            }
+            studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
+          }*/
+        }
 
-            assessments2 = await getAssess();
-            setState(() {
-              studentAssessmentsList.addAll(assessments2);
-            });
-
-            if (y == 0) {
-              setState(() {
-                assessmentsList.removeAt(0);
-                studentAssessmentsList.removeAt(0);
-                y++;
-              });
-            }
-          }
-        } else {
-          if (y == 0) {
-            setState(() {
-              assessmentsList.removeAt(0);
-              studentAssessmentsList.removeAt(0);
-              y++;
-            });
-          }
-
+        if (y == 0) {
           setState(() {
-            studentAssessmentsList.add(assessment(assessmentsList[0].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[1].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[2].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[3].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[4].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[5].name, 0));
-          });
-
-          widget.stRef.collection("Grades").add({
-            "assessments":
-                studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
-            "subjectID": widget.classRef,
+            assessmentsList.removeAt(0);
+            studentAssessmentsList.removeAt(0);
+            y++;
           });
         }
-      } //end if customized = true
-      else {
+      } else {
+        if (y == 0) {
+          setState(() {
+            assessmentsList.removeAt(0);
+            //studentAssessmentsList.removeAt(0);
+            y++;
+          });
+        }
         notCustomized();
-
-        studentAssessmentsList.add(assessment(assessmentsList[0].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[1].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[2].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[3].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[4].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[5].name, 0));
-
-        widget.stRef.collection("Grades").add({
-          "assessments":
-              studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
-          "subjectID": widget.classRef,
-        });
-      } //end if not customized
-    });
-  }
-
-  notCustomized() async {
-    setState(() {
-      assessmentsList.add(assessment("درجة الحضور", 10));
-      assessmentsList.add(assessment("درجة المشاركة", 10));
-      assessmentsList.add(assessment("درجة الواجبات", 5));
-      assessmentsList.add(assessment("درجة المشاريع", 15));
-      assessmentsList.add(assessment("درجة الاختبار الشهري", 20));
-      assessmentsList.add(assessment("درجة الاختبار النهائي", 40));
-    });
-
-    await widget.classRef.update({
-      'customized': true,
-    });
-    assessmentsList.forEach((assessment) async {
-      await widget.classRef.update(({
-        'assessments': FieldValue.arrayUnion([
-          {'name': assessment.name, 'grade': assessment.grade}
-        ])
-      }));
+      }
     });
   }
 
@@ -208,7 +140,6 @@ class _EditProfilePageState extends State<studentGrades> {
 
   @override
   Widget build(BuildContext context) {
-    // print(customized.toString());
     return Scaffold(
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -254,8 +185,8 @@ class _EditProfilePageState extends State<studentGrades> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => viewStudentsForGrades(
-                  ref: widget.classRef,
+                builder: (context) => grades(
+                  subRef: widget.subjectRef,
                 ),
               ),
             );
@@ -266,13 +197,13 @@ class _EditProfilePageState extends State<studentGrades> {
       body: Form(
         key: _formkey,
         child: Builder(builder: (context) {
-          print("studentAssessmentsList.lenght " +
-              studentAssessmentsList.length.toString());
+          //   print("studentAssessmentsList.lenght " +
+          //   studentAssessmentsList.length.toString());
           print("assessmentsList.lenght " + assessmentsList.length.toString());
           if (x == 0) {
             getData();
           }
-          if (studentAssessmentsList.length == numOfAssess) {
+          if (assessmentsList.length == numOfAssess) {
             //  if (assessmentStudentGradesList.length == assessmentsList.length) {
             return ListView.builder(
               itemCount: assessmentsList.length,
@@ -296,10 +227,8 @@ class _EditProfilePageState extends State<studentGrades> {
                               ],
                               keyboardType: TextInputType.number,
                               //  initialValue: assessmentsList[position].name,
-                              controller: TextEditingController(
-                                  text: studentAssessmentsList[position]
-                                      .grade
-                                      .toString()),
+                              controller:
+                                  TextEditingController(text: "0".toString()),
 
                               decoration: InputDecoration(
                                 labelText: assessmentsList[position].name,
@@ -346,11 +275,20 @@ class _EditProfilePageState extends State<studentGrades> {
     );
   }
 
+  bool isNumeric(String str) {
+    if (str == null) {
+      return false;
+    }
+    return double.tryParse(str) != null;
+  }
+
+  int numOfStudents = 0;
+
   Future<bool> conform() async {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Text("تأكيد حفظ درجات الطالب؟"),
+        content: Text("تأكيد حفظ درجات الطلاب؟"),
         actions: [
           TextButton(
               child: Text("لا",
@@ -374,32 +312,40 @@ class _EditProfilePageState extends State<studentGrades> {
       totalGrades += int.parse(studentAssessmentsList[i].grade.toString());
     }
     if (totalGrades < 100) {
-      var stRef = await widget.stRef
-          .collection("Grades")
-          .where('subjectID', isEqualTo: widget.classRef)
-          .get();
-      if (stRef.docs.length > 0) {
-        await widget.stRef
-            .collection("Grades")
-            .where('subjectID', isEqualTo: widget.classRef)
-            .get()
-            .then((querySnapshot) {
-          querySnapshot.docs.forEach((documentSnapshot) {
-            assessmentsList.forEach((assessment) async {
-              documentSnapshot.reference.update({
-                'assessments':
-                    studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
+      DocumentReference subjectRef =
+          await widget.subjectRef.parent.parent as DocumentReference<Object?>;
+      subjectRef.get().then((DocumentSnapshot ds) async {
+        numOfStudents = ds['Students'].length;
+        for (var i = 0; i < numOfStudents; i++) {
+          DocumentReference docu = ds['Students'][i];
+          var studentRef = await docu
+              .collection("Grades")
+              .where('subjectID', isEqualTo: widget.subjectRef)
+              .get();
+          if (studentRef.docs.length > 0) {
+            await docu
+                .collection("Grades")
+                .where('subjectID', isEqualTo: widget.subjectRef)
+                .get()
+                .then((querySnapshot) {
+              querySnapshot.docs.forEach((documentSnapshot) {
+                documentSnapshot.reference.update({
+                  "assessments": studentAssessmentsList
+                      .map<Map>((e) => e.toMap())
+                      .toList(),
+                });
               });
             });
-          });
-        });
-      } else {
-        widget.stRef.collection("Grades").add({
-          "assessments":
-              studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
-          "subjectID": widget.classRef,
-        });
-      }
+          } else {
+            docu.collection("Grades").add({
+              "assessments":
+                  studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
+              "subjectID": widget.subjectRef,
+            });
+          }
+        }
+      });
+
       showDialog(
           context: context,
           builder: (context) {
@@ -428,3 +374,5 @@ class _EditProfilePageState extends State<studentGrades> {
     }
   }
 } //end class
+
+

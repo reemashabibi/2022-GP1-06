@@ -180,21 +180,19 @@ class _teacherHPState extends State<teacherHP> {
 
               return Container(
                   child: ListView(
+                padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                 children: _SubjectsNameList.map((e) {
                   return Container(
+                      margin: EdgeInsets.only(bottom: 30),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 244, 247, 253),
+                          color: Color.fromARGB(255, 231, 231, 231),
                           border: Border.all(
                             color: Color.fromARGB(255, 130, 126, 126),
-                            width: 2.0,
+                            width: 2.5,
                           ),
                           borderRadius: BorderRadius.circular(10.0),
-                          gradient: LinearGradient(
-                            colors: [
-                              (Color.fromARGB(255, 170, 243, 250)),
-                              Color.fromARGB(255, 195, 196, 196)
-                            ],
-                          ),
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.grey,
@@ -219,70 +217,100 @@ class _teacherHPState extends State<teacherHP> {
                             child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            IconButton(
-                              onPressed: () {
-                                if (_SubjectsRefList[0] != "") {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => viewStudents(
-                                              ref: _SubjectsRefList[
-                                                  _SubjectsNameList.indexOf(e)],
-                                            )),
-                                  );
-                                }
-                              },
-                              icon: Image.asset(
-                                "images/studentsIcon.png",
-                                width: 44,
-                                height: 44,
-                                fit: BoxFit.cover,
+                            SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: FittedBox(
+                                child: FloatingActionButton(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 199, 248, 248),
+                                  onPressed: () {
+                                    if (_SubjectsRefList[0] != "") {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => viewStudents(
+                                                  ref: _SubjectsRefList[
+                                                      _SubjectsNameList.indexOf(
+                                                          e)],
+                                                )),
+                                      );
+                                    }
+                                  },
+                                  child: Image.asset(
+                                    "images/studentsIcon.png",
+                                    width: 44,
+                                    height: 44,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => grades(
-                                            subRef: _SubjectsRefList[
-                                                _SubjectsNameList.indexOf(e)],
-                                          )),
-                                );
-                              },
-                              icon: Image.asset(
-                                "images/gradesIcon.png",
-                                width: 44,
-                                height: 44,
-                                fit: BoxFit.cover,
+                            SizedBox(
+                              width: 15,
+                            ),
+                            SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: FittedBox(
+                                child: FloatingActionButton(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 199, 248, 248),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => grades(
+                                                subRef: _SubjectsRefList[
+                                                    _SubjectsNameList.indexOf(
+                                                        e)],
+                                              )),
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    "images/gradesIcon.png",
+                                    width: 44,
+                                    height: 44,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
-                            IconButton(
-                              onPressed: () {},
-                              icon: Image.asset(
-                                "images/chatIcon.png",
-                                width: 44,
-                                height: 44,
-                                fit: BoxFit.cover,
+                            SizedBox(
+                              width: 15,
+                            ),
+                            SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: FittedBox(
+                                child: FloatingActionButton(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 199, 248, 248),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => grades(
+                                                subRef: _SubjectsRefList[
+                                                    _SubjectsNameList.indexOf(
+                                                        e)],
+                                              )),
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    "images/chatIcon.png",
+                                    width: 44,
+                                    height: 44,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ))
 
                         // color: Color.fromARGB(255, 222, 227, 234),
-                      ])); /*
-                    onTap: () {
-                      if (_SubjectsRefList[0] != "") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyWidget(
-                                    ref: _SubjectsRefList[
-                                        _SubjectsNameList.indexOf(e)],
-                                  )),
-                        );
-                      }
-                    },*/
+                      ]));
                 }).toList(),
               ));
             }
