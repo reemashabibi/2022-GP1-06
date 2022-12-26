@@ -52,10 +52,9 @@ class _parentHPState extends State<parentHP> {
       break;
     }
 
-    //DocumentReference docRef = await FirebaseFirestore.instance
-    //  .doc('School/' + '$schoolID' + '/Parent/' + user!.uid);
-    DocumentReference docRef = await FirebaseFirestore.instance.doc(
-        "/School/NS1CyESQA9VK6RkFuRN7pjC73VW2/Parent/SPn294RlrRVf0axYY7tvH9Jls0D2");
+    DocumentReference docRef = await FirebaseFirestore.instance
+        .doc('School/' + '$schoolID' + '/Parent/' + user!.uid);
+
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
 
@@ -88,7 +87,7 @@ class _parentHPState extends State<parentHP> {
       }
     });
   }
-/*
+
   Future<void> getSchoolID() async {
     User? user = FirebaseAuth.instance.currentUser;
     var col = FirebaseFirestore.instance
@@ -99,12 +98,12 @@ class _parentHPState extends State<parentHP> {
       schoolID = doc.reference.parent.parent!.id;
       break;
     }
-  }*/
+  }
 
   @override
   void initState() {
     getSubjects();
-    // getSchoolID();
+    getSchoolID();
     // getSchoolID();
     //remove();
 
