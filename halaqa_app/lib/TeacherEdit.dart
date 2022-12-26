@@ -210,7 +210,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                         return "الاسم يجب أن لا يزيد عن 20 حرف";
                                       }
                                       if (value.length <= 2) {
-                                        return "الايم يجب أن لا يقل عن 2 حرف";
+                                        return "الاسم يجب أن لا يقل عن 2 حرف";
                                       } else {
                                         return null;
                                       }
@@ -223,11 +223,18 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                                    TextFormField(
                                    // maxLength: 20,
+                                    minLines: 2,
+                                    maxLines: 5,
+                                    keyboardType: TextInputType.multiline,
                                     onChanged: (newText) {
                                       NewOH = newText;
                                     },
                                     controller: officeHoursController,
                                     decoration: InputDecoration(
+                                      hintText: "الإثنين - 11:00صباحًا - 1:00مساءً",
+                                      hintStyle: TextStyle(
+                                        color: Colors.grey
+                                      ),
                                       labelText: "الساعات المكتبية",
                                       //hintText: "EnterF Name",
                                       border: OutlineInputBorder(
