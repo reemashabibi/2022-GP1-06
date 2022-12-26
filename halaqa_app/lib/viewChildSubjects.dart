@@ -39,8 +39,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   }
 
   getSubjects() async {
-    //DocumentReference docRef = await FirebaseFirestore.instance
-    //  .doc('School/' + '$schoolID' + '/Parent/' + user!.uid);
     DocumentReference docRef = widget.classRef;
     var subRefs = await docRef.collection("Subject").get();
     if (subRefs.docs.length > 0) {
@@ -56,23 +54,10 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       setState(() {
         className = ds['ClassName'] + " " + ds["Level"].toString();
       });
-/*
-      for (var i = 0; i < numOfSubjects; i++) {
-        DocumentReference str = ds['Students'][i];
 
-        var clsName = await str.get().then((value) {
-          setState(() {
-            _FNList.add(value['FirstName']);
-            _LNList.add(value['LastName']);
-          });
-        });
-      }
-*/
       setState(() {
         if (_SubjectsNameList.length > 1) {
           _SubjectsNameList.removeAt(0);
-          //_LNList.removeAt(0);
-          // _SubjectsRefList.removeAt(0);
         }
       });
       if (_SubjectsNameList[0] == "") {
@@ -80,18 +65,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       }
     });
   }
-/*
-  Future<void> getSchoolID() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Parent')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-  }*/
 
   @override
   void initState() {
@@ -105,10 +78,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //  resizeToAvoidBottomInset: false,
-      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
@@ -128,7 +98,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
         ),
         actions: [],
       ),
-
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -207,6 +176,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
@@ -242,6 +212,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {

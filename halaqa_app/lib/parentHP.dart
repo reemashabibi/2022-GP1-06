@@ -224,6 +224,7 @@ class _parentHPState extends State<parentHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
@@ -259,6 +260,7 @@ class _parentHPState extends State<parentHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
@@ -290,6 +292,7 @@ class _parentHPState extends State<parentHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
@@ -322,6 +325,7 @@ class _parentHPState extends State<parentHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {

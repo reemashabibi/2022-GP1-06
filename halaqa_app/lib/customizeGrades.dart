@@ -91,7 +91,7 @@ class _customizeGradesState extends State<customizeGrades> {
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         FloatingActionButton(
-          heroTag: "btn1",
+          heroTag: null,
           child: Icon(
             Icons.add,
             color: Colors.white,
@@ -101,7 +101,7 @@ class _customizeGradesState extends State<customizeGrades> {
           },
         ),
         FloatingActionButton(
-          heroTag: "btn2",
+          heroTag: null,
           backgroundColor: Colors.green,
           child: Icon(
             Icons.done,

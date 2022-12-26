@@ -147,7 +147,7 @@ class _classGradesState extends State<classGrades> {
           height: 50,
           width: 250,
           child: FloatingActionButton.extended(
-            heroTag: "btn2",
+            heroTag: null,
             backgroundColor: Colors.green,
             label: Row(
               children: [
