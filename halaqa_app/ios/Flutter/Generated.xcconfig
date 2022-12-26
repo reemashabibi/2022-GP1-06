@@ -1,6 +1,11 @@
 // This is a generated file; do not edit or check into version control.
+<<<<<<< HEAD
 FLUTTER_ROOT=/Users/reemafahad/flutter
 FLUTTER_APPLICATION_PATH=/Users/reemafahad/Desktop/2022-GP1-06/halaqa_app
+=======
+FLUTTER_ROOT=/Users/maca7/flutter
+FLUTTER_APPLICATION_PATH=/Users/maca7/Desktop/2022-GP1-06/halaqa_app
+>>>>>>> e466e870116e4ce04d4319765acfc3c5f98159f9
 COCOAPODS_PARALLEL_CODE_SIGN=true
 FLUTTER_TARGET=/Users/reemafahad/Desktop/2022-GP1-06/halaqa_app/lib/main.dart
 FLUTTER_BUILD_DIR=build

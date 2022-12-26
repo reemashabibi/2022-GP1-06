@@ -1,11 +1,9 @@
-//container
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:decider/services/auth_service.dart'
-//import 'var.dart' as globals;
+
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -22,34 +20,44 @@ class _teacherHPState extends State<teacherHP> {
   var className = "";
   var level = "";
   late List _SubjectList;
-  late List _SubjectsNameList = [""];
+  late List _SubjectsNameList;
   late List _SubjectsRefList;
   late List _ClassNameList;
-  late List _LevelNameList ;
+  late List _LevelNameList;
+  var x = 0;
+  var v = 0;
+
   var numOfSubjects;
-  var schoolID="xx";
+  var schoolID = "xx";
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
+  getData() {
+    _ClassNameList = ["يتم التحميل...."];
+    _LevelNameList = ["يتم التحميل...."];
+    _SubjectList = [""];
+    _SubjectsNameList = [""];
+    _SubjectsRefList = [""];
+    x++;
+  }
 
-  Future <void>getSubjects() async {
-    print('in1');
+  getSubjects() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final uid = user?.uid;
-    
-    //_SubjectsNameList = [];
-    //print(uid);
-   // DocumentReference docRef = await FirebaseFirestore.instance.doc(user!.uid);
-    // setState(() {});
+    User? user = FirebaseAuth.instance.currentUser;
 
+    var col = FirebaseFirestore.instance
+        .collectionGroup('Teacher')
+        .where('Email', isEqualTo: user!.email);
+    var snapshot = await col.get();
+    for (var doc in snapshot.docs) {
+      schoolID = doc.reference.parent.parent!.id;
+      break;
+    }
 
- getSchoolID();
-DocumentReference docRef = await FirebaseFirestore.instance.doc('School/'+ '$schoolID'+'/Teacher/'+user!.uid);
+    DocumentReference docRef = await FirebaseFirestore.instance
+        .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid);
+
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
-      _ClassNameList = ["يتم التحميل...."];
-      _LevelNameList = ["يتم التحميل...."];
-      _SubjectList = [""];
-      _SubjectsNameList = [""];
-      _SubjectsRefList = [""];
 
       numOfSubjects = ds['Subjects'].length;
 
@@ -75,29 +83,36 @@ DocumentReference docRef = await FirebaseFirestore.instance.doc('School/'+ '$sch
         });
       }
       setState(() {
-        _SubjectsNameList.removeAt(0);
-        _ClassNameList.removeAt(0);
-        _LevelNameList.removeAt(0);
-        _SubjectsRefList.removeAt(0);
+        if (_SubjectsNameList.length > 1) {
+          _SubjectsNameList.removeAt(0);
+          _ClassNameList.removeAt(0);
+          _LevelNameList.removeAt(0);
+          _SubjectsRefList.removeAt(0);
+        }
       });
+      if (_SubjectsNameList[0] == "") {
+        v++;
+      }
     });
   }
 
-Future<void> getSchoolID() async {
+  Future<void> getSchoolID() async {
     User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance.collectionGroup('Teacher').where('Email', isEqualTo: user!.email);
-     var snapshot = await col.get();
-     for (var doc in snapshot.docs) {
-       schoolID = doc.reference.parent.parent!.id;
-       break;
+    var col = FirebaseFirestore.instance
+        .collectionGroup('Teacher')
+        .where('Email', isEqualTo: user!.email);
+    var snapshot = await col.get();
+    for (var doc in snapshot.docs) {
+      schoolID = doc.reference.parent.parent!.id;
+      break;
     }
   }
-  remove() {}
 
   @override
   void initState() {
     getSubjects();
     getSchoolID();
+    // getSchoolID();
     //remove();
 
     super.initState();
@@ -105,11 +120,12 @@ Future<void> getSchoolID() async {
 
   @override
   Widget build(BuildContext context) {
+    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-
       //appBar: AppBar(title: const Text("Teacher")),
-            appBar: AppBar(
-        title: Text("Teacher"),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
         actions: [
           IconButton(
             onPressed: () {
@@ -118,34 +134,34 @@ Future<void> getSchoolID() async {
             },
             icon: Icon(
               Icons.logout,
+              color: Colors.black,
             ),
           ),
-
-            IconButton(
+          IconButton(
             onPressed: () {
-             // Navigator.pushReplacement(
+              // Navigator.pushReplacement(
               //context,
               //MaterialPageRoute(
-             // builder: (context) => EditProfilePage()
+              // builder: (context) => EditProfilePage()
               // ),
-           //  );
-                  Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => const EditProfilePage()),
-                );
+              //  );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const EditProfilePage()),
+              );
             },
             icon: Icon(
               Icons.account_circle_rounded,
+              color: Colors.black,
             ),
-          )
+          ),
         ],
       ),
 
-      body: StreamBuilder<DocumentSnapshot>(
-          stream: FirebaseFirestore.instance
-              .doc(
-                  "School/NS1CyESQA9VK6RkFuRN7pjC73VW2/Teacher/jSMmsmAqeTl67VrotFoV")
-              .snapshots(),
+      body: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
+              .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -154,146 +170,248 @@ Future<void> getSchoolID() async {
             }
 
             //Check if data arrived
-            if (snapshot.hasData) {
-              _SubjectList = snapshot.data!['Subjects'];
+            if (x == 0) {
+              getData();
+            }
+
+            if (snapshot.hasData && _SubjectsNameList[0] != "") {
+              //  dataGet();
+              // _SubjectList = snapshot.data!['Subjects'];
 
               return Container(
                   child: ListView(
+                padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                 children: _SubjectsNameList.map((e) {
-                  return InkWell(
-                    child: Container(
+                  return Container(
+                      margin: EdgeInsets.only(bottom: 30),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 244, 247, 253),
+                          color: Color.fromARGB(255, 231, 231, 231),
                           border: Border.all(
                             color: Color.fromARGB(255, 130, 126, 126),
-                            width: 2.0,
+                            width: 2.5,
                           ),
                           borderRadius: BorderRadius.circular(10.0),
-                          gradient: LinearGradient(colors: [
-                            Color.fromARGB(255, 123, 211, 217),
-                            Color.fromARGB(255, 209, 213, 216)
-                          ]),
                           boxShadow: [
                             BoxShadow(
                                 color: Colors.grey,
                                 blurRadius: 2.0,
                                 offset: Offset(2.0, 2.0))
                           ]),
-                      child: Text(
-                          e +
-                              "\nالفصل: " +
-                              _ClassNameList[_SubjectsNameList.indexOf(e)] +
-                              "\nالمرحلة: " +
-                              _LevelNameList[_SubjectsNameList.indexOf(e)],
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(13),
-                      // color: Color.fromARGB(255, 222, 227, 234),
-                    ),
-                    onTap: () {
-                      if (_SubjectsRefList[0] != "") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MyWidget(
-                                    ref: _SubjectsRefList[
-                                        _SubjectsNameList.indexOf(e)],
-                                  )),
-                        );
-                      }
-                    },
-                  );
+                      child: new Column(children: [
+                        new Container(
+                          child: Text(
+                              e +
+                                  "\nالفصل: " +
+                                  _ClassNameList[_SubjectsNameList.indexOf(e)] +
+                                  "\nالمرحلة: " +
+                                  _LevelNameList[_SubjectsNameList.indexOf(e)],
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          margin: EdgeInsets.all(4),
+                          padding: EdgeInsets.all(2),
+                        ),
+                        new Container(
+                            child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: FittedBox(
+                                child: FloatingActionButton(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 199, 248, 248),
+                                  onPressed: () {
+                                    if (_SubjectsRefList[0] != "") {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => viewStudents(
+                                                  ref: _SubjectsRefList[
+                                                      _SubjectsNameList.indexOf(
+                                                          e)],
+                                                )),
+                                      );
+                                    }
+                                  },
+                                  child: Image.asset(
+                                    "images/studentsIcon.png",
+                                    width: 44,
+                                    height: 44,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: FittedBox(
+                                child: FloatingActionButton(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 199, 248, 248),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => grades(
+                                                subRef: _SubjectsRefList[
+                                                    _SubjectsNameList.indexOf(
+                                                        e)],
+                                              )),
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    "images/gradesIcon.png",
+                                    width: 44,
+                                    height: 44,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 15,
+                            ),
+                            SizedBox(
+                              width: 44,
+                              height: 44,
+                              child: FittedBox(
+                                child: FloatingActionButton(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 199, 248, 248),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => grades(
+                                                subRef: _SubjectsRefList[
+                                                    _SubjectsNameList.indexOf(
+                                                        e)],
+                                              )),
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    "images/chatIcon.png",
+                                    width: 44,
+                                    height: 44,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ))
+
+                        // color: Color.fromARGB(255, 222, 227, 234),
+                      ]));
                 }).toList(),
               ));
+            }
+            if (_SubjectsNameList.length == 0 && x == 0) {
+              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+            }
+            if (_SubjectsNameList[0] == "" && v == 1) {
+              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
             return Center(child: CircularProgressIndicator());
           }),
     );
   }
-  
-  
 
   Future<void> logout(BuildContext context) async {
-   showAlertDialog(BuildContext context ) {};
+    showAlertDialog(BuildContext context) {}
+    ;
   }
 
-  Future<void> showAlertDialog(BuildContext context )async {
-   // set up the buttons
-  Widget continueButton = TextButton( //continueButton
-    child: Text("نعم"),
-    onPressed:  () async {
-   CircularProgressIndicator();
-    await FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-      builder: (context) => LoginScreen(),
-      ),
+  Future<void> showAlertDialog(BuildContext context) async {
+    // set up the buttons
+    Widget continueButton = TextButton(
+      //continueButton
+      child: Text("نعم"),
+      onPressed: () async {
+        CircularProgressIndicator();
+        await FirebaseAuth.instance.signOut();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      },
     );
-    },
-  );
 
-  Widget cancelButton = TextButton(//cancelButton
-     child: Text("إلغاء",
-       style: TextStyle(
+    Widget cancelButton = TextButton(
+      //cancelButton
+      child: Text("إلغاء",
+          style: TextStyle(
             color: Colors.red,
           )),
-    onPressed:  () {
-     Navigator.of(context).pop();
-    },
-  );
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
 
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    //title: Text("AlertDialog"),
-    content: Text("هل تأكد تسجيل الخروج؟",
-    textAlign: TextAlign.center ,
-    ),
-    actions: [
-      continueButton,
-      cancelButton
-    ],
-  );
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      //title: Text("AlertDialog"),
+      content: Text(
+        "هل تأكد تسجيل الخروج؟",
+        textAlign: TextAlign.center,
+      ),
+      actions: [continueButton, cancelButton],
+    );
 
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-   }//end method
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  } //end method
 
 }
 
-class MyWidget extends StatefulWidget {
-  const MyWidget({super.key, required this.ref});
+class viewStudents extends StatefulWidget {
+  const viewStudents({super.key, required this.ref});
   final DocumentReference ref;
   @override
-  State<MyWidget> createState() => _MyWidgetState();
+  State<viewStudents> createState() => _MyWidgetState();
 }
 
-class _MyWidgetState extends State<MyWidget> {
+class _MyWidgetState extends State<viewStudents> {
   late List _StudentList;
   late List _StudenNameList;
   late List _StudentsRefList;
+  var x = 0;
+  var v = 0;
+  var className;
+  var levelName;
 
   var numOfStudents;
 
+  getData() {
+    _StudentList = [""];
+    _StudentsRefList = [""];
+    _StudenNameList = [""];
+    x++;
+  }
+
   getStudents() async {
-    setState(() {
-      _StudentList = [""];
-      _StudentsRefList = [""];
-      _StudenNameList = ["يتم تحميل الطلاب....."];
-    });
     DocumentReference docRef =
         widget.ref.parent.parent as DocumentReference<Object?>;
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
-      print(widget.ref.toString());
+      className = ds['ClassName'];
+      levelName = ds['Level'];
 
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
@@ -307,10 +425,15 @@ class _MyWidgetState extends State<MyWidget> {
       }
 
       setState(() {
-        _StudentList.removeAt(0);
-        _StudenNameList.removeAt(0);
-        _StudentsRefList.removeAt(0);
+        if (_StudenNameList.length > 1) {
+          _StudentList.removeAt(0);
+          _StudenNameList.removeAt(0);
+          _StudentsRefList.removeAt(0);
+        }
       });
+      if (_StudenNameList[0] == "") {
+        v++;
+      }
     });
   }
 
@@ -324,11 +447,29 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     DocumentReference ref = widget.ref;
-    DocumentReference s = FirebaseFirestore.instance.doc(
-        "School/NS1CyESQA9VK6RkFuRN7pjC73VW2/Class/AcHYASkjczRWPhGWhCbO/Subject/2NG55SpgBc1M4lmlEhiu");
+
     DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
+
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 76, 170, 175),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => teacherHP(),
+              ),
+            );
+          },
+        ),
+        actions: [],
+      ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: widget.ref.parent.parent?.snapshots(),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -338,67 +479,85 @@ class _MyWidgetState extends State<MyWidget> {
             }
 
             //Check if data arrived
-            if (snapshot.hasData && numOfStudents != 0) {
+            if (x == 0) {
+              getData();
+            }
+            if (snapshot.hasData && _StudenNameList[0] != "") {
               //Display the list
 
               return Container(
-                  child: ListView(
-                children: _StudenNameList.map((e) {
-                  return InkWell(
-                    child: Container(
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 244, 247, 253),
-                          border: Border.all(
-                            color: Color.fromARGB(255, 130, 126, 126),
-                            width: 2.0,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                          gradient: LinearGradient(colors: [
-                            Color.fromARGB(255, 123, 211, 217),
-                            Color.fromARGB(255, 209, 213, 216)
-                          ]),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 2.0,
-                                offset: Offset(2.0, 2.0))
-                          ]),
-                      child: Text(e,
-                          textDirection: TextDirection.rtl,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold)),
-                      margin: EdgeInsets.all(5),
-                      padding: EdgeInsets.all(15),
-                      //   color: Color.fromARGB(255, 222, 227, 234),
+                  child: new Column(
+                children: [
+                  new Container(
+                    child: Text(
+                      className + " " + levelName.toString(),
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 80, 80, 80),
+                        fontSize: 30,
+                      ),
                     ),
-                    onTap: () {
-                      if (_StudentsRefList[0] != "") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => studentGrades(
-                                    stRef: _StudentsRefList[
-                                        _StudenNameList.indexOf(e)],
-                                    classRef: ref,
-                                  )),
+                  ),
+                  new Container(
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: _StudenNameList.map((e) {
+                        return Container(
+                          decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 244, 247, 253),
+                              border: Border.all(
+                                color: Color(0xffEEEEEE),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                              gradient: LinearGradient(
+                                colors: [
+                                  (Color.fromARGB(255, 170, 243, 250)),
+                                  Color.fromARGB(255, 195, 196, 196)
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Colors.grey,
+                                    blurRadius: 2.0,
+                                    offset: Offset(2.0, 2.0))
+                              ]),
+                          child: Text(e,
+                              textDirection: TextDirection.rtl,
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                          margin: EdgeInsets.all(5),
+                          padding: EdgeInsets.all(15),
+                          //   color: Color.fromARGB(255, 222, 227, 234),
                         );
-                      }
-                    },
-                  );
-                }).toList(),
+                        /*
+                          onTap: () {
+                            if (_StudentsRefList[0] != "") {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => studentGrades(
+                                          stRef: _StudentsRefList[
+                                              _StudenNameList.indexOf(e)],
+                                          classRef: ref,
+                                        )),
+                              );
+                            }
+                          },*/
+                      }).toList(),
+                    ),
+                  )
+                ],
               ));
             }
-
-            return Center(child: Text(".لم تتم اضافة اي طالب بالفصل"));
+            if (_StudenNameList.length == 0 && x == 0) {
+              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+            }
+            if (_StudenNameList[0] == "" && v == 1) {
+              return Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
+            }
+            return Center(child: CircularProgressIndicator());
           }),
     );
-
-    
-
   }
-
-
-
-
-  
 }
