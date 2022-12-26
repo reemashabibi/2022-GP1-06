@@ -119,6 +119,7 @@ classForm.addEventListener('submit', async (e) => {
         addDoc(colRefSubject, {
         SubjectName: doc.data().Subjects[i],
         TeacherID:  "",
+        customized: false 
       }).then(() => { 
         console.log("added")
       })}
