@@ -178,7 +178,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               return "الاسم يجب أن لا يزيد عن 20 حرف";
                             }
                             if (value.length <= 2) {
-                              return "الايم يجب أن لا يقل عن 2 حرف";
+                              return "الاسم يجب أن لا يقل عن 2 حرف";
                             } else {
                               return null;
                             }
