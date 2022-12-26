@@ -1,0 +1,17 @@
+.center {
+    display:inline-block;
+    position: relative;
+    background: #fff;
+    align-content: center;
+  
+}
+.paragraphStyle {
+    text-align: center;
+}
+h2 {
+    font-size: 26px;
+    margin: 20px 0;
+    text-align: center;
+    color: rgb(40, 87, 111);
+   
+  }

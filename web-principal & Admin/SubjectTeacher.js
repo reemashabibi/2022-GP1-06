@@ -289,7 +289,8 @@ console.log(currentSubjectsWithoutSomeChar);
 
         const data = {
           SubjectName: subjectName,
-          TeacherID: "" 
+          TeacherID: "",
+          customized: false 
        };
        addDoc(dbRef, data)
         .then(docRef => {
