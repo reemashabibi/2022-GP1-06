@@ -1,12 +1,7 @@
 halaqa_app
 2.18
-<<<<<<< HEAD
-file:///Users/reemafahad/Desktop/2022-GP1-06/halaqa_app/
-file:///Users/reemafahad/Desktop/2022-GP1-06/halaqa_app/lib/
-=======
 file:///Users/maca7/Desktop/2022-GP1-06/halaqa_app/
 file:///Users/maca7/Desktop/2022-GP1-06/halaqa_app/lib/
->>>>>>> e466e870116e4ce04d4319765acfc3c5f98159f9
 _flutterfire_internals
 2.16
 file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/_flutterfire_internals-1.0.10/
@@ -115,6 +110,10 @@ fluttertoast
 2.12
 file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.1.1/
 file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/fluttertoast-8.1.1/lib/
+get
+2.15
+file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/
+file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5/lib/
 http
 2.14
 file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/http-0.13.5/
