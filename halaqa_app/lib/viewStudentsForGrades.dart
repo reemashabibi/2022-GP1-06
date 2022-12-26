@@ -114,7 +114,8 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
               //Display the list
 
               return Container(
-                  child: new Column(
+                  child: SingleChildScrollView(
+                      child: new Column(
                 children: [
                   new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
@@ -129,6 +130,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                   ),
                   new Container(
                     child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
@@ -173,7 +175,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                     ),
                   )
                 ],
-              ));
+              )));
             }
             if (_StudenNameList.length == 0 && x == 0) {
               return Center(child: Text("لم يتم تعيين أي فصل بعد."));

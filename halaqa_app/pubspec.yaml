@@ -78,6 +78,10 @@ flutter:
       - images/gradesIcon.png
       - images/chatIcon.png
       - images/editIcon.png
+      - images/subjectsIcon.png
+      - images/absenceIcon.png
+      - images/gradeIcon.png
+     
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
