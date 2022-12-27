@@ -10,7 +10,7 @@
 		</data>
 		<key>flutter_assets/AssetManifest.json</key>
 		<data>
-		xL9I461eZzYv+rHWa+5NRRQxleU=
+		rK5OGmJ0/EWVFAwxmEEDTtL2jhE=
 		</data>
 		<key>flutter_assets/FontManifest.json</key>
 		<data>
@@ -18,11 +18,15 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		0WGkD2/k5pUhV50cJ6W2QHp+ldo=
+		lhD+LkD2S333+ii15/X8LOn4A9A=
 		</data>
 		<key>flutter_assets/fonts/MaterialIcons-Regular.otf</key>
 		<data>
 		mcmNrC70e/OT89y/p5EgxkVsLrs=
+		</data>
+		<key>flutter_assets/images/absenceIcon.png</key>
+		<data>
+		PNM+K6gwQII/RUGXsL9LgXpswZM=
 		</data>
 		<key>flutter_assets/images/chatIcon.png</key>
 		<data>
@@ -32,13 +36,21 @@
 		<data>
 		KTeGs0iOQ+LRbKptpDsjO6zHDbM=
 		</data>
+		<key>flutter_assets/images/eventsIcon.png</key>
+		<data>
+		iuwZxJl4PSYEmy4eoo6nWbaTFm4=
+		</data>
+		<key>flutter_assets/images/gradeIcon.png</key>
+		<data>
+		UFiFQJFnhlenlN+dj/RIudRJFLs=
+		</data>
 		<key>flutter_assets/images/gradesIcon.png</key>
 		<data>
 		gaeEtvXULOuCCOnKHHwmqBPvMKk=
 		</data>
 		<key>flutter_assets/images/logo.png</key>
 		<data>
-		zrIUrOrJvsvnLH9+ZUcOiBELpb4=
+		PoQOiUJJs3YROTsUaqy69+4NUtw=
 		</data>
 		<key>flutter_assets/images/studentIcon.png</key>
 		<data>
@@ -48,21 +60,17 @@
 		<data>
 		fr7ynT3sTU1E2jeIkVIQL2lbeAo=
 		</data>
+		<key>flutter_assets/images/subjectsIcon.png</key>
+		<data>
+		5XMs6AArl4N3LLxXaeL9c1Mb8ws=
+		</data>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<data>
 		jtyHs+6eMVt00swwjGovNjvYFno=
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-<<<<<<< HEAD
-		zCpVTcdeO8vAf/mF7BKaI9EW77Q=
-=======
-<<<<<<< HEAD
-		m5MAjvcozjW6L4NAdubPQBp/jFo=
-=======
-		7m1drZmmMLYeOQMRccwip5iirBk=
->>>>>>> e466e870116e4ce04d4319765acfc3c5f98159f9
->>>>>>> origin/main
+		vPLOXMyb0NjXBECFqkUrBXFbB0s=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -107,7 +115,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			XbtIpLq3FD8V5XMPSfWhyKCMEhkCRKZt7Dv9ES3hCmw=
+			8A544WJyVArgWr36tzhPpGe0uksseCNZtdHTLEQqgdM=
 			</data>
 		</dict>
 		<key>flutter_assets/FontManifest.json</key>
@@ -121,7 +129,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/ZGjBNOecurkIKXHwefjcX5B7Bj4m8YSPYhBC8PmNCQ=
+			KWGVdQufYbpQ5kn5TxXtgd+o/LW1HMug5S+lNOkJT0Y=
 			</data>
 		</dict>
 		<key>flutter_assets/fonts/MaterialIcons-Regular.otf</key>
@@ -129,6 +137,13 @@
 			<key>hash2</key>
 			<data>
 			BugRRJlkJdABYrpi+ZDcvZjsh+EPQ4Uf2ST65b83vlc=
+			</data>
+		</dict>
+		<key>flutter_assets/images/absenceIcon.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ol4wAg6sBuTx9fVTkGK/0MsawLmnSrOqASsXjJ69NnQ=
 			</data>
 		</dict>
 		<key>flutter_assets/images/chatIcon.png</key>
@@ -145,6 +160,20 @@
 			XeiIqFKHVq5hDbdtNty3321pxnKNDVbr2Pz0OSUth5k=
 			</data>
 		</dict>
+		<key>flutter_assets/images/eventsIcon.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			SVo0mOzeCMU5JTobPMY03fYLgkjrEt4xAAalS1H3ue4=
+			</data>
+		</dict>
+		<key>flutter_assets/images/gradeIcon.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			reiu4tJvy5KYc7nDtS13VODljPF36U5yi0Gw3PnqviA=
+			</data>
+		</dict>
 		<key>flutter_assets/images/gradesIcon.png</key>
 		<dict>
 			<key>hash2</key>
@@ -156,7 +185,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ka8+6aYXt6X4x57LTChcVci5ZTBNEJIqfRbVkJMUPDI=
+			ue60cHTmmbIL2nKk3BiPm+HXhKSQx+kHYoFQ5QMl9FU=
 			</data>
 		</dict>
 		<key>flutter_assets/images/studentIcon.png</key>
@@ -173,6 +202,13 @@
 			nLyl/P/Qb6g/5Z2tiKhWlYpBCxytR9KZnCJ4Erfsnic=
 			</data>
 		</dict>
+		<key>flutter_assets/images/subjectsIcon.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			krPOGZSTZX5+a80uGqWvsq+blKgGYU1S9UKohO6cKVk=
+			</data>
+		</dict>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<dict>
 			<key>hash2</key>
@@ -184,15 +220,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-<<<<<<< HEAD
-			u4cL47mv3wGueZtXmMCupTKNqurgcOppMUPdVLhWCI4=
-=======
-<<<<<<< HEAD
-			StEvaXz62lV8cbzKC2c5TveCNtz+qjcg3Wckk4jgHfE=
-=======
-			XDjHGWG+PMoPcKmSHZDnPHzNgx7cBqv2MBClDgfiJxA=
->>>>>>> e466e870116e4ce04d4319765acfc3c5f98159f9
->>>>>>> origin/main
+			8jHS2msVgfMP/Akf7Ti8TtYYxoAgYlQj276/H0mdU98=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>

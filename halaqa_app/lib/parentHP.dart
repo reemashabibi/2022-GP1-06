@@ -1,7 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:halaqa_app/viewEvents.dart';
+//import 'package:titled_navigation_bar/titled_navigation_bar.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -115,9 +117,16 @@ class _parentHPState extends State<parentHP> {
     // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
+
       appBar: AppBar(
+        title: Text('حلقة',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 9, 18, 121),
+            )),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {
@@ -126,8 +135,9 @@ class _parentHPState extends State<parentHP> {
             },
             icon: Icon(
               Icons.logout,
-              color: Colors.black,
+              color: Color.fromARGB(255, 9, 18, 121),
             ),
+            iconSize: 30,
           ),
           IconButton(
             onPressed: () {
@@ -140,12 +150,74 @@ class _parentHPState extends State<parentHP> {
             },
             icon: Icon(
               Icons.account_circle_rounded,
-              color: Colors.black,
+              color: Color.fromARGB(255, 9, 18, 121),
             ),
+            iconSize: 30,
           ),
         ],
       ),
-
+      bottomNavigationBar: TitledBottomNavigationBar(
+          //currentIndex: 1, // Use this to update the Bar giving a position
+          inactiveColor: Color.fromARGB(255, 9, 18, 121),
+          indicatorColor: Color.fromARGB(255, 76, 170, 175),
+          activeColor: Color.fromARGB(255, 76, 170, 175),
+          onTap: (index) {
+            currentIndex:
+            index;
+            if (index == 1) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => viewEvents(),
+                ),
+              );
+            }
+          },
+          items: [
+            TitledNavigationBarItem(
+                title: Text('الصفحة الرئيسية',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                icon: const Icon(Icons.home)),
+            TitledNavigationBarItem(
+              title: Text('الأحداث',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.calendar_today),
+            ), /*
+            TitledNavigationBarItem(
+              title: Text('Events'),
+              icon: Image.asset(
+                "images/eventsIcon.png",
+                width: 20,
+                height: 20,
+                //fit: BoxFit.cover,
+              ),
+            ),*/
+          ]),
+      /* bottomNavigationBar: BottomAppBar(
+        color: Color.fromARGB(255, 76, 170, 175),
+        child: new Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisSize: MainAxisSize.max,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              iconSize: 35,
+              onPressed: () {},
+            ),
+            IconButton(
+              icon: Image.asset(
+                "images/eventsIcon.png",
+                width: 65,
+                height: 65,
+                fit: BoxFit.cover,
+              ),
+              onPressed: () {},
+            ),
+          ],
+        ),
+      ),
+*/
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -175,9 +247,13 @@ class _parentHPState extends State<parentHP> {
                     child: Text(
                       parentName,
                       style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 80, 80, 80),
+                        fontWeight: FontWeight.w600,
                         fontSize: 30,
+
+                        color: Color.fromARGB(255, 151, 142, 142),
+
+                        //  color: Color.fromARGB(255, 80, 80, 80),
+                        // fontSize: 30,
                       ),
                     ),
                   ),
@@ -192,7 +268,7 @@ class _parentHPState extends State<parentHP> {
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                color: Color.fromARGB(255, 245, 245, 245),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
@@ -356,7 +432,7 @@ class _parentHPState extends State<parentHP> {
                             ]));
                       }).toList(),
                     ),
-                  )
+                  ),
                 ],
               )));
             }

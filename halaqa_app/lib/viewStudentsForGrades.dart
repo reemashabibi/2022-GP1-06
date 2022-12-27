@@ -37,7 +37,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
       className = ds['ClassName'];
-      levelName = ds['Level'];
+      levelName = ds['LevelName'];
 
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
@@ -120,7 +120,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                   new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      className + " " + levelName.toString(),
+                      className + " / " + levelName.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),

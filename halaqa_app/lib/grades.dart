@@ -27,7 +27,7 @@ class _gradesState extends State<grades> {
     await doc.get().then((DocumentSnapshot ds) async {
       setState(() {
         className = ds['ClassName'];
-        level = ds['Level'].toString();
+        level = ds['LevelName'].toString();
       });
     });
     // print(className);
@@ -69,7 +69,7 @@ class _gradesState extends State<grades> {
             children: [
               new Container(
                 child: Text(
-                  className + " " + level,
+                  className + " / " + level,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 80, 80, 80),
