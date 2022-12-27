@@ -30,7 +30,14 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
     x++;
   }
 
+  var subName = "";
   getStudents() async {
+    DocumentReference doc = await widget.ref;
+    await widget.ref.get().then((value) async {
+      setState(() {
+        subName = value['SubjectName'];
+      });
+    });
     DocumentReference docRef =
         widget.ref.parent.parent as DocumentReference<Object?>;
 
@@ -91,6 +98,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
               MaterialPageRoute(
                 builder: (context) => grades(
                   subRef: widget.ref,
+                  subName: subName,
                 ),
               ),
             );

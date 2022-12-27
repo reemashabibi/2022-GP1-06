@@ -1,151 +1,86 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
-import 'package:halaqa_app/grades.dart';
-import 'package:halaqa_app/parentHP.dart';
-import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
-import 'package:halaqa_app/TeacherEdit.dart';
-import 'package:halaqa_app/teacherHP.dart';
+import 'package:halaqa_app/parentHP.dart';
+import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
-class viewEvents extends StatefulWidget {
-  const viewEvents({super.key});
+class viewChildGrades extends StatefulWidget {
+  const viewChildGrades({super.key, this.classRef, this.studentName});
+  final classRef;
+  final studentName;
 
   @override
-  State<viewEvents> createState() => _viewEventsState();
+  State<viewChildGrades> createState() => _viewChildGradesState();
 }
 
-class events {
-  String content;
-  String image;
-  String title;
-
-  events(this.content, this.image, this.title);
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "content  $content  image $image   title   $title";
-  }
-}
-
-class _viewEventsState extends State<viewEvents> {
-  List<events> eventList = [];
-  List imageList = <String>[];
-  /*
-  late List _List;
+class _viewChildGradesState extends State<viewChildGrades> {
+  var className = "";
+  var level = "";
+  late List _SubjectList;
   late List _SubjectsNameList;
   late List _SubjectsRefList;
-  late List _ClassNameList;
-  late List _LevelNameList;
- 
-  var teacherName = "";
 
-  var numOfSubjects;*/
   var x = 0;
   var v = 0;
+  var parentName = "";
+
+  var numOfSubjects;
   var schoolID = "xx";
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
-
   getData() {
-    eventList.add(events("", "", ""));
-    imageList.add("start");
+    _SubjectsNameList = [""];
+    //_SubjectList = [""];
+    // _SubjectsRefList = [""];
     x++;
   }
 
   getSubjects() async {
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    User? user = FirebaseAuth.instance.currentUser;
-
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Parent')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-
-    DocumentReference docRef =
-        await FirebaseFirestore.instance.doc('School/' + '$schoolID');
-
-    var EventRefs = await docRef.collection("Event").get();
-    if (EventRefs.docs.length > 0) {
-      await docRef.collection("Event").get().then((querySnapshot) {
-        querySnapshot.docs.forEach((documentSnapshot) async {
-          eventList.add(events(documentSnapshot['content'],
-              documentSnapshot['image'], documentSnapshot['title']));
+    DocumentReference docRef = widget.classRef;
+    var subRefs = await docRef.collection("Subject").get();
+    if (subRefs.docs.length > 0) {
+      await await docRef.collection("Subject").get().then((querySnapshot) {
+        querySnapshot.docs.forEach((documentSnapshot) {
+          _SubjectsNameList.add(documentSnapshot['SubjectName']);
         });
       });
     }
+    docRef.get().then((DocumentSnapshot ds) async {
+      // use ds as a snapshot
 
-    setState(() {
-      if (eventList.length > 1) {
-        eventList.removeAt(0);
+      setState(() {
+        className = ds['ClassName'] + " / " + ds["LevelName"].toString();
+      });
+
+      setState(() {
+        if (_SubjectsNameList.length > 1) {
+          _SubjectsNameList.removeAt(0);
+        }
+      });
+      if (_SubjectsNameList[0] == "") {
+        v++;
       }
     });
-    for (int i = 0; i < eventList.length; i++) {
-      imageList.add(await getImage(eventList[i].image));
-    }
-
-    setState(() {
-      if (imageList.length > 1) {
-        imageList.removeAt(0);
-      }
-    });
-    if (eventList[0].content == "") {
-      v++;
-    }
-  }
-
-  Future<void> getSchoolID() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Teacher')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-  }
-
-  Future<String?> getImage(img) async {
-    if (img == "") {
-      return "";
-    }
-    try {
-      var downloadURL = await FirebaseStorage.instance
-          .ref()
-          .child("images/")
-          .child(img)
-          .getDownloadURL();
-
-      return downloadURL;
-    } catch (e) {
-      return null;
-    }
   }
 
   @override
   void initState() {
-    // getSchoolID();
     getSubjects();
+    // getSchoolID();
+    // getSchoolID();
+    //remove();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
@@ -166,15 +101,11 @@ class _viewEventsState extends State<viewEvents> {
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
+          currentIndex: 2, // Use this to update the Bar giving a position
           inactiveColor: Color.fromARGB(255, 9, 18, 121),
           indicatorColor: Color.fromARGB(255, 76, 170, 175),
           activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
-            setState(() {
-              currentIndex:
-              index;
-            });
             if (index == 0) {
               Navigator.pushReplacement(
                 context,
@@ -183,7 +114,14 @@ class _viewEventsState extends State<viewEvents> {
                 ),
               );
             }
-            if (index == 1) {}
+            if (index == 1) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => viewEvents(),
+                ),
+              );
+            }
           },
           items: [
             TitledNavigationBarItem(
@@ -205,7 +143,6 @@ class _viewEventsState extends State<viewEvents> {
               ),
             ),*/
           ]),
-
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -222,9 +159,7 @@ class _viewEventsState extends State<viewEvents> {
               getData();
             }
 
-            if (snapshot.hasData &&
-                eventList[0].content != "" &&
-                imageList[0] != "start") {
+            if (snapshot.hasData && _SubjectsNameList[0] != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
@@ -235,7 +170,8 @@ class _viewEventsState extends State<viewEvents> {
                   new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      "الأحداث",
+                      widget.studentName + "\n" + className,
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
@@ -249,7 +185,7 @@ class _viewEventsState extends State<viewEvents> {
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                       //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                      children: eventList.map((e) {
+                      children: _SubjectsNameList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
@@ -268,7 +204,7 @@ class _viewEventsState extends State<viewEvents> {
                                 ]),
                             child: new Column(children: [
                               new Container(
-                                child: Text(e.title,
+                                child: Text(e,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 25,
@@ -277,19 +213,76 @@ class _viewEventsState extends State<viewEvents> {
                                 padding: EdgeInsets.all(2),
                               ),
                               new Container(
-                                child: Text(e.content,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                  child: FadeInImage(
-                                image: NetworkImage(
-                                    imageList[eventList.indexOf(e)]),
-                                placeholder: AssetImage("images/editIcon.png"),
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
+                                    width: 44,
+                                    height: 44,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        heroTag: null,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
+                                        onPressed: () {
+                                          /*
+                                          if (_SubjectsRefList[0] != "") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      viewStudents(
+                                                        ref: _SubjectsRefList[
+                                                            _SubjectsNameList
+                                                                .indexOf(e)],
+                                                      )),
+                                            );
+                                          }
+                                      */
+                                        },
+                                        child: Image.asset(
+                                          "images/gradeIcon.png",
+                                          width: 55,
+                                          height: 55,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  SizedBox(
+                                    width: 44,
+                                    height: 44,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        heroTag: null,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
+                                        onPressed: () {
+                                          /*
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => grades(
+                                                      subRef: _SubjectsRefList[
+                                                          _SubjectsNameList
+                                                              .indexOf(e)],
+                                                    )),
+                                          );
+                                        */
+                                        },
+                                        child: Image.asset(
+                                          "images/chatIcon.png",
+                                          width: 44,
+                                          height: 44,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ))
 
                               // color: Color.fromARGB(255, 222, 227, 234),
@@ -300,11 +293,11 @@ class _viewEventsState extends State<viewEvents> {
                 ],
               )));
             }
-            if (eventList.length == 0 && x == 0) {
-              return Center(child: Text("لا توجد أحداث بالوقت الحالي"));
+            if (_SubjectsNameList.length == 0 && x == 0) {
+              return Center(child: Text(""));
             }
-            if (eventList[0].content == "" && v == 1) {
-              return Center(child: Text("لا توجد أحداث بالوقت الحالي"));
+            if (_SubjectsNameList[0] == "" && v == 1) {
+              return Center(child: Text("لا يوجد مواد مسجلة"));
             }
             return Center(child: CircularProgressIndicator());
           }),

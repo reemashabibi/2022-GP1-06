@@ -42,6 +42,7 @@ class _classGradesState extends State<classGrades> {
   List<int> assessmentStudentGradesList = [];
 
   bool customized = false;
+  var subName = "";
   var numOfAssess = 6;
   var assessments;
   var assessments2;
@@ -84,6 +85,7 @@ class _classGradesState extends State<classGrades> {
     await widget.subjectRef.get().then((value) async {
       setState(() {
         customized = value['customized'];
+        subName = value['SubjectName'];
       });
       if (customized) {
         setState(() {
@@ -187,6 +189,7 @@ class _classGradesState extends State<classGrades> {
               MaterialPageRoute(
                 builder: (context) => grades(
                   subRef: widget.subjectRef,
+                  subName: subName,
                 ),
               ),
             );

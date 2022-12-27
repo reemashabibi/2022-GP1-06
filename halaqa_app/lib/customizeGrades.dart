@@ -34,11 +34,13 @@ class _customizeGradesState extends State<customizeGrades> {
   var numOfAssess = 0;
 
   var x = 0;
+  var subName = "";
 
   checkCustomization() async {
     await widget.subjectRef.get().then((value) {
       setState(() {
         customized = value['customized'];
+        subName = value['SubjectName'];
         if (customized) {
           numOfAssess = value['assessments'].length;
           //assessmentsList.addAll(value['assessments']);
@@ -143,6 +145,7 @@ class _customizeGradesState extends State<customizeGrades> {
               MaterialPageRoute(
                 builder: (context) => grades(
                   subRef: widget.subjectRef,
+                  subName: subName,
                 ),
               ),
             );

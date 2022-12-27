@@ -247,6 +247,7 @@ class _teacherHPState extends State<teacherHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
@@ -280,6 +281,7 @@ class _teacherHPState extends State<teacherHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
@@ -290,6 +292,10 @@ class _teacherHPState extends State<teacherHP> {
                                                       subRef: _SubjectsRefList[
                                                           _SubjectsNameList
                                                               .indexOf(e)],
+                                                      subName:
+                                                          _SubjectsNameList[
+                                                              _SubjectsNameList
+                                                                  .indexOf(e)],
                                                     )),
                                           );
                                         },
@@ -310,6 +316,7 @@ class _teacherHPState extends State<teacherHP> {
                                     height: 44,
                                     child: FittedBox(
                                       child: FloatingActionButton(
+                                        heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {

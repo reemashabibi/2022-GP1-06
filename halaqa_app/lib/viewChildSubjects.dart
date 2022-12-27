@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
+import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class viewChildSubjcets extends StatefulWidget {
@@ -113,7 +114,14 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                 ),
               );
             }
-            if (index == 1) {}
+            if (index == 1) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => viewEvents(),
+                ),
+              );
+            }
           },
           items: [
             TitledNavigationBarItem(
