@@ -216,7 +216,7 @@ class _EditProfilePageState extends State<studentGrades> {
           height: 50,
           width: 250,
           child: FloatingActionButton.extended(
-            heroTag: "btn2",
+            heroTag: null,
             backgroundColor: Colors.green,
             label: Row(
               children: [

@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
+import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -26,6 +27,7 @@ class _teacherHPState extends State<teacherHP> {
   late List _LevelNameList;
   var x = 0;
   var v = 0;
+  var teacherName = "";
 
   var numOfSubjects;
   var schoolID = "xx";
@@ -60,6 +62,9 @@ class _teacherHPState extends State<teacherHP> {
       // use ds as a snapshot
 
       numOfSubjects = ds['Subjects'].length;
+      setState(() {
+        teacherName = ds['FirstName'] + " " + ds['LastName'];
+      });
 
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference str = ds['Subjects'][i].parent.parent;
@@ -68,7 +73,7 @@ class _teacherHPState extends State<teacherHP> {
           setState(() {
             _ClassNameList.add(value['ClassName']);
 
-            _LevelNameList.add(value['Level'].toString());
+            _LevelNameList.add(value['LevelName'].toString());
           });
         });
 
@@ -179,140 +184,168 @@ class _teacherHPState extends State<teacherHP> {
               // _SubjectList = snapshot.data!['Subjects'];
 
               return Container(
-                  child: ListView(
-                padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                children: _SubjectsNameList.map((e) {
-                  return Container(
-                      margin: EdgeInsets.only(bottom: 30),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 231, 231, 231),
-                          border: Border.all(
-                            color: Color.fromARGB(255, 130, 126, 126),
-                            width: 2.5,
-                          ),
-                          borderRadius: BorderRadius.circular(10.0),
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 2.0,
-                                offset: Offset(2.0, 2.0))
-                          ]),
-                      child: new Column(children: [
-                        new Container(
-                          child: Text(
-                              e +
-                                  "\nالفصل: " +
-                                  _ClassNameList[_SubjectsNameList.indexOf(e)] +
-                                  "\nالمرحلة: " +
-                                  _LevelNameList[_SubjectsNameList.indexOf(e)],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
-                          margin: EdgeInsets.all(4),
-                          padding: EdgeInsets.all(2),
-                        ),
-                        new Container(
-                            child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            SizedBox(
-                              width: 44,
-                              height: 44,
-                              child: FittedBox(
-                                child: FloatingActionButton(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 199, 248, 248),
-                                  onPressed: () {
-                                    if (_SubjectsRefList[0] != "") {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => viewStudents(
-                                                  ref: _SubjectsRefList[
-                                                      _SubjectsNameList.indexOf(
-                                                          e)],
-                                                )),
-                                      );
-                                    }
-                                  },
-                                  child: Image.asset(
-                                    "images/studentsIcon.png",
+                  child: SingleChildScrollView(
+                      child: new Column(
+                children: [
+                  new Container(
+                    padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
+                    child: Text(
+                      teacherName,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 80, 80, 80),
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                  new Container(
+                    child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
+                      children: _SubjectsNameList.map((e) {
+                        return Container(
+                            margin: EdgeInsets.only(bottom: 30),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 231, 231, 231),
+                                border: Border.all(
+                                  color: Color.fromARGB(255, 130, 126, 126),
+                                  width: 2.5,
+                                ),
+                                borderRadius: BorderRadius.circular(10.0),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: Colors.grey,
+                                      blurRadius: 2.0,
+                                      offset: Offset(2.0, 2.0))
+                                ]),
+                            child: new Column(children: [
+                              new Container(
+                                child: Text(
+                                    e +
+                                        "\nالفصل: " +
+                                        _ClassNameList[
+                                            _SubjectsNameList.indexOf(e)] +
+                                        "\nالمرحلة: " +
+                                        _LevelNameList[
+                                            _SubjectsNameList.indexOf(e)],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(2),
+                              ),
+                              new Container(
+                                  child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  SizedBox(
                                     width: 44,
                                     height: 44,
-                                    fit: BoxFit.cover,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        heroTag: null,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
+                                        onPressed: () {
+                                          if (_SubjectsRefList[0] != "") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      viewStudents(
+                                                        ref: _SubjectsRefList[
+                                                            _SubjectsNameList
+                                                                .indexOf(e)],
+                                                      )),
+                                            );
+                                          }
+                                        },
+                                        child: Image.asset(
+                                          "images/studentsIcon.png",
+                                          width: 44,
+                                          height: 44,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            SizedBox(
-                              width: 44,
-                              height: 44,
-                              child: FittedBox(
-                                child: FloatingActionButton(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 199, 248, 248),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => grades(
-                                                subRef: _SubjectsRefList[
-                                                    _SubjectsNameList.indexOf(
-                                                        e)],
-                                              )),
-                                    );
-                                  },
-                                  child: Image.asset(
-                                    "images/gradesIcon.png",
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  SizedBox(
                                     width: 44,
                                     height: 44,
-                                    fit: BoxFit.cover,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        heroTag: null,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => grades(
+                                                      subRef: _SubjectsRefList[
+                                                          _SubjectsNameList
+                                                              .indexOf(e)],
+                                                      subName:
+                                                          _SubjectsNameList[
+                                                              _SubjectsNameList
+                                                                  .indexOf(e)],
+                                                    )),
+                                          );
+                                        },
+                                        child: Image.asset(
+                                          "images/gradesIcon.png",
+                                          width: 44,
+                                          height: 44,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            SizedBox(
-                              width: 15,
-                            ),
-                            SizedBox(
-                              width: 44,
-                              height: 44,
-                              child: FittedBox(
-                                child: FloatingActionButton(
-                                  backgroundColor:
-                                      Color.fromARGB(255, 199, 248, 248),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => grades(
-                                                subRef: _SubjectsRefList[
-                                                    _SubjectsNameList.indexOf(
-                                                        e)],
-                                              )),
-                                    );
-                                  },
-                                  child: Image.asset(
-                                    "images/chatIcon.png",
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  SizedBox(
                                     width: 44,
                                     height: 44,
-                                    fit: BoxFit.cover,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        heroTag: null,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
+                                        onPressed: () {
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    parentHP()),
+                                          );
+                                        },
+                                        child: Image.asset(
+                                          "images/chatIcon.png",
+                                          width: 44,
+                                          height: 44,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ))
+                                ],
+                              ))
 
-                        // color: Color.fromARGB(255, 222, 227, 234),
-                      ]));
-                }).toList(),
-              ));
+                              // color: Color.fromARGB(255, 222, 227, 234),
+                            ]));
+                      }).toList(),
+                    ),
+                  )
+                ],
+              )));
             }
             if (_SubjectsNameList.length == 0 && x == 0) {
               return Center(child: Text("لم يتم تعيين أي فصل بعد."));
@@ -411,7 +444,7 @@ class _MyWidgetState extends State<viewStudents> {
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
       className = ds['ClassName'];
-      levelName = ds['Level'];
+      levelName = ds['LevelName'];
 
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
@@ -486,11 +519,13 @@ class _MyWidgetState extends State<viewStudents> {
               //Display the list
 
               return Container(
-                  child: new Column(
+                  child: SingleChildScrollView(
+                      child: new Column(
                 children: [
                   new Container(
+                    padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      className + " " + levelName.toString(),
+                      className + " / " + levelName.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
@@ -500,21 +535,17 @@ class _MyWidgetState extends State<viewStudents> {
                   ),
                   new Container(
                     child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
                         return Container(
                           decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 244, 247, 253),
+                              borderRadius: BorderRadius.circular(10.0),
+                              color: Color.fromARGB(255, 231, 231, 231),
                               border: Border.all(
                                 color: Color(0xffEEEEEE),
                                 width: 2.0,
-                              ),
-                              borderRadius: BorderRadius.circular(10.0),
-                              gradient: LinearGradient(
-                                colors: [
-                                  (Color.fromARGB(255, 170, 243, 250)),
-                                  Color.fromARGB(255, 195, 196, 196)
-                                ],
                               ),
                               boxShadow: [
                                 BoxShadow(
@@ -523,32 +554,18 @@ class _MyWidgetState extends State<viewStudents> {
                                     offset: Offset(2.0, 2.0))
                               ]),
                           child: Text(e,
-                              textDirection: TextDirection.rtl,
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
                           margin: EdgeInsets.all(5),
                           padding: EdgeInsets.all(15),
                           //   color: Color.fromARGB(255, 222, 227, 234),
                         );
-                        /*
-                          onTap: () {
-                            if (_StudentsRefList[0] != "") {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => studentGrades(
-                                          stRef: _StudentsRefList[
-                                              _StudenNameList.indexOf(e)],
-                                          classRef: ref,
-                                        )),
-                              );
-                            }
-                          },*/
                       }).toList(),
                     ),
                   )
                 ],
-              ));
+              )));
             }
             if (_StudenNameList.length == 0 && x == 0) {
               return Center(child: Text("لم يتم تعيين أي فصل بعد."));
