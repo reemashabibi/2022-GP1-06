@@ -70,7 +70,7 @@ onAuthStateChanged(auth, (user) => {
         
         snapshot.docs.forEach(doc => {
           const new_op = document.createElement("option");
-          new_op.innerHTML = doc.data().Level+ " :المرحلة"+" / "+ doc.data().ClassName + " :فصل";
+          new_op.innerHTML = doc.data().LevelName+"-"+doc.data().ClassName;
           new_op.setAttribute("id", doc.id);
           new_op.setAttribute("value", doc.id);
           document.getElementById("classes").appendChild(new_op);
@@ -175,8 +175,16 @@ export async function viewDocuments(){
                     var trHead = document.createElement('tr');
                     var th =  document.createElement('th');
                     var thSpan =  document.createElement('span');
-                    thSpan.innerHTML = className;
-                    th.colSpan = '2';
+                    thSpan.innerHTML = " مستندات الفصل "+className;
+                    
+                   
+                    var th2 =  document.createElement('th');
+                    var thSpan2 =  document.createElement('span');
+                    thSpan2.innerHTML = '<a href= "students.html?'+doc.id+'|'+schoolID+'">طلاب الصف</a>';
+
+                    
+                    th2.appendChild(thSpan2);
+                    trHead.appendChild(th2);
 
                     th.appendChild(thSpan);
                     trHead.appendChild(th);
@@ -412,7 +420,7 @@ export async function viewDocuments(){
 //add new document
 $(document).on('submit', '.docForm', async function (e){
 
-    const classDocForm = document.querySelector('.classForm');
+    const classDocForm = document.querySelector('.docForm');
 
     e.preventDefault()
     var selectedClass = document.getElementById("classes");
@@ -454,7 +462,7 @@ $(document).on('submit', '.docForm', async function (e){
  
     uploadBytes(storageRef, file).then(async (snapshot) => {
         
-      await  updateDoc(classRef, {Documents: arrayUnion( doc(db, 'School', schoolID, 'Documents', docRef.id)) })
+      await updateDoc(classRef, {Documents: arrayUnion( doc(db, 'School', schoolID, 'Documents', docRef.id)) })
         .catch(error => {
           $(".loader").hide();
             console.log(error);
