@@ -9,8 +9,9 @@ import 'package:halaqa_app/classGrades.dart';
 import 'package:halaqa_app/viewStudentsForGrades.dart';
 
 class grades extends StatefulWidget {
-  const grades({super.key, required this.subRef});
+  const grades({super.key, required this.subRef, required this.subName});
   final DocumentReference subRef;
+  final String subName;
 
   @override
   State<grades> createState() => _gradesState();
@@ -27,7 +28,7 @@ class _gradesState extends State<grades> {
     await doc.get().then((DocumentSnapshot ds) async {
       setState(() {
         className = ds['ClassName'];
-        level = ds['Level'].toString();
+        level = ds['LevelName'].toString();
       });
     });
     // print(className);
@@ -69,7 +70,7 @@ class _gradesState extends State<grades> {
             children: [
               new Container(
                 child: Text(
-                  className + " " + level,
+                  className + " / " + level,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 80, 80, 80),
@@ -78,8 +79,19 @@ class _gradesState extends State<grades> {
                 ),
                 alignment: Alignment.center,
               ),
+              new Container(
+                child: Text(
+                  widget.subName,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color.fromARGB(255, 80, 80, 80),
+                    fontSize: 25,
+                  ),
+                ),
+                alignment: Alignment.center,
+              ),
               SizedBox(
-                height: 50, // <-- SEE HERE
+                height: 20, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(
@@ -131,7 +143,7 @@ class _gradesState extends State<grades> {
                     ),
                   )),
               SizedBox(
-                height: 50, // <-- SEE HERE
+                height: 20, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(
@@ -183,7 +195,7 @@ class _gradesState extends State<grades> {
                     ),
                   )),
               SizedBox(
-                height: 50, // <-- SEE HERE
+                height: 20, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(
@@ -218,7 +230,8 @@ class _gradesState extends State<grades> {
                               ),
 
                               Text(
-                                "ادخال درجة جميع طلاب الفصل",
+                                "ادخال درجة موحدة \n لجميع طلاب الفصل",
+                                textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(255, 80, 80, 80),

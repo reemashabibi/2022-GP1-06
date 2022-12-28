@@ -30,14 +30,21 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
     x++;
   }
 
+  var subName = "";
   getStudents() async {
+    DocumentReference doc = await widget.ref;
+    await widget.ref.get().then((value) async {
+      setState(() {
+        subName = value['SubjectName'];
+      });
+    });
     DocumentReference docRef =
         widget.ref.parent.parent as DocumentReference<Object?>;
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
       className = ds['ClassName'];
-      levelName = ds['Level'];
+      levelName = ds['LevelName'];
 
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
@@ -91,6 +98,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
               MaterialPageRoute(
                 builder: (context) => grades(
                   subRef: widget.ref,
+                  subName: subName,
                 ),
               ),
             );
@@ -114,12 +122,13 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
               //Display the list
 
               return Container(
-                  child: new Column(
+                  child: SingleChildScrollView(
+                      child: new Column(
                 children: [
                   new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      className + " " + levelName.toString(),
+                      className + " / " + levelName.toString(),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
@@ -129,6 +138,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                   ),
                   new Container(
                     child: ListView(
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
@@ -173,7 +183,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                     ),
                   )
                 ],
-              ));
+              )));
             }
             if (_StudenNameList.length == 0 && x == 0) {
               return Center(child: Text("لم يتم تعيين أي فصل بعد."));

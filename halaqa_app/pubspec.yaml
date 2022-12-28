@@ -47,6 +47,9 @@ dependencies:
     sdk: flutter
   localization: ^2.1.0
   flutter_cupertino_localizations: ^1.0.1
+  get: ^4.6.5
+  
+  titled_navigation_bar: ^5.0.0-nullsafety.0
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +81,11 @@ flutter:
       - images/gradesIcon.png
       - images/chatIcon.png
       - images/editIcon.png
+      - images/subjectsIcon.png
+      - images/absenceIcon.png
+      - images/gradeIcon.png
+      - images/eventsIcon.png
+     
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
