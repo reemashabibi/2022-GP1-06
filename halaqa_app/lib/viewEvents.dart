@@ -22,7 +22,7 @@ class viewEvents extends StatefulWidget {
 
 class events {
   String content;
-  String image;
+  String? image;
   String title;
 
   events(this.content, this.image, this.title);
@@ -36,7 +36,7 @@ class events {
 
 class _viewEventsState extends State<viewEvents> {
   List<events> eventList = [];
-  List imageList = <String>[];
+  List imageList = <String?>[];
   /*
   late List _List;
   late List _SubjectsNameList;
@@ -118,7 +118,7 @@ class _viewEventsState extends State<viewEvents> {
 
   Future<String?> getImage(img) async {
     if (img == "") {
-      return "";
+      return null;
     }
     try {
       var downloadURL = await FirebaseStorage.instance
@@ -135,7 +135,6 @@ class _viewEventsState extends State<viewEvents> {
 
   @override
   void initState() {
-    // getSchoolID();
     getSubjects();
 
     super.initState();
@@ -143,9 +142,7 @@ class _viewEventsState extends State<viewEvents> {
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
@@ -166,7 +163,7 @@ class _viewEventsState extends State<viewEvents> {
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
+          currentIndex: 1,
           inactiveColor: Color.fromARGB(255, 9, 18, 121),
           indicatorColor: Color.fromARGB(255, 76, 170, 175),
           activeColor: Color.fromARGB(255, 76, 170, 175),
@@ -205,7 +202,6 @@ class _viewEventsState extends State<viewEvents> {
               ),
             ),*/
           ]),
-
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -288,8 +284,12 @@ class _viewEventsState extends State<viewEvents> {
                               new Container(
                                   child: FadeInImage(
                                 image: NetworkImage(
-                                    imageList[eventList.indexOf(e)]),
-                                placeholder: AssetImage("images/editIcon.png"),
+                                    imageList[eventList.indexOf(e)] ?? ""),
+                                imageErrorBuilder: (BuildContext context,
+                                    Object exception, StackTrace? stackTrace) {
+                                  return const Text('');
+                                },
+                                placeholder: AssetImage("images/logo.png"),
                               ))
 
                               // color: Color.fromARGB(255, 222, 227, 234),

@@ -47,7 +47,7 @@ class _parentHPState extends State<parentHP> {
     User? user = FirebaseAuth.instance.currentUser;
 
     var col = FirebaseFirestore.instance
-        .collectionGroup('Teacher')
+        .collectionGroup('Parent')
         .where('Email', isEqualTo: user!.email);
     var snapshot = await col.get();
     for (var doc in snapshot.docs) {
@@ -91,34 +91,16 @@ class _parentHPState extends State<parentHP> {
     });
   }
 
-  Future<void> getSchoolID() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Parent')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-  }
-
   @override
   void initState() {
     getSubjects();
-    getSchoolID();
-    // getSchoolID();
-    //remove();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
-
       appBar: AppBar(
         title: Text('حلقة',
             style: TextStyle(
@@ -141,14 +123,7 @@ class _parentHPState extends State<parentHP> {
             iconSize: 30,
           ),
           IconButton(
-            onPressed: () {
-              /*
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const EditProfilePage()),
-        );
-           */
-            },
+            onPressed: () {},
             icon: Icon(
               Icons.account_circle_rounded,
               color: Color.fromARGB(255, 9, 18, 121),
@@ -194,32 +169,6 @@ class _parentHPState extends State<parentHP> {
               ),
             ),*/
           ]),
-      /* bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 76, 170, 175),
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home),
-              iconSize: 35,
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 65,
-                height: 65,
-                fit: BoxFit.cover,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-*/
-
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
