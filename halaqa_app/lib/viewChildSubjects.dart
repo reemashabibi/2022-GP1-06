@@ -184,7 +184,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: _SubjectsNameList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),

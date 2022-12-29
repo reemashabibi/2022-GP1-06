@@ -63,6 +63,7 @@ class _gradesState extends State<grades> {
           actions: [],
         ),
         body: Container(
+            child: SingleChildScrollView(
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,6 +95,7 @@ class _gradesState extends State<grades> {
                 height: 20, // <-- SEE HERE
               ),
               new Container(
+                  // physics: const NeverScrollableScrollPhysics(),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
                     border: Border.all(
@@ -246,6 +248,6 @@ class _gradesState extends State<grades> {
                   )),
             ],
           ),
-        ));
+        )));
   }
 }
