@@ -289,7 +289,7 @@ class _viewEventsState extends State<viewEvents> {
                                     Object exception, StackTrace? stackTrace) {
                                   return const Text('');
                                 },
-                                placeholder: AssetImage("images/editIcon.png"),
+                                placeholder: AssetImage("images/logo.png"),
                               ))
 
                               // color: Color.fromARGB(255, 222, 227, 234),

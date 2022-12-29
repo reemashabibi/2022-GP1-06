@@ -100,7 +100,6 @@ class _EditProfilePageState extends State<studentGrades> {
           setState(() {
             assessmentsList.removeAt(0);
             // studentAssessmentsList.removeAt(0);
-
             y++;
           });
         }
@@ -137,9 +136,6 @@ class _EditProfilePageState extends State<studentGrades> {
               studentAssessmentsList.addAll(assessments2);
             });
 
-            for (int i = 0; i < studentAssessmentsList.length; i++) {
-              state += studentAssessmentsList[i].grade;
-            }
             if (v == 0) {
               setState(() {
                 //   assessmentsList.removeAt(0);
@@ -149,21 +145,20 @@ class _EditProfilePageState extends State<studentGrades> {
             }
           }
         } else {
-          if (y == 0) {
-            setState(() {
-              assessmentsList.removeAt(0);
-              studentAssessmentsList.removeAt(0);
-              y++;
-            });
-          }
-
           setState(() {
             for (int i = 0; i < numOfAssess; i++) {
               studentAssessmentsList
                   .add(assessment(assessmentsList[i].name, 0));
             }
           });
-
+          if (v == 0) {
+            setState(() {
+              studentAssessmentsList.removeAt(0);
+              v++;
+            });
+            print("studentAssessmentsList.len " +
+                studentAssessmentsList.length.toString());
+          }
           widget.stRef.collection("Grades").add({
             "assessments":
                 studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
@@ -310,6 +305,7 @@ class _EditProfilePageState extends State<studentGrades> {
                         shrinkWrap: true,
                         itemCount: assessmentsList.length,
                         itemBuilder: (context, position) {
+                          state = studentAssessmentsList[position].grade;
                           return Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
@@ -323,10 +319,7 @@ class _EditProfilePageState extends State<studentGrades> {
                                       child: TextFormField(
                                         onChanged: (newText) {
                                           setState(() {
-                                            state = state -
-                                                studentAssessmentsList[position]
-                                                    .grade;
-                                            state = state + int.parse(newText);
+                                            state = int.parse(newText);
                                           });
 
                                           studentAssessmentsList[position]
@@ -381,7 +374,11 @@ class _EditProfilePageState extends State<studentGrades> {
                                 new Container(
                                     child: SingleChildScrollView(
                                   child: Text(
-                                    "TOTAL" + state.toString(),
+                                    state.toString() +
+                                        "/" +
+                                        assessmentsList[position]
+                                            .grade
+                                            .toString(),
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
