@@ -56,7 +56,7 @@ class _teacherHPState extends State<teacherHP> {
     }
 
     DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid);
+        .doc('School/' + '$schoolID' + '/Teacher/' + user.uid);
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
@@ -129,8 +129,14 @@ class _teacherHPState extends State<teacherHP> {
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
+        title: Text('حلقة',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color.fromARGB(255, 9, 18, 121),
+            )),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
+        automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {
@@ -139,26 +145,24 @@ class _teacherHPState extends State<teacherHP> {
             },
             icon: Icon(
               Icons.logout,
-              color: Colors.black,
+              color: Color.fromARGB(255, 9, 18, 121),
             ),
+            iconSize: 30,
           ),
           IconButton(
             onPressed: () {
-              // Navigator.pushReplacement(
-              //context,
-              //MaterialPageRoute(
-              // builder: (context) => EditProfilePage()
-              // ),
-              //  );
+              /*
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => const EditProfilePage()),
-              );
+        );
+           */
             },
             icon: Icon(
               Icons.account_circle_rounded,
-              color: Colors.black,
+              color: Color.fromARGB(255, 9, 18, 121),
             ),
+            iconSize: 30,
           ),
         ],
       ),
@@ -320,12 +324,18 @@ class _teacherHPState extends State<teacherHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    parentHP()),
-                                          );
+                                          if (_SubjectsRefList[0] != "") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      viewStudents(
+                                                        ref: _SubjectsRefList[
+                                                            _SubjectsNameList
+                                                                .indexOf(e)],
+                                                      )),
+                                            );
+                                          }
                                         },
                                         child: Image.asset(
                                           "images/chatIcon.png",

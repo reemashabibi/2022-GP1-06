@@ -17,7 +17,7 @@ class studentGrades extends StatefulWidget {
 
 class assessment {
   String name;
-  int? grade;
+  int grade;
 
   assessment(this.name, this.grade);
 
@@ -52,6 +52,7 @@ class _EditProfilePageState extends State<studentGrades> {
   var gradeID;
   var x = 0;
   var y = 0;
+  var v = 0;
 
   getData() {
     studentAssessmentsList.add(assessment("", 0));
@@ -65,6 +66,7 @@ class _EditProfilePageState extends State<studentGrades> {
       setState(() {
         customized = value['customized'];
       });
+
       if (customized) {
         setState(() {
           numOfAssess = value['assessments'].length;
@@ -93,6 +95,15 @@ class _EditProfilePageState extends State<studentGrades> {
             .collection("Grades")
             .where('subjectID', isEqualTo: widget.classRef)
             .get();
+
+        if (y == 0) {
+          setState(() {
+            assessmentsList.removeAt(0);
+            // studentAssessmentsList.removeAt(0);
+
+            y++;
+          });
+        }
         if (stRef.docs.length > 0) {
           var stRef = await widget.stRef
               .collection("Grades")
@@ -126,11 +137,14 @@ class _EditProfilePageState extends State<studentGrades> {
               studentAssessmentsList.addAll(assessments2);
             });
 
-            if (y == 0) {
+            for (int i = 0; i < studentAssessmentsList.length; i++) {
+              state += studentAssessmentsList[i].grade;
+            }
+            if (v == 0) {
               setState(() {
-                assessmentsList.removeAt(0);
+                //   assessmentsList.removeAt(0);
                 studentAssessmentsList.removeAt(0);
-                y++;
+                v++;
               });
             }
           }
@@ -144,12 +158,10 @@ class _EditProfilePageState extends State<studentGrades> {
           }
 
           setState(() {
-            studentAssessmentsList.add(assessment(assessmentsList[0].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[1].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[2].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[3].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[4].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[5].name, 0));
+            for (int i = 0; i < numOfAssess; i++) {
+              studentAssessmentsList
+                  .add(assessment(assessmentsList[i].name, 0));
+            }
           });
 
           widget.stRef.collection("Grades").add({
@@ -187,6 +199,13 @@ class _EditProfilePageState extends State<studentGrades> {
       assessmentsList.add(assessment("درجة الاختبار الشهري", 20));
       assessmentsList.add(assessment("درجة الاختبار النهائي", 40));
     });
+    if (y == 0) {
+      setState(() {
+        assessmentsList.removeAt(0);
+        studentAssessmentsList.removeAt(0);
+        y++;
+      });
+    }
 
     await widget.classRef.update({
       'customized': true,
@@ -200,7 +219,9 @@ class _EditProfilePageState extends State<studentGrades> {
     });
   }
 
+  late int state = 0;
   void initState() {
+    state = 0;
     checkCustomization();
 
     super.initState();
@@ -264,85 +285,127 @@ class _EditProfilePageState extends State<studentGrades> {
         actions: [],
       ),
       body: Form(
-        key: _formkey,
-        child: Builder(builder: (context) {
-          print("studentAssessmentsList.lenght " +
-              studentAssessmentsList.length.toString());
-          print("assessmentsList.lenght " + assessmentsList.length.toString());
-          if (x == 0) {
-            getData();
-          }
-          if (studentAssessmentsList.length == numOfAssess) {
-            //  if (assessmentStudentGradesList.length == assessmentsList.length) {
-            return ListView.builder(
-              itemCount: assessmentsList.length,
-              itemBuilder: (context, position) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 5.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Expanded(
-                          child: Row(
-                        children: [
-                          new Flexible(
-                            child: TextFormField(
-                              onChanged: (newText) {
-                                studentAssessmentsList[position].grade =
-                                    int.parse(newText);
-                              },
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              keyboardType: TextInputType.number,
-                              //  initialValue: assessmentsList[position].name,
-                              controller: TextEditingController(
-                                  text: studentAssessmentsList[position]
-                                      .grade
-                                      .toString()),
+          key: _formkey,
+          child: SingleChildScrollView(
+              child: Column(
+            children: [
+              new Container(
+                child: SingleChildScrollView(
+                  child: Builder(builder: (context) {
+                    print("assessmentsList.lenght " +
+                        assessmentsList.length.toString());
+                    if (x == 0) {
+                      getData();
+                    }
+                    print("studentAssessmentsList.lenght " +
+                        assessmentsList.length.toString() +
+                        " .   " +
+                        numOfAssess.toString());
 
-                              decoration: InputDecoration(
-                                labelText: assessmentsList[position].name,
-                                //hintText: "EnterF Name",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                    if (studentAssessmentsList.length == numOfAssess &&
+                        y == 1) {
+                      //  if (assessmentStudentGradesList.length == assessmentsList.length) {\
+
+                      return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: assessmentsList.length,
+                        itemBuilder: (context, position) {
+                          return Padding(
+                            padding:
+                                const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Expanded(
+                                    child: Row(
+                                  children: [
+                                    new Flexible(
+                                      child: TextFormField(
+                                        onChanged: (newText) {
+                                          setState(() {
+                                            state = state -
+                                                studentAssessmentsList[position]
+                                                    .grade;
+                                            state = state + int.parse(newText);
+                                          });
+
+                                          studentAssessmentsList[position]
+                                              .grade = int.parse(newText);
+                                        },
+                                        inputFormatters: <TextInputFormatter>[
+                                          FilteringTextInputFormatter.digitsOnly
+                                        ],
+                                        keyboardType: TextInputType.number,
+                                        //  initialValue: assessmentsList[position].name,
+                                        controller: TextEditingController(
+                                            text:
+                                                studentAssessmentsList[position]
+                                                    .grade
+                                                    .toString()),
+
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              assessmentsList[position].name,
+                                          //hintText: "EnterF Name",
+                                          border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                        ),
+                                        validator: (value) {
+                                          if (value!.isEmpty) {
+                                            return "ادخل درجة المتطلب";
+                                          }
+                                          if (int.parse(value) < 0 ||
+                                              int.parse(value) >
+                                                  int.parse(
+                                                      assessmentsList[position]
+                                                          .grade
+                                                          .toString())) {
+                                            return "يجب ان تكون حدود الدرجة من ٠ الى " +
+                                                assessmentsList[position]
+                                                    .grade
+                                                    .toString();
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                        maxLines: 1,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                                SizedBox(
+                                  width: 20,
                                 ),
-                              ),
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "ادخل درجة المتطلب";
-                                }
-                                if (int.parse(value) < 0 ||
-                                    int.parse(value) >
-                                        int.parse(assessmentsList[position]
-                                            .grade
-                                            .toString())) {
-                                  return "يجب ان تكون حدود الدرجة من ٠ الى " +
-                                      assessmentsList[position]
-                                          .grade
-                                          .toString();
-                                } else {
-                                  return null;
-                                }
-                              },
-                              maxLines: 1,
+                                new Container(
+                                    child: SingleChildScrollView(
+                                  child: Text(
+                                    "TOTAL" + state.toString(),
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(255, 45, 44, 44),
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                )),
+                              ],
                             ),
-                          ),
-                        ],
-                      )),
-                    ],
-                  ),
-                );
-              },
-            );
-            //   } else {
-            //   return Center(child: CircularProgressIndicator());
-            //}
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        }),
-      ),
+                          );
+                        },
+                      );
+                      //   } else {
+                      //   return Center(child: CircularProgressIndicator());
+                      //}
+                    } else {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                  }),
+                ),
+              ),
+            ],
+          ))),
     );
   }
 
@@ -405,7 +468,7 @@ class _EditProfilePageState extends State<studentGrades> {
           builder: (context) {
             return AlertDialog(
               content: Text(
-                "تم حفظ التعديلات بنجاح",
+                "تم حفظ التغييرات بنجاح",
                 style: TextStyle(
                     // color: Colors.red,
                     ),

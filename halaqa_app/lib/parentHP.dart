@@ -56,7 +56,7 @@ class _parentHPState extends State<parentHP> {
     }
 
     DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/' + '$schoolID' + '/Parent/' + user!.uid);
+        .doc('School/' + '$schoolID' + '/Parent/' + user.uid);
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
