@@ -9,6 +9,7 @@ import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
+import 'package:halaqa_app/viewStudentForChat.dart';
 
 class teacherHP extends StatefulWidget {
   const teacherHP({super.key});
@@ -329,7 +330,7 @@ class _teacherHPState extends State<teacherHP> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      viewStudents(
+                                                      viewStudentsForChat(
                                                         ref: _SubjectsRefList[
                                                             _SubjectsNameList
                                                                 .indexOf(e)],

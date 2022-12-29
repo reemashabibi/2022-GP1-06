@@ -22,7 +22,7 @@ class parentHP extends StatefulWidget {
 class _parentHPState extends State<parentHP> {
   var className = "";
   var level = "";
-
+  late List studentRefList;
   late List _FNList;
   late List _LNList;
   late List ClassID;
@@ -39,6 +39,7 @@ class _parentHPState extends State<parentHP> {
     _FNList = [""];
     _LNList = [""];
     ClassID = [""];
+    studentRefList = [""];
     x++;
   }
 
@@ -74,6 +75,7 @@ class _parentHPState extends State<parentHP> {
             _FNList.add(value['FirstName']);
             ClassID.add(value['ClassID']);
             _LNList.add(value['LastName']);
+            studentRefList.add(str);
           });
         });
       }
@@ -83,6 +85,7 @@ class _parentHPState extends State<parentHP> {
           _FNList.removeAt(0);
           _LNList.removeAt(0);
           ClassID.removeAt(0);
+          studentRefList.removeAt(0);
         }
       });
       if (_FNList[0] == "") {
@@ -267,6 +270,8 @@ class _parentHPState extends State<parentHP> {
                                                           _LNList[
                                                               _FNList.indexOf(
                                                                   e)],
+                                                      stRef: studentRefList[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
                                         },

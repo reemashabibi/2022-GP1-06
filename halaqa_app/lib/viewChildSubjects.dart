@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
+import 'package:halaqa_app/viewChildGrades.dart';
 import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class viewChildSubjcets extends StatefulWidget {
-  const viewChildSubjcets({super.key, this.classRef, this.studentName});
+  const viewChildSubjcets(
+      {super.key, this.classRef, this.studentName, this.stRef});
   final classRef;
   final studentName;
+  final stRef;
 
   @override
   State<viewChildSubjcets> createState() => _viewChildSubjcetsState();
@@ -36,7 +39,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   getData() {
     _SubjectsNameList = [""];
     //_SubjectList = [""];
-    // _SubjectsRefList = [""];
+    _SubjectsRefList = [""];
     x++;
   }
 
@@ -47,6 +50,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       await await docRef.collection("Subject").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
           _SubjectsNameList.add(documentSnapshot['SubjectName']);
+          _SubjectsRefList.add(documentSnapshot.reference);
         });
       });
     }
@@ -60,6 +64,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       setState(() {
         if (_SubjectsNameList.length > 1) {
           _SubjectsNameList.removeAt(0);
+          _SubjectsRefList.removeAt(0);
         }
       });
       if (_SubjectsNameList[0] == "") {
@@ -224,20 +229,19 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      viewStudents(
-                                                        ref: _SubjectsRefList[
+                                                      viewChildGrades(
+                                                        subRef: _SubjectsRefList[
                                                             _SubjectsNameList
                                                                 .indexOf(e)],
+                                                        stRef: widget.stRef,
                                                       )),
                                             );
                                           }
-                                      */
                                         },
                                         child: Image.asset(
                                           "images/gradeIcon.png",
