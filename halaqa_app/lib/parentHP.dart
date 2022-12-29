@@ -56,7 +56,7 @@ class _parentHPState extends State<parentHP> {
     }
 
     DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/' + '$schoolID' + '/Parent/' + user!.uid);
+        .doc('School/' + '$schoolID' + '/Parent/' + user.uid);
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
@@ -219,6 +219,7 @@ class _parentHPState extends State<parentHP> {
         ),
       ),
 */
+
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -238,7 +239,7 @@ class _parentHPState extends State<parentHP> {
             if (snapshot.hasData && _FNList[0] != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
-
+              print('has data before :)');
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
