@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
+import 'package:halaqa_app/viewDocuments.dart';
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -340,17 +341,15 @@ class _parentHPState extends State<parentHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
+                                                builder: (context) =>
+                                                    viewDocuments(
+                                                      ref: ClassID[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
-                                        */
                                         },
                                         child: Icon(
                                           Icons.folder,
