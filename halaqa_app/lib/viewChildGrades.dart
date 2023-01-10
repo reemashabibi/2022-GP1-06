@@ -50,11 +50,13 @@ class _viewChildGradesState extends State<viewChildGrades> {
   var numOfAssess = 0;
   var assessments2;
   var assessments;
+  var totalGrade = 0;
   List<assessment> studentAssessmentsList = [];
   List<assessment> assessmentsList = [];
 
   var x = 0;
   var v = 0;
+  bool noGrades = false;
   var parentName = "";
 
   var numOfSubjects;
@@ -128,6 +130,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
         Future<List<assessment>> getAssess() async {
           final snapshots = await Future.wait(
               [docu.get().then((value) => value['assessments'][i])]);
+
           return snapshots
               .map(
                   (snapshot) => assessment(snapshot['name'], snapshot['grade']))
@@ -137,6 +140,8 @@ class _viewChildGradesState extends State<viewChildGrades> {
         assessments2 = await getAssess();
         setState(() {
           studentAssessmentsList.addAll(assessments2);
+
+          totalGrade += studentAssessmentsList[i].grade;
         });
 
         if (v == 0) {
@@ -148,31 +153,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
         }
       }
     }
-
-/*
-    if (subRefs.docs.length > 0) {
-      await await docRef.collection("Subject").get().then((querySnapshot) {
-        querySnapshot.docs.forEach((documentSnapshot) {
-          _SubjectsNameList.add(documentSnapshot['SubjectName']);
-        });
-      });
-    }
-    docRef.get().then((DocumentSnapshot ds) async {
-      // use ds as a snapshot
-
-      setState(() {
-        className = ds['ClassName'] + " / " + ds["LevelName"].toString();
-      });
-
-      setState(() {
-        if (_SubjectsNameList.length > 1) {
-          _SubjectsNameList.removeAt(0);
-        }
-      });
-      if (_SubjectsNameList[0] == "") {
-        v++;
-      }
-    });*/
+    noGrades = true;
   }
 
   @override
@@ -248,6 +229,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
               getData();
             }
             print("assessmentsList.name    " + assessmentsList[0].name);
+            print("v    " + v.toString());
             if (studentAssessmentsList[0].name != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
@@ -272,85 +254,111 @@ class _viewChildGradesState extends State<viewChildGrades> {
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      padding: EdgeInsets.only(right: 60.0, left: 60.0),
+                      padding: EdgeInsets.only(right: 30.0, left: 30.0),
                       children: studentAssessmentsList.map((e) {
                         return Container(
-                            padding:
-                                const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
-                            margin: EdgeInsets.only(bottom: 30),
-                            // padding: const EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                shape: BoxShape.rectangle,
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: new Column(children: [
-                              new Container(
-                                child: Text(e.name,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                //  padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                child: SizedBox(
-                                  width: 200,
-                                  height: 100,
-                                  child: FittedBox(
-                                    child: FloatingActionButton.extended(
-                                      shape: new CircleBorder(),
-                                      heroTag: null,
-                                      backgroundColor:
-                                          Color.fromARGB(255, 199, 248, 248),
-                                      onPressed: () {},
-                                      label: Text(
-                                          studentAssessmentsList[
-                                                      studentAssessmentsList
-                                                          .indexOf(e)]
-                                                  .grade
-                                                  .toString() +
-                                              "/" +
-                                              assessmentsList[
-                                                      studentAssessmentsList
-                                                          .indexOf(e)]
-                                                  .grade
-                                                  .toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                Color.fromARGB(255, 80, 80, 80),
-                                            fontSize: 10,
-                                          )),
-                                    ),
-                                  ),
-                                ),
-                              )
+                            child: new Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text(e.name,
+                                        //    textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold)),
 
-                              // color: Color.fromARGB(255, 222, 227, 234),
-                            ]));
+                                    margin: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 0, 10.0, 0),
+                                    // padding: EdgeInsets.all(),
+                                  ),
+                                  //SizedBox(width: 100),
+                                  //  Spacer(),
+                                  new Container(
+                                    child: SizedBox(
+                                      width: 60,
+                                      height: 50,
+                                      child: FittedBox(
+                                        child: FloatingActionButton.extended(
+                                          shape: new CircleBorder(),
+                                          heroTag: null,
+                                          backgroundColor: Color.fromARGB(
+                                              255, 199, 248, 248),
+                                          onPressed: () {},
+                                          label: Text(
+                                              studentAssessmentsList[
+                                                          studentAssessmentsList
+                                                              .indexOf(e)]
+                                                      .grade
+                                                      .toString() +
+                                                  "/" +
+                                                  assessmentsList[
+                                                          studentAssessmentsList
+                                                              .indexOf(e)]
+                                                      .grade
+                                                      .toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 80, 80, 80),
+                                                fontSize: 20,
+                                              )),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+
+                                  // color: Color.fromARGB(255, 222, 227, 234),
+                                ]));
                       }).toList(),
                     ),
-                  )
+                  ),
+                  new Container(
+                    child: SizedBox(
+                      width: 130,
+                      height: 100,
+                      child: FittedBox(
+                        child: FloatingActionButton.extended(
+                          shape: new CircleBorder(),
+                          heroTag: null,
+                          backgroundColor: Color.fromARGB(255, 199, 248, 248),
+                          onPressed: () {},
+                          label: Text(totalGrade.toString() + "/" + "100",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 80, 80, 80),
+                                fontSize: 15,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               )));
             }
             if (studentAssessmentsList.length == 0 && x == 0) {
               return Center(child: Text(""));
             }
-            if (studentAssessmentsList[0] == "" && v == 1) {
-              return Center(child: Text("لا يوجد مواد مسجلة"));
+            if (noGrades) {
+              return Center(child: Text("لم يتم اصدار الدرجات بعد."));
             }
             return Center(child: CircularProgressIndicator());
           }),

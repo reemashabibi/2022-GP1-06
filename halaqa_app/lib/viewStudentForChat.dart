@@ -166,7 +166,11 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => teacherHP()),
+                                    builder: (context) => studentGrades(
+                                          stRef: _StudentsRefList[
+                                              _StudenNameList.indexOf(e)],
+                                          classRef: ref,
+                                        )),
                               );
                             });
                       }).toList(),

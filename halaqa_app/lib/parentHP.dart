@@ -105,11 +105,10 @@ class _parentHPState extends State<parentHP> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('حلقة',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 9, 18, 121),
-            )),
+        title: Image.asset(
+          "images/logo.png",
+          scale: 9,
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         automaticallyImplyLeading: false,
@@ -121,7 +120,7 @@ class _parentHPState extends State<parentHP> {
             },
             icon: Icon(
               Icons.logout,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
@@ -129,7 +128,7 @@ class _parentHPState extends State<parentHP> {
             onPressed: () {},
             icon: Icon(
               Icons.account_circle_rounded,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
@@ -137,7 +136,7 @@ class _parentHPState extends State<parentHP> {
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           //currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
+          inactiveColor: Colors.black,
           indicatorColor: Color.fromARGB(255, 76, 170, 175),
           activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
@@ -204,7 +203,7 @@ class _parentHPState extends State<parentHP> {
                         fontWeight: FontWeight.w600,
                         fontSize: 30,
 
-                        color: Color.fromARGB(255, 151, 142, 142),
+                        color: Colors.black,
 
                         //  color: Color.fromARGB(255, 80, 80, 80),
                         // fontSize: 30,
@@ -216,18 +215,20 @@ class _parentHPState extends State<parentHP> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+
                       //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: _FNList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 245, 245, 245),
+                                shape: BoxShape.rectangle,
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,

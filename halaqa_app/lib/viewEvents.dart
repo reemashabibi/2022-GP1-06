@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'package:intl/intl.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class viewEvents extends StatefulWidget {
@@ -24,13 +25,14 @@ class events {
   String content;
   String? image;
   String title;
+  DateTime time;
 
-  events(this.content, this.image, this.title);
+  events(this.content, this.image, this.title, this.time);
 
   @override
   String toString() {
     // TODO: implement toString
-    return "content  $content  image $image   title   $title";
+    return "content  $content  image $image   title   $title      time   $time";
   }
 }
 
@@ -54,7 +56,7 @@ class _viewEventsState extends State<viewEvents> {
   User? user = FirebaseAuth.instance.currentUser;
 
   getData() {
-    eventList.add(events("", "", ""));
+    eventList.add(events("", "", "", DateTime.now()));
     imageList.add("start");
     x++;
   }
@@ -79,8 +81,11 @@ class _viewEventsState extends State<viewEvents> {
     if (EventRefs.docs.length > 0) {
       await docRef.collection("Event").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) async {
-          eventList.add(events(documentSnapshot['content'],
-              documentSnapshot['image'], documentSnapshot['title']));
+          eventList.add(events(
+              documentSnapshot['content'],
+              documentSnapshot['image'],
+              documentSnapshot['title'],
+              documentSnapshot['Time'].toDate()));
         });
       });
     }
@@ -164,7 +169,7 @@ class _viewEventsState extends State<viewEvents> {
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           currentIndex: 1,
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
+          inactiveColor: Colors.black,
           indicatorColor: Color.fromARGB(255, 76, 170, 175),
           activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
@@ -191,16 +196,7 @@ class _viewEventsState extends State<viewEvents> {
               title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
+            ),
           ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
@@ -229,12 +225,29 @@ class _viewEventsState extends State<viewEvents> {
                       child: new Column(
                 children: [
                   new Container(
+                    height: 100,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       "الأحداث",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 80, 80, 80),
+                        color: Colors.black,
                         fontSize: 30,
                       ),
                     ),
@@ -250,7 +263,7 @@ class _viewEventsState extends State<viewEvents> {
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
@@ -264,13 +277,43 @@ class _viewEventsState extends State<viewEvents> {
                                 ]),
                             child: new Column(children: [
                               new Container(
-                                child: Text(e.title,
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                    DateFormat('yyyy-MM-dd')
+                                        .add_Hm()
+                                        .format(e.time)
+                                        .toString(),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.bold)),
                                 margin: EdgeInsets.all(4),
                                 padding: EdgeInsets.all(2),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              new Container(
+                                child: Text(e.title,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        background: Paint()
+                                          ..color =
+                                              Color.fromARGB(255, 76, 170, 175)
+                                          ..strokeWidth = 24
+                                          ..strokeJoin = StrokeJoin.round
+                                          ..strokeCap = StrokeCap.round
+                                          ..style = PaintingStyle.stroke,
+                                        color: Colors.black,
+                                        //   backgroundColor: Color.fromARGB(255, 90, 199, 205),
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(2),
+                              ),
+                              SizedBox(
+                                height: 20,
                               ),
                               new Container(
                                 child: Text(e.content,

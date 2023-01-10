@@ -70,23 +70,29 @@ class _gradesState extends State<grades> {
             //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               new Container(
+                height: 150,
+                width: 500,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(50),
+                      bottomLeft: Radius.circular(50)),
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 76, 170, 175),
+                      Color.fromARGB(255, 255, 255, 255)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
                 child: Text(
-                  className + " / " + level,
+                  className + " / " + level + "\n" + widget.subName,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 80, 80, 80),
                     fontSize: 30,
-                  ),
-                ),
-                alignment: Alignment.center,
-              ),
-              new Container(
-                child: Text(
-                  widget.subName,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 80, 80, 80),
-                    fontSize: 25,
                   ),
                 ),
                 alignment: Alignment.center,
@@ -98,8 +104,7 @@ class _gradesState extends State<grades> {
                   // physics: const NeverScrollableScrollPhysics(),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    border: Border.all(
-                        width: 5, color: Color.fromARGB(255, 76, 170, 175)),
+                    border: Border.all(width: 5, color: Colors.black),
                   ),
                   child: SizedBox.fromSize(
                     size: Size(250, 170), // button width and height
@@ -150,8 +155,7 @@ class _gradesState extends State<grades> {
               new Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    border: Border.all(
-                        width: 5, color: Color.fromARGB(255, 76, 170, 175)),
+                    border: Border.all(width: 5, color: Colors.black),
                   ),
                   child: SizedBox.fromSize(
                     size: Size(250, 170), // button width and height
@@ -202,8 +206,7 @@ class _gradesState extends State<grades> {
               new Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    border: Border.all(
-                        width: 5, color: Color.fromARGB(255, 76, 170, 175)),
+                    border: Border.all(width: 5, color: Colors.black),
                   ),
                   child: SizedBox.fromSize(
                     size: Size(250, 170), // button width and height

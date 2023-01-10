@@ -224,7 +224,6 @@ class _EditProfilePageState extends State<studentGrades> {
 
   @override
   Widget build(BuildContext context) {
-    // print(customized.toString());
     return Scaffold(
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -243,7 +242,7 @@ class _EditProfilePageState extends State<studentGrades> {
                 Text('حفظ')
               ],
             ),
-            shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+            // shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
@@ -259,12 +258,12 @@ class _EditProfilePageState extends State<studentGrades> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
           onPressed: () {
             Navigator.pushReplacement(
@@ -287,20 +286,12 @@ class _EditProfilePageState extends State<studentGrades> {
               new Container(
                 child: SingleChildScrollView(
                   child: Builder(builder: (context) {
-                    print("assessmentsList.lenght " +
-                        assessmentsList.length.toString());
                     if (x == 0) {
                       getData();
                     }
-                    print("studentAssessmentsList.lenght " +
-                        assessmentsList.length.toString() +
-                        " .   " +
-                        numOfAssess.toString());
 
                     if (studentAssessmentsList.length == numOfAssess &&
                         y == 1) {
-                      //  if (assessmentStudentGradesList.length == assessmentsList.length) {\
-
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: assessmentsList.length,
@@ -339,7 +330,6 @@ class _EditProfilePageState extends State<studentGrades> {
                                         decoration: InputDecoration(
                                           labelText:
                                               assessmentsList[position].name,
-                                          //hintText: "EnterF Name",
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(12),
@@ -392,9 +382,6 @@ class _EditProfilePageState extends State<studentGrades> {
                           );
                         },
                       );
-                      //   } else {
-                      //   return Center(child: CircularProgressIndicator());
-                      //}
                     } else {
                       return Center(child: CircularProgressIndicator());
                     }
@@ -410,7 +397,7 @@ class _EditProfilePageState extends State<studentGrades> {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Text("تأكيد حفظ درجات الطالب؟"),
+        content: Text("هل تأكد عملية حفظ درجات الطالب؟"),
         actions: [
           TextButton(
               child: Text("لا",
@@ -479,9 +466,7 @@ class _EditProfilePageState extends State<studentGrades> {
             return AlertDialog(
               content: Text(
                 "لم تتم حفظ التغييرات، مجموع الدرجات أكبر من ١٠٠!",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
+                style: TextStyle(),
               ),
             );
           });
