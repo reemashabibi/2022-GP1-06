@@ -47,7 +47,7 @@ export async function fillData(email) {
       
       snapshot.docs.forEach(doc => {
         const new_op = document.createElement("option");
-        new_op.innerHTML = doc.data().Level+ " :المرحلة"+" / "+ doc.data().ClassName + " :فصل";
+        new_op.innerHTML =  doc.data().LevelName+"-"+doc.data().ClassName;
         new_op.setAttribute("id", doc.id);
         new_op.setAttribute("value", doc.data().ClassName);
         document.getElementById("classes").appendChild(new_op);
@@ -171,35 +171,35 @@ addStudentForm.addEventListener('submit', async (e) => {
               email: registerEmail,
               password: registerPass
            },
-           function (data, stat) {
+           async function (data, stat) {
              if(data.status == 'Successfull'){
               const res = doc(db, "School", schoolID, "Parent", data.uid)
 
               //add to the document
-              setDoc(doc(db, "School", schoolID, "Parent", data.uid), {
+            await  setDoc(doc(db, "School", schoolID, "Parent", data.uid), {
                 Email: registerEmail,
                 FirstName: registerFname,
                 LastName: registerlname,
                 Phonenumber: phoneNum,
                 Students: []
-              }).then(() => {
+              }).then(async () => {
                 docRef = doc(db, "School", schoolID, "Parent", data.uid);
                 docRefClass = doc(db, "School", schoolID, "Class", selectedClass[selectedClass.selectedIndex].id);
-                addDoc(colRefStudent, {
+              await  addDoc(colRefStudent, {
                   FirstName: addStudentForm.Fname.value,
                   LastName: addStudentForm.Lname.value,
                   ClassID: docRefClass,
                   ParentID: docRef,
                 })
-                .then( d => {
+                .then( async (d) => {
                   
                   var StuRef = doc(db, "School",schoolID,"Student", d.id);
-                  updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
+                 await updateDoc(docRefClass, {Students: arrayUnion(StuRef) })
                   .catch(error => {
                     $(".loader").hide();
                       console.log(error);
                   })
-                  updateDoc(docRef, {Students: arrayUnion(StuRef) })
+                await  updateDoc(docRef, {Students: arrayUnion(StuRef) })
                   .catch(error => {
                     $(".loader").hide();
                       console.log(error);
@@ -311,7 +311,7 @@ addStudentForm.addEventListener('submit', async (e) => {
 
                 docRef = doc(db, "School", schoolID, "Parent", ParentId);
                 docRefClass = doc(db, "School", schoolID, "Class", selectedClass[selectedClass.selectedIndex].id);
-                addDoc(colRefStudent, {
+              await  addDoc(colRefStudent, {
                   FirstName: addStudentForm.Fname.value,
                   LastName: addStudentForm.Lname.value,
                   ClassID: docRefClass,
@@ -335,7 +335,11 @@ addStudentForm.addEventListener('submit', async (e) => {
                         console.log(error);
                     })
                     $(".loader").hide();
-                    alert("تمت إضافة الطالب بنجاح")
+                    document.getElementById('alertContainer').innerHTML  = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success" id="alert-temp">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح</p> </div>';
+                    $("#alert-temp").delay().fadeOut(7000);
+                    document.getElementById('alertContainer').innerHTML
+
+
                     addStudentForm.reset()
                   });
 

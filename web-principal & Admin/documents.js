@@ -76,6 +76,17 @@ onAuthStateChanged(auth, (user) => {
           document.getElementById("classes").appendChild(new_op);
         })
        $(".loader").hide();
+       let mySelect = new vanillaSelectBox("#classes", {
+
+        placeHolder: "--اختر الفصل--",
+        translations: { 
+          "all": "الكل", 
+          "item": "item",
+          "items": "items", 
+          "selectAll": "اختيار الكل", 
+          "clearAll": "ازالة الكل" 
+        },
+       });
       });
     
     });
@@ -181,7 +192,8 @@ export async function viewDocuments(){
                     var th2 =  document.createElement('th');
                     var thSpan2 =  document.createElement('span');
                     thSpan2.innerHTML = '<a href= "students.html?'+doc.id+'|'+schoolID+'">طلاب الصف</a>';
-
+                    th2.style.textAlign = 'left';
+                    th2.style.paddingLeft = '1%' ;
                     
                     th2.appendChild(thSpan2);
                     trHead.appendChild(th2);
@@ -203,7 +215,7 @@ export async function viewDocuments(){
             
                     
                     var fileName = theDocOfClass.data().FileName;
-                    var filepath = fileName+"@"+theDocOfClass.id;
+                    var filepath = 'School Files/'+fileName+"@"+theDocOfClass.id;
                     var displayName = theDocOfClass.data().DisplayName;
 
 
@@ -307,34 +319,101 @@ export async function viewDocuments(){
                     var tableHead = document.createElement('thead');
                     var trHead = document.createElement('tr');
                     var th =  document.createElement('th');
+                    th.colSpan= 2;
                     var thSpan =  document.createElement('span');
                     thSpan.innerHTML = " مستندات من ولي أمر الطالب "+stuName;
                     
+                    var trHead2 = document.createElement('tr');//row for 2nd row titels
+                    trHead2.style.fontWeight = 'bolder';
+                    
+                    
+                    var th2 =  document.createElement('td');
+                   
+                    th2.innerHTML = "  اسم مستند ولي أمر الطالب ";
+
+                    var th3 =  document.createElement('td');
+               
+                    th3.innerHTML = "  اسم المستند ";
+
 
                     th.appendChild(thSpan);
                     trHead.appendChild(th);
                     tableHead.appendChild(trHead);
+                    
+                    trHead2.appendChild(th2);
+                    trHead2.appendChild(th3);
+
+                   
+
                     table.appendChild(tableHead);
                     div6.appendChild(table);
                     var tableBody = document.createElement('tbody');
-    
+                    tableBody.appendChild(trHead2);
+                    
+                    var classDocsRef = [];
                 if(docsFilled.docs.length > 0) {
+                  var i = 0;
                     docsFilled.forEach( async (doc) => {
                 //loop through documents of the class
             
-                   
+                 // this code is to put the documents uploaded for the same file in one cell
+                    var schoolFileRef= doc.data().DocumentID;
+                    const schoolFileDocSnap = await getDoc(schoolFileRef);
+
+ 
+                    if(classDocsRef.indexOf(schoolFileDocSnap.id)<0 || classDocsRef.length == 0)//check if id already in
+                          classDocsRef.push(schoolFileDocSnap.id); 
+                    else{
+                     
+                      var a_anotherdoclink = document.createElement('a');
+                      a_anotherdoclink.className = 'tdContent';
+                      getDownloadURL(ref(storage, "Parent Files/"+doc.data().FileName+"@"+doc.id))
+                      .then((url) => {
+                          
+                      // `url` is the download URL for the file
+                      a_anotherdoclink.innerHTML = "<br>"+doc.data().FileName;
+                      a_anotherdoclink.href = url;
+                      updateDoc(doc.ref, {Viewed: true})
+                        .then(docRef => {
+                        console.log("viewed");
+                        })
+                       .catch(error => {
+                        console.log(error);
+                         })
+                         
+                     })
+                    .catch((error) => {
+                       // Handle any errors
+                       console.log(error);
+                       a_anotherdoclink.innerHTML = "تعذر تحميل الملف";
+                      });
+                      var cells = document.getElementById(classDocsRef.indexOf(schoolFileDocSnap.id)).getElementsByTagName('td');
+                      cells[0].appendChild(a_anotherdoclink);
+                      return;
+    
+                    }// end of it
+
+// if it is for another document responce complete the code
                     var fileName = doc.data().FileName;
-                    var filepath = fileName+"@"+doc.id;
+                    var filepath = "Parent Files/"+fileName+"@"+doc.id;
+
+                    var schoolFilePath = 'School Files/'+schoolFileDocSnap.data().FileName+'@'+schoolFileDocSnap.id;
 
 
                     var tr = document.createElement('tr');
                     tableBody.appendChild(tr);
+                    tr.id = i;
+                    i++;
+                    
 
 
                     // file 
-                        var td2 = document.createElement('td');
+                        var td2 = document.createElement('td');//Admin file cell
+                        var td = document.createElement('td');//Parent file cell
+
+                        tr.appendChild(td);
                         tr.appendChild(td2);
-          
+
                         var a = document.createElement('a');
                         a.className = 'tdContent';
                         getDownloadURL(ref(storage, filepath))
@@ -358,16 +437,166 @@ export async function viewDocuments(){
                          a.innerHTML = "تعذر تحميل الملف";
                         });
                     
-                        td2.appendChild(a);
+                        td.appendChild(a);
+
+
+                        //cell of School/Admin file
+                        var a2 = document.createElement('a');
+                        a2.className = 'tdContent';
+                        getDownloadURL(ref(storage, schoolFilePath))
+                        .then((url) => {
+                            
+                        // `url` is the download URL for the file
+                        a2.innerHTML = schoolFileDocSnap.data().DisplayName;
+                        a2.href = url;
+                           
+                       })
+                      .catch((error) => {
+                         // Handle any errors
+                         console.log(error);
+                         a2.innerHTML = "تعذر تحميل الملف";
+                        });
+                    
+                        td2.appendChild(a2);
                        
                     })
                 table.appendChild(tableBody);
               
              
             
-        }
+        }//end of the parent filled documents
 
-        
+        //start of view student abcense excuse
+
+        var absencediv2 = document.createElement('div');
+        div2.className = "row";
+        document.getElementById('allTabelsDiv').appendChild(absencediv2);
+
+         var absencediv3 = document.createElement('div');
+        div3.className = "col-lg-12";
+        absencediv2.appendChild(absencediv3);
+
+         var absencediv4 = document.createElement('div');
+         absencediv4.className = "main-box no-header clearfix";
+         absencediv3.appendChild(absencediv4);
+
+         var absencediv5 = document.createElement('div');
+         absencediv5.className = "main-box-body clearfix ";
+         absencediv4.appendChild(absencediv5);
+
+         var absencediv6 = document.createElement('div');
+         absencediv6.className = "table-responsive";
+         absencediv6.id = 'tableArea'
+         absencediv5.appendChild(absencediv6);
+
+        var absencetable = document.createElement('table');
+        absencetable.ClassName = "table user-list";
+
+               var absencetableHead = document.createElement('thead');
+               var absencetrHead = document.createElement('tr');
+               var absenceth =  document.createElement('th');
+               absenceth.colSpan= 3;
+               var absencethSpan =  document.createElement('span');
+               absencethSpan.innerHTML = " غياب الطالب "+stuName;
+
+               var absencetrHead2 = document.createElement('tr');//row for 2nd row titels
+               absencetrHead2.style.fontWeight = 'bolder';
+
+                     var absenceth2 =  document.createElement('td');
+                     absenceth2.innerHTML = "  مستند عذر غياب";
+
+                   var absenceth3 =  document.createElement('td');
+                   absenceth3.innerHTML = " عذر كتابي ";
+
+                    
+                   var absenceth4 =  document.createElement('td');
+                   absenceth4.innerHTML = "  تاريخ الغياب ";
+
+                   absencetrHead2.appendChild(absenceth2);
+                   absencetrHead2.appendChild(absenceth3);
+                   absencetrHead2.appendChild(absenceth4);
+
+                   absenceth.appendChild(absencethSpan);
+                   absencetrHead.appendChild(absenceth);
+                   absencetableHead.appendChild(absencetrHead);
+
+              absencetable.appendChild(absencetableHead);
+              absencediv6.appendChild(absencetable);
+              var absencetableBody = document.createElement('tbody');
+              absencetableBody.appendChild(absencetrHead2);
+              const absenceCollection = collection (db, "School",schoolID, "Student", stu, 'Absence');
+
+              const absensces = await getDocs(absenceCollection);
+
+              if(absensces.docs.length > 0) {
+
+                absensces.forEach( async (doc) => {
+
+                  var fileName = doc.data().FileName;
+                  var filepath = "Parent Files/"+fileName+stu+"@"+doc.id;
+
+
+                  var tr = document.createElement('tr');
+                  absencetableBody.appendChild(tr);
+              
+                
+                  // absence row data 
+                      var td3 = document.createElement('td');//date of absence  cell
+                      var td2 = document.createElement('td');//excuse text cell
+                      var td = document.createElement('td');//excuse file cell
+
+                      tr.appendChild(td);
+                      tr.appendChild(td2);
+                      tr.appendChild(td3);
+
+                      td3.innerHTML = doc.id;
+
+                      if(fileName != null && fileName != ''){
+                      var a = document.createElement('a');
+                      a.className = 'tdContent';
+                      getDownloadURL(ref(storage, filepath))
+                      .then((url) => {
+                          
+                      // `url` is the download URL for the file
+                      a.innerHTML = fileName;
+                      a.href = url;
+                         
+                     })
+                    .catch((error) => {
+                       // Handle any errors
+                       console.log(error);
+                       a.innerHTML = "تعذر تحميل الملف";
+                      });
+                  
+                      td.appendChild(a);
+                    }
+                    else{
+                      td.innerHTML = "لم يتم ارفاق ملف";
+                      td.style.color = 'red';
+                    }
+                    
+                    
+                    if(doc.data().excuse != "")
+                    td2.innerHTML = doc.data().excuse;
+                    else{
+                    td2.innerHTML = "لم يتم ارفاق عذر كتابي";
+                    td2.style.color = 'red';
+                    }
+
+                    if(doc.data().excuse != "" || (fileName != null && fileName != ''))
+                    updateDoc(doc.ref, {Viewed: true})
+                    .then(docRef => {
+                    console.log("viewed");
+                    })
+                   .catch(error => {
+                    console.log(error);
+                     })
+
+
+                  });
+                  absencetable.appendChild(absencetableBody);
+
+              }
    
  
 
@@ -397,7 +626,7 @@ export async function viewDocuments(){
             });
         }
         // Create a reference to the file to delete
-       const fileRef = ref(storage, fileName+"@"+docID);
+       const fileRef = ref(storage, 'School Files/'+fileName+"@"+docID);
 
        // Delete the file
        await deleteObject(fileRef).then(() => {
@@ -423,21 +652,19 @@ $(document).on('submit', '.docForm', async function (e){
     const classDocForm = document.querySelector('.docForm');
 
     e.preventDefault()
-    var selectedClass = document.getElementById("classes");
-    var selectedClassIn = selectedClass[selectedClass.selectedIndex].value;
-    if (selectedClassIn == "non") {
-      document.getElementById('alertContainer').innerHTML='<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يرجى اختيار فصل  </p> </div>';
-      document.querySelector('.add').non.focus();
-      return;
-    }
-
+    var selectedClasses = $('#classes').val();
+    
     $('.loader').show();
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
     snapshot.forEach(async docSnap => {
     const school = await getDoc(docSnap.ref.parent.parent);
     schoolID = school.id;
+
+    var classesRef = [];
+    for(var k=0; k<selectedClasses.length; k++){
+       classesRef[k] = doc(db, 'School', schoolID, 'Class', selectedClasses[k] );
+    }
     
-    const classRef = doc(db, 'School', schoolID, 'Class', classDocForm.classes.value );
     const DocsRef = collection(db, 'School', schoolID, 'Documents' );
 
     var file = document.getElementById("file").files[0];
@@ -447,22 +674,25 @@ $(document).on('submit', '.docForm', async function (e){
       $(".loader").hide();
       return;
     }
-
+    let allowParentUpload = true;
+if(!classDocForm.allowReply.checked){
+  allowParentUpload = false;
+}
     var data = {
-       Classes:  arrayUnion(classRef),
+       Classes:  classesRef,
        FileName: file.name,
-       DisplayName: classDocForm.Dname.value
-    
+       DisplayName: classDocForm.Dname.value,
+       AllowReply: allowParentUpload
      };
      
     await addDoc(DocsRef, data)
-   .then(docRef => {
+   .then(async docRef => {
 
-    const storageRef = ref(storage, file.name+"@"+docRef.id);
+    const storageRef = ref(storage, 'School Files/'+file.name+"@"+docRef.id);
  
-    uploadBytes(storageRef, file).then(async (snapshot) => {
-        
-      await updateDoc(classRef, {Documents: arrayUnion( doc(db, 'School', schoolID, 'Documents', docRef.id)) })
+     await uploadBytes(storageRef, file).then(async (snapshot) => {
+      for(var k=0; k<selectedClasses.length; k++)
+         await updateDoc(classesRef[k], {Documents: arrayUnion( doc(db, 'School', schoolID, 'Documents', docRef.id)) })
         .catch(error => {
           $(".loader").hide();
             console.log(error);
@@ -482,6 +712,7 @@ $(document).on('submit', '.docForm', async function (e){
       
       })
 });
+//edit uploaded document
 $(document).on('click', '.changeDocSubmit',async function (e) {
   e.preventDefault();
 
@@ -505,10 +736,10 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
           DisplayName: DocForm.NewDocname.value,
           FileName: document.getElementById("NewFile").files[0].name
         }
-        const storageRef = ref(storage, document.getElementById("NewFile").files[0].name+"@"+$('.inputbox button').attr('id'));
+        const storageRef = ref(storage, 'School Files/'+document.getElementById("NewFile").files[0].name+"@"+$('.inputbox button').attr('id'));
  
     await uploadBytes(storageRef, document.getElementById("NewFile").files[0]).then(async (snapshot) => {
-      const fileRef = ref(storage, documentDoc.data().FileName+"@"+documentDoc.id);
+      const fileRef = ref(storage, 'School Files/'+documentDoc.data().FileName+"@"+documentDoc.id);
 
       // Delete the file
       await deleteObject(fileRef).then(() => {

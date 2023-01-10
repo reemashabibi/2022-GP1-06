@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
 import 'package:halaqa_app/viewDocuments.dart';
+import 'package:halaqa_app/viewAbcense.dart';
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -26,6 +27,7 @@ class _parentHPState extends State<parentHP> {
   late List _FNList;
   late List _LNList;
   late List ClassID;
+  late List _StuId; //added by reema s
   var x = 0;
   var v = 0;
 
@@ -39,6 +41,7 @@ class _parentHPState extends State<parentHP> {
     _FNList = [""];
     _LNList = [""];
     ClassID = [""];
+    _StuId = ['']; //added by reema s
     x++;
   }
 
@@ -74,6 +77,7 @@ class _parentHPState extends State<parentHP> {
             _FNList.add(value['FirstName']);
             ClassID.add(value['ClassID']);
             _LNList.add(value['LastName']);
+            _StuId.add(str); //added by reema s
           });
         });
       }
@@ -83,6 +87,7 @@ class _parentHPState extends State<parentHP> {
           _FNList.removeAt(0);
           _LNList.removeAt(0);
           ClassID.removeAt(0);
+          _StuId.removeAt(0);
         }
       });
       if (_FNList[0] == "") {
@@ -188,7 +193,7 @@ class _parentHPState extends State<parentHP> {
             if (snapshot.hasData && _FNList[0] != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
-              print('has data before :)');
+
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -296,9 +301,13 @@ class _parentHPState extends State<parentHP> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     viewDocuments(
-                                                      ref: ClassID[
-                                                          _FNList.indexOf(e)],
-                                                    )),
+                                                        ref:
+                                                            ClassID[
+                                                                _FNList.indexOf(
+                                                                    e)],
+                                                        studentRef: _StuId[
+                                                            _FNList.indexOf(
+                                                                e)])),
                                           );
                                         },
                                         child: Icon(
@@ -321,17 +330,15 @@ class _parentHPState extends State<parentHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
+                                                builder: (context) =>
+                                                    viewAbcense(
+                                                      ref: _StuId[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
-                                        */
                                         },
                                         child: Image.asset(
                                           "images/absenceIcon.png",

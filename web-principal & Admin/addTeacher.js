@@ -132,9 +132,9 @@ onAuthStateChanged(authPrin, (user) => {
                  email: registerEmail,
                  password: registerPass
               },
-              function (data, stat) {
+           async  function (data, stat) {
                 if(data.status == 'Successfull'){
-                  setDoc(doc(db, 'School/'+schoolID+'/Teacher', data.uid), {
+                  await setDoc(doc(db, 'School/'+schoolID+'/Teacher', data.uid), {
                     Email: registerEmail,
                     FirstName: registerFname,
                     LastName: registerlname,

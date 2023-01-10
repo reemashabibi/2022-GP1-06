@@ -39,7 +39,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -49,6 +49,8 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
     
     <link href="students.css" rel="stylesheet">
 	
@@ -58,13 +60,19 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
     <title>مستندات الطالب</title>
     
     <style>
-        th {text-align: center;}
+        th {text-align: center;  background: cadetblue;
+    color: white;
+}
        
-        td {text-align: center; }
+        td {text-align: center;     border: 1px solid aliceblue;}
         .tdContent{margin-right: 10%;}
         th, td {border-bottom: 1px solid #ddd;}
         table{width: 100% }
-      
+        tbody tr:nth-child(1){
+            background: rgb(197, 225, 227);
+
+        }
+
       
     </style>
 </head>
@@ -91,13 +99,13 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
      
         
                 <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0);"> إصطحاب الطلاب</a>
+                    <a class="nav-link" href="pickup.html"> إصطحاب الطلاب</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);"></i>الإعلانات</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);">الأحداث</a>
+                    <a class="nav-link" href="events.html">الأحداث</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="documents.html">المستندات</a>
@@ -152,8 +160,7 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
        
     <div class="screen__background__shape screen__background__shape4"></div>
     <div class="screen__background__shape screen__background__shape3"></div>		
-    <div class="screen__background__shape screen__background__shape2"></div>
-    <div class="screen__background__shape screen__background__shape1"></div>
+    <div class="screen__background__shape screen__background__shape1 hidden-xs d-md-none d-lg-block"></div>
   </div>
   <div>
 
