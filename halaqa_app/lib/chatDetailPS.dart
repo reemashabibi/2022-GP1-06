@@ -1,0 +1,269 @@
+// ignore_for_file: unused_import
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat_bubble/bubble_type.dart';
+import 'package:flutter_chat_bubble/chat_bubble.dart';
+import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
+import 'package:halaqa_app/global_fun.dart';
+import 'package:intl/intl.dart';
+
+////need techerID, teacherName,  it's childID
+class ChatdetailPS extends StatefulWidget {
+  final  TeacherUid;
+  final  TeacherName;
+  final  StudentUid;
+  final schoolId;
+  final subjectId;
+  final classID;
+  @override
+  const ChatdetailPS({Key? key, required this.TeacherUid, required this.TeacherName, required this.StudentUid, this.schoolId, this.subjectId, this.classID }) : super (key:key);
+
+  State<ChatdetailPS> createState() => _ChatdetailPSState(TeacherUid, TeacherName, StudentUid);
+}
+
+class _ChatdetailPSState extends State<ChatdetailPS> {
+  //Get schoolID #######
+  late CollectionReference chats;
+  final  TeacherUid; 
+  final  TeacherName; 
+  final  StudentUid;
+   //it's childUID 'studentUID':
+  get currentuserUserId => StudentUid;
+  var   chatDocID;
+  var  _textController = new TextEditingController();
+  var   schoolID;
+
+  _ChatdetailPSState(this.TeacherUid, this.TeacherName, this.StudentUid);
+  @override
+
+  int count = 1;
+
+
+  void sendMessage(String msg) {
+     if (msg == "")
+      return;
+
+     else{
+     // print("Chat DocumentID:");
+    //  print(chatDocID.id);
+      chats.doc(chatDocID).collection('messages').add({
+        'createdOn': FieldValue.serverTimestamp(),
+        'uid':currentuserUserId,
+        'msg': msg,
+      }).then(((value) {
+        print('sent');
+        _textController.text ="";
+        FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').doc(widget.StudentUid).update({
+          "msg_count" : count++,
+        });
+      } ));
+     }
+  }
+
+    Future<void> getSchoolID() async {
+    print("!!!! ${widget.schoolId}");
+    chats = FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats');
+    User? user = FirebaseAuth.instance.currentUser;
+    var col = FirebaseFirestore.instance
+        .collectionGroup('Parent')
+        .where('Email', isEqualTo: user!.email);
+    var snapshot = await col.get();
+    for (var doc in snapshot.docs) {
+
+      schoolID = doc.reference.parent.parent!.id;
+      break;
+    }
+    setState(() {
+
+    });
+  }
+
+  bool isSender(String freind){
+    return freind == currentuserUserId;
+  }
+
+Alignment getAlignment (freind){
+  if (freind == currentuserUserId ){
+    return Alignment.topRight;
+  }
+  return Alignment.topLeft;
+}
+
+  readMsg() {
+    FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class').doc("${widget.classID}").collection("Subject").doc(widget.subjectId).update({
+      "msg_count" : 0
+    });
+  }
+
+   void initState ()  {
+   super.initState();
+   getSchoolID();
+
+   chats.where('users',isEqualTo: {currentuserUserId : null, TeacherUid:null})
+     .limit(1)
+     .get()
+     .then(
+      (QuerySnapshot querySnapshot){
+        /// We have chat between these two users
+        if (querySnapshot.docs.isNotEmpty){
+           chatDocID = querySnapshot.docs.single.id;
+         print("DocumentID: ${querySnapshot.docs.single.id}");
+         setState(() {
+
+         });
+        }else{
+          ///Adding a Map
+          chats.add({
+            'users':{ currentuserUserId : null, TeacherUid : null,} 
+          }).then((value) {
+           //in case we do not have a document created between these two user we create one
+           //and wait for the call back to assaign the dicumentId to chatDocID
+           setState(() {
+             chatDocID = value;
+           });
+          });
+        }
+      },   
+      );
+   readMsg();
+     
+  }///end initState
+
+
+  Widget build(BuildContext context) {
+   return StreamBuilder <QuerySnapshot>(
+    ////get schoolID
+    stream: FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats')
+    .doc(chatDocID)
+    .collection('messages')
+    .orderBy('createdOn', descending: true)
+    .snapshots(),
+    builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
+        if (snapshot.hasError){
+          return const Center(child: Text("Something went wrong"),);
+        }
+
+        if(snapshot.hasData){
+         //= document.data()!;
+        //initState () ;
+       // super.initState();
+         // print("snapshot hasData");
+      return CupertinoPageScaffold( 
+        navigationBar: CupertinoNavigationBar(previousPageTitle: "رجوع",
+        ///add parent Name or TeacherOH
+        middle: Text(TeacherName,
+        style: const TextStyle(
+                  color: Color.fromARGB(255, 99, 99, 99),
+                  fontSize: 23,
+                 //fontWeight: FontWeight.bold
+                 ),),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          onPressed: (){},
+          child: const Text("")
+        ),
+        ),
+        child: SafeArea(
+          child: Column(children: [
+            Expanded(
+              child: ListView(
+              reverse: true,
+              children: snapshot.data!.docs.map((DocumentSnapshot document){
+                var  data =document;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                  child: ChatBubble(
+                    clipper: ChatBubbleClipper5(
+                     // nipSize: 0,
+                      radius:0,
+                      type:BubbleType.sendBubble,
+                      ),
+                      alignment: getAlignment(data['uid'].toString()),
+                      margin: const EdgeInsets.only(top:20),
+                      backGroundColor: isSender(data['uid'].toString())
+                      ? const Color.fromARGB(255, 184, 215, 249)
+                      : const Color.fromARGB(237, 205, 203, 203),
+                      child: Container(
+                        constraints: BoxConstraints(
+                          maxWidth:
+                          MediaQuery.of(context).size.width *0.5,
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment:
+                              MainAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Text(data['msg'],
+                                  style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w500,
+                                    color: isSender(
+                                      data['uid'].toString())
+                                      ? Colors.white
+                                      : const Color.fromARGB(255, 255, 255, 255)),
+                               overflow: TextOverflow.clip
+                                  ),
+                                )
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  data['createdOn']== null
+                                  ? DateTime.now().toString()
+                                  : "${GlobalFun.realDate(data['createdOn'].toDate().toString().substring(0,10))} ${GlobalFun.realTime(data['createdOn'])}",
+                                 style: TextStyle(
+                                  decoration: TextDecoration.none,
+                                fontSize: 10,
+                              //  fontWeight:  ,
+                                color: isSender(data['uid'].toString())
+                                ?const Color.fromARGB(255, 132, 131, 131)
+                                :const Color.fromARGB(255, 132, 131, 131)
+                                ))
+                              ],
+                            )
+                          ]
+                        )
+                      )
+                  ),
+                );
+              }).toList(),
+            )),
+            Container(
+               decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 244, 241, 241),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              margin: const EdgeInsets.all(20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                Expanded(
+                  child: CupertinoTextField(
+                  minLines: 2,
+                  maxLines: 20,
+                  controller: _textController                  
+                    )),
+                CupertinoButton(
+          onPressed: () => sendMessage(_textController.text), 
+          child: const Icon(Icons.send_sharp),
+        ),
+              ],),
+            )
+            
+          ],)
+          ),
+      );
+        }
+        return Container();
+      });
+   
+  }
+  
+}
