@@ -109,9 +109,8 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
     );
     return TextField(
       controller: controller,
-      minLines: 1,
       maxLines: 10,
-      keyboardType: TextInputType.multiline,
+      // minLines: 1,
       decoration: InputDecoration(
         border: border,
         enabledBorder: border,
@@ -128,7 +127,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
           borderRadius: BorderRadius.circular(10)
       ),
       child: Container(
-        height: 350,
+        // height: 242,
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10)
@@ -136,6 +135,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -149,7 +149,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                 padding: const EdgeInsets.symmetric(vertical:10.0),
                 child: customTextFiled(),
               ),
-              const Spacer(),
+              // const Spacer(),
               ElevatedButton(onPressed: () {
                 print("TEXT ${controller.text}");
                 if(controller.text.isNotEmpty) {

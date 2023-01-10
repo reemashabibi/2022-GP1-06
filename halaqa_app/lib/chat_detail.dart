@@ -108,7 +108,7 @@ String? classId;
           }).then((value) {
            //in case we do not have a document created between these two user we create one
            //and wait for the call back to assaign the dicumentId to chatDocID
-           chatDocID = value;
+           chatDocID = value.id;
           });
         }
       },   
