@@ -1,18 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/grades.dart';
+import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
+import 'package:flutter/material.dart';
+import 'package:halaqa_app/login_screen.dart';
+import 'package:halaqa_app/TeacherEdit.dart';
+import 'package:halaqa_app/teacherHP.dart';
 
-import 'grades.dart';
-
-class viewStudentsForGrades extends StatefulWidget {
-  const viewStudentsForGrades({super.key, required this.ref});
+class viewStudentsForChat extends StatefulWidget {
+  const viewStudentsForChat({super.key, required this.ref});
   final DocumentReference ref;
-
   @override
-  State<viewStudentsForGrades> createState() => _viewStudentsForGradesState();
+  State<viewStudentsForChat> createState() => _viewStudentsForChatState();
 }
 
-class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
+class _viewStudentsForChatState extends State<viewStudentsForChat> {
   late List _StudentList;
   late List _StudenNameList;
   late List _StudentsRefList;
@@ -30,14 +36,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
     x++;
   }
 
-  var subName = "";
   getStudents() async {
-    DocumentReference doc = await widget.ref;
-    await widget.ref.get().then((value) async {
-      setState(() {
-        subName = value['SubjectName'];
-      });
-    });
     DocumentReference docRef =
         widget.ref.parent.parent as DocumentReference<Object?>;
 
@@ -45,6 +44,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
       // use ds as a snapshot
       className = ds['ClassName'];
       levelName = ds['LevelName'];
+
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
@@ -84,21 +84,18 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Colors.white,
+            color: Color.fromARGB(255, 76, 170, 175),
           ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => grades(
-                  subRef: widget.ref,
-                  subName: subName,
-                ),
+                builder: (context) => teacherHP(),
               ),
             );
           },
@@ -142,30 +139,29 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
                         return InkWell(
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Color.fromARGB(255, 231, 231, 231),
-                                border: Border.all(
-                                  color: Color(0xffEEEEEE),
-                                  width: 2.0,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
-                            child: Text(e,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
-                            margin: EdgeInsets.all(5),
-                            padding: EdgeInsets.all(15),
-                            //   color: Color.fromARGB(255, 222, 227, 234),
-                          ),
-                          onTap: () {
-                            if (_StudentsRefList[0] != "") {
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: Color.fromARGB(255, 231, 231, 231),
+                                  border: Border.all(
+                                    color: Color(0xffEEEEEE),
+                                    width: 2.0,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.grey,
+                                        blurRadius: 2.0,
+                                        offset: Offset(2.0, 2.0))
+                                  ]),
+                              child: Text(e,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold)),
+                              margin: EdgeInsets.all(5),
+                              padding: EdgeInsets.all(15),
+                            ),
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -175,9 +171,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                                           classRef: ref,
                                         )),
                               );
-                            }
-                          },
-                        );
+                            });
                       }).toList(),
                     ),
                   )

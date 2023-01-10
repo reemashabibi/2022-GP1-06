@@ -124,39 +124,53 @@ class _customizeGradesState extends State<customizeGrades> {
     return Scaffold(
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        FloatingActionButton(
+        FloatingActionButton.extended(
           heroTag: null,
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
+          label: Row(
+            children: [
+              Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              Text('إضافة')
+            ],
           ),
           onPressed: () {
             _addNewAssessment();
           },
         ),
-        FloatingActionButton(
+        FloatingActionButton.extended(
           heroTag: null,
           backgroundColor: Colors.green,
-          child: Icon(
-            Icons.done,
-            color: Colors.white,
+          label: Row(
+            children: [
+              Icon(
+                Icons.done,
+                color: Colors.white,
+              ),
+              Text('حفظ')
+            ],
           ),
           onPressed: () async {
-            if (assessmentsList.length != 0) {
-              updateDatabase();
-            } else {
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Text(
-                        "لم يتم اضافة اي متطلب!",
-                        style: TextStyle(
-                            // color: Colors.red,
-                            ),
-                      ),
-                    );
-                  });
+            var f = false;
+            f = await conform();
+            if (f) {
+              if (assessmentsList.length != 0) {
+                updateDatabase();
+              } else {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        content: Text(
+                          "لم يتم اضافة اي متطلب!",
+                          style: TextStyle(
+                              // color: Colors.red,
+                              ),
+                        ),
+                      );
+                    });
+              }
             }
           },
         ),
@@ -164,12 +178,12 @@ class _customizeGradesState extends State<customizeGrades> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
           onPressed: () {
             Navigator.pushReplacement(
@@ -212,19 +226,14 @@ class _customizeGradesState extends State<customizeGrades> {
                                 new Flexible(
                                   child: TextFormField(
                                     keyboardType: TextInputType.number,
-                                    //  initialValue: assessmentsList[position].name,
                                     controller: TextEditingController(
                                         text: assessmentsList[position].name),
-
-                                    // maxLength: 20,
                                     onChanged: (newText) {
                                       assessmentsList[position].name = newText;
                                       ;
                                     },
-
                                     decoration: InputDecoration(
                                       labelText: "اسم المتطلب",
-                                      //hintText: "EnterF Name",
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
@@ -244,7 +253,6 @@ class _customizeGradesState extends State<customizeGrades> {
                                     inputFormatters: <TextInputFormatter>[
                                       FilteringTextInputFormatter.digitsOnly
                                     ],
-                                    // maxLength: 20,
                                     onChanged: (newText) {
                                       setState(() {
                                         state = state -
@@ -255,8 +263,6 @@ class _customizeGradesState extends State<customizeGrades> {
                                       assessmentsList[position].grade =
                                           int.parse(newText);
                                     },
-                                    //initialValue:
-                                    //assessmentsList[position].grade.toString(),
                                     controller: TextEditingController(
                                         text: assessmentsList[position]
                                             .grade
@@ -306,7 +312,7 @@ class _customizeGradesState extends State<customizeGrades> {
                     },
                   );
                 }),
-              )),
+              )), /*
               new Container(
                   child: SingleChildScrollView(
                 child: Text(
@@ -317,7 +323,7 @@ class _customizeGradesState extends State<customizeGrades> {
                     fontSize: 30,
                   ),
                 ),
-              )),
+              )),*/
             ],
           ))),
     );
@@ -329,7 +335,7 @@ class _customizeGradesState extends State<customizeGrades> {
       for (int i = 0; i < assessmentsList.length; i++) {
         totalGrades += assessmentsList[i].grade!;
       }
-      if (totalGrades <= 100 && assessmentsList.length > 0) {
+      if (totalGrades == 100 && assessmentsList.length > 0) {
         print("totalGrades " + totalGrades.toString());
         await widget.subjectRef.update({
           'customized': true,
@@ -394,10 +400,8 @@ class _customizeGradesState extends State<customizeGrades> {
             builder: (context) {
               return AlertDialog(
                 content: Text(
-                  "لم تتم حفظ التغييرات، مجموع الدرجات أكبر من ١٠٠!",
-                  style: TextStyle(
-                      // color: Colors.red,
-                      ),
+                  "لم يتم حفظ التعديلات، مجموع الدرجات لا يساوي ١٠٠!",
+                  style: TextStyle(),
                 ),
               );
             });
@@ -466,7 +470,29 @@ class _customizeGradesState extends State<customizeGrades> {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Text("تأكيد حذف المتطلب؟"),
+        content: Text("هل تريد تأكيد عملية حذف المتطلب؟"),
+        actions: [
+          TextButton(
+              child: Text("لا",
+                  style: TextStyle(color: Color.fromARGB(255, 208, 16, 16))),
+              onPressed: () {
+                Navigator.pop(context, false);
+              }),
+          TextButton(
+              child: Text("نعم", style: TextStyle(color: Colors.blue)),
+              onPressed: () {
+                Navigator.pop(context, true);
+              })
+        ],
+      ),
+    );
+  }
+
+  Future<bool> conform() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("هل تريد تأكيد عملية حفظ التعديلات؟"),
         actions: [
           TextButton(
               child: Text("لا",

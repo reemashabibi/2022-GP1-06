@@ -10,70 +10,153 @@ import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class viewChildGrades extends StatefulWidget {
-  const viewChildGrades({super.key, this.classRef, this.studentName});
-  final classRef;
-  final studentName;
+  const viewChildGrades({
+    super.key,
+    required this.subRef,
+    required this.stRef,
+  });
+  final DocumentReference subRef;
+  final DocumentReference stRef;
 
   @override
   State<viewChildGrades> createState() => _viewChildGradesState();
 }
 
+class assessment {
+  String name;
+  int grade;
+
+  assessment(this.name, this.grade);
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'grade': grade,
+    };
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "name  $name  garde $grade";
+  }
+}
+
 class _viewChildGradesState extends State<viewChildGrades> {
-  var className = "";
+  var subjectName = "";
   var level = "";
-  late List _SubjectList;
-  late List _SubjectsNameList;
-  late List _SubjectsRefList;
+  late var gradeID;
+  bool customized = false;
+  var numOfAssess = 0;
+  var assessments2;
+  var assessments;
+  var totalGrade = 0;
+  List<assessment> studentAssessmentsList = [];
+  List<assessment> assessmentsList = [];
 
   var x = 0;
   var v = 0;
+  bool noGrades = false;
   var parentName = "";
 
   var numOfSubjects;
   var schoolID = "xx";
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
+
   getData() {
-    _SubjectsNameList = [""];
-    //_SubjectList = [""];
-    // _SubjectsRefList = [""];
+    studentAssessmentsList.add(assessment("", 0));
+    assessmentsList.add(assessment("", 0));
     x++;
   }
 
-  getSubjects() async {
-    DocumentReference docRef = widget.classRef;
-    var subRefs = await docRef.collection("Subject").get();
-    if (subRefs.docs.length > 0) {
-      await await docRef.collection("Subject").get().then((querySnapshot) {
-        querySnapshot.docs.forEach((documentSnapshot) {
-          _SubjectsNameList.add(documentSnapshot['SubjectName']);
-        });
-      });
-    }
-    docRef.get().then((DocumentSnapshot ds) async {
+  getAssessments() async {
+    DocumentReference docRef = widget.subRef;
+    var subRefs = await docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
-
       setState(() {
-        className = ds['ClassName'] + " / " + ds["LevelName"].toString();
-      });
-
-      setState(() {
-        if (_SubjectsNameList.length > 1) {
-          _SubjectsNameList.removeAt(0);
+        subjectName = ds['SubjectName'];
+        customized = ds['customized'];
+        if (customized) {
+          numOfAssess = ds['assessments'].length;
         }
       });
-      if (_SubjectsNameList[0] == "") {
-        v++;
-      }
     });
+
+    var stRef = await widget.stRef
+        .collection("Grades")
+        .where('subjectID', isEqualTo: widget.subRef)
+        .get();
+    print("stRef.docs.length     " + stRef.docs.length.toString());
+    if (stRef.docs.length > 0) {
+      for (int i = 0; i < numOfAssess; i++) {
+        Future<List<assessment>> getAssessment() async {
+          setState(() {});
+          final snapshots = await Future.wait(
+              [docRef.get().then((value) => value['assessments'][i])]);
+          return snapshots
+              .map(
+                  (snapshot) => assessment(snapshot['name'], snapshot['grade']))
+              .toList();
+        }
+
+        assessments = await getAssessment();
+        setState(() {
+          assessmentsList.addAll(assessments);
+        });
+      }
+
+      // if student grades are assigned
+      var stRef = await widget.stRef
+          .collection("Grades")
+          .where('subjectID', isEqualTo: widget.subRef)
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.map((DocumentSnapshot document) {
+          setState(() {
+            gradeID = document.id;
+          });
+        }).toList();
+      });
+
+      print("in if");
+      DocumentReference docu =
+          await widget.stRef.collection("Grades").doc(gradeID);
+      print(gradeID);
+
+      for (int i = 0; i < numOfAssess; i++) {
+        Future<List<assessment>> getAssess() async {
+          final snapshots = await Future.wait(
+              [docu.get().then((value) => value['assessments'][i])]);
+
+          return snapshots
+              .map(
+                  (snapshot) => assessment(snapshot['name'], snapshot['grade']))
+              .toList();
+        }
+
+        assessments2 = await getAssess();
+        setState(() {
+          studentAssessmentsList.addAll(assessments2);
+
+          totalGrade += studentAssessmentsList[i].grade;
+        });
+
+        if (v == 0) {
+          setState(() {
+            assessmentsList.removeAt(0);
+            studentAssessmentsList.removeAt(0);
+            v++;
+          });
+        }
+      }
+    }
+    noGrades = true;
   }
 
   @override
   void initState() {
-    getSubjects();
-    // getSchoolID();
-    // getSchoolID();
-    //remove();
+    getAssessments();
 
     super.initState();
   }
@@ -84,21 +167,6 @@ class _viewChildGradesState extends State<viewChildGrades> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => parentHP(),
-              ),
-            );
-          },
-        ),
-        actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           currentIndex: 2, // Use this to update the Bar giving a position
@@ -132,16 +200,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
               title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
+            ),
           ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
@@ -153,16 +212,14 @@ class _viewChildGradesState extends State<viewChildGrades> {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
             }
-
+            print("object");
             //Check if data arrived
             if (x == 0) {
               getData();
             }
-
-            if (snapshot.hasData && _SubjectsNameList[0] != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
+            print("assessmentsList.name    " + assessmentsList[0].name);
+            print("v    " + v.toString());
+            if (studentAssessmentsList[0].name != "") {
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -170,7 +227,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
                   new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      widget.studentName + "\n" + className,
+                      subjectName,
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -183,121 +240,105 @@ class _viewChildGradesState extends State<viewChildGrades> {
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                      children: _SubjectsNameList.map((e) {
+                      padding: EdgeInsets.only(right: 30.0, left: 30.0),
+                      children: studentAssessmentsList.map((e) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                shape: BoxShape.rectangle,
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: new Column(children: [
-                              new Container(
-                                child: Text(e,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          /*
-                                          if (_SubjectsRefList[0] != "") {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      viewStudents(
-                                                        ref: _SubjectsRefList[
-                                                            _SubjectsNameList
-                                                                .indexOf(e)],
-                                                      )),
-                                            );
-                                          }
-                                      */
-                                        },
-                                        child: Image.asset(
-                                          "images/gradeIcon.png",
-                                          width: 55,
-                                          height: 55,
-                                          fit: BoxFit.cover,
+                            child: new Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text(e.name,
+                                        //    textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.bold)),
+                                    margin: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 0, 10.0, 0),
+                                  ),
+                                  new Container(
+                                    child: SizedBox(
+                                      width: 60,
+                                      height: 50,
+                                      child: FittedBox(
+                                        child: FloatingActionButton.extended(
+                                          shape: new CircleBorder(),
+                                          heroTag: null,
+                                          backgroundColor: Color.fromARGB(
+                                              255, 199, 248, 248),
+                                          onPressed: () {},
+                                          label: Text(
+                                              studentAssessmentsList[
+                                                          studentAssessmentsList
+                                                              .indexOf(e)]
+                                                      .grade
+                                                      .toString() +
+                                                  "/" +
+                                                  assessmentsList[
+                                                          studentAssessmentsList
+                                                              .indexOf(e)]
+                                                      .grade
+                                                      .toString(),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    255, 80, 80, 80),
+                                                fontSize: 20,
+                                              )),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          /*
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
-                                                    )),
-                                          );
-                                        */
-                                        },
-                                        child: Image.asset(
-                                          "images/chatIcon.png",
-                                          width: 44,
-                                          height: 44,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ))
-
-                              // color: Color.fromARGB(255, 222, 227, 234),
-                            ]));
+                                  )
+                                ]));
                       }).toList(),
                     ),
-                  )
+                  ),
+                  new Container(
+                    child: SizedBox(
+                      width: 130,
+                      height: 100,
+                      child: FittedBox(
+                        child: FloatingActionButton.extended(
+                          shape: new CircleBorder(),
+                          heroTag: null,
+                          backgroundColor: Color.fromARGB(255, 199, 248, 248),
+                          onPressed: () {},
+                          label: Text(totalGrade.toString() + "/" + "100",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 80, 80, 80),
+                                fontSize: 15,
+                              )),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               )));
             }
-            if (_SubjectsNameList.length == 0 && x == 0) {
+            if (studentAssessmentsList.length == 0 && x == 0) {
               return Center(child: Text(""));
             }
-            if (_SubjectsNameList[0] == "" && v == 1) {
-              return Center(child: Text("لا يوجد مواد مسجلة"));
+            if (noGrades) {
+              return Center(child: Text("لم يتم اصدار الدرجات بعد."));
             }
             return Center(child: CircularProgressIndicator());
           }),

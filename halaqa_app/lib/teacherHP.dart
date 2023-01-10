@@ -9,6 +9,7 @@ import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
+import 'package:halaqa_app/viewStudentForChat.dart';
 
 class teacherHP extends StatefulWidget {
   const teacherHP({super.key});
@@ -117,23 +118,18 @@ class _teacherHPState extends State<teacherHP> {
   void initState() {
     getSubjects();
     getSchoolID();
-    // getSchoolID();
-    //remove();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
-        title: Text('حلقة',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 9, 18, 121),
-            )),
+        title: Image.asset(
+          "images/logo.png",
+          scale: 9,
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         automaticallyImplyLeading: false,
@@ -145,28 +141,20 @@ class _teacherHPState extends State<teacherHP> {
             },
             icon: Icon(
               Icons.logout,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
           IconButton(
-            onPressed: () {
-              /*
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => const EditProfilePage()),
-        );
-           */
-            },
+            onPressed: () {},
             icon: Icon(
               Icons.account_circle_rounded,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
         ],
       ),
-
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
@@ -184,9 +172,6 @@ class _teacherHPState extends State<teacherHP> {
             }
 
             if (snapshot.hasData && _SubjectsNameList[0] != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -207,7 +192,6 @@ class _teacherHPState extends State<teacherHP> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: _SubjectsNameList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
@@ -218,7 +202,7 @@ class _teacherHPState extends State<teacherHP> {
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,
@@ -329,7 +313,7 @@ class _teacherHPState extends State<teacherHP> {
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      viewStudents(
+                                                      viewStudentsForChat(
                                                         ref: _SubjectsRefList[
                                                             _SubjectsNameList
                                                                 .indexOf(e)],
@@ -348,8 +332,6 @@ class _teacherHPState extends State<teacherHP> {
                                   ),
                                 ],
                               ))
-
-                              // color: Color.fromARGB(255, 222, 227, 234),
                             ]));
                       }).toList(),
                     ),
@@ -495,19 +477,17 @@ class _MyWidgetState extends State<viewStudents> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(
-                builder: (context) => teacherHP(),
-              ),
+              MaterialPageRoute(builder: (context) => teacherHP()),
             );
           },
         ),
@@ -533,9 +513,26 @@ class _MyWidgetState extends State<viewStudents> {
                       child: new Column(
                 children: [
                   new Container(
+                    height: 100,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       className + " / " + levelName.toString(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
@@ -551,7 +548,7 @@ class _MyWidgetState extends State<viewStudents> {
                       children: _StudenNameList.map((e) {
                         return Container(
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(100.0),
                               color: Color.fromARGB(255, 231, 231, 231),
                               border: Border.all(
                                 color: Color(0xffEEEEEE),

@@ -16,7 +16,7 @@ class classGrades extends StatefulWidget {
 
 class assessment {
   String name;
-  int? grade;
+  int grade;
 
   assessment(this.name, this.grade);
 
@@ -98,7 +98,8 @@ class _classGradesState extends State<classGrades> {
             final snapshots = await Future.wait(
                 [doc.get().then((value) => value['assessments'][i])]);
             return snapshots
-                .map((snapshot) => assessment(snapshot['name'], 0))
+                .map((snapshot) =>
+                    assessment(snapshot['name'], snapshot['grade']))
                 .toList();
           }
 
@@ -106,20 +107,21 @@ class _classGradesState extends State<classGrades> {
           // assessments2 = await getData();
           setState(() {
             assessmentsList.addAll(assessments);
-            studentAssessmentsList.addAll(assessments);
+            // studentAssessmentsList.addAll(assessments);
           });
+
           /*
           for (int i = 0; i < numOfAssess; i++) {
             studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
           }*/
-        }
-
-        if (y == 0) {
-          setState(() {
-            assessmentsList.removeAt(0);
-            studentAssessmentsList.removeAt(0);
-            y++;
-          });
+          if (y == 0) {
+            setState(() {
+              assessmentsList.removeAt(0);
+              studentAssessmentsList.removeAt(0);
+              y++;
+            });
+          }
+          studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
         }
       } else {
         if (y == 0) {
@@ -134,7 +136,9 @@ class _classGradesState extends State<classGrades> {
     });
   }
 
+  late int state = 0;
   void initState() {
+    state = 0;
     checkCustomization();
 
     super.initState();
@@ -160,7 +164,6 @@ class _classGradesState extends State<classGrades> {
                 Text('حفظ')
               ],
             ),
-            shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
@@ -176,12 +179,12 @@ class _classGradesState extends State<classGrades> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
           onPressed: () {
             Navigator.pushReplacement(
@@ -202,17 +205,20 @@ class _classGradesState extends State<classGrades> {
         child: Builder(builder: (context) {
           //   print("studentAssessmentsList.lenght " +
           //   studentAssessmentsList.length.toString());
-          print("assessmentsList.lenght " + assessmentsList.length.toString());
+
           if (x == 0) {
             getData();
           }
           if (assessmentsList.length == numOfAssess) {
+            print("assessmentsList.grade[0] " +
+                assessmentsList.length.toString());
             //  if (assessmentStudentGradesList.length == assessmentsList.length) {
             return ListView.builder(
               itemCount: assessmentsList.length,
               itemBuilder: (context, position) {
+                state = studentAssessmentsList[position].grade;
                 return Padding(
-                  padding: EdgeInsets.only(top: 5.0),
+                  padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
@@ -222,6 +228,9 @@ class _classGradesState extends State<classGrades> {
                           new Flexible(
                             child: TextFormField(
                               onChanged: (newText) {
+                                setState(() {
+                                  state = int.parse(newText);
+                                });
                                 studentAssessmentsList[position].grade =
                                     int.parse(newText);
                               },
@@ -230,8 +239,6 @@ class _classGradesState extends State<classGrades> {
                               ],
                               keyboardType: TextInputType.number,
                               //  initialValue: assessmentsList[position].name,
-                              controller:
-                                  TextEditingController(text: "0".toString()),
 
                               decoration: InputDecoration(
                                 labelText: assessmentsList[position].name,
@@ -261,6 +268,23 @@ class _classGradesState extends State<classGrades> {
                             ),
                           ),
                         ],
+                      )),
+                      SizedBox(
+                        width: 20,
+                      ),
+                      new Container(
+                          child: SingleChildScrollView(
+                        child: Text(
+                          state.toString() +
+                              "/" +
+                              assessmentsList[position].grade.toString(),
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 45, 44, 44),
+                            fontSize: 20,
+                          ),
+                        ),
                       )),
                     ],
                   ),

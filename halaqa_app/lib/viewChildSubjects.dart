@@ -6,13 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
+import 'package:halaqa_app/viewChildGrades.dart';
 import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class viewChildSubjcets extends StatefulWidget {
-  const viewChildSubjcets({super.key, this.classRef, this.studentName});
+  const viewChildSubjcets(
+      {super.key, this.classRef, this.studentName, this.stRef});
   final classRef;
   final studentName;
+  final stRef;
 
   @override
   State<viewChildSubjcets> createState() => _viewChildSubjcetsState();
@@ -35,8 +38,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   User? user = FirebaseAuth.instance.currentUser;
   getData() {
     _SubjectsNameList = [""];
-    //_SubjectList = [""];
-    // _SubjectsRefList = [""];
+
+    _SubjectsRefList = [""];
     x++;
   }
 
@@ -47,6 +50,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       await await docRef.collection("Subject").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
           _SubjectsNameList.add(documentSnapshot['SubjectName']);
+          _SubjectsRefList.add(documentSnapshot.reference);
         });
       });
     }
@@ -60,6 +64,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       setState(() {
         if (_SubjectsNameList.length > 1) {
           _SubjectsNameList.removeAt(0);
+          _SubjectsRefList.removeAt(0);
         }
       });
       if (_SubjectsNameList[0] == "") {
@@ -71,9 +76,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   @override
   void initState() {
     getSubjects();
-    // getSchoolID();
-    // getSchoolID();
-    //remove();
 
     super.initState();
   }
@@ -84,20 +86,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => parentHP(),
-              ),
-            );
-          },
-        ),
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
@@ -132,16 +120,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
+            ),
           ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
@@ -160,14 +139,27 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
             }
 
             if (snapshot.hasData && _SubjectsNameList[0] != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
                 children: [
                   new Container(
+                    height: 150,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       widget.studentName + "\n" + className,
@@ -181,20 +173,21 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                   ),
                   new Container(
                     child: ListView(
+                      padding: EdgeInsets.only(right: 40.0, left: 40.0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                      //  padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                       children: _SubjectsNameList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,
@@ -224,25 +217,24 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      viewStudents(
-                                                        ref: _SubjectsRefList[
+                                                      viewChildGrades(
+                                                        subRef: _SubjectsRefList[
                                                             _SubjectsNameList
                                                                 .indexOf(e)],
+                                                        stRef: widget.stRef,
                                                       )),
                                             );
                                           }
-                                      */
                                         },
                                         child: Image.asset(
-                                          "images/gradeIcon.png",
-                                          width: 55,
-                                          height: 55,
+                                          "images/gradesIcon.png",
+                                          width: 45,
+                                          height: 45,
                                           fit: BoxFit.cover,
                                         ),
                                       ),

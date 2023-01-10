@@ -5,7 +5,6 @@ import 'package:halaqa_app/viewEvents.dart';
 //import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
 import 'package:halaqa_app/viewDocuments.dart';
@@ -23,7 +22,7 @@ class parentHP extends StatefulWidget {
 class _parentHPState extends State<parentHP> {
   var className = "";
   var level = "";
-
+  late List studentRefList;
   late List _FNList;
   late List _LNList;
   late List ClassID;
@@ -41,7 +40,7 @@ class _parentHPState extends State<parentHP> {
     _FNList = [""];
     _LNList = [""];
     ClassID = [""];
-    _StuId = ['']; //added by reema s
+    studentRefList = [""];
     x++;
   }
 
@@ -77,7 +76,7 @@ class _parentHPState extends State<parentHP> {
             _FNList.add(value['FirstName']);
             ClassID.add(value['ClassID']);
             _LNList.add(value['LastName']);
-            _StuId.add(str); //added by reema s
+            studentRefList.add(str);
           });
         });
       }
@@ -87,7 +86,7 @@ class _parentHPState extends State<parentHP> {
           _FNList.removeAt(0);
           _LNList.removeAt(0);
           ClassID.removeAt(0);
-          _StuId.removeAt(0);
+          studentRefList.removeAt(0);
         }
       });
       if (_FNList[0] == "") {
@@ -107,11 +106,10 @@ class _parentHPState extends State<parentHP> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('حلقة',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 9, 18, 121),
-            )),
+        title: Image.asset(
+          "images/logo.png",
+          scale: 9,
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         automaticallyImplyLeading: false,
@@ -123,7 +121,7 @@ class _parentHPState extends State<parentHP> {
             },
             icon: Icon(
               Icons.logout,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
@@ -131,7 +129,7 @@ class _parentHPState extends State<parentHP> {
             onPressed: () {},
             icon: Icon(
               Icons.account_circle_rounded,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
@@ -139,7 +137,7 @@ class _parentHPState extends State<parentHP> {
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           //currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
+          inactiveColor: Colors.black,
           indicatorColor: Color.fromARGB(255, 76, 170, 175),
           activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
@@ -205,11 +203,7 @@ class _parentHPState extends State<parentHP> {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 30,
-
-                        color: Color.fromARGB(255, 151, 142, 142),
-
-                        //  color: Color.fromARGB(255, 80, 80, 80),
-                        // fontSize: 30,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -218,18 +212,20 @@ class _parentHPState extends State<parentHP> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+
                       //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: _FNList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 245, 245, 245),
+                                shape: BoxShape.rectangle,
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,
@@ -272,6 +268,8 @@ class _parentHPState extends State<parentHP> {
                                                           _LNList[
                                                               _FNList.indexOf(
                                                                   e)],
+                                                      stRef: studentRefList[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
                                         },
@@ -302,12 +300,12 @@ class _parentHPState extends State<parentHP> {
                                                 builder: (context) =>
                                                     viewDocuments(
                                                         ref:
-                                                            ClassID[
+                                                            ClassID[_FNList
+                                                                .indexOf(e)],
+                                                        studentRef:
+                                                            studentRefList[
                                                                 _FNList.indexOf(
-                                                                    e)],
-                                                        studentRef: _StuId[
-                                                            _FNList.indexOf(
-                                                                e)])),
+                                                                    e)])),
                                           );
                                         },
                                         child: Icon(
@@ -335,7 +333,7 @@ class _parentHPState extends State<parentHP> {
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     viewAbcense(
-                                                      ref: _StuId[
+                                                      ref: studentRefList[
                                                           _FNList.indexOf(e)],
                                                     )),
                                           );
