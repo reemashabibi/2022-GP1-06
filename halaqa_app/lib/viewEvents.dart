@@ -39,16 +39,7 @@ class events {
 class _viewEventsState extends State<viewEvents> {
   List<events> eventList = [];
   List imageList = <String?>[];
-  /*
-  late List _List;
-  late List _SubjectsNameList;
-  late List _SubjectsRefList;
-  late List _ClassNameList;
-  late List _LevelNameList;
- 
-  var teacherName = "";
 
-  var numOfSubjects;*/
   var x = 0;
   var v = 0;
   var schoolID = "xx";
@@ -217,9 +208,6 @@ class _viewEventsState extends State<viewEvents> {
             if (snapshot.hasData &&
                 eventList[0].content != "" &&
                 imageList[0] != "start") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -257,7 +245,6 @@ class _viewEventsState extends State<viewEvents> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: eventList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
@@ -306,7 +293,6 @@ class _viewEventsState extends State<viewEvents> {
                                           ..strokeCap = StrokeCap.round
                                           ..style = PaintingStyle.stroke,
                                         color: Colors.black,
-                                        //   backgroundColor: Color.fromARGB(255, 90, 199, 205),
                                         fontSize: 20,
                                         fontWeight: FontWeight.bold)),
                                 margin: EdgeInsets.all(4),
@@ -334,8 +320,6 @@ class _viewEventsState extends State<viewEvents> {
                                 },
                                 placeholder: AssetImage("images/logo.png"),
                               ))
-
-                              // color: Color.fromARGB(255, 222, 227, 234),
                             ]));
                       }).toList(),
                     ),

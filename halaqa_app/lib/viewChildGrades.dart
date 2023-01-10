@@ -101,9 +101,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
         }
 
         assessments = await getAssessment();
-        // assessments2 = await getData();
         setState(() {
-          // studentAssessmentsList.addAll(assessments);
           assessmentsList.addAll(assessments);
         });
       }
@@ -202,16 +200,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
               title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
+            ),
           ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
@@ -231,9 +220,6 @@ class _viewChildGradesState extends State<viewChildGrades> {
             print("assessmentsList.name    " + assessmentsList[0].name);
             print("v    " + v.toString());
             if (studentAssessmentsList[0].name != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -282,14 +268,10 @@ class _viewChildGradesState extends State<viewChildGrades> {
                                         style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.bold)),
-
                                     margin: EdgeInsets.all(4),
                                     padding: const EdgeInsets.fromLTRB(
                                         0.0, 0, 10.0, 0),
-                                    // padding: EdgeInsets.all(),
                                   ),
-                                  //SizedBox(width: 100),
-                                  //  Spacer(),
                                   new Container(
                                     child: SizedBox(
                                       width: 60,
@@ -324,8 +306,6 @@ class _viewChildGradesState extends State<viewChildGrades> {
                                       ),
                                     ),
                                   )
-
-                                  // color: Color.fromARGB(255, 222, 227, 234),
                                 ]));
                       }).toList(),
                     ),

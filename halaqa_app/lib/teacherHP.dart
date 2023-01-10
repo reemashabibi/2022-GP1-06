@@ -118,17 +118,13 @@ class _teacherHPState extends State<teacherHP> {
   void initState() {
     getSubjects();
     getSchoolID();
-    // getSchoolID();
-    //remove();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
         title: Image.asset(
           "images/logo.png",
@@ -159,7 +155,6 @@ class _teacherHPState extends State<teacherHP> {
           ),
         ],
       ),
-
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
@@ -177,9 +172,6 @@ class _teacherHPState extends State<teacherHP> {
             }
 
             if (snapshot.hasData && _SubjectsNameList[0] != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -340,8 +332,6 @@ class _teacherHPState extends State<teacherHP> {
                                   ),
                                 ],
                               ))
-
-                              // color: Color.fromARGB(255, 222, 227, 234),
                             ]));
                       }).toList(),
                     ),

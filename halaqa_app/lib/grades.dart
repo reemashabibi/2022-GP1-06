@@ -67,7 +67,6 @@ class _gradesState extends State<grades> {
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               new Container(
                 height: 150,

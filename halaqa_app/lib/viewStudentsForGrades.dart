@@ -45,7 +45,6 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
       // use ds as a snapshot
       className = ds['ClassName'];
       levelName = ds['LevelName'];
-
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];

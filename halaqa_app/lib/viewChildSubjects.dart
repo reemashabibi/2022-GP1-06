@@ -38,7 +38,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   User? user = FirebaseAuth.instance.currentUser;
   getData() {
     _SubjectsNameList = [""];
-    //_SubjectList = [""];
+
     _SubjectsRefList = [""];
     x++;
   }
@@ -76,9 +76,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   @override
   void initState() {
     getSubjects();
-    // getSchoolID();
-    // getSchoolID();
-    //remove();
 
     super.initState();
   }
@@ -89,21 +86,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
-        /*
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => parentHP(),
-              ),
-            );
-          },
-        ),*/
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
@@ -138,16 +120,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
+            ),
           ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
@@ -166,9 +139,6 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
             }
 
             if (snapshot.hasData && _SubjectsNameList[0] != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(

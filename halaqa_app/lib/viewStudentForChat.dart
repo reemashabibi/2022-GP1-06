@@ -160,7 +160,6 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                       fontWeight: FontWeight.bold)),
                               margin: EdgeInsets.all(5),
                               padding: EdgeInsets.all(15),
-                              //   color: Color.fromARGB(255, 222, 227, 234),
                             ),
                             onTap: () {
                               Navigator.push(

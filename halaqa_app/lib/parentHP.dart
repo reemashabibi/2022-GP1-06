@@ -202,11 +202,7 @@ class _parentHPState extends State<parentHP> {
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 30,
-
                         color: Colors.black,
-
-                        //  color: Color.fromARGB(255, 80, 80, 80),
-                        // fontSize: 30,
                       ),
                     ),
                   ),
