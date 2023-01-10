@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
         // ... other locales the app supports
       ],
       locale: Locale('ar'),
+      // locale: Locale('en'),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
    );

@@ -13,7 +13,6 @@ class viewChildGrades extends StatefulWidget {
   const viewChildGrades({super.key, this.classRef, this.studentName});
   final classRef;
   final studentName;
-
   @override
   State<viewChildGrades> createState() => _viewChildGradesState();
 }

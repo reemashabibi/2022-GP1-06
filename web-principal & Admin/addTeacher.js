@@ -138,6 +138,7 @@ onAuthStateChanged(authPrin, (user) => {
                     Email: registerEmail,
                     FirstName: registerFname,
                     LastName: registerlname,
+                    OfficeHours:"لم يتم التحديد بعد",
                     Subjects: [],               
                   })
                // alert(" after ");

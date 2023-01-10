@@ -48,8 +48,17 @@ dependencies:
   localization: ^2.1.0
   flutter_cupertino_localizations: ^1.0.1
   get: ^4.6.5
+  chat_bubbles: ^1.4.0
+
+  
   
   titled_navigation_bar: ^5.0.0-nullsafety.0
+  flutter_mobx: ^2.0.6+5
+  cupertino_list_tile: ^0.2.1
+  flutter_chat_bubble: ^2.0.0
+  intl: ^0.17.0
+  native_font: ^1.1.0
+  intl_phone_field: ^3.1.0
 
 dev_dependencies:
   flutter_test:

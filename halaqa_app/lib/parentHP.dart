@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
+import 'package:halaqa_app/ParentEdit.dart';
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -44,24 +45,30 @@ class _parentHPState extends State<parentHP> {
   getSubjects() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = FirebaseAuth.instance.currentUser;
+    print("EMAIL ## ${user!.email}");
+    print("EMAIL ## ${user.uid}");
 
     var col = FirebaseFirestore.instance
         .collectionGroup('Teacher')
-        .where('Email', isEqualTo: user!.email);
+        .where('Email', isEqualTo: user.email);
     var snapshot = await col.get();
+    print(snapshot.docs.length);
     for (var doc in snapshot.docs) {
+      print("ZQQQWQW ${doc.reference.parent.parent!.id}");
       schoolID = doc.reference.parent.parent!.id;
       break;
     }
 
     DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/' + '$schoolID' + '/Parent/' + user!.uid);
+        .doc('School/$schoolID/Parent/${user.uid}');
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
 
-      numOfSubjects = ds['Students'].length;
+      print("ZZZZ ${ds.data()}");
+
       setState(() {
+        numOfSubjects = ds['Students'].length;
         parentName = ds['FirstName'] + " " + ds['LastName'];
       });
 
@@ -97,15 +104,25 @@ class _parentHPState extends State<parentHP> {
         .where('Email', isEqualTo: user!.email);
     var snapshot = await col.get();
     for (var doc in snapshot.docs) {
+      print("!!!!!!!!!!!!!!! ${doc.reference.parent.parent!.id}");
       schoolID = doc.reference.parent.parent!.id;
+      print("ZZZZZZZ $schoolID");
       break;
     }
+    setState(() {
+
+    });
+  }
+
+  getDataOfData() async{
+   await getSchoolID();
+    getSubjects();
   }
 
   @override
   void initState() {
-    getSubjects();
-    getSchoolID();
+    print("PPPPPPPARRRENT LOGIN +++++++++++++++++++++++++++++++++++++++");
+    getDataOfData();
     // getSchoolID();
     //remove();
 
@@ -119,7 +136,7 @@ class _parentHPState extends State<parentHP> {
       //appBar: AppBar(title: const Text("Teacher")),
 
       appBar: AppBar(
-        title: Text('حلقة',
+        title: const Text('حلقة',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Color.fromARGB(255, 9, 18, 121),
@@ -133,7 +150,7 @@ class _parentHPState extends State<parentHP> {
               //conformation message
               showAlertDialog(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               color: Color.fromARGB(255, 9, 18, 121),
             ),
@@ -141,14 +158,14 @@ class _parentHPState extends State<parentHP> {
           ),
           IconButton(
             onPressed: () {
-              /*
+              
               Navigator.of(context).push(
                 MaterialPageRoute(
-                    builder: (context) => const EditProfilePage()),
+                    builder: (context) => EditProfilePage(schoolId: schoolID,)),
         );
-           */
+           
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.account_circle_rounded,
               color: Color.fromARGB(255, 9, 18, 121),
             ),
@@ -158,9 +175,9 @@ class _parentHPState extends State<parentHP> {
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           //currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
+          inactiveColor: const Color.fromARGB(255, 9, 18, 121),
+          indicatorColor: const Color.fromARGB(255, 76, 170, 175),
+          activeColor: const Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
             currentIndex:
             index;
@@ -168,18 +185,18 @@ class _parentHPState extends State<parentHP> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => viewEvents(),
+                  builder: (context) => const viewEvents(),
                 ),
               );
             }
           },
           items: [
             TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
+                title: const Text('الصفحة الرئيسية',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 icon: const Icon(Icons.home)),
             TitledNavigationBarItem(
-              title: Text('الأحداث',
+              title: const Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
             ), /*
@@ -220,7 +237,7 @@ class _parentHPState extends State<parentHP> {
 */
       body: FutureBuilder(
           future: FirebaseFirestore.instance
-              .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
+              .doc('School/$schoolID/Parent/${user!.uid}')
               .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -240,13 +257,13 @@ class _parentHPState extends State<parentHP> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
-                  new Container(
+                  Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       parentName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 30,
 
@@ -257,7 +274,7 @@ class _parentHPState extends State<parentHP> {
                       ),
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -265,33 +282,33 @@ class _parentHPState extends State<parentHP> {
                       //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: _FNList.map((e) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 30),
+                            margin: const EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 245, 245, 245),
+                                color: const Color.fromARGB(255, 245, 245, 245),
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
+                                  color: const Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
                                 borderRadius: BorderRadius.circular(10.0),
                                 boxShadow: [
-                                  BoxShadow(
+                                  const BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: new Column(children: [
-                              new Container(
+                            child: Column(children: [
+                              Container(
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(2),
                                 child: Text(
                                     e + " " + _LNList[_FNList.indexOf(e)],
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
                               ),
-                              new Container(
+                              Container(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -302,20 +319,18 @@ class _parentHPState extends State<parentHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
+                                          print(ClassID[_FNList.indexOf(e)].id);
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
                                                     viewChildSubjcets(
-                                                      classRef: ClassID[
-                                                          _FNList.indexOf(e)],
-                                                      studentName: e +
-                                                          " " +
-                                                          _LNList[
-                                                              _FNList.indexOf(
-                                                                  e)],
+                                                      classRef: ClassID[_FNList.indexOf(e)],
+                                                      studentName: e + " " + _LNList[_FNList.indexOf(e)],
+                                                      schoolID: schoolID,
+                                                      classId: ClassID[_FNList.indexOf(e)].id,
                                                     )),
                                           );
                                         },
@@ -328,7 +343,7 @@ class _parentHPState extends State<parentHP> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -338,7 +353,7 @@ class _parentHPState extends State<parentHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           /*
                                           Navigator.push(
@@ -352,7 +367,7 @@ class _parentHPState extends State<parentHP> {
                                           );
                                         */
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.folder,
                                           color: Colors.black,
                                           size: 40,
@@ -360,7 +375,7 @@ class _parentHPState extends State<parentHP> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -370,7 +385,7 @@ class _parentHPState extends State<parentHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           /*
                                           Navigator.push(
@@ -393,7 +408,7 @@ class _parentHPState extends State<parentHP> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -403,7 +418,7 @@ class _parentHPState extends State<parentHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           /*
                                           Navigator.push(
@@ -417,7 +432,7 @@ class _parentHPState extends State<parentHP> {
                                           );
                                        */
                                         },
-                                        child: Icon(
+                                        child: const Icon(
                                           Icons.airport_shuttle_rounded,
                                           color: Colors.black,
                                           size: 40,
@@ -437,12 +452,12 @@ class _parentHPState extends State<parentHP> {
               )));
             }
             if (_FNList.length == 0 && x == 0) {
-              return Center(child: Text(""));
+              return const Center(child: Text(""));
             }
             if (_FNList[0] == "" && v == 1) {
-              return Center(child: Text("لا يوجد طلاب تابعين لولي الآمر"));
+              return const Center(child: Text("لا يوجد طلاب تابعين لولي الآمر"));
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -456,9 +471,9 @@ class _parentHPState extends State<parentHP> {
     // set up the buttons
     Widget continueButton = TextButton(
       //continueButton
-      child: Text("نعم"),
+      child: const Text("نعم"),
       onPressed: () async {
-        CircularProgressIndicator();
+        const CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
@@ -471,7 +486,7 @@ class _parentHPState extends State<parentHP> {
 
     Widget cancelButton = TextButton(
       //cancelButton
-      child: Text("إلغاء",
+      child: const Text("إلغاء",
           style: TextStyle(
             color: Colors.red,
           )),
@@ -483,7 +498,7 @@ class _parentHPState extends State<parentHP> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("AlertDialog"),
-      content: Text(
+      content: const Text(
         "هل تأكد تسجيل الخروج؟",
         textAlign: TextAlign.center,
       ),

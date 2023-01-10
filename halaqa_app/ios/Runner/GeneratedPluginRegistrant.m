@@ -30,10 +30,22 @@
 @import firebase_storage;
 #endif
 
+#if __has_include(<flutter_chat_bubble/FlutterChatBubblePlugin.h>)
+#import <flutter_chat_bubble/FlutterChatBubblePlugin.h>
+#else
+@import flutter_chat_bubble;
+#endif
+
 #if __has_include(<fluttertoast/FluttertoastPlugin.h>)
 #import <fluttertoast/FluttertoastPlugin.h>
 #else
 @import fluttertoast;
+#endif
+
+#if __has_include(<native_font/NativeFontPlugin.h>)
+#import <native_font/NativeFontPlugin.h>
+#else
+@import native_font;
 #endif
 
 #if __has_include(<url_launcher_ios/FLTURLLauncherPlugin.h>)
@@ -49,7 +61,9 @@
   [FLTFirebaseAuthPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseAuthPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTFirebaseStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseStoragePlugin"]];
+  [FlutterChatBubblePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterChatBubblePlugin"]];
   [FluttertoastPlugin registerWithRegistrar:[registry registrarForPlugin:@"FluttertoastPlugin"]];
+  [NativeFontPlugin registerWithRegistrar:[registry registrarForPlugin:@"NativeFontPlugin"]];
   [FLTURLLauncherPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTURLLauncherPlugin"]];
 }
 

@@ -1,7 +1,8 @@
+
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/parentHP.dart';
@@ -9,6 +10,8 @@ import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
+import 'package:halaqa_app/viewStudentForChat.dart';
+
 
 class teacherHP extends StatefulWidget {
   const teacherHP({super.key});
@@ -22,6 +25,7 @@ class _teacherHPState extends State<teacherHP> {
   var level = "";
   late List _SubjectList;
   late List _SubjectsNameList;
+  late List _SubjectsIdsList;
   late List _SubjectsRefList;
   late List _ClassNameList;
   late List _LevelNameList;
@@ -39,8 +43,11 @@ class _teacherHPState extends State<teacherHP> {
     _SubjectList = [""];
     _SubjectsNameList = [""];
     _SubjectsRefList = [""];
+    _SubjectsIdsList = [""];
     x++;
   }
+
+
 
   getSubjects() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
@@ -68,8 +75,10 @@ class _teacherHPState extends State<teacherHP> {
 
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference str = ds['Subjects'][i].parent.parent;
+        print("@#@# ${ds['Subjects'][i]}");
 
         var clsName = await str.get().then((value) {
+          print("CVCVVC ${ds['Subjects'][i].parent.parent}");
           setState(() {
             _ClassNameList.add(value['ClassName']);
 
@@ -79,7 +88,10 @@ class _teacherHPState extends State<teacherHP> {
 
         DocumentReference docu = ds['Subjects'][i];
 
+
         var subName = await docu.get().then((value) {
+          print("SUBJECT ID ${value.id}");
+          _SubjectsIdsList.add(value.id);
           setState(() {
             _SubjectsNameList.add(value['SubjectName']);
 
@@ -90,6 +102,7 @@ class _teacherHPState extends State<teacherHP> {
       setState(() {
         if (_SubjectsNameList.length > 1) {
           _SubjectsNameList.removeAt(0);
+          _SubjectsIdsList.removeAt(0);
           _ClassNameList.removeAt(0);
           _LevelNameList.removeAt(0);
           _SubjectsRefList.removeAt(0);
@@ -165,10 +178,10 @@ class _teacherHPState extends State<teacherHP> {
 
       body: FutureBuilder(
           future: FirebaseFirestore.instance
-              .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
+              .doc('School/$schoolID/Teacher/${user!.uid}')
               .get(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            // print("DAT A ${snapshot.data!.data()}");
             if (snapshot.hasError) {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
@@ -185,9 +198,9 @@ class _teacherHPState extends State<teacherHP> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
-                  new Container(
+                  Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       teacherName,
@@ -198,7 +211,7 @@ class _teacherHPState extends State<teacherHP> {
                       ),
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
@@ -221,8 +234,8 @@ class _teacherHPState extends State<teacherHP> {
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: new Column(children: [
-                              new Container(
+                            child: Column(children: [
+                              Container(
                                 child: Text(
                                     e +
                                         "\nالفصل: " +
@@ -238,7 +251,7 @@ class _teacherHPState extends State<teacherHP> {
                                 margin: EdgeInsets.all(4),
                                 padding: EdgeInsets.all(2),
                               ),
-                              new Container(
+                              Container(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -320,12 +333,22 @@ class _teacherHPState extends State<teacherHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    parentHP()),
-                                          );
+                                          print("ID############$schoolID");
+                                          if (_SubjectsRefList[0] != "") {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      viewStudentsForChat(
+                                                        ref: _SubjectsRefList[
+                                                            _SubjectsNameList
+                                                                .indexOf(e)],
+                                                        schoolId: schoolID,
+                                                        subjectId: _SubjectsIdsList[_SubjectsNameList.indexOf(e)],
+                                                      )),
+                                            );
+                                          }
+                                          
                                         },
                                         child: Image.asset(
                                           "images/chatIcon.png",
@@ -520,9 +543,9 @@ class _MyWidgetState extends State<viewStudents> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
-                  new Container(
+                  Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       className + " / " + levelName.toString(),
@@ -533,7 +556,7 @@ class _MyWidgetState extends State<viewStudents> {
                       ),
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),

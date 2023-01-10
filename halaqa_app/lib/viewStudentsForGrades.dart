@@ -20,7 +20,6 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
   var v = 0;
   var className;
   var levelName;
-
   var numOfStudents;
 
   getData() {
@@ -80,8 +79,9 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
   @override
   Widget build(BuildContext context) {
     DocumentReference ref = widget.ref;
-
     DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
+    print(str);
+
 
     return Scaffold(
       appBar: AppBar(
@@ -143,7 +143,9 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
                         return InkWell(
+                          
                           child: Container(
+                            
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Color.fromARGB(255, 231, 231, 231),
@@ -156,7 +158,9 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
+                                      
                                 ]),
+                                
                             child: Text(e,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -178,9 +182,11 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                               );
                             }
                           },
+                          
                         );
                       }).toList(),
                     ),
+                    
                   )
                 ],
               )));

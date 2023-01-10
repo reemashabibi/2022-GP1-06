@@ -1,40 +1,44 @@
 // ignore_for_file: unused_import
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_5.dart';
 import 'package:halaqa_app/global_fun.dart';
 import 'package:intl/intl.dart';
 
-////need techerID, teacherName,  it's childID
-class ChatdetailPS extends StatefulWidget {
-  final  TeacherUid;
-  final  TeacherName;
-  final  StudentUid;
-  final schoolId;
-  @override
-  const ChatdetailPS({Key? key, required this.TeacherUid, required this.TeacherName, required this.StudentUid, this.schoolId, required String subjectId, required classID }) : super (key:key);
 
-  State<ChatdetailPS> createState() => _ChatdetailPSState(TeacherUid, TeacherName, StudentUid);
+class Chatdetail extends StatefulWidget {
+  final  friendUid;
+  final  friendName;
+  final String schoolId;
+  final String classId;
+  final String subjectId;
+  @override
+  const Chatdetail({Key? key, required this.friendUid, required this.friendName, required this.schoolId, required this.classId, required this.subjectId}) : super (key:key);
+
+  State<Chatdetail> createState() => _ChatdetailState(friendUid, friendName);
 }
 
-class _ChatdetailPSState extends State<ChatdetailPS> {
-  //Get schoolID #######
+class _ChatdetailState extends State<Chatdetail> {
+  //Get schoolID ??
   late CollectionReference chats;
-  final  TeacherUid; 
-  final  TeacherName; 
-  final  StudentUid;
-   //it's childUID 'studentUID':
-  get currentuserUserId => StudentUid;
-  var   chatDocID;
-  var  _textController = new TextEditingController();
-  var   schoolID;
+  final friendUid;
+  final friendName;
+  final currentuserUserId = FirebaseAuth.instance.currentUser?.uid;
+  var chatDocID;
+  var _textController = new TextEditingController();
+  var schoolID;
 
-  _ChatdetailPSState(this.TeacherUid, this.TeacherName, this.StudentUid);
+  _ChatdetailState(this.friendUid, this.friendName);
   @override
+
+  int count = 1;
+
 
   void sendMessage(String msg) {
      if (msg == "")
@@ -50,25 +54,11 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
       }).then(((value) {
         print('sent');
         _textController.text ="";
+        FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class').doc(widget.classId).collection("Subject").doc(widget.subjectId).update({
+          "msg_count" : count++
+        });
       } ));
      }
-  }
-
-    Future<void> getSchoolID() async {
-    print("!!!! ${widget.schoolId}");
-    chats = FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats');
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Parent')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-    setState(() {
-
-    });
   }
 
   bool isSender(String freind){
@@ -81,39 +71,52 @@ Alignment getAlignment (freind){
   }
   return Alignment.topLeft;
 }
-  
+
+String? classId;
+
+  readMsg() {
+    FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').doc("${widget.friendUid}").update({
+      "msg_count" : 0
+    });
+  }
+
 
    void initState ()  {
-    getSchoolID();
    super.initState();
+   print("CCCCCCCCCCCHHHHHHHHHHHHHHAAAAAAAAAAAAAAATTTTTTTTTTTTTTTTTTT ${widget.schoolId}, ${widget.friendUid}");
+   chats = FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats');
   
-     chats.where('users',isEqualTo: {currentuserUserId : null, TeacherUid:null})
+     chats.where('users',isEqualTo: {currentuserUserId : null, friendUid:null})
      .limit(1)
      .get()
      .then(
       (QuerySnapshot querySnapshot){
+        // print("#################### ");
         /// We have chat between these two users
         if (querySnapshot.docs.isNotEmpty){
+          // print("!!!!!!!!!!! ${querySnapshot.docs.single.id}");
+
+           // chatDocID = querySnapshot.docs.single.id;
            chatDocID = querySnapshot.docs.single.id;
-           chatDocID = chatDocID.id;
-         print("DocumentID: ${querySnapshot.docs.single.id}");
+           // print("CHAT DOC ID $chatDocID");
+         // print("DocumentID: ${querySnapshot.docs.single.id}");
+         setState(() {});
         }else{
           ///Adding a Map
           chats.add({
-            'users':{ currentuserUserId : null, TeacherUid : null,} 
-          }).then((value) => {
+            'users':{ currentuserUserId : null, friendUid : null,} 
+          }).then((value) {
            //in case we do not have a document created between these two user we create one
-           //and wait for the call back to assaign the dicumentId to chatDocID 
-           chatDocID = value
+           //and wait for the call back to assaign the dicumentId to chatDocID
+           chatDocID = value;
           });
         }
       },   
       ) .catchError((error){});
-     setState(() {
-
-     });
+   readMsg();
      
   }///end initState
+
 
 
   Widget build(BuildContext context) {
@@ -138,7 +141,7 @@ Alignment getAlignment (freind){
       return CupertinoPageScaffold( 
         navigationBar: CupertinoNavigationBar(previousPageTitle: "رجوع",
         ///add parent Name or TeacherOH
-        middle: Text(TeacherName,
+        middle: Text(friendName,
         style: TextStyle(
                   color: Color.fromARGB(255, 99, 99, 99),
                   fontSize: 23,
@@ -147,8 +150,7 @@ Alignment getAlignment (freind){
         trailing: CupertinoButton(
           padding: EdgeInsets.zero,
           onPressed: (){}, 
-          child: Text(""),
-          
+          child: Text("")
         ),
         ) ,
         child: SafeArea(
@@ -158,9 +160,7 @@ Alignment getAlignment (freind){
                 child: ListView(
                 reverse: true,
                 children: snapshot.data!.docs.map((DocumentSnapshot document){
-                   data = document.data()!; 
-                  print(document.toString());
-                   print(data['msg']);
+                   data = document.data();
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: ChatBubble(
@@ -206,7 +206,7 @@ Alignment getAlignment (freind){
                                   Text(
                                     data['createdOn']== null
                                     ? DateTime.now().toString()
-                                    : "${GlobalFun.realDate(data['createdOn'].toDate().toString().substring(0,10))} ${GlobalFun.realTime(data['createdOn'])}",
+                                    :"${GlobalFun.realDate(data['createdOn'].toDate().toString().substring(0,10))} ${GlobalFun.realTime(data['createdOn'])}",
                                    style: TextStyle(
                                     decoration: TextDecoration.none,
                                   fontSize: 10,
@@ -227,7 +227,7 @@ Alignment getAlignment (freind){
               )),
             Container(
                decoration: BoxDecoration(
-                color: Color.fromARGB(255, 244, 241, 241),
+                color: Color.fromARGB(255, 242, 240, 240),
                 borderRadius: BorderRadius.circular(20),
               ),
               margin: EdgeInsets.all(20),
