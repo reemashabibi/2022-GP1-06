@@ -45,7 +45,6 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
       // use ds as a snapshot
       className = ds['ClassName'];
       levelName = ds['LevelName'];
-
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
@@ -145,7 +144,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                         return InkWell(
                           child: Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 color: Color.fromARGB(255, 231, 231, 231),
                                 border: Border.all(
                                   color: Color(0xffEEEEEE),

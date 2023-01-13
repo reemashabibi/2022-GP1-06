@@ -8,8 +8,7 @@ FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
 EXCLUDED_ARCHS[sdk=iphonesimulator*]=i386
 EXCLUDED_ARCHS[sdk=iphoneos*]=armv7
-DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ==
 DART_OBFUSCATION=false
 TRACK_WIDGET_CREATION=true
 TREE_SHAKE_ICONS=false
-PACKAGE_CONFIG=/Users/njoudalfahad/Downloads/2022-GP1-06/halaqa_app/.dart_tool/package_config.json
+PACKAGE_CONFIG=.dart_tool/package_config.json

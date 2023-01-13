@@ -181,9 +181,14 @@ text-decoration:none;
 	width: 520px;
   background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
 	top: -20px;
-	left: 95%;	
+	left: 40%;	
 	border-radius: 72px 72px 72px 72px;
   z-index: -1 ;
+}
+@media (max-width: 767px) {
+  .screen__background__shape1 {
+    display: none;
+  }
 }
 
 .screen__background__shape2 {
