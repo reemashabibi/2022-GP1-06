@@ -78,7 +78,7 @@
 
        
           <li class="nav-item ">
-              <a class="nav-link" href="javascript:void(0);"> إصطحاب الطلاب</a>
+              <a class="nav-link" href="pickup.html"> إصطحاب الطلاب</a>
           </li>
           <li class="nav-item">
               <a class="nav-link" href="javascript:void(0);"></i>الإعلانات</a>
@@ -87,7 +87,7 @@
               <a class="nav-link" href="events.html">الأحداث</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="javascript:void(0);">المستندات</a>
+              <a class="nav-link" href="documents.html">المستندات</a>
           </li>
           <li class="nav-item active">
               <a class="nav-link" href="adminHomePage.html">الصفحة الرئيسية</a>
@@ -138,7 +138,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-    import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+    import { collection, collectionGroup, getDocs, addDoc,serverTimestamp, Timestamp, deleteDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
     import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
     import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
     import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -210,9 +210,11 @@
               title: title.value,
               content: content.value,
               image:imm,
+              time: serverTimestamp(),
             }).then(async (e) =>{
             
               alert("تم إضافة الحدث بنجاح");
+              window.location.href="events.html"
 
 
             })

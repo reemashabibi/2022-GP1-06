@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
 import 'package:halaqa_app/viewDocuments.dart';
+import 'package:halaqa_app/pickup.dart';
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -359,23 +360,26 @@ class _parentHPState extends State<parentHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
+                                          
+                                           
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
+                                                builder: (context) =>
+                                                    pickup (
+                                                     stRef: studentRefList[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
-                                       */
+                                        
+                                       
                                         },
                                         child: Icon(
                                           Icons.airport_shuttle_rounded,
                                           color: Colors.black,
                                           size: 40,
                                         ),
+                                     
                                       ),
                                     ),
                                   ),

@@ -4,7 +4,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc,documentId,arrayUnion,arrayRemove } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, collectionGroup, getDocs, addDoc , Timestamp,deleteDoc, getDoc, updateDoc,documentId,arrayUnion,arrayRemove } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js"
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -47,10 +47,11 @@ export async function viewStudents(email){
     });
     const reference = doc(db, "School", schoolId);
     const q = await collection(reference, "Student");
+    const eee= query(q , orderBy("time","desc"));
     const ul1=document.getElementById("1");
     const ul2=document.getElementById("2");
     
-    onSnapshot(q,(querySnapshot)=>{
+    onSnapshot(eee,(querySnapshot)=>{
     //const querySnapshot = await getDocs(q);
    
     $(".loader").show();
@@ -92,14 +93,47 @@ querySnapshot.forEach((doc)  => {
     //alert(doc.data().time);
     const currentDate = new Date();
      const timestamp = Math.floor(Date.now() /1000); 
-     
-     var dat= Math.abs(doc.data().time.seconds-timestamp);
-        if (dat<1000){
+     var currentTimestamp = Date.now()/1000;
+     var firestoreTimestamp = doc.data().time.seconds;
+     var differenceInMilliseconds = currentTimestamp - firestoreTimestamp;
+
+// convert milliseconds to minutes
+//var differenceInMinutes = differenceInMilliseconds / (1000);
+     //var dat= Math.abs(doc.data().time.minutes-timestamp);
+     //alert(currentTimestamp-firestoreTimestamp );
+     if (doc.data().someone=="yes"){
+      let myInterval= setInterval(function () {li.setAttribute('style','background-color:blue; color:white;')}, 100);
+
+     }
+       else if (differenceInMilliseconds<300){
          let myInterval= setInterval(function () {li.setAttribute('style','background-color:green; color:white;')}, 100);
          
     }
     else{
       li.setAttribute('style','background-color:white; color:black;')
+    }
+   // var refe = doc(db,"School", schoolId,"Announcement", doc.data().id);
+
+    if (doc.data().someone=="yes" ){
+      if (differenceInMilliseconds > 28800 ){
+      updateDoc(doc.ref ,{
+        picked : "yes",
+        someone: "no" ,
+        fullname: "",
+        nid:"",
+        phone:"",
+
+    });
+    window.location.href="pickup.html";
+  }
+  }
+    else if (differenceInMilliseconds > 300 ){
+      updateDoc(doc.ref ,{
+        picked : "yes",
+       
+    });
+  }
+
     }
 
      
@@ -108,14 +142,14 @@ querySnapshot.forEach((doc)  => {
     
     //div1.appendChild(document.createElement('hr'));
 
-  }
+  })
 
 
 })
-
-});
 $(".loader").hide();
 }
+
+
 
 
 
