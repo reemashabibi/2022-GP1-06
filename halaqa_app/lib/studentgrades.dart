@@ -52,6 +52,7 @@ class _EditProfilePageState extends State<studentGrades> {
   var gradeID;
   var x = 0;
   var y = 0;
+  var v = 0;
 
   getData() {
     studentAssessmentsList.add(assessment("", 0));
@@ -65,6 +66,7 @@ class _EditProfilePageState extends State<studentGrades> {
       setState(() {
         customized = value['customized'];
       });
+
       if (customized) {
         setState(() {
           numOfAssess = value['assessments'].length;
@@ -93,6 +95,14 @@ class _EditProfilePageState extends State<studentGrades> {
             .collection("Grades")
             .where('subjectID', isEqualTo: widget.classRef)
             .get();
+
+        if (y == 0) {
+          setState(() {
+            assessmentsList.removeAt(0);
+            // studentAssessmentsList.removeAt(0);
+            y++;
+          });
+        }
         if (stRef.docs.length > 0) {
           var stRef = await widget.stRef
               .collection("Grades")
@@ -106,8 +116,10 @@ class _EditProfilePageState extends State<studentGrades> {
             }).toList();
           });
 
+          print("in if");
           DocumentReference docu =
               await widget.stRef.collection("Grades").doc(gradeID);
+          print(gradeID);
 
           for (int i = 0; i < numOfAssess; i++) {
             Future<List<assessment>> getAssess() async {
@@ -124,32 +136,29 @@ class _EditProfilePageState extends State<studentGrades> {
               studentAssessmentsList.addAll(assessments2);
             });
 
-            if (y == 0) {
+            if (v == 0) {
               setState(() {
-                assessmentsList.removeAt(0);
+                //   assessmentsList.removeAt(0);
                 studentAssessmentsList.removeAt(0);
-                y++;
+                v++;
               });
             }
           }
         } else {
-          if (y == 0) {
-            setState(() {
-              assessmentsList.removeAt(0);
-              studentAssessmentsList.removeAt(0);
-              y++;
-            });
-          }
-
           setState(() {
-            studentAssessmentsList.add(assessment(assessmentsList[0].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[1].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[2].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[3].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[4].name, 0));
-            studentAssessmentsList.add(assessment(assessmentsList[5].name, 0));
+            for (int i = 0; i < numOfAssess; i++) {
+              studentAssessmentsList
+                  .add(assessment(assessmentsList[i].name, 0));
+            }
           });
-
+          if (v == 0) {
+            setState(() {
+              studentAssessmentsList.removeAt(0);
+              v++;
+            });
+            print("studentAssessmentsList.len " +
+                studentAssessmentsList.length.toString());
+          }
           widget.stRef.collection("Grades").add({
             "assessments":
                 studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
@@ -185,6 +194,13 @@ class _EditProfilePageState extends State<studentGrades> {
       assessmentsList.add(assessment("درجة الاختبار الشهري", 20));
       assessmentsList.add(assessment("درجة الاختبار النهائي", 40));
     });
+    if (y == 0) {
+      setState(() {
+        assessmentsList.removeAt(0);
+        studentAssessmentsList.removeAt(0);
+        y++;
+      });
+    }
 
     await widget.classRef.update({
       'customized': true,
@@ -198,10 +214,9 @@ class _EditProfilePageState extends State<studentGrades> {
     });
   }
 
-  late bool checked = false;
-  late bool changed = false;
   late int state = 0;
   void initState() {
+    state = 0;
     checkCustomization();
 
     super.initState();
@@ -209,7 +224,6 @@ class _EditProfilePageState extends State<studentGrades> {
 
   @override
   Widget build(BuildContext context) {
-    // print(customized.toString());
     return Scaffold(
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -228,15 +242,13 @@ class _EditProfilePageState extends State<studentGrades> {
                 Text('حفظ')
               ],
             ),
-            shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
+            // shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
-                f = await confirm();
+                f = await conform();
               }
               if (f) {
-                checked = false;
-                changed = false;
                 updateDatabase();
               }
             },
@@ -246,45 +258,22 @@ class _EditProfilePageState extends State<studentGrades> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
+            color: Color.fromARGB(255, 255, 255, 255),
           ),
-          onPressed: () async {
-            if (changed && !checked) {
-              if (await confirmBackArrow()) {
-                updateDatabase();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => viewStudentsForGrades(
-                      ref: widget.classRef,
-                    ),
-                  ),
-                );
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => viewStudentsForGrades(
-                      ref: widget.classRef,
-                    ),
-                  ),
-                );
-              }
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => viewStudentsForGrades(
-                    ref: widget.classRef,
-                  ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => viewStudentsForGrades(
+                  ref: widget.classRef,
                 ),
-              );
-            }
+              ),
+            );
           },
         ),
         actions: [],
@@ -320,7 +309,6 @@ class _EditProfilePageState extends State<studentGrades> {
                                     new Flexible(
                                       child: TextFormField(
                                         onChanged: (newText) {
-                                          changed = true;
                                           setState(() {
                                             state = int.parse(newText);
                                           });
@@ -332,11 +320,13 @@ class _EditProfilePageState extends State<studentGrades> {
                                           FilteringTextInputFormatter.digitsOnly
                                         ],
                                         keyboardType: TextInputType.number,
+                                        //  initialValue: assessmentsList[position].name,
                                         controller: TextEditingController(
                                             text:
                                                 studentAssessmentsList[position]
                                                     .grade
                                                     .toString()),
+
                                         decoration: InputDecoration(
                                           labelText:
                                               assessmentsList[position].name,
@@ -403,11 +393,11 @@ class _EditProfilePageState extends State<studentGrades> {
     );
   }
 
-  Future<bool> confirm() async {
+  Future<bool> conform() async {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        content: Text("تأكيد حفظ درجات الطالب؟"),
+        content: Text("هل تأكد عملية حفظ درجات الطالب؟"),
         actions: [
           TextButton(
               child: Text("لا",
@@ -418,29 +408,6 @@ class _EditProfilePageState extends State<studentGrades> {
           TextButton(
               child: Text("نعم", style: TextStyle(color: Colors.blue)),
               onPressed: () {
-                Navigator.pop(context, true);
-              })
-        ],
-      ),
-    );
-  }
-
-  Future<bool> confirmBackArrow() async {
-    return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: Text("لم يتم حفظ التعديلات؟ هل تريد حفظ التعديلات؟"),
-        actions: [
-          TextButton(
-              child: Text("لا",
-                  style: TextStyle(color: Color.fromARGB(255, 208, 16, 16))),
-              onPressed: () {
-                Navigator.pop(context, false);
-              }),
-          TextButton(
-              child: Text("نعم", style: TextStyle(color: Colors.blue)),
-              onPressed: () {
-                checked = true;
                 Navigator.pop(context, true);
               })
         ],
@@ -480,20 +447,18 @@ class _EditProfilePageState extends State<studentGrades> {
           "subjectID": widget.classRef,
         });
       }
-      if (!checked) {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(
-                  "تم حفظ التعديلات بنجاح",
-                  style: TextStyle(
-                      // color: Colors.red,
-                      ),
-                ),
-              );
-            });
-      }
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(
+                "تم حفظ التغييرات بنجاح",
+                style: TextStyle(
+                    // color: Colors.red,
+                    ),
+              ),
+            );
+          });
     } else {
       showDialog(
           context: context,
@@ -501,9 +466,7 @@ class _EditProfilePageState extends State<studentGrades> {
             return AlertDialog(
               content: Text(
                 "لم تتم حفظ التغييرات، مجموع الدرجات أكبر من ١٠٠!",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
+                style: TextStyle(),
               ),
             );
           });

@@ -70,7 +70,7 @@ class _gradesState extends State<grades> {
             //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               new Container(
-                height: 130,
+                height: 120,
                 width: 500,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
@@ -86,27 +86,25 @@ class _gradesState extends State<grades> {
                     end: Alignment.bottomCenter,
                   ),
                 ),
-                alignment: Alignment.center,
-              ),
-              new Container(
                 child: Text(
-                  widget.subName,
+                  className + " / " + level + "\n" + widget.subName,
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Color.fromARGB(255, 80, 80, 80),
-                    fontSize: 25,
+                    fontSize: 30,
                   ),
                 ),
                 alignment: Alignment.center,
               ),
               SizedBox(
-                height: 15, // <-- SEE HERE
+                height: 20, // <-- SEE HERE
               ),
               new Container(
+                  // physics: const NeverScrollableScrollPhysics(),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    border: Border.all(
-                        width: 5, color: Color.fromARGB(255, 76, 170, 175)),
+                    border: Border.all(width: 5, color: Colors.black),
                   ),
                   child: SizedBox.fromSize(
                     size: Size(250, 170), // button width and height
@@ -152,13 +150,12 @@ class _gradesState extends State<grades> {
                     ),
                   )),
               SizedBox(
-                height: 18, // <-- SEE HERE
+                height: 20, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    border: Border.all(
-                        width: 5, color: Color.fromARGB(255, 76, 170, 175)),
+                    border: Border.all(width: 5, color: Colors.black),
                   ),
                   child: SizedBox.fromSize(
                     size: Size(250, 170), // button width and height
@@ -204,13 +201,12 @@ class _gradesState extends State<grades> {
                     ),
                   )),
               SizedBox(
-                height: 18, // <-- SEE HERE
+                height: 20, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
-                    border: Border.all(
-                        width: 5, color: Color.fromARGB(255, 76, 170, 175)),
+                    border: Border.all(width: 5, color: Colors.black),
                   ),
                   child: SizedBox.fromSize(
                     size: Size(250, 170), // button width and height

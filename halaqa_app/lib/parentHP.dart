@@ -5,13 +5,13 @@ import 'package:halaqa_app/viewEvents.dart';
 //import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
-import 'package:halaqa_app/ParentEdit.dart';
-//import 'package:halaqa_app/viewDocuments.dart';
+import 'package:halaqa_app/viewDocuments.dart';
+import 'package:halaqa_app/viewAbcense.dart';
 import 'package:halaqa_app/pickup.dart';
-//import 'package:halaqa_app/viewAbcense.dart';
+
+import 'ParentEdit.dart';
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -29,6 +29,7 @@ class _parentHPState extends State<parentHP> {
   late List _FNList;
   late List _LNList;
   late List ClassID;
+  late List _StuId; //added by reema s
   var x = 0;
   var v = 0;
 
@@ -49,30 +50,24 @@ class _parentHPState extends State<parentHP> {
   getSubjects() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = FirebaseAuth.instance.currentUser;
-    print("EMAIL ## ${user!.email}");
-    print("EMAIL ## ${user.uid}");
 
     var col = FirebaseFirestore.instance
-        .collectionGroup('Teacher')
-        .where('Email', isEqualTo: user.email);
+        .collectionGroup('Parent')
+        .where('Email', isEqualTo: user!.email);
     var snapshot = await col.get();
-    print(snapshot.docs.length);
     for (var doc in snapshot.docs) {
-      print("ZQQQWQW ${doc.reference.parent.parent!.id}");
       schoolID = doc.reference.parent.parent!.id;
       break;
     }
 
     DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/$schoolID/Parent/${user.uid}');
+        .doc('School/' + '$schoolID' + '/Parent/' + user.uid);
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
 
-      print("ZZZZ ${ds.data()}");
-
+      numOfSubjects = ds['Students'].length;
       setState(() {
-        numOfSubjects = ds['Students'].length;
         parentName = ds['FirstName'] + " " + ds['LastName'];
       });
 
@@ -103,48 +98,21 @@ class _parentHPState extends State<parentHP> {
     });
   }
 
-  Future<void> getSchoolID() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Parent')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      print("!!!!!!!!!!!!!!! ${doc.reference.parent.parent!.id}");
-      schoolID = doc.reference.parent.parent!.id;
-      print("ZZZZZZZ $schoolID");
-      break;
-    }
-    setState(() {});
-  }
-
-  getDataOfData() async {
-    await getSchoolID();
-    getSubjects();
-  }
-
   @override
   void initState() {
-    print("PPPPPPPARRRENT LOGIN +++++++++++++++++++++++++++++++++++++++");
-    getDataOfData();
-    // getSchoolID();
-    //remove();
+    getSubjects();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
-
       appBar: AppBar(
-        title: const Text('حلقة',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Color.fromARGB(255, 9, 18, 121),
-            )),
+        title: Image.asset(
+          "images/logo.png",
+          scale: 9,
+        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         automaticallyImplyLeading: false,
@@ -154,9 +122,9 @@ class _parentHPState extends State<parentHP> {
               //conformation message
               showAlertDialog(context);
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.logout,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
@@ -169,9 +137,9 @@ class _parentHPState extends State<parentHP> {
                         )),
               );
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.account_circle_rounded,
-              color: Color.fromARGB(255, 9, 18, 121),
+              color: Colors.black,
             ),
             iconSize: 30,
           ),
@@ -179,9 +147,9 @@ class _parentHPState extends State<parentHP> {
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           //currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: const Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: const Color.fromARGB(255, 76, 170, 175),
-          activeColor: const Color.fromARGB(255, 76, 170, 175),
+          inactiveColor: Colors.black,
+          indicatorColor: Color.fromARGB(255, 76, 170, 175),
+          activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
             currentIndex:
             index;
@@ -189,18 +157,18 @@ class _parentHPState extends State<parentHP> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const viewEvents(),
+                  builder: (context) => viewEvents(),
                 ),
               );
             }
           },
           items: [
             TitledNavigationBarItem(
-                title: const Text('الصفحة الرئيسية',
+                title: Text('الصفحة الرئيسية',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 icon: const Icon(Icons.home)),
             TitledNavigationBarItem(
-              title: const Text('الأحداث',
+              title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
             ), /*
@@ -214,34 +182,9 @@ class _parentHPState extends State<parentHP> {
               ),
             ),*/
           ]),
-      /* bottomNavigationBar: BottomAppBar(
-        color: Color.fromARGB(255, 76, 170, 175),
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.max,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            IconButton(
-              icon: Icon(Icons.home),
-              iconSize: 35,
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 65,
-                height: 65,
-                fit: BoxFit.cover,
-              ),
-              onPressed: () {},
-            ),
-          ],
-        ),
-      ),
-*/
       body: FutureBuilder(
           future: FirebaseFirestore.instance
-              .doc('School/$schoolID/Parent/${user!.uid}')
+              .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
               .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -261,59 +204,56 @@ class _parentHPState extends State<parentHP> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: Column(
+                      child: new Column(
                 children: [
-                  Container(
+                  new Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       parentName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 30,
-
-                        color: Color.fromARGB(255, 151, 142, 142),
-
-                        //  color: Color.fromARGB(255, 80, 80, 80),
-                        // fontSize: 30,
+                        color: Colors.black,
                       ),
                     ),
                   ),
-                  Container(
+                  new Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+
                       //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: _FNList.map((e) {
                         return Container(
-                            margin: const EdgeInsets.only(bottom: 30),
+                            margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 245, 245, 245),
+                                shape: BoxShape.rectangle,
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 130, 126, 126),
+                                  color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
-                                  const BoxShadow(
+                                  BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: Column(children: [
-                              Container(
-                                margin: const EdgeInsets.all(4),
-                                padding: const EdgeInsets.all(2),
+                            child: new Column(children: [
+                              new Container(
                                 child: Text(
                                     e + " " + _LNList[_FNList.indexOf(e)],
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(2),
                               ),
-                              Container(
+                              new Container(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -323,10 +263,9 @@ class _parentHPState extends State<parentHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          print(ClassID[_FNList.indexOf(e)].id);
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
@@ -339,6 +278,8 @@ class _parentHPState extends State<parentHP> {
                                                           _LNList[
                                                               _FNList.indexOf(
                                                                   e)],
+                                                      stRef: studentRefList[
+                                                          _FNList.indexOf(e)],
                                                       schoolID: schoolID,
                                                       classId: ClassID[
                                                               _FNList.indexOf(
@@ -356,7 +297,7 @@ class _parentHPState extends State<parentHP> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -365,22 +306,24 @@ class _parentHPState extends State<parentHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
-                                                    )),
+                                                builder: (context) =>
+                                                    viewDocuments(
+                                                        ref:
+                                                            ClassID[_FNList
+                                                                .indexOf(e)],
+                                                        studentRef:
+                                                            studentRefList[
+                                                                _FNList.indexOf(
+                                                                    e)])),
                                           );
-                                        */
                                         },
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.folder,
                                           color: Colors.black,
                                           size: 40,
@@ -388,7 +331,7 @@ class _parentHPState extends State<parentHP> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -397,20 +340,18 @@ class _parentHPState extends State<parentHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
+                                                builder: (context) =>
+                                                    viewAbcense(
+                                                      ref: studentRefList[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
-                                        */
                                         },
                                         child: Image.asset(
                                           "images/absenceIcon.png",
@@ -421,7 +362,7 @@ class _parentHPState extends State<parentHP> {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -430,8 +371,8 @@ class _parentHPState extends State<parentHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           Navigator.push(
                                             context,
@@ -442,7 +383,7 @@ class _parentHPState extends State<parentHP> {
                                                     )),
                                           );
                                         },
-                                        child: const Icon(
+                                        child: Icon(
                                           Icons.airport_shuttle_rounded,
                                           color: Colors.black,
                                           size: 40,
@@ -462,13 +403,12 @@ class _parentHPState extends State<parentHP> {
               )));
             }
             if (_FNList.length == 0 && x == 0) {
-              return const Center(child: Text(""));
+              return Center(child: Text(""));
             }
             if (_FNList[0] == "" && v == 1) {
-              return const Center(
-                  child: Text("لا يوجد طلاب تابعين لولي الآمر"));
+              return Center(child: Text("لا يوجد طلاب تابعين لولي الآمر"));
             }
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -482,9 +422,9 @@ class _parentHPState extends State<parentHP> {
     // set up the buttons
     Widget continueButton = TextButton(
       //continueButton
-      child: const Text("نعم"),
+      child: Text("نعم"),
       onPressed: () async {
-        const CircularProgressIndicator();
+        CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
@@ -497,7 +437,7 @@ class _parentHPState extends State<parentHP> {
 
     Widget cancelButton = TextButton(
       //cancelButton
-      child: const Text("إلغاء",
+      child: Text("إلغاء",
           style: TextStyle(
             color: Colors.red,
           )),
@@ -509,7 +449,7 @@ class _parentHPState extends State<parentHP> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("AlertDialog"),
-      content: const Text(
+      content: Text(
         "هل تأكد تسجيل الخروج؟",
         textAlign: TextAlign.center,
       ),

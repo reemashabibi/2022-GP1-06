@@ -20,6 +20,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
   var v = 0;
   var className;
   var levelName;
+
   var numOfStudents;
 
   getData() {
@@ -79,9 +80,8 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
   @override
   Widget build(BuildContext context) {
     DocumentReference ref = widget.ref;
-    DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
-    print(str);
 
+    DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
 
     return Scaffold(
       appBar: AppBar(
@@ -126,9 +126,26 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                       child: new Column(
                 children: [
                   new Container(
+                    height: 120,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       className + " / " + levelName.toString(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
@@ -143,11 +160,9 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
                         return InkWell(
-                          
                           child: Container(
-                            
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 color: Color.fromARGB(255, 231, 231, 231),
                                 border: Border.all(
                                   color: Color(0xffEEEEEE),
@@ -158,9 +173,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
-                                      
                                 ]),
-                                
                             child: Text(e,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -182,11 +195,9 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                               );
                             }
                           },
-                          
                         );
                       }).toList(),
                     ),
-                    
                   )
                 ],
               )));
