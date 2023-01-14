@@ -70,12 +70,20 @@ class _gradesState extends State<grades> {
             //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               new Container(
-                child: Text(
-                  className + " / " + level,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 80, 80, 80),
-                    fontSize: 30,
+                height: 130,
+                width: 500,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(50),
+                      bottomLeft: Radius.circular(50)),
+                  color: Color.fromARGB(255, 255, 255, 255),
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 76, 170, 175),
+                      Color.fromARGB(255, 255, 255, 255)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
                   ),
                 ),
                 alignment: Alignment.center,
@@ -92,10 +100,9 @@ class _gradesState extends State<grades> {
                 alignment: Alignment.center,
               ),
               SizedBox(
-                height: 20, // <-- SEE HERE
+                height: 15, // <-- SEE HERE
               ),
               new Container(
-                  // physics: const NeverScrollableScrollPhysics(),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100.0),
                     border: Border.all(
@@ -145,7 +152,7 @@ class _gradesState extends State<grades> {
                     ),
                   )),
               SizedBox(
-                height: 20, // <-- SEE HERE
+                height: 18, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(
@@ -197,7 +204,7 @@ class _gradesState extends State<grades> {
                     ),
                   )),
               SizedBox(
-                height: 20, // <-- SEE HERE
+                height: 18, // <-- SEE HERE
               ),
               new Container(
                   decoration: BoxDecoration(

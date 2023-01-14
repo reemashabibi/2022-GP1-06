@@ -2,9 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
+//import 'package:full_screen_image/full_screen_image.dart';
+import 'package:full_screen_network_image/full_screen_network_image.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +26,9 @@ class events {
   String content;
   String image;
   String title;
+  String time;
 
-  events(this.content, this.image, this.title);
+  events(this.content, this.image, this.title, this.time);
 
   @override
   String toString() {
@@ -54,7 +57,7 @@ class _viewEventsState extends State<viewEvents> {
   User? user = FirebaseAuth.instance.currentUser;
 
   getData() {
-    eventList.add(events("", "", ""));
+    eventList.add(events("", "", "", ""));
     imageList.add("start");
     x++;
   }
@@ -79,8 +82,11 @@ class _viewEventsState extends State<viewEvents> {
     if (EventRefs.docs.length > 0) {
       await docRef.collection("Event").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) async {
-          eventList.add(events(documentSnapshot['content'],
-              documentSnapshot['image'], documentSnapshot['title']));
+          eventList.add(events(
+              documentSnapshot['content'],
+              documentSnapshot['image'],
+              documentSnapshot['title'],
+              documentSnapshot['Time']));
         });
       });
     }
@@ -89,6 +95,9 @@ class _viewEventsState extends State<viewEvents> {
       if (eventList.length > 1) {
         eventList.removeAt(0);
       }
+      eventList.sort((a, b) {
+        return a.time.compareTo(b.time);
+      });
     });
     for (int i = 0; i < eventList.length; i++) {
       imageList.add(await getImage(eventList[i].image));
@@ -286,13 +295,44 @@ class _viewEventsState extends State<viewEvents> {
                                 padding: EdgeInsets.all(2),
                               ),
                               new Container(
-                                  child: FadeInImage(
-                                image: NetworkImage(
-                                    imageList[eventList.indexOf(e)]),
-                                placeholder: AssetImage("images/editIcon.png"),
-                              ))
+                                  /*
+                                  child: FullScreenWidget(
+                                child: Hero(
+                                  tag: "customTag",
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: FadeInImage(
+                                      image: NetworkImage(
+                                          imageList[eventList.indexOf(e)] ??
+                                              ""),
+                                      fit: BoxFit.cover,
+                                      placeholder:
+                                          AssetImage("images/logo.png"),
+                                    ),
+                                  ),
+                                ),
+                              )*/
 
-                              // color: Color.fromARGB(255, 222, 227, 234),
+                                  child: FullScreenWidget(
+                                child: InteractiveViewer(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: FadeInImage(
+                                      image: NetworkImage(
+                                          imageList[eventList.indexOf(e)] ??
+                                              ""),
+                                      fit: BoxFit.contain,
+                                      imageErrorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return const Text('');
+                                      },
+                                      placeholder:
+                                          AssetImage("images/logo.png"),
+                                    ),
+                                  ),
+                                ),
+                              )),
                             ]));
                       }).toList(),
                     ),

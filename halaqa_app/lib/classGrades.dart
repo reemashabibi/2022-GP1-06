@@ -164,7 +164,7 @@ class _classGradesState extends State<classGrades> {
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
-                f = await conform();
+                f = await confirm();
               }
               if (f) {
                 updateDatabase();
@@ -287,7 +287,7 @@ class _classGradesState extends State<classGrades> {
 
   int numOfStudents = 0;
 
-  Future<bool> conform() async {
+  Future<bool> confirm() async {
     return await showDialog(
       context: context,
       builder: (context) => AlertDialog(
