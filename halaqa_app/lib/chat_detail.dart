@@ -58,6 +58,9 @@ class _ChatdetailState extends State<Chatdetail> {
           "msg_count" : count++
         });
       } ));
+      setState(() {
+
+      });
      }
   }
 
@@ -193,7 +196,7 @@ String? classId;
                                       fontWeight: FontWeight.w500,
                                       color: isSender(
                                         data['uid'].toString())
-                                        ? Colors.white
+                                        ? Color.fromARGB(255, 255, 255, 255)
                                         : Color.fromARGB(255, 255, 255, 255)),
                                  overflow: TextOverflow.clip
                                     ),

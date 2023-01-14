@@ -59,7 +59,9 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
           "msg_count" : count++,
         });
       } ));
+      setState(() { });
      }
+ 
   }
 
     Future<void> getSchoolID() async {
@@ -173,7 +175,7 @@ Alignment getAlignment (freind){
                     ],
                   ),
 
-                  Text("الساعات المكتبية ",style: TextStyle(
+                  Text(" الساعات المكتبية",style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold
                   ),),
@@ -224,11 +226,11 @@ Alignment getAlignment (freind){
           onPressed: (){
             showDataCalender();
           },
-          child: const Icon(Icons.calendar_month,color: Color.fromARGB(255, 99, 99, 99),size: 20,)
+          child: const Icon(Icons.calendar_month,color: Color.fromARGB(255, 11, 129, 239),size: 20,)
         ),
         ),
         child: SafeArea(
-          child: Column(children: [
+          child: Column(children: [ 
             Expanded(
               child: ListView(
               reverse: true,

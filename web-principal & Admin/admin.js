@@ -138,7 +138,7 @@ export async function viewTachersAndClasses(aid){
     var email = doc2.data().Email
 
     const div1 = document.createElement("div");
-    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30";
+    div1.className = "job-box d-md-flex align-items-center justify-content-between mb-30 theTab";
     document.getElementById("bigdiv2").appendChild(div1);
     const div5 = document.createElement("div");
     div5.className = "job-right my-4 flex-shrink-0";
@@ -162,7 +162,7 @@ export async function viewTachersAndClasses(aid){
     div4.className = "job-content";
     div2.appendChild(div4);
     const h5 = document.createElement('h5');
-    h5.className = "text-center text-md-left";
+    h5.className = "text-center text-md-right";
     h5.appendChild(document.createTextNode(firstName + " " + lastName));
     div4.appendChild(h5);
 
@@ -326,6 +326,17 @@ tr.id = d.ref.path;
     });
   }
 
+  const absenceColRef = collection (db, "School",schoolId, "Student", d.id, 'Absence');
+  const absences = await getDocs(absenceColRef);
+  if(absences.docs.length > 0) {
+    absences.forEach( async (doc) => {
+//loop through absences of the student and check if an excuse is uploaded
+    if(doc.data().Viewed == false && (doc.data().excuse != "" || (doc.data().FileName != null && doc.data().FileName != ''))){
+      numOfNewDocs++;
+    }
+  });
+}
+
       if(numOfNewDocs >0){
 
     var spanNotfiy = document.createElement('span');
@@ -356,7 +367,7 @@ tr.id = d.ref.path;
   $('.loader').hide();
 }
 
-
+//delete student
 $(document).ready(function () {
   $(document).on('click', '#delete', function () {
     if($('input[name="chosenstudents[]"]:checked').length == 0){
@@ -408,16 +419,7 @@ $(document).ready(function () {
        
        });///End of new code
 
-   /*    await deleteDoc(parent).then(() => {
-         deleted = true;
-        
-       }).catch(error => {
-           console.log(error);
-           $(".loader").hide();
-           alert("حصل خطأ، الرجاء المحاولة لاحقًا");
-           deleted = false;
-           return;
-         })*/
+
      }else{
       await updateDoc(parent, {
         Students: arrayRemove(docRef)
@@ -461,7 +463,7 @@ $(document).ready(function () {
  }
     }
   });
-
+//delete teacher
   $(document).on('click', '.deletebtnTeacher', async function () {
     var teacherID = $(this).attr('id');
     const docRef = doc(db, teacherID);
@@ -581,7 +583,8 @@ $(document).ready(function () {
       if(status == "abcenseBtn out"){
 
        await setDoc(doc(db, refre+'/Absence', date), {
-          excuse: "",  
+          excuse: "", 
+          FileName: '' 
      });
       }
               });

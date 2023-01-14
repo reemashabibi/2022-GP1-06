@@ -165,7 +165,9 @@ ul {
 text-align: center;
 margin-top: 5%;
 }
-
+.text-center{
+  font-size: larger;
+}
 
 /* CSS */
 .button-36 {

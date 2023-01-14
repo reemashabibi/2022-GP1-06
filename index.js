@@ -11,7 +11,7 @@ app.use("/",router);
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("/Users/njoudalfahad/Downloads/halaqa-89b43-firebase-adminsdk-j33v0-7eaa69b308.json");
+var serviceAccount = require("/Users/maca7/Downloads/halaqa-89b43-firebase-adminsdk-j33v0-cfd72dd807.json");
 
 // Intialize the firebase-admin project/account
 admin.initializeApp({

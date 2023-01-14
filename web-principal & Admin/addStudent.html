@@ -7,6 +7,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="create.css">
+    <link rel="stylesheet" href="style.css">
+
     <link rel="stylesheet" href="navbar.css"/>
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
@@ -60,13 +62,13 @@
                 <div class="hori-selector" ><div class="left" ></div><div class="right"></div></div>
 
                 <li class="nav-item ">
-                    <a class="nav-link" href="javascript:void(0);"> إصطحاب الطلاب</a>
+                    <a class="nav-link" href="pickup.html"> إصطحاب الطلاب</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);"></i>الإعلانات</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="javascript:void(0);">الأحداث</a>
+                    <a class="nav-link" href="events.html">الأحداث</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="documents.html">المستندات</a>
@@ -105,7 +107,7 @@
             
             <div class="inputbox" >
       <select required=" true"
-                style="  margin-left: 50px; margin-top: 15px; padding: 10px; background: #4ebfc1; border: 2px solid #000; width:40%; height: 30px; text-align:center; "
+                style="  margin-left: 50px; margin-top: 1%; padding: 10px; border: 2px solid #000; width:40%; height: 50px; text-align:center; "
                 id="classes" name="classes">
                 <option id="non" value="" name="non">--اختر الفصل--</option>
                 </select>
@@ -148,7 +150,7 @@
                 </div>
 
 
-                <div class="inputbox">
+                <div class="inputbox" id = 'alertContainer'>
                     <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
                   </div>
        
