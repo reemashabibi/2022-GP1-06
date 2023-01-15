@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -389,10 +389,13 @@ class StartState extends State<LoginScreen> {
 else if (role == "ولي أمر"){
      var schoolID ="x";
    User? user = FirebaseAuth.instance.currentUser;
+   print("USER ~~~~~~~~~~~~~~~~~ ${user!.uid}");
+   print("USER EMAIL ~~~~~~~~~~~~~~~~~ ${user.email}");
    if(role == "ولي أمر"){
-   var col = FirebaseFirestore.instance.collectionGroup('Parent').where('Email', isEqualTo: user!.email);
+   var col = FirebaseFirestore.instance.collectionGroup('Parent').where('Email', isEqualTo: user.email);
      var snapshot = await col.get();
      for (var doc in snapshot.docs) {
+       print("DATA OF DATA ${doc.data()}");
        schoolID = doc.reference.parent.parent!.id;
        print(doc.reference.parent.parent?.id);
        break;

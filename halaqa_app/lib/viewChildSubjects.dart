@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +11,21 @@ import 'package:halaqa_app/viewChildGrades.dart';
 import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
+import 'chatDetailPS.dart';
+
 class viewChildSubjcets extends StatefulWidget {
   const viewChildSubjcets(
-      {super.key, this.classRef, this.studentName, this.stRef});
+      {super.key,
+      this.classRef,
+      this.studentName,
+      this.stRef,
+      this.schoolID,
+      this.classId});
   final classRef;
   final studentName;
   final stRef;
+  final schoolID;
+  final classId;
 
   @override
   State<viewChildSubjcets> createState() => _viewChildSubjcetsState();
@@ -25,7 +35,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   var className = "";
   var level = "";
   late List _SubjectList;
-  late List _SubjectsNameList;
+  late List<Map<String, dynamic>> _SubjectsNameList;
   late List _SubjectsRefList;
 
   var x = 0;
@@ -37,10 +47,49 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   getData() {
-    _SubjectsNameList = [""];
-
+    _SubjectsNameList = [];
+    //_SubjectList = [""];
     _SubjectsRefList = [""];
     x++;
+  }
+
+  String studentId = "";
+
+  void callChatDetailScreen(DocumentReference<Map<String, dynamic>> teacherId,
+      String subjectId) async {
+    print("In function Student Name: " + "tst ${teacherId.id}");
+    print(user!.uid);
+    print(subjectId);
+    print(widget.classId);
+    var dc =
+        FirebaseFirestore.instance.doc("School/$schoolID/Parent/${user!.uid}");
+    dc.get().then((value) async {
+      print(value.get("Students"));
+      for (DocumentReference<Map<String, dynamic>> s in value.get("Students")) {
+        print("STUDENT ID ${s.id}");
+        studentId = s.id;
+      }
+    });
+    DocumentSnapshot teacherDs = await FirebaseFirestore.instance
+        .doc("School/$schoolID/Teacher/${teacherId.id}")
+        .get();
+    print(teacherDs.data());
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => ChatdetailPS(
+                  /////trasfer TeacherName, TeacherUid, StudentUid
+                  // TeacherName: "Faisal naser",
+                  // TeacherUid: "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
+                  // StudentUid: "koHNAlQnVjEmUklBkUtn",
+                  TeacherName:
+                      "${teacherDs.get("FirstName")} ${teacherDs.get("LastName")}",
+                  TeacherUid: teacherId.id,
+                  StudentUid: studentId,
+                  schoolId: schoolID,
+                  subjectId: subjectId,
+                  classID: widget.classId,
+                )));
   }
 
   getSubjects() async {
@@ -49,7 +98,12 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
     if (subRefs.docs.length > 0) {
       await await docRef.collection("Subject").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
-          _SubjectsNameList.add(documentSnapshot['SubjectName']);
+          _SubjectsNameList.add({
+            "name": documentSnapshot.get('SubjectName'),
+            "id": documentSnapshot.get("TeacherID"),
+            "docId": documentSnapshot.id,
+            "msg_count": documentSnapshot.get("msg_count")
+          });
           _SubjectsRefList.add(documentSnapshot.reference);
         });
       });
@@ -75,7 +129,11 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
 
   @override
   void initState() {
+    schoolID = widget.schoolID;
     getSubjects();
+    // getSchoolID();
+    // getSchoolID();
+    //remove();
 
     super.initState();
   }
@@ -86,6 +144,20 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => parentHP(),
+              ),
+            );
+          },
+        ),
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
@@ -122,12 +194,14 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               icon: const Icon(Icons.calendar_today),
             ),
           ]),
-      body: FutureBuilder(
-          future: FirebaseFirestore.instance
-              .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
-              .get(),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('School/$schoolID/Class')
+              .doc(widget.classId)
+              .collection("Subject")
+              .snapshots(),
           builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
@@ -138,7 +212,10 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               getData();
             }
 
-            if (snapshot.hasData && _SubjectsNameList[0] != "") {
+            if (snapshot.hasData /*&& _SubjectsNameList[0] != ""*/) {
+              //  dataGet();
+              // _SubjectList = snapshot.data!['Subjects'];
+
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -177,7 +254,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       //  padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      children: _SubjectsNameList.map((e) {
+                      children: snapshot.data!.docs.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
@@ -196,7 +273,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                 ]),
                             child: new Column(children: [
                               new Container(
-                                child: Text(e,
+                                child: Text("${e.get("SubjectName")}",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 25,
@@ -223,9 +300,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       viewChildGrades(
-                                                        subRef: _SubjectsRefList[
-                                                            _SubjectsNameList
-                                                                .indexOf(e)],
+                                                        subRef: e.reference,
                                                         stRef: widget.stRef,
                                                       )),
                                             );
@@ -252,17 +327,13 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
-                                                    )),
-                                          );
-                                        */
+                                          callChatDetailScreen(
+                                              e['TeacherID'], e.id
+                                              //     context ,
+                                              //     "faisal naser",
+                                              //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
+
+                                              );
                                         },
                                         child: Image.asset(
                                           "images/chatIcon.png",
@@ -284,10 +355,10 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                 ],
               )));
             }
-            if (_SubjectsNameList.length == 0 && x == 0) {
+            if (/*_SubjectsNameList.length == 0 &&*/ x == 0) {
               return Center(child: Text(""));
             }
-            if (_SubjectsNameList[0] == "" && v == 1) {
+            if (/*_SubjectsNameList[0] == "" &&*/ v == 1) {
               return Center(child: Text("لا يوجد مواد مسجلة"));
             }
             return Center(child: CircularProgressIndicator());

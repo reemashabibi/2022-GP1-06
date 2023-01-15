@@ -814,7 +814,7 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-  
+        document.getElementById('alertContainer').innerHTML ='';
       }, 9000);
       
       document.getElementById('alertContainer').innerHTML ='';

@@ -242,6 +242,7 @@ class _EditProfilePageState extends State<studentGrades> {
                 Text('حفظ')
               ],
             ),
+            // shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
@@ -319,11 +320,13 @@ class _EditProfilePageState extends State<studentGrades> {
                                           FilteringTextInputFormatter.digitsOnly
                                         ],
                                         keyboardType: TextInputType.number,
+                                        //  initialValue: assessmentsList[position].name,
                                         controller: TextEditingController(
                                             text:
                                                 studentAssessmentsList[position]
                                                     .grade
                                                     .toString()),
+
                                         decoration: InputDecoration(
                                           labelText:
                                               assessmentsList[position].name,

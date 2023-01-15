@@ -9,6 +9,9 @@ import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
 import 'package:halaqa_app/viewDocuments.dart';
 import 'package:halaqa_app/viewAbcense.dart';
+import 'package:halaqa_app/pickup.dart';
+
+import 'ParentEdit.dart';
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -26,7 +29,6 @@ class _parentHPState extends State<parentHP> {
   late List _FNList;
   late List _LNList;
   late List ClassID;
-  late List _StuId; //added by reema s
   var x = 0;
   var v = 0;
 
@@ -126,7 +128,14 @@ class _parentHPState extends State<parentHP> {
             iconSize: 30,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => EditProfilePage(
+                          schoolId: schoolID,
+                        )),
+              );
+            },
             icon: Icon(
               Icons.account_circle_rounded,
               color: Colors.black,
@@ -270,6 +279,11 @@ class _parentHPState extends State<parentHP> {
                                                                   e)],
                                                       stRef: studentRefList[
                                                           _FNList.indexOf(e)],
+                                                      schoolID: schoolID,
+                                                      classId: ClassID[
+                                                              _FNList.indexOf(
+                                                                  e)]
+                                                          .id,
                                                     )),
                                           );
                                         },
@@ -359,17 +373,14 @@ class _parentHPState extends State<parentHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
+                                                builder: (context) => pickup(
+                                                      stRef: studentRefList[
+                                                          _FNList.indexOf(e)],
                                                     )),
                                           );
-                                       */
                                         },
                                         child: Icon(
                                           Icons.airport_shuttle_rounded,

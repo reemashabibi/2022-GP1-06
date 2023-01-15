@@ -26,6 +26,7 @@ class _teacherHPState extends State<teacherHP> {
   late List _SubjectsRefList;
   late List _ClassNameList;
   late List _LevelNameList;
+  late List _SubjectsIdsList;
   var x = 0;
   var v = 0;
   var teacherName = "";
@@ -40,6 +41,7 @@ class _teacherHPState extends State<teacherHP> {
     _SubjectList = [""];
     _SubjectsNameList = [""];
     _SubjectsRefList = [""];
+    _SubjectsIdsList = [""];
     x++;
   }
 
@@ -82,6 +84,8 @@ class _teacherHPState extends State<teacherHP> {
 
         var subName = await docu.get().then((value) {
           setState(() {
+            print("SUBJECT ID ${value.id}");
+            _SubjectsIdsList.add(value.id);
             _SubjectsNameList.add(value['SubjectName']);
 
             _SubjectsRefList.add(docu);
@@ -118,13 +122,17 @@ class _teacherHPState extends State<teacherHP> {
   void initState() {
     getSubjects();
     getSchoolID();
+    // getSchoolID();
+    //remove();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
+      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
         title: Image.asset(
           "images/logo.png",
@@ -146,7 +154,12 @@ class _teacherHPState extends State<teacherHP> {
             iconSize: 30,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => const EditProfilePage()),
+              );
+            },
             icon: Icon(
               Icons.account_circle_rounded,
               color: Colors.black,
@@ -155,12 +168,14 @@ class _teacherHPState extends State<teacherHP> {
           ),
         ],
       ),
+
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
               .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+            // print("DAT A ${snapshot.data!.data()}");
             if (snapshot.hasError) {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
@@ -172,6 +187,9 @@ class _teacherHPState extends State<teacherHP> {
             }
 
             if (snapshot.hasData && _SubjectsNameList[0] != "") {
+              //  dataGet();
+              // _SubjectList = snapshot.data!['Subjects'];
+
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
@@ -308,6 +326,7 @@ class _teacherHPState extends State<teacherHP> {
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
+                                          print("ID############$schoolID");
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
@@ -317,6 +336,12 @@ class _teacherHPState extends State<teacherHP> {
                                                         ref: _SubjectsRefList[
                                                             _SubjectsNameList
                                                                 .indexOf(e)],
+                                                        schoolId: schoolID,
+                                                        subjectId:
+                                                            _SubjectsIdsList[
+                                                                _SubjectsNameList
+                                                                    .indexOf(
+                                                                        e)],
                                                       )),
                                             );
                                           }
@@ -332,6 +357,8 @@ class _teacherHPState extends State<teacherHP> {
                                   ),
                                 ],
                               ))
+
+                              // color: Color.fromARGB(255, 222, 227, 234),
                             ]));
                       }).toList(),
                     ),

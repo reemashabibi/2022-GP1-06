@@ -1,7 +1,10 @@
+import 'dart:developer';
+
+import 'package:cupertino_list_tile/cupertino_list_tile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/parentHP.dart';
@@ -10,10 +13,15 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'chat_detail.dart';
 
 class viewStudentsForChat extends StatefulWidget {
-  const viewStudentsForChat({super.key, required this.ref});
+  const viewStudentsForChat({super.key, required this.ref, required this.schoolId, required this.subjectId});
   final DocumentReference ref;
+  final String schoolId;
+  final String subjectId;
+
+
   @override
   State<viewStudentsForChat> createState() => _viewStudentsForChatState();
 }
@@ -26,8 +34,26 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
   var v = 0;
   var className;
   var levelName;
-
   var numOfStudents;
+
+ 
+  void callChatDetailScreen(BuildContext context ,String name,  uid,String classID,String subjectId){
+    print("In function Student Name: "+ name);
+     print(uid);
+     print(classID);
+     Navigator.push(
+        context,
+        CupertinoPageRoute(
+        builder: (context) => Chatdetail(
+         friendName: name,
+         friendUid: uid,
+         schoolId: widget.schoolId,
+          classId: classID,
+          subjectId: subjectId,
+
+          )));
+
+  }
 
   getData() {
     _StudentList = [""];
@@ -37,8 +63,11 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
   }
 
   getStudents() async {
-    DocumentReference docRef =
-        widget.ref.parent.parent as DocumentReference<Object?>;
+    DocumentReference docRef = widget.ref.parent.parent as DocumentReference<Object?>;
+         print("docref: ${widget.ref.parent.id}");
+         ///classID
+        print(docRef);
+        print(docRef);
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
@@ -46,9 +75,11 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
       levelName = ds['LevelName'];
 
       numOfStudents = ds['Students'].length;
+      print("numOfStudents $numOfStudents");
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
         var stName = await docu.get().then((value) {
+          print("DDDDDDDDDDD ${value.id}");
           setState(() {
             _StudenNameList.add(value['FirstName'] + " " + value['LastName']);
             _StudentsRefList.add(docu);
@@ -69,8 +100,92 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
     });
   }
 
+
+  TextEditingController controller = TextEditingController();
+
+  TextField customTextFiled() {
+    final border = OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8)
+    );
+    return TextField(
+      controller: controller,
+      maxLines: 10,
+      // minLines: 1,
+      decoration: InputDecoration(
+        border: border,
+        enabledBorder: border,
+        focusedBorder: border,
+        isDense: true,
+        hintText: "أدخل النص"
+      ),
+    );
+  }
+
+  sendMsgAll() {
+    return showDialog(context: context, builder: (_) => Dialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: Container(
+        // height: 242,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10)
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: const Icon(Icons.clear,color: Colors.black,))
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical:10.0),
+                child: customTextFiled(),
+              ),
+              // const Spacer(),
+              ElevatedButton(onPressed: () {
+                print("TEXT ${controller.text}");
+                if(controller.text.isNotEmpty) {
+                  Navigator.pop(context);
+                  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').get().then((value) {
+                    for(var doc in value.docs) {
+                      FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').doc(doc.id).collection("messages").add({
+                        'createdOn': FieldValue.serverTimestamp(),
+                        'uid':FirebaseAuth.instance.currentUser?.uid,
+                        'msg': controller.text,
+                      });
+                      // FirebaseFirestore.instance.collection("sc")
+                    }
+
+                  });
+
+                }
+
+                setState(() {
+
+                });
+
+
+
+              }, child: const Text("إرسال"))
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
+
+
   @override
   void initState() {
+    print("<<<<<<<<<<object>>>>>>>>>> ${widget.subjectId} ${widget.schoolId}");
     getStudents();
     super.initState();
   }
@@ -78,114 +193,122 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
   bool visible = false;
   @override
   Widget build(BuildContext context) {
-    DocumentReference ref = widget.ref;
-
-    DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => teacherHP(),
-              ),
-            );
-          },
-        ),
-        actions: [],
-      ),
-      body: StreamBuilder<DocumentSnapshot>(
+    // DocumentReference ref = widget.ref;
+    // DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
+    
+    
+      return StreamBuilder<DocumentSnapshot>(
           stream: widget.ref.parent.parent?.snapshots(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasError) {
+          builder: (BuildContext context, AsyncSnapshot snap) {
+            print("@@@ ${snap.data}");
+            if (snap.hasError) {
               return Center(
-                  child: Text('Some error occurred ${snapshot.error}'));
+                  child: Text('Some error occurred ${snap.error}'));
             }
 
             //Check if data arrived
             if (x == 0) {
               getData();
             }
-            if (snapshot.hasData && _StudenNameList[0] != "") {
-              //Display the list
 
-              return Container(
-                  child: SingleChildScrollView(
-                      child: new Column(
-                children: [
-                  new Container(
-                    padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
-                    child: Text(
-                      className + " / " + levelName.toString(),
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 80, 80, 80),
-                        fontSize: 30,
+            if (snap.hasData && _StudenNameList[0] != "") {
+              //Display the list
+               print("in");
+        return StreamBuilder <QuerySnapshot>(
+          ///get schoolID
+      stream : FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
+        if (snapshot.hasError){
+          return const Center(child: Text("Something went wrong"),);
+        }
+       // if(snapshot.connectionState == ConnectionState.waiting ){
+       //   return Center (child: Text("Loading"),);
+      //  }
+        if(snapshot.hasData){
+      return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.white,
+          onPressed: () {
+            controller.clear();
+            sendMsgAll();
+          },
+          child: const Text("إرسال للكل",textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Color.fromARGB(255, 68, 68, 68),
+          ),
+          ),
+        ),
+        body: Container(
+          color: Colors.white,
+          child: CustomScrollView(
+            slivers: [
+              CupertinoSliverNavigationBar(
+                ///bad design
+                largeTitle: Text( className + " - " + levelName.toString(),
+                style: const TextStyle(
+                    color: Color.fromARGB(255, 68, 68, 68),
+                  //  fontSize: 25,
+                   //fontWeight: FontWeight.bold
+                   ),),
+                ),
+
+                SliverList(
+                  delegate: SliverChildListDelegate (
+                      snapshot.data!.docs.map((e) {
+                       // print("${e.data()}");
+                // Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+                 return CupertinoListTile(
+                  onTap: () {
+                    callChatDetailScreen(context ,e['FirstName'] + " " + e['LastName'], e.id,e["ClassID"].id,widget.subjectId);
+                    },
+                  title: Row(
+                    children: [
+                      e['msg_count'] == 0 ? Container() : Container(
+                        height: 25,
+                        width: 25,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle
+                        ),
+                        child: Center(
+                          child: Text("${e['msg_count']}",style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 12
+                          ),),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 5,),
+                      Text(e['FirstName'] + " " + e['LastName'],
+                       style: const TextStyle(
+                        color: Color.fromARGB(255, 1, 135, 173),
+                        fontSize: 25,
+                       ),
+                      ),
+                    ],
                   ),
-                  new Container(
-                    child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
-                      shrinkWrap: true,
-                      children: _StudenNameList.map((e) {
-                        return InkWell(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: Color.fromARGB(255, 231, 231, 231),
-                                  border: Border.all(
-                                    color: Color(0xffEEEEEE),
-                                    width: 2.0,
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                        color: Colors.grey,
-                                        blurRadius: 2.0,
-                                        offset: Offset(2.0, 2.0))
-                                  ]),
-                              child: Text(e,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold)),
-                              margin: EdgeInsets.all(5),
-                              padding: EdgeInsets.all(15),
-                            ),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => studentGrades(
-                                          stRef: _StudentsRefList[
-                                              _StudenNameList.indexOf(e)],
-                                          classRef: ref,
-                                        )),
-                              );
-                            });
-                      }).toList(),
-                    ),
-                  )
-                ],
-              )));
+                 );
+
+               }).toList()
+               )
+
+               )
+            ],
+           ),
+        ),
+      );
+        }
+        return Container();
+      });
+
             }
-            if (_StudenNameList.length == 0 && x == 0) {
-              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
-            }
-            if (_StudenNameList[0] == "" && v == 1) {
-              return Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
-            }
-            return Center(child: CircularProgressIndicator());
-          }),
-    );
+            // if (_StudenNameList.length == 0 && x == 0) {
+            //   return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
+            // }
+            // if (_StudenNameList[0] == "" && v == 1) {
+            //   return const Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
+            // }
+            return const Center(child: CircularProgressIndicator());
+          });
+    
   }
 }

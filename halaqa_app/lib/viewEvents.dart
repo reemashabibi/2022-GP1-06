@@ -2,9 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
+import 'package:full_screen_network_image/full_screen_network_image.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class viewEvents extends StatefulWidget {
 
 class events {
   String content;
-  String? image;
+  String image;
   String title;
   DateTime time;
 
@@ -32,13 +33,13 @@ class events {
   @override
   String toString() {
     // TODO: implement toString
-    return "content  $content  image $image   title   $title      time   $time";
+    return "content  $content  image $image   title   $title";
   }
 }
 
 class _viewEventsState extends State<viewEvents> {
   List<events> eventList = [];
-  List imageList = <String?>[];
+  List imageList = <String>[];
 
   var x = 0;
   var v = 0;
@@ -85,6 +86,9 @@ class _viewEventsState extends State<viewEvents> {
       if (eventList.length > 1) {
         eventList.removeAt(0);
       }
+      eventList.sort((a, b) {
+        return a.time.compareTo(b.time);
+      });
     });
     for (int i = 0; i < eventList.length; i++) {
       imageList.add(await getImage(eventList[i].image));
@@ -114,7 +118,7 @@ class _viewEventsState extends State<viewEvents> {
 
   Future<String?> getImage(img) async {
     if (img == "") {
-      return null;
+      return "";
     }
     try {
       var downloadURL = await FirebaseStorage.instance
@@ -131,6 +135,7 @@ class _viewEventsState extends State<viewEvents> {
 
   @override
   void initState() {
+    // getSchoolID();
     getSubjects();
 
     super.initState();
@@ -138,7 +143,9 @@ class _viewEventsState extends State<viewEvents> {
 
   @override
   Widget build(BuildContext context) {
+    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
+      //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
@@ -159,8 +166,8 @@ class _viewEventsState extends State<viewEvents> {
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1,
-          inactiveColor: Colors.black,
+          currentIndex: 1, // Use this to update the Bar giving a position
+          inactiveColor: Color.fromARGB(255, 9, 18, 121),
           indicatorColor: Color.fromARGB(255, 76, 170, 175),
           activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
@@ -187,8 +194,18 @@ class _viewEventsState extends State<viewEvents> {
               title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ),
+            ), /*
+            TitledNavigationBarItem(
+              title: Text('Events'),
+              icon: Image.asset(
+                "images/eventsIcon.png",
+                width: 20,
+                height: 20,
+                //fit: BoxFit.cover,
+              ),
+            ),*/
           ]),
+
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -208,12 +225,15 @@ class _viewEventsState extends State<viewEvents> {
             if (snapshot.hasData &&
                 eventList[0].content != "" &&
                 imageList[0] != "start") {
+              //  dataGet();
+              // _SubjectList = snapshot.data!['Subjects'];
+
               return Container(
                   child: SingleChildScrollView(
                       child: new Column(
                 children: [
                   new Container(
-                    height: 100,
+                    height: 120,
                     width: 500,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
@@ -235,7 +255,7 @@ class _viewEventsState extends State<viewEvents> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: Color.fromARGB(255, 80, 80, 80),
                         fontSize: 30,
                       ),
                     ),
@@ -245,12 +265,13 @@ class _viewEventsState extends State<viewEvents> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                       children: eventList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 251, 250, 250),
+                                color: Color.fromARGB(255, 231, 231, 231),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
@@ -266,40 +287,22 @@ class _viewEventsState extends State<viewEvents> {
                               new Container(
                                 alignment: Alignment.topLeft,
                                 child: Text(
-                                    DateFormat('yyyy-MM-dd')
-                                        .add_Hm()
-                                        .format(e.time)
-                                        .toString(),
+                                    DateFormat('MMM d, h:mm a').format(e.time),
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        fontSize: 12,
+                                        fontSize: 13,
                                         fontWeight: FontWeight.bold)),
                                 margin: EdgeInsets.all(4),
                                 padding: EdgeInsets.all(2),
-                              ),
-                              SizedBox(
-                                height: 20,
                               ),
                               new Container(
                                 child: Text(e.title,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        background: Paint()
-                                          ..color =
-                                              Color.fromARGB(255, 76, 170, 175)
-                                          ..strokeWidth = 24
-                                          ..strokeJoin = StrokeJoin.round
-                                          ..strokeCap = StrokeCap.round
-                                          ..style = PaintingStyle.stroke,
-                                        color: Colors.black,
-                                        fontSize: 20,
+                                        fontSize: 25,
                                         fontWeight: FontWeight.bold)),
                                 margin: EdgeInsets.all(4),
                                 padding: EdgeInsets.all(2),
-                              ),
-                              SizedBox(
-                                height: 20,
                               ),
                               new Container(
                                 child: Text(e.content,
@@ -311,15 +314,26 @@ class _viewEventsState extends State<viewEvents> {
                                 padding: EdgeInsets.all(2),
                               ),
                               new Container(
-                                  child: FadeInImage(
-                                image: NetworkImage(
-                                    imageList[eventList.indexOf(e)] ?? ""),
-                                imageErrorBuilder: (BuildContext context,
-                                    Object exception, StackTrace? stackTrace) {
-                                  return const Text('');
-                                },
-                                placeholder: AssetImage("images/logo.png"),
-                              ))
+                                  child: FullScreenWidget(
+                                child: InteractiveViewer(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: FadeInImage(
+                                      image: NetworkImage(
+                                          imageList[eventList.indexOf(e)] ??
+                                              ""),
+                                      fit: BoxFit.contain,
+                                      imageErrorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return const Text('');
+                                      },
+                                      placeholder:
+                                          AssetImage("images/logo.png"),
+                                    ),
+                                  ),
+                                ),
+                              )),
                             ]));
                       }).toList(),
                     ),

@@ -67,9 +67,10 @@ class _gradesState extends State<grades> {
           child: new Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
+            //crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               new Container(
-                height: 150,
+                height: 120,
                 width: 500,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(

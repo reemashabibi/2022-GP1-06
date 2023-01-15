@@ -10,18 +10,19 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Firebase.apps.isEmpty) {
+  if (Firebase.apps.isEmpty){
     await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform);
+      options: DefaultFirebaseOptions.currentPlatform);
   }
-  runApp(MyApp());
+   runApp(MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+   return MaterialApp(
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -33,10 +34,12 @@ class MyApp extends StatelessWidget {
         // ... other locales the app supports
       ],
       locale: Locale('ar'),
+      // locale: Locale('en'),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
-    );
+   );
   }
+  
 }
 
 // debugShowCheckedModeBanner: false,

@@ -45,6 +45,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
       // use ds as a snapshot
       className = ds['ClassName'];
       levelName = ds['LevelName'];
+
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
@@ -125,9 +126,26 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                       child: new Column(
                 children: [
                   new Container(
+                    height: 120,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       className + " / " + levelName.toString(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
