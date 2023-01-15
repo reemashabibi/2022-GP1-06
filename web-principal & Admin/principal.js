@@ -145,7 +145,12 @@ $(document).ready(function () {
         function (data, stat) {
           if(data.status == 'Successfull'){
             deleteDoc(docRef).then(() => {
-              alert("تم حذف الإداري");
+              $('.loader').hide();
+              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم حذف الإداري</p> </div>';
+              setTimeout(() => {
+                document.getElementById('alertContainer').innerHTML='';
+                
+              }, 5000);
               window.location.reload(true);
             })
               .catch(error => {
@@ -153,7 +158,12 @@ $(document).ready(function () {
               })
           }
           else{
-            alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+            $(".loader").hide();
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+            setTimeout(() => {
+              document.getElementById('alertContainer').innerHTML='';
+              
+            }, 7000);
           }
         });///End of new code
  /*   deleteDoc(docRef).then(() => {

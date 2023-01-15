@@ -404,7 +404,7 @@ class _Excuse extends State<Excuse> {
                           height: 2,
                         ),
                         Text(
-                          "ارفاق عذر غياب للتارخ ${widget.abcneseRef.id}", //  text ??
+                          "ارفاق عذر غياب للتاريخ ${widget.abcneseRef.id}", //  text ??
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Color.fromARGB(255, 80, 80, 80),
@@ -536,7 +536,7 @@ class _Excuse extends State<Excuse> {
   }
 
   Future chackData() async {
-    if (file == null && textExcuse == '') {
+    if (file == null && (textExcuse == '' || textExcuse.trim() == '')) {
       Widget backbutton = TextButton(
         child: Text("حسنًا"),
         onPressed: () {
@@ -587,12 +587,31 @@ class _Excuse extends State<Excuse> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              content: Text(
+              title: const Text(
                 "تم رفع عذر الغياب بنجاح",
                 style: TextStyle(
                     // color: Colors.red,
                     ),
               ),
+              content: Icon(
+                Icons.check_circle_outline,
+                color: Colors.green,
+                size: 50.0,
+              ),
+              actions: [
+                TextButton(
+                  child: Text("حسنًا"),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => viewAbcense(
+                                ref: widget.stuRef,
+                              )),
+                    );
+                  },
+                )
+              ],
             );
           });
       return;

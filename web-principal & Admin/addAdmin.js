@@ -83,7 +83,13 @@ let authPrinID = "";
             var fname = document.getElementById( "firstName" );
             if( fname.value == "" )
             {
-             alert('يجب أن لا يكون الحقل المطلوب فارغًا');
+             document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون الحقل المطلوب فارغًا </p> </div>';
+             setTimeout(() => {
+             
+               // 👇️ replace element from DOM
+               document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+         
+             }, 9000);
              document.addAdmin.firstName.focus();
              return false;
             }
@@ -138,19 +144,45 @@ let authPrinID = "";
                        LastName: registerlname,               
                      })
                      
-                    alert("تمت الإضافة بنجاح"); 
+                    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح </p> </div>';
+                    setTimeout(() => {
+                    
+                      // 👇️ replace element from DOM
+                      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+                
+                    }, 9000);
                     sendPasswordResetEmail(auth,registerEmail).then(() => {
                       // EmailSent
                    
                     })  
                 }
                 else{
-                  if(data.status == 'used')
-                  alert("البريد الالكتروني مستخدم من قبل");
-                  else if (data == 'error')
-                  alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
-                  else
-                  alert("???");
+                  if(data.status == 'used'){
+                
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">البريد الالكتروني مستخدم من قبل </p> </div>';
+                  setTimeout(() => {
+                  
+                    // 👇️ replace element from DOM
+                    document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+              
+                  }, 9000);
+                  sendPasswordResetEmail(auth,registerEmail).then(() => {
+                    // EmailSent
+                 
+                  })
+                }  
+                  else if (data == 'error'){
+               
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ بالنظام، الرجاء المحاولة لاحقًا </p> </div>';
+                  setTimeout(() => {
+                  
+                    // 👇️ replace element from DOM
+                    document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+              
+                  }, 9000);
+
+                  }
+                  
                 }
                  console.log(data);
               });

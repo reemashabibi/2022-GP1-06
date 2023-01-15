@@ -76,7 +76,13 @@ onAuthStateChanged(authPrin, (user) => {
           var fname = document.getElementById( "firstName" );
           if( fname.value == "" )
           {
-           alert('يجب أن لا يكون الحقل المطلوب فارغًا');
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون الحقل المطلوب فارغًا </p> </div>';
+            setTimeout(() => {
+            
+              // 👇️ replace element from DOM
+              document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+            }, 9000);
            document.addAdmin.firstName.focus();
            return false;
           }
@@ -84,7 +90,13 @@ onAuthStateChanged(authPrin, (user) => {
           var lname = document.getElementById( "lastName" );
           if( lname.value == "" )
           {
-            alert('يجب أن لا يكون الحقل المطلوب فارغًا');
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون الحقل المطلوب فارغًا </p> </div>';
+            setTimeout(() => {
+            
+              // 👇️ replace element from DOM
+              document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+            }, 9000);
            document.addAdmin.lastName.focus();
            return false;
           }
@@ -142,7 +154,13 @@ onAuthStateChanged(authPrin, (user) => {
                   })
                // alert(" after ");
                $(".loader").hide();
-                alert("تمت الإضافة بنجاح");
+               document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح </p> </div>';
+               setTimeout(() => {
+               
+                 // 👇️ replace element from DOM
+                 document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+           
+               }, 9000);
                 addTeacherForm.reset();
                     sendPasswordResetEmail(auth,registerEmail).then(() => {
                       // EmailSent
@@ -152,11 +170,23 @@ onAuthStateChanged(authPrin, (user) => {
                 else{
                   if(data.status == 'used'){
                   $(".loader").hide();
-                  alert("البريد الالكتروني مستخدم من قبل");
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">البريد الالكتروني مستخدم من قبل </p> </div>';
+                  setTimeout(() => {
+                  
+                    // 👇️ replace element from DOM
+                    document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+              
+                  }, 9000);
                 }
                   else if (data == 'error'){
                   $(".loader").hide();
-                  alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ بالنظام، الرجاء المحاولة لاحقًا </p> </div>';
+                  setTimeout(() => {
+                  
+                    // 👇️ replace element from DOM
+                    document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+              
+                  }, 9000);
                   }
                 }
               });

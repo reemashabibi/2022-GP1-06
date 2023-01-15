@@ -273,12 +273,26 @@ console.log(currentSubjectsWithoutSomeChar);
         $('.loader').show();
         var subjectName = document.getElementById('sname').value;
         if(subjectName == ""){
-          alert("لإضافة مادة يجب أن يتم تعبأة حقل اسم المادة");
+
           $('.loader').hide();
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لإضافة مادة يجب أن يتم تعبأة حقل اسم المادة</p> </div>';
+          setTimeout(() => {
+          
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+      
+          }, 5000);
         }
         else if(currentSubjects.indexOf(subjectName) !== -1 || currentSubjectsWithoutSomeChar.indexOf(subjectName) !== -1){
-          alert("تمت إضافة هذه المادة مسبقًا للفصل");
+
           $('.loader').hide();
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">تمت إضافة هذه المادة مسبقًا للفصل</p> </div>';
+          setTimeout(() => {
+          
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+      
+          }, 5000);
           document.getElementById('sname').value="";
           
         }
@@ -295,7 +309,14 @@ console.log(currentSubjectsWithoutSomeChar);
        addDoc(dbRef, data)
         .then(docRef => {
           currentSubjects.push(subjectName);
-          alert(" تمت إضافة المادة بنجاح");
+          $('.loader').hide();
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت إضافة المادة بنجاح</p> </div>';
+          setTimeout(() => {
+          
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+      
+          }, 5000);
           document.getElementById('sname').value= "";
           //add it to the table 
           
@@ -368,7 +389,14 @@ console.log(currentSubjectsWithoutSomeChar);
          })
        .catch(error => {
         console.log(error);
-        alert("حصل خطأ أثناء الإضافة، الرجاء المحاولة لاحقًا");
+        $('.loader').hide();
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ أثناء الإضافة، الرجاء المحاولة لاحقًا</p> </div>';
+        setTimeout(() => {
+        
+          // 👇️ replace element from DOM
+          document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+    
+        }, 5000);
         $('.loader').hide();
        })
       
@@ -426,10 +454,23 @@ console.log(currentSubjectsWithoutSomeChar);
 
         })
         if(changed){
-          alert("تم حفظ جميع التعديلات");
+         
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">تم حفظ جميع التعديلات</p> </div>';
+          setTimeout(() => {
+          
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+      
+          }, 5000);
         }
         else{
-          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+          setTimeout(() => {
+          
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+      
+          }, 5000);
         }
       }
         

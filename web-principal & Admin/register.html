@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>التسجيل</title>
   <link href="register.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 
 
@@ -20,7 +21,7 @@
     <h1>سجل مدرستك في حلقة</h1>
     <div class="loader topTitle" style="top: 25vmax;"></div>
     <form id="signForm">
-      <div class="inputbox">
+      <div class="inputbox" id="alertContainer">
         <span class="req" style="color: red;">جميع الحقول مطلوبة*</span>
       </div>
 
@@ -45,11 +46,7 @@
         <input type="password" required="required" id="passInp">
         <span>كلمة المرور</span>
       </div>
-      <div class="inputbox">
-
-        <input type="checkbox"  name="show" onclick="myFunction()" style="margin-left:100% ;">  
-         <h6 style="margin-left:79%; font-size: 9px;">إظهار كلمة المرور </h6>
-      </div>
+  
       <div class="inputbox">
         <span class="req" style="color: red;">كلمة المرور يجب أن تكون أكثر من ٦ أحرف و/أو أرقام*</span>
       </div>
@@ -174,7 +171,14 @@
               displayName:"Principal",
            });
                
-           alert("تم تسجيل المدرسة بنجاح");
+    
+           document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم تسجيل المدرسة بنجاح</p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 5000);
             signForm.reset();
             window.location.href = "principalHomePage.html";
             
@@ -186,10 +190,25 @@
             console.log(errorMessage);
             if (errorMessage =="Firebase: Error (auth/email-already-in-use)."){
               $(".loader").hide();
-           alert("البريد الالكتروني مستخدم من قبل")}
+  
+           document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">البريد الالكتروني مستخدم من قبل</p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 5000);
+          }
            else{
             $(".loader").hide();
-           alert("حدث خطأ حاول مره أخرى");
+
+           document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حدث خطأ حاول مره أخرى</p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 5000);
             signForm.reset();
           }
           });
@@ -202,7 +221,13 @@
       }
       else {
         $(".loader").hide();
-        alert("المدرسة مسجلة مسبقاً");
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">المدرسة مسجلة مسبقاً</p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 5000);
         signForm.reset();
       }
     });
@@ -225,7 +250,15 @@
     function validate() {
 
       if (Firstname.value == "" || Lastname.value == "" || schoolname.value == "" ||  password.value == "") {
-        alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+        $(".loader").hide();
+
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">جميع الحقول مطلوبة يرجى التحقق من تعبئتها</p> </div>';
+        setTimeout(() => {
+              
+              // 👇️ replace element from DOM
+              document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+            }, 5000);
         return false;
       }
 
@@ -235,7 +268,15 @@
      
 
       if (password.value.length < 6) {
-        alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+        $(".loader").hide();
+
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام </p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 5000);
         return false;
       }
 

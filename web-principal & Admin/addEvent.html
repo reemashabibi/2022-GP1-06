@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
     <script type="module">
-     /* import{checkUser} from "./admin.js";
+     import{checkUser} from "./admin.js";
+     
       import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
   const auth = getAuth();
   
 
   checkUser();
-       
-       
            const logout= document.getElementById("signout");
        
            logout.addEventListener('click',  async (e) => {
@@ -21,7 +20,7 @@
        console.log(error.message);
        }); 
    }
-    }); */
+    }); 
        
        
        </script>
@@ -39,10 +38,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="navbar.js"></script>
+<link rel="stylesheet" href="style.css"/>
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="eventUA.css" rel="stylesheet">
-   
+    <script src="events.js" type="module"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
     <style>
@@ -56,6 +56,69 @@
      justify-content:center;
      align-items: center;
    }
+
+   .screen__background__shape {
+      transform: rotate(45deg);
+      position: absolute;
+    }
+    .screen__background__shape1 {
+      height: 520px;
+      width: 520px;
+      background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+      top: -20px;
+      left: 150px;	
+      z-index: -1;
+      border-radius: 72px 72px 72px 72px;
+    }
+    
+    .screen__background__shape2 {
+      height: 220px;
+      z-index: -1;
+      width: 220px;
+      background: cadetblue;	
+      top: -100px;
+      left: 0;	
+      border-radius: 32px;
+    }
+    
+    .screen__background__shape3 {
+      height: 500px;
+      width: 190px;
+      z-index: -1;
+      top: 100px;
+      background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+      left: 77%;	
+      border-radius: 32px;
+    }
+    
+    .screen__background__shape5 {
+      height: 540px;
+      width: 190px;
+      top: 25%;
+      z-index: -1;
+      background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+      left: 0;	
+      border-radius: 32px;
+    }
+    .screen__background__shape6 {
+      height: 520px;
+      width: 580px;
+      background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+      top: 45em;
+      left: 80%;	
+      z-index: -1;
+      border-radius: 72px 72px 72px 72px;
+    }
+    
+    .screen__background__shape7 {
+      height: 440px;
+      width: 200px;
+      z-index: -1;
+      top: 90px;
+      background:linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+      left: 70%;	
+      border-radius: 32px;
+    }
        </style>
 </head>
 <body>
@@ -105,12 +168,12 @@
       <br>
       <br>
         <h1 >  إضافة حدث إلى مدرستك </h1>
-        
+        <div class="loader topTitle"></div>
     <form id="addEvent" >
        
         
-          <div class="inputbox">
-            <input type="text" required="required" id="eventTitle">
+          <div class="inputbox" required="required">
+            <input type="text" required  id="eventTitle">
             <span> العنوان</span>
           </div>
           
@@ -128,117 +191,22 @@
             <input type="file"  id="image" accept="image/*,.pdf,.jpg,.png">
             <span>إضافة صورة</span>
           </div>
+          <div class="inputbox" id="alertContainer"></div>
           <div class="inputbox">
-            <button  id="eventButton" class="button-36 topTitle" type="submit">إضافة</button>
+            <button  id="eventButton" class="button-36 topTitle" role="button">إضافة</button>
           </div>
 
     </form>
+    </div>
+    <div class="screen__background">
+      <div class="screen__background__shape screen__background__shape7"></div>
+      <div class="screen__background__shape screen__background__shape5"></div>
+   
+      <div class="screen__background__shape screen__background__shape3"></div>		
+      <div class="screen__background__shape screen__background__shape2"></div>
+      <div class="screen__background__shape screen__background__shape1"></div>
     </div>
   </main>
 </body>
 </html>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-    import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
-    import { get } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
-    import { getAuth, createUserWithEmailAndPassword , updateProfile} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
-    import { getStorage, uploadBytes, uploadBytesResumable ,getDownloadURL, ref} from "https://www.gstatic.com/firebasejs/9.12.1/firebase-storage.js";
-
-
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
-      authDomain: "halaqa-89b43.firebaseapp.com",
-      projectId: "halaqa-89b43",
-      storageBucket: "halaqa-89b43.appspot.com",
-      messagingSenderId: "969971486820",
-      appId: "1:969971486820:web:40cc0abf19a909cc470f71",
-      measurementId: "G-PCYTHJF1SD",
-      storageBucket:"gs://halaqa-89b43.appspot.com"
-    };
-    const app = initializeApp(firebaseConfig);
-    
-
-    export { app, db, collection, getDocs, Timestamp, addDoc, setDoc };
-    export { query, orderBy, limit, where, onSnapshot };
-    const analytics = getAnalytics(app);
-    const auth1= getAuth();
-    
-
-    const db = getFirestore(app);
-
-    const title = document.getElementById("eventTitle");
-    const content = document.getElementById("content");
-    const image = document.getElementById('image');
-    const saveButton = document.getElementById('eventButton');
-
-    saveButton.addEventListener('click', async (e) => {
-      e.preventDefault();
-      
-    
-
-      const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth1.currentUser.email)));
-      var schoolId = "";
-
-    docSnap.forEach((doc) => {
-
-      schoolId = doc.ref.parent.parent.id;
-    });
-    const storage = getStorage(app);
-    const reference = doc(db, "School", schoolId);
-    const q = await collection(reference, "Event");
-    const id1 = id();
-     var imm="";  
-    const file=document.querySelector("#image").files[0];
-              
-              if(file != null){
-              const metadata = {
-                contentType: file.type 
-              };
-              const storageRef = await ref(storage, 'images/' +file.name+id);
-              const uploadTask = await uploadBytesResumable(storageRef, file, metadata);
-              imm=file.name+id1;
-            }
-    
-      
-   
-
-
-      await setDoc(doc(db, "School",schoolId,"Event",id1), {
-              title: title.value,
-              content: content.value,
-              image:imm,
-            }).then(async (e) =>{
-            
-              alert("تم إضافة الحدث بنجاح");
-
-
-            })
-            .catch((error) => {
-                console.log(error);
-                alert(error);
-              });
-
-    
-    
-    })
-
-    function id(){
-    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-            var string_length = 10;
-            var id = '';
-            for (var i=0; i<string_length; i++) {
-                var rnum = Math.floor(Math.random() * chars.length);
-                id += chars.substring(rnum,rnum+1);
-            }
-        return id;
-    }
-
-
-
-</script>

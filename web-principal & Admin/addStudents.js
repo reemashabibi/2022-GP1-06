@@ -203,35 +203,59 @@ excel_file.addEventListener('change', (event) => {
 
              //***********/  
              if (validate1 == false){
-              alert(" الخانة الأولى يجب أن تحتوي على الاسم الأول للطالب، يرجى تحميل نموذج الإضافة ورفعه ");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الأولى يجب أن تحتوي على الاسم الأول للطالب، يرجى تحميل نموذج الإضافة ورفعه </p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate2 == false){ 
-              alert("الخانة الثانية يجب أن تحتوي على الاسم الأخير للطالب، يرجى تحميل نموذج الإضافة ورفعه ");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثانية يجب أن تحتوي على الاسم الأخير للطالب، يرجى تحميل نموذج الإضافة ورفعه </p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate3 == false){
-              alert("الخانة الثالثة يجب أن تحتوي على اسم الفصل، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثالثة يجب أن تحتوي على اسم الفصل، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate4 == false){
-              alert("الخانة الرابعة يجب أن تحتوي على رقم المرحلة الدراسية، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الرابعة يجب أن تحتوي على رقم المرحلة الدراسية، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate5 == false){
-              alert("الخانة الخامسة يجب أن تحتوي على رقم هاتف ولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الخامسة يجب أن تحتوي على رقم هاتف ولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate6 == false){
-              alert("الخانة السادسة يجب أن تحتوي على الاسم الأول لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة السادسة يجب أن تحتوي على الاسم الأول لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate7 == false){
-              alert("الخانة السابعة يجب أن تحتوي على الاسم الأخير لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة السابعة يجب أن تحتوي على الاسم الأخير لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate8 == false){
-              alert("الخانة الثامنة يجب أن تحتوي على البريد الإلكتروني لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثامنة يجب أن تحتوي على البريد الإلكتروني لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
       

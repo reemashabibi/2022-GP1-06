@@ -55,7 +55,8 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 <script src="navbar.js"></script>
 <link rel="stylesheet" href="events.css"/>
-
+<link rel="stylesheet" href="style.css"/>
+<link href="students.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -64,18 +65,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
    
-<style>
-    .button {
-  background-color: rgb(13, 124, 128);/* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-}
-</style>
+
 </head>
 <body>
   <!--start of nav -->
@@ -115,9 +105,20 @@
     </div>
 </nav>
   <!--end of nav -->
-  <br>
-  <h2> قائمة الأحداث </h2>
-  <button class="button" type="button" onclick="window.location.href='addEvent.html'">إضافة</button>
+  <div class="row">
+    <div class="col-lg-10 mx-auto mb-4">
+       <div class="section-title text-center ">
+       <h2 class="topTitle"> قائمة الأحداث </h2>
+       <div class="loader topTitle"></div>
+          <div id="alertContainer"></div>
+          <button class="button-5" id= 'addEvent'type="button" onclick="window.location.href='addEvent.html'">إضافة</button>
+       </div>
+
+   </div>
+</div>
+  
+  
+
   <div class="row">
     <div class="col-lg-10 mx-auto">
         <div class="career-search mb-60">
@@ -132,7 +133,14 @@
 
     </div>
 </div>
-
+<div class="screen__background">
+       
+    <div class="screen__background__shape screen__background__shape4"></div>
+    <div class="screen__background__shape screen__background__shape3"></div>		
+   
+    <div class="screen__background__shape screen__background__shape1"></div>
+  </div>
+  <div>
 </body>
 </html>
 

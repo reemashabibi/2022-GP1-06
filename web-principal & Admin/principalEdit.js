@@ -85,7 +85,12 @@ const user= auth.currentUser;
               snapshot.forEach((doc) => {
                 if(doc.data().Email != auth.currentUser.email){
                   $(".loader").hide();
-                  alert("المدرسة مسجلة مسبقاً")
+                  document.getElementById("myForm").style.display = "none";
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">المدرسة مسجلة مسبقاً</p> </div>';
+                  setTimeout(() => {
+                    document.getElementById('alertContainer').innerHTML='';
+                    
+                  }, 9000);
                   SchoolExist = true ;
                   return;
                 }
@@ -111,22 +116,37 @@ const user= auth.currentUser;
             if (Password.value!="undefined"){
               updatePassword(auth.currentUser, Password.value);
             }
-            alert("تم حفظ التعديلات بنجاح");
+    
             document.getElementById("myForm").style.display = "none";
             $(".loader").hide();
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم حفظ التعديلات بنجاح</p> </div>';
+            setTimeout(() => {
+              document.getElementById('alertContainer').innerHTML='';
+              
+            }, 7000);
                });
   
        }).catch((error) => {
         
           if(error.message=="Firebase: Error (auth/wrong-password)."){
             $('.loader').hide();
-    
-            alert("هناك خطأ في البريد الإلكتروني أو كلمة المرور ");
+            document.getElementById("myForm").style.display = "none";
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">هناك خطأ في البريد الإلكتروني أو كلمة المرور</p> </div>';
+            setTimeout(() => {
+              document.getElementById('alertContainer').innerHTML='';
+              
+            }, 7000);
           }
           else{
-          alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
           document.getElementById("myForm").style.display = "none";
-          $(".loader").hide();}
+          $(".loader").hide();
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حدث خطأ يرجى المحاولة في وقتٍ لاحق</p> </div>';
+          setTimeout(() => {
+            document.getElementById('alertContainer').innerHTML='';
+            
+          }, 7000);
+        }
+          
       
           })
           });
@@ -142,12 +162,21 @@ const user= auth.currentUser;
     });
     function validate() {
   
-      if(Email.value==""||Password.value==""){
-        alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+      if(Email.value==""||Password.value=="" || FirstName.value==''|| LastName.value==''||document.getElementById("snameInp").value==''){
+        document.getElementById("myForm").style.display = "none";
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">جميع الحقول مطلوبة يرجى التحقق من تعبئتها </p> </div>';
+        setTimeout(() => {
+          document.getElementById('alertContainer').innerHTML='';
+          
+        }, 7000);
         return false;
       }
       else if (Password.value.length < 6) {
-        alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام </p> </div>';
+        setTimeout(() => {
+          document.getElementById('alertContainer').innerHTML='';
+          
+        }, 7000);
         return false;
       }
     

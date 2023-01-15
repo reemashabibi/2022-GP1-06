@@ -15,6 +15,8 @@
     <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css"/>
 
     <link rel="stylesheet" href="navbar.css"/>
+    <link rel="stylesheet" href="style.css"/>
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css"/>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -73,6 +75,9 @@
  display:grid;
  justify-content:center;
  align-items: center;
+}
+label {
+    float: right;
 }
    </style>
     <link rel="stylesheet" href="style.css">
@@ -134,7 +139,7 @@
         <form class="changeDocForm">
 
             <div class="inputbox">
-              <input type="text" required="required" name="NewDocname" id="NewDocname">
+              <input type="text" required="true" name="NewDocname" id="NewDocname">
               <span>اسم المستند الجديد</span>
           </div>
 
@@ -142,14 +147,24 @@
             <input style="align-items: center ;" type="file" id="NewFile" name="NewFile" />
         </div>
         
-            <div class="inputbox" id="alertContainer" style="text-align: right;">
+        <div class="inputbox">
+          <input type="checkbox" name="allowReply" id="editParentCanUpload" style="margin-left: 53% ;" />
+        
+          <label>السماح لأولياء الامور بارفاق مستند
+          </label>
+        </div>
+
+            <div class="inputbox" style="text-align: right;">
     
-              <p class="req"> :الستند الحالي</p>
-              <span id="docLink" class="req" style="margin: 2%; "></span>
-           <br>
-                <p style="color: rgb(157, 48, 48);"class="req" >جميع الحقول مطلوبة*</p>
+              <p class="req"> :المستند الحالي</p>
+              <span id="docLink" class="req" style="margin: 1%; "></span>
               </div>
+              <div class="inputbox" id="alertContainer">
+                <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
+              </div>
+       
             <div class="inputbox">
+              
 
                 <button  class="button-36 topTitle changeDocSubmit" id="change">تعديل</button>
             </div>
