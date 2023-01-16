@@ -2,18 +2,28 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:halaqa_app/chatDetailPS.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
+import 'package:halaqa_app/viewChildGrades.dart';
 import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
+import 'chatDetailPS.dart';
+
 class viewChildSubjcets extends StatefulWidget {
-  const viewChildSubjcets({super.key, this.classRef, this.studentName, this.schoolID, this.classId,});
+  const viewChildSubjcets(
+      {super.key,
+      this.classRef,
+      this.studentName,
+      this.stRef,
+      this.schoolID,
+      this.classId});
   final classRef;
   final studentName;
+  final stRef;
   final schoolID;
   final classId;
 
@@ -25,8 +35,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   var className = "";
   var level = "";
   late List _SubjectList;
-  ///create map of list because i need teacher id
-  late List<Map<String,dynamic>> _SubjectsNameList;
+  late List<Map<String, dynamic>> _SubjectsNameList;
   late List _SubjectsRefList;
 
   var x = 0;
@@ -40,64 +49,62 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   getData() {
     _SubjectsNameList = [];
     //_SubjectList = [""];
-    // _SubjectsRefList = [""];
+    _SubjectsRefList = [""];
     x++;
   }
 
   String studentId = "";
 
-  void callChatDetailScreen(DocumentReference<Map<String, dynamic>> teacherId,String subjectId)async{
-    print("In function Student Name: "+ "tst ${teacherId.id}");
+  void callChatDetailScreen(DocumentReference<Map<String, dynamic>> teacherId,
+      String subjectId) async {
+    print("In function Student Name: " + "tst ${teacherId.id}");
     print(user!.uid);
     print(subjectId);
     print(widget.classId);
-    var dc = FirebaseFirestore.instance.doc("School/$schoolID/Parent/${user!.uid}");
-    dc.get().then((value)async{
+    var dc =
+        FirebaseFirestore.instance.doc("School/$schoolID/Parent/${user!.uid}");
+    dc.get().then((value) async {
       print(value.get("Students"));
       for (DocumentReference<Map<String, dynamic>> s in value.get("Students")) {
         print("STUDENT ID ${s.id}");
         studentId = s.id;
       }
     });
-    DocumentSnapshot teacherDs = await FirebaseFirestore.instance.doc("School/$schoolID/Teacher/${teacherId.id}").get();
+    DocumentSnapshot teacherDs = await FirebaseFirestore.instance
+        .doc("School/$schoolID/Teacher/${teacherId.id}")
+        .get();
     print(teacherDs.data());
-     Navigator.push(
+    Navigator.push(
         context,
         CupertinoPageRoute(
-        builder: (context) => ChatdetailPS(
-          /////trasfer TeacherName, TeacherUid, StudentUid
-         // TeacherName: "Faisal naser",
-         // TeacherUid: "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
-         // StudentUid: "koHNAlQnVjEmUklBkUtn",
-          TeacherName: "${teacherDs.get("FirstName")} ${teacherDs.get("LastName")}",
-          TeacherUid: teacherId.id,
-          StudentUid: studentId,
-          schoolId: schoolID,
-          subjectId: subjectId,
-          classID: widget.classId,
-          )));
+            builder: (context) => ChatdetailPS(
+                  /////trasfer TeacherName, TeacherUid, StudentUid
+                  // TeacherName: "Faisal naser",
+                  // TeacherUid: "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
+                  // StudentUid: "koHNAlQnVjEmUklBkUtn",
+                  TeacherName:
+                      "${teacherDs.get("FirstName")} ${teacherDs.get("LastName")}",
+                  TeacherUid: teacherId.id,
+                  StudentUid: studentId,
+                  schoolId: schoolID,
+                  subjectId: subjectId,
+                  classID: widget.classId,
+                )));
   }
-
-
-getTeacher() async {
-
-}
 
   getSubjects() async {
     DocumentReference docRef = widget.classRef;
     var subRefs = await docRef.collection("Subject").get();
     if (subRefs.docs.length > 0) {
-      await docRef.collection("Subject").get().then((querySnapshot) {
+      await await docRef.collection("Subject").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
-
-          // DocumentReference<Map<String, dynamic>> id = documentSnapshot.get("TeacherID");
-          // print("SUBJECT ^^^ ${documentSnapshot.get("msg_count")}");
           _SubjectsNameList.add({
-            "name" : documentSnapshot.get('SubjectName'),
-            "id" : documentSnapshot.get("TeacherID"),
-            "docId" : documentSnapshot.id,
-            "msg_count" : documentSnapshot.get("msg_count")
+            "name": documentSnapshot.get('SubjectName'),
+            "id": documentSnapshot.get("TeacherID"),
+            "docId": documentSnapshot.id,
+            "msg_count": documentSnapshot.get("msg_count")
           });
+          _SubjectsRefList.add(documentSnapshot.reference);
         });
       });
     }
@@ -111,19 +118,18 @@ getTeacher() async {
       setState(() {
         if (_SubjectsNameList.length > 1) {
           _SubjectsNameList.removeAt(0);
+          _SubjectsRefList.removeAt(0);
         }
       });
       if (_SubjectsNameList[0] == "") {
         v++;
       }
     });
-    // print("ZZZZZZZZZZZZZZ $_SubjectsNameList");
   }
 
   @override
   void initState() {
     schoolID = widget.schoolID;
-    // print("SCHOOL ID $schoolID, ${user!.uid}");
     getSubjects();
     // getSchoolID();
     // getSchoolID();
@@ -136,36 +142,35 @@ getTeacher() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
             color: Color.fromARGB(255, 255, 255, 255),
           ),
           onPressed: () {
-            Navigator.pop(context);
-            // Navigator.pushReplacement(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => parentHP(),
-            //   ),
-            // );
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => parentHP(),
+              ),
+            );
           },
         ),
         actions: [],
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           currentIndex: 2, // Use this to update the Bar giving a position
-          inactiveColor: const Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: const Color.fromARGB(255, 76, 170, 175),
-          activeColor: const Color.fromARGB(255, 76, 170, 175),
+          inactiveColor: Color.fromARGB(255, 9, 18, 121),
+          indicatorColor: Color.fromARGB(255, 76, 170, 175),
+          activeColor: Color.fromARGB(255, 76, 170, 175),
           onTap: (index) {
             if (index == 0) {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const parentHP(),
+                  builder: (context) => parentHP(),
                 ),
               );
             }
@@ -173,34 +178,28 @@ getTeacher() async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const viewEvents(),
+                  builder: (context) => viewEvents(),
                 ),
               );
             }
           },
           items: [
             TitledNavigationBarItem(
-                title: const Text('الصفحة الرئيسية',
+                title: Text('الصفحة الرئيسية',
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 icon: const Icon(Icons.home)),
             TitledNavigationBarItem(
-              title: const Text('الأحداث',
+              title: Text('الأحداث',
                   style: TextStyle(fontWeight: FontWeight.bold)),
               icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
+            ),
           ]),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('School/$schoolID/Class').doc(widget.classId).collection("Subject").snapshots(),
+              .collection('School/$schoolID/Class')
+              .doc(widget.classId)
+              .collection("Subject")
+              .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
@@ -219,54 +218,70 @@ getTeacher() async {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: Column(
+                      child: new Column(
                 children: [
-                  Container(
+                  new Container(
+                    height: 150,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       widget.studentName + "\n" + className,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
                         fontSize: 30,
                       ),
                     ),
                   ),
-                  Container(
+                  new Container(
                     child: ListView(
+                      padding: EdgeInsets.only(right: 40.0, left: 40.0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                      //  padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                       children: snapshot.data!.docs.map((e) {
-
                         return Container(
-                            margin: const EdgeInsets.only(bottom: 30),
+                            margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 231, 231, 231),
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
-                                  color: const Color.fromARGB(255, 130, 126, 126),
+                                  color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(10.0),
+                                borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
-                                  const BoxShadow(
+                                  BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: Column(children: [
-                              Container(
-                                margin: const EdgeInsets.all(4),
-                                padding: const EdgeInsets.all(2),
+                            child: new Column(children: [
+                              new Container(
                                 child: Text("${e.get("SubjectName")}",
                                     textAlign: TextAlign.center,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(2),
                               ),
-                              Container(
+                              new Container(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -277,82 +292,57 @@ getTeacher() async {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            const Color.fromARGB(255, 199, 248, 248),
+                                            Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          /*
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      viewStudents(
-                                                        ref: _SubjectsRefList[
-                                                            _SubjectsNameList
-                                                                .indexOf(e)],
+                                                      viewChildGrades(
+                                                        subRef: e.reference,
+                                                        stRef: widget.stRef,
                                                       )),
                                             );
                                           }
-                                      */
                                         },
                                         child: Image.asset(
-                                          "images/gradeIcon.png",
-                                          width: 55,
-                                          height: 55,
+                                          "images/gradesIcon.png",
+                                          width: 45,
+                                          height: 45,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
+                                  SizedBox(
                                     width: 15,
                                   ),
-                                  Stack(
-                                    children: [
-                                      SizedBox(
-                                        width: 44,
-                                        height: 44,
-                                        child: FittedBox(
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            backgroundColor:
-                                                const Color.fromARGB(255, 199, 248, 248),
-                                            onPressed: () {
-                                            //  getTeacher();
-                                              callChatDetailScreen(
-                                                  e['TeacherID'],
-                                                  e.id
-                                                  //     context ,
-                                                  //     "faisal naser",
-                                                  //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
+                                  SizedBox(
+                                    width: 44,
+                                    height: 44,
+                                    child: FittedBox(
+                                      child: FloatingActionButton(
+                                        heroTag: null,
+                                        backgroundColor:
+                                            Color.fromARGB(255, 199, 248, 248),
+                                        onPressed: () {
+                                          callChatDetailScreen(
+                                              e['TeacherID'], e.id
+                                              //     context ,
+                                              //     "faisal naser",
+                                              //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
 
-                                                );
-
-
-
-                                            },
-                                            child: Image.asset(
-                                              "images/chatIcon.png",
-                                              width: 44,
-                                              height: 44,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
+                                              );
+                                        },
+                                        child: Image.asset(
+                                          "images/chatIcon.png",
+                                          width: 44,
+                                          height: 44,
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
-                                      e['msg_count'] == 0 ? Container() : Positioned(
-                                        child: Container(
-                                        height: 14,
-                                        width: 14,
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle
-                                        ),
-                                        child: Center(child: Text("${e['msg_count']}",style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 7
-                                        ),)),
-                                      ))
-                                    ],
+                                    ),
                                   ),
                                 ],
                               ))
@@ -365,13 +355,13 @@ getTeacher() async {
                 ],
               )));
             }
-            if (_SubjectsNameList.length == 0 && x == 0) {
-              return const Center(child: Text(""));
+            if (/*_SubjectsNameList.length == 0 &&*/ x == 0) {
+              return Center(child: Text(""));
             }
-            if (/*_SubjectsNameList[0] == "" && */v == 1) {
-              return const Center(child: Text("لا يوجد مواد مسجلة"));
+            if (/*_SubjectsNameList[0] == "" &&*/ v == 1) {
+              return Center(child: Text("لا يوجد مواد مسجلة"));
             }
-            return const Center(child: CircularProgressIndicator());
+            return Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -385,9 +375,9 @@ getTeacher() async {
     // set up the buttons
     Widget continueButton = TextButton(
       //continueButton
-      child: const Text("نعم"),
+      child: Text("نعم"),
       onPressed: () async {
-        const CircularProgressIndicator();
+        CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
@@ -400,7 +390,7 @@ getTeacher() async {
 
     Widget cancelButton = TextButton(
       //cancelButton
-      child: const Text("إلغاء",
+      child: Text("إلغاء",
           style: TextStyle(
             color: Colors.red,
           )),
@@ -412,7 +402,7 @@ getTeacher() async {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("AlertDialog"),
-      content: const Text(
+      content: Text(
         "هل تأكد تسجيل الخروج؟",
         textAlign: TextAlign.center,
       ),

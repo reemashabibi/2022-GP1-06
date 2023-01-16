@@ -266,6 +266,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "full_screen_image_null_safe",
+      "rootUri": "file:///Users/reemafahad/flutter/.pub-cache/hosted/pub.dartlang.org/full_screen_image_null_safe-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "full_screen_network_image",
+      "rootUri": "file:///Users/reemafahad/flutter/.pub-cache/hosted/pub.dartlang.org/full_screen_network_image-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "get",
       "rootUri": "file:///Users/reemafahad/flutter/.pub-cache/hosted/pub.dartlang.org/get-4.6.5",
       "packageUri": "lib/",
@@ -602,7 +614,7 @@
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-14T11:51:22.903293Z",
+  "generated": "2023-01-16T10:45:15.930972Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

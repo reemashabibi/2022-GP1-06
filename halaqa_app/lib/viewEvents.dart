@@ -2,15 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
+import 'package:full_screen_network_image/full_screen_network_image.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'package:intl/intl.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class viewEvents extends StatefulWidget {
@@ -24,8 +26,9 @@ class events {
   String content;
   String image;
   String title;
+  DateTime time;
 
-  events(this.content, this.image, this.title);
+  events(this.content, this.image, this.title, this.time);
 
   @override
   String toString() {
@@ -37,16 +40,7 @@ class events {
 class _viewEventsState extends State<viewEvents> {
   List<events> eventList = [];
   List imageList = <String>[];
-  /*
-  late List _List;
-  late List _SubjectsNameList;
-  late List _SubjectsRefList;
-  late List _ClassNameList;
-  late List _LevelNameList;
- 
-  var teacherName = "";
 
-  var numOfSubjects;*/
   var x = 0;
   var v = 0;
   var schoolID = "xx";
@@ -54,7 +48,7 @@ class _viewEventsState extends State<viewEvents> {
   User? user = FirebaseAuth.instance.currentUser;
 
   getData() {
-    eventList.add(events("", "", ""));
+    eventList.add(events("", "", "", DateTime.now()));
     imageList.add("start");
     x++;
   }
@@ -79,8 +73,11 @@ class _viewEventsState extends State<viewEvents> {
     if (EventRefs.docs.length > 0) {
       await docRef.collection("Event").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) async {
-          eventList.add(events(documentSnapshot['content'],
-              documentSnapshot['image'], documentSnapshot['title']));
+          eventList.add(events(
+              documentSnapshot['content'],
+              documentSnapshot['image'],
+              documentSnapshot['title'],
+              documentSnapshot['Time'].toDate()));
         });
       });
     }
@@ -89,6 +86,9 @@ class _viewEventsState extends State<viewEvents> {
       if (eventList.length > 1) {
         eventList.removeAt(0);
       }
+      eventList.sort((a, b) {
+        return a.time.compareTo(b.time);
+      });
     });
     for (int i = 0; i < eventList.length; i++) {
       imageList.add(await getImage(eventList[i].image));
@@ -233,9 +233,26 @@ class _viewEventsState extends State<viewEvents> {
                       child: new Column(
                 children: [
                   new Container(
+                    height: 120,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(50),
+                          bottomLeft: Radius.circular(50)),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      gradient: LinearGradient(
+                        colors: [
+                          Color.fromARGB(255, 76, 170, 175),
+                          Color.fromARGB(255, 255, 255, 255)
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       "الأحداث",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
@@ -268,6 +285,17 @@ class _viewEventsState extends State<viewEvents> {
                                 ]),
                             child: new Column(children: [
                               new Container(
+                                alignment: Alignment.topLeft,
+                                child: Text(
+                                    DateFormat('MMM d, h:mm a').format(e.time),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.bold)),
+                                margin: EdgeInsets.all(4),
+                                padding: EdgeInsets.all(2),
+                              ),
+                              new Container(
                                 child: Text(e.title,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
@@ -286,13 +314,26 @@ class _viewEventsState extends State<viewEvents> {
                                 padding: EdgeInsets.all(2),
                               ),
                               new Container(
-                                  child: FadeInImage(
-                                image: NetworkImage(
-                                    imageList[eventList.indexOf(e)]),
-                                placeholder: AssetImage("images/editIcon.png"),
-                              ))
-
-                              // color: Color.fromARGB(255, 222, 227, 234),
+                                  child: FullScreenWidget(
+                                child: InteractiveViewer(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: FadeInImage(
+                                      image: NetworkImage(
+                                          imageList[eventList.indexOf(e)] ??
+                                              ""),
+                                      fit: BoxFit.contain,
+                                      imageErrorBuilder: (BuildContext context,
+                                          Object exception,
+                                          StackTrace? stackTrace) {
+                                        return const Text('');
+                                      },
+                                      placeholder:
+                                          AssetImage("images/logo.png"),
+                                    ),
+                                  ),
+                                ),
+                              )),
                             ]));
                       }).toList(),
                     ),

@@ -81,7 +81,14 @@ classForm.addEventListener('submit', async (e) => {
     
     const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     if(classForm.Cname.value.match(specialChars))
-    {alert("اسم الفصل يجب ان يتكون من حروف فقط ");
+    {
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">اسم الفصل يجب ان يتكون من حروف فقط</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
       return;
     }
     $('.loader').show();
@@ -97,7 +104,7 @@ classForm.addEventListener('submit', async (e) => {
       var options = document.getElementById('classes').options;
       var levelId = options[options.selectedIndex].id;
       
-    addDoc(colRefClass, {
+   await addDoc(colRefClass, {
         ClassName: classForm.Cname.value,
         LevelName: classForm.classes.value,
         Level: parseInt(levelId),
@@ -108,15 +115,15 @@ classForm.addEventListener('submit', async (e) => {
       classForm.reset();
       const refrence = doc(db, "School", schoolID, "Class", docRef.id);
       let currentClass = await getDoc(refrence);
-      const levelName = currentClass.data().Level;
+      const levelName = currentClass.data().LevelName;
       const qc = query(collection(db, "Level"), where("LevelName", "==", levelName ));
       const querySnapshotc = await getDocs(qc);
-     querySnapshotc.forEach((doc) =>{
+     querySnapshotc.forEach(async(doc) =>{
        
         const colRefSubject = collection(db, "School",schoolID, "Class", docRef.id, "Subject");
         const subLength= doc.data().Subjects;
         for(let i = 0; i < subLength.length; i++){
-        addDoc(colRefSubject, {
+       await addDoc(colRefSubject, {
         SubjectName: doc.data().Subjects[i],
         TeacherID:  "",
         customized: false 
@@ -126,11 +133,23 @@ classForm.addEventListener('submit', async (e) => {
 
             });
             $('.loader').hide();
-alert("تمت اضافة الفصل بنجاح");
+document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت إضافة الفصل بنجاح</p> </div>';
+setTimeout(() => {
+    
+  // 👇️ replace element from DOM
+  document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+}, 9000);
         })
       }else{
         $(".loader").hide();
-       alert("لم تتم الإضافة، يوجد فصل مُطابِق لاسم الفصل والمستوى")
+       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لم تتم الإضافة، يوجد فصل مُطابِق لاسم الفصل والمستوى</p> </div>';
+       setTimeout(() => {
+    
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+      }, 9000);
        classForm.reset();
       }
       })

@@ -41,8 +41,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> تعديل الإعلان</title>
-    <div class="loader topTitle" style="top: 25vmax;"></div>
     <link href="eventUA.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
 
      <link rel="stylesheet" href="navbar.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"/>
@@ -102,9 +102,12 @@
           <li class="nav-item">
               <a class="nav-link" href="documents.html">المستندات</a>
           </li>
-          <li class="nav-item active">
+          <li class="nav-item ">
               <a class="nav-link" href="adminHomePage.html">الصفحة الرئيسية</a>
           </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="javascript:void(0);"></a>
+        </li>
       </ul>
   </div>
 </nav>
@@ -113,12 +116,12 @@
 <main>
     <div class="center" id="foorm" >
         <h1 >  تعديل الإعلان   </h1>
-
+        <div class="loader topTitle"></div>
     <form id="addEvent" >
        
         
           <div class="inputbox">
-            <input type="text" required="required" id="eventTitle">
+            <input type="text" required="required" id="Title">
             <span> العنوان</span>
           </div>
           

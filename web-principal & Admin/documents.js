@@ -104,7 +104,8 @@ onAuthStateChanged(auth, (user) => {
       const docSnap = await getDoc(docRef);
       if(docSnap.exists()) {
         document.getElementById("NewDocname").value = docSnap.data().DisplayName;
-        var filepath = docSnap.data().FileName+"@"+docId;
+        document.getElementById("editParentCanUpload").checked = docSnap.data().AllowReply;
+        var filepath = 'School Files/'+docSnap.data().FileName+"@"+docId;
 
         await getDownloadURL(ref(storage, filepath))
                         .then((url) => {
@@ -653,7 +654,17 @@ $(document).on('submit', '.docForm', async function (e){
 
     e.preventDefault()
     var selectedClasses = $('#classes').val();
-    
+    if(!selectedClasses){
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب إختيار فصل واحد على الأقل </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 5000);
+      return false;
+    }
+
     $('.loader').show();
     const snapshot = await getDocs(query(collectionGroup(db, "Admin"), where("Email","==" ,email )));
     snapshot.forEach(async docSnap => {
@@ -670,9 +681,16 @@ $(document).on('submit', '.docForm', async function (e){
     var file = document.getElementById("file").files[0];
     var format = /[@]/;
     if(format.test(file.name)){
+      $('.loader').hide();
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">@ يجب أن لا يحتوي اسم الملف على الرمز </p> </div>';
-      $(".loader").hide();
-      return;
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 9000);
+      
+      return false;
     }
     let allowParentUpload = true;
 if(!classDocForm.allowReply.checked){
@@ -701,12 +719,23 @@ if(!classDocForm.allowReply.checked){
     });
     $(".loader").hide();
     document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح</p> </div>';
+    setTimeout(() => {
+              
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
 })
    .catch(error => {
     $(".loader").hide();
     console.log(error);
     document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
+    setTimeout(() => {
+              
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
 
+    }, 9000);
   })
 
       
@@ -722,19 +751,38 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
     snapshot.forEach(async docSnap => {
     const school = await getDoc(docSnap.ref.parent.parent);
     schoolID = school.id;
-    
+
+    if(DocForm.NewDocname.value==''){
+      $('.loader').hide();
+
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين اسم للمستند </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML ='';
+      }, 5000);
+      return false;
+    }
+
+    let allowParentUpload = true;
+    if(!DocForm.allowReply.checked){
+      allowParentUpload = false;
+    }
+
     var data
     const docRef = doc(db, 'School', schoolID, 'Documents', $('.inputbox button').attr('id'));
     const documentDoc = await getDoc(docRef);
     if(document.getElementById("NewFile").files.length == 0){
        data = {
         DisplayName: DocForm.NewDocname.value,
+        AllowReply: allowParentUpload,
       }
     }
       else{
         data = {
           DisplayName: DocForm.NewDocname.value,
-          FileName: document.getElementById("NewFile").files[0].name
+          FileName: document.getElementById("NewFile").files[0].name,
+          AllowReply: allowParentUpload,
         }
         const storageRef = ref(storage, 'School Files/'+document.getElementById("NewFile").files[0].name+"@"+$('.inputbox button').attr('id'));
  
@@ -745,8 +793,14 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       await deleteObject(fileRef).then(() => {
        // File deleted successfully
      }).catch((error) => {
-      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
       $('.loader').hide();
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML ='';
+      }, 9000);
+   
 
         return;
        });
@@ -755,14 +809,27 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
     }
     await updateDoc(docRef, data)
     .then(docRef => {
-      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم التغيير بنجاح</p> </div>';
       $('.loader').hide();
-
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم التغيير بنجاح</p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML ='';
+      }, 9000);
+      
+      document.getElementById('alertContainer').innerHTML ='';
    })
    .catch(error => {
-    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
     $('.loader').hide();
 
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
+    setTimeout(() => {
+              
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML ='';
+
+    }, 9000);
+    
    })
   
 

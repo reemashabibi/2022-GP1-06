@@ -72,7 +72,14 @@ addStudentForm.addEventListener('submit', async (e) => {
   var fname = document.getElementById("Fname");
   var letters = null;
   if (fname.value == "") {
-    alert('يجب أن لا يكون  الاسم الأول للطالب فارغًا');
+
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون  الاسم الأول للطالب فارغًا</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     fname.focus();
     notValidated = true;
     return false;
@@ -80,7 +87,13 @@ addStudentForm.addEventListener('submit', async (e) => {
 
   var Lname = document.getElementById("Lname");
   if (Lname.value == "") {
-    alert('يجب أن لا يكون  الاسم الأخير للطالب فارغًا');
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون  الاسم الأخير للطالب فارغًا</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     Lname.focus();
     notValidated = true;
   }
@@ -88,7 +101,14 @@ addStudentForm.addEventListener('submit', async (e) => {
   var selectedClass = document.getElementById("classes");
   var selectedClassIn = selectedClass[selectedClass.selectedIndex].value;
   if (selectedClassIn == "non") {
-    alert('يرجى اختيار الفصل');
+
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يرجى اختيار الفصل</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     document.querySelector('.add').non.focus();
     notValidated = true;
   }
@@ -98,7 +118,13 @@ addStudentForm.addEventListener('submit', async (e) => {
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
   if ((!phoneNo.value.match(phoneno))) {
-    alert('يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية');
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     phoneNo.focus();
     notValidated = true;
 
@@ -110,14 +136,26 @@ addStudentForm.addEventListener('submit', async (e) => {
   var FnameParent = document.getElementById("FnameParent");
   var letters = null;
   if (FnameParent.value == "") {
-    alert('يجب أن لا يكون الاسم الأول لولي الأمر فارغًا');
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون الاسم الأول لولي الأمر فارغًا</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     FnameParent.focus();
     notValidated = true;
   }
 
   var LnameParent = document.getElementById("LnameParent");
   if (LnameParent.value == "") {
-    alert('يجب أن لا يكون  الاسم الأخير لولي الأمر فارغًا');
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب أن لا يكون الاسم الأخير لولي الأمر فارغًا</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     LnameParent.focus();
     notValidated = true;
   }
@@ -125,7 +163,13 @@ addStudentForm.addEventListener('submit', async (e) => {
   var emailP = document.getElementById("emailP");
   var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (!emailP.value.match(mailformat)) {
-    alert("الرجاء إدحال بريد إلكتروني صحيح");
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الرجاء إدحال بريد إلكتروني صحيح</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     emailP.focus();
     notValidated = true;
   }
@@ -209,24 +253,49 @@ addStudentForm.addEventListener('submit', async (e) => {
                     // EmailSent
                  
                   });  
-                  alert("تمت الإضافة بنجاح")
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تمت الإضافة بنجاح</p> </div>';
+                  setTimeout(() => {
+                  
+                    // 👇️ replace element from DOM
+                    document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+              
+                  }, 9000);
                   addStudentForm.reset();
               });
             }).catch((error) => {
               $(".loader").hide();
 
-              alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ بالنظام، الرجاء المحاولة لاحقًا</p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 9000);
             });
           }
 
              else{
                if(data.status == 'used'){
                 $(".loader").hide();
-               alert("البريد الالكتروني مستخدم من قبل");
+               document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">البريد الالكتروني مستخدم من قبل</p> </div>';
+               setTimeout(() => {
+               
+                 // 👇️ replace element from DOM
+                 document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+           
+               }, 9000);
                addStudentForm.emailP.focus();}
                else if (data == 'error'){
                 $(".loader").hide();
-               alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+               document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ بالنظام، الرجاء المحاولة لاحقًا</p> </div>';
+               setTimeout(() => {
+               
+                 // 👇️ replace element from DOM
+                 document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+           
+               }, 9000);
+
               }
              }
 
@@ -336,8 +405,12 @@ addStudentForm.addEventListener('submit', async (e) => {
                     })
                     $(".loader").hide();
                     document.getElementById('alertContainer').innerHTML  = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success" id="alert-temp">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح</p> </div>';
-                    $("#alert-temp").delay().fadeOut(7000);
-                    document.getElementById('alertContainer').innerHTML
+                    setTimeout(() => {
+                    
+                      // 👇️ replace element from DOM
+                      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+                
+                    }, 9000);
 
 
                     addStudentForm.reset()
@@ -348,7 +421,13 @@ addStudentForm.addEventListener('submit', async (e) => {
 
               }//if(FName != addStudentForm.Fname.value )
               else {
-                alert("الطالب مسجل بالنظام")
+                document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> الطالب مسجل بالنظام</p> </div>';
+                setTimeout(() => {
+                
+                  // 👇️ replace element from DOM
+                  document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+            
+                }, 9000);
                 $(".loader").hide();
                 addStudentForm.Fname.focus();
                 //return;
@@ -372,7 +451,14 @@ $(".phone").change(async function () {
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
   if ((!phoneNo.value.match(phoneno))) {// validate Phone Number
-    alert('يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية');
+
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يلزم ان يتكون رقم الهاتف ١٠ ارقام باللغة الإنجليزية</p> </div>';
+    setTimeout(() => {
+    
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+    }, 9000);
     phoneNo.focus();
     notValidated = true;
     document.getElementById("FnameParent").disabled = true;
@@ -413,8 +499,13 @@ $(".phone").change(async function () {
         $(".loader").hide();
             } else{
               $(".loader").hide();
-
-              alert("الطالب مسجل بالنظام")
+              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> الطالب مسجل بالنظام</p> </div>';
+              setTimeout(() => {
+              
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          
+              }, 9000);
               addStudentForm.phone.value = "";
               addStudentForm.Fname.value = "";
               addStudentForm.Fname.focus();

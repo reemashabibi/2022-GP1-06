@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDo,serverTimestamp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -28,7 +28,8 @@ import { getAuth, createUserWithEmailAndPassword , updateProfile} from "https://
   
   
       const db = getFirestore(app);
-
+      const auth= getAuth();
+      $('.loader').hide();
 
 export async function viewAnnouncement(email){
    
@@ -119,7 +120,13 @@ $(document).ready(function () {
    
      await deleteDoc(docRef).then(() =>{
         $(".loader").hide();
-        alert("تم الحذف ");
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم الحذف </p> </div>';
+        setTimeout(() => {
+                
+          // 👇️ replace element from DOM
+          document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+    
+        }, 2000);
         window.location.reload(true);
       })
       .catch(error => {
@@ -131,3 +138,65 @@ $(document).ready(function () {
   
   });
 });
+
+const title = document.getElementById("announcmentTitle");
+    const content = document.getElementById("content");
+    
+    
+    $(document).on('click','#eventButton', async function(e) {
+      e.preventDefault();
+      $('.loader').show();
+    
+      const title = document.getElementById("announcmentTitle");
+    const content = document.getElementById("content");
+    
+    if(title.value == ''){
+      $('.loader').hide();
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين عنوان للإعلان </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML ='';
+      }, 5000);
+      return false;
+    }
+
+      const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', auth.currentUser.email)));
+      var schoolId = "";
+
+    docSnap.forEach((doc) => {
+
+      schoolId = doc.ref.parent.parent.id;
+    });
+    
+    const reference = doc(db, "School", schoolId);
+    const q = await collection(reference, "Announcement");
+     
+    
+      
+
+      await setDoc(q, {
+              title: title.value,
+              content: content.value,
+              time: serverTimestamp(),
+            }).then(async (e) =>{
+      
+              $('.loader').hide();
+              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم إضافة الإعلان بنجاح </p> </div>';
+              setTimeout(() => {
+                      
+                // 👇️ replace element from DOM
+                document.getElementById('alertContainer').innerHTML ='';
+              }, 5000);
+              window.location.href="announcement.html"
+
+
+            })
+            .catch((error) => {
+                console.log(error);
+                alert(error);
+              });
+
+    
+    
+    })

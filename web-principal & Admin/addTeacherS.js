@@ -173,15 +173,27 @@ excel_file.addEventListener('change', (event) => {
               
             //***********/  
             if (validate1 == false){
-              alert(" الخانة الأولى يجب أن تحتوي على الاسم الأول، يرجى تحميل نموذج الإضافة ورفعه ");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> الخانة الأولى يجب أن تحتوي على الاسم الأول، يرجى تحميل نموذج الإضافة ورفعه  </p> </div>';
+              setTimeout(() => {
+              
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate2 == false){ 
-              alert("الخانة الثانية يجب أن تحتوي على الاسم الأخير، يرجى تحميل نموذج الإضافة ورفعه ");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> الخانة الثانية يجب أن تحتوي على الاسم الأخير، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+              
+                document.getElementById('excel_data').innerHTML='';
+              }, 9000);
              // break;
              }
              if(validate3 == false){
-              alert("الخانة الثالثة يجب أن تحتوي على البريد الإلكتروني، يرجى تحميل نموذج الإضافة ورفعه");
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثالثة يجب أن تحتوي على البريد الإلكتروني، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              setTimeout(() => {
+                document.getElementById('excel_data').innerHTML='';
+                    
+              }, 9000);
              // break;
              }
       

@@ -230,7 +230,14 @@ export async function viewStudents(classId, schoolId){
   });
   //end of dropdown data
   if (CurrenrclassStudents.length <=0) {
-    alert("لا يوجد طلاب حاليًا في هذا الفصل.");
+    
+    var trNoStudents = document.createElement('tr');
+    trNoStudents.style.textAlign = 'center';
+    var tdNoStudnets = document.createElement('td');
+    tdNoStudnets.colSpan = 6;
+    tdNoStudnets.innerHTML = "لا يوجد طلاب حاليًا في هذا الفصل"
+   trNoStudents.appendChild(tdNoStudnets);
+   document.getElementById('schedule').appendChild(trNoStudents);
   }
  
   for(var j=0; j<CurrenrclassStudents.length;j++){
@@ -371,7 +378,11 @@ tr.id = d.ref.path;
 $(document).ready(function () {
   $(document).on('click', '#delete', function () {
     if($('input[name="chosenstudents[]"]:checked').length == 0){
-      alert("ليتم حذف الطالب/الطلاب يجب النقر على مربع تحديد واحد أو أكثر ");
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">ليتم حذف الطالب/الطلاب يجب النقر على مربع تحديد واحد أو أكثر  </p> </div>';
+      setTimeout(() => {
+        document.getElementById('alertContainer').innerHTML='';
+        
+      }, 9000);
       return;
     }
    var deleted = true;
@@ -405,7 +416,12 @@ $(document).ready(function () {
            }).catch(error => {
             console.log(error);
             $(".loader").hide();
-            alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+        
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+            setTimeout(() => {
+              document.getElementById('alertContainer').innerHTML='';
+              
+            }, 9000);
             deleted = false;
             return;
           })
@@ -413,7 +429,11 @@ $(document).ready(function () {
          else{
           deleted = false;
           $(".loader").hide();
-          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+          setTimeout(() => {
+            document.getElementById('alertContainer').innerHTML='';
+            
+          }, 9000);
          }
 
        
@@ -434,7 +454,11 @@ $(document).ready(function () {
         console.log(error);
         deleted = false;
         $(".loader").hide();
-        alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+        setTimeout(() => {
+          document.getElementById('alertContainer').innerHTML='';
+          
+        }, 9000);
         return;
       });
      }
@@ -447,7 +471,11 @@ $(document).ready(function () {
           console.log(error);
           deleted = false;
           $(".loader").hide();
-          alert("حصل خطأ، الرجاء المحاولة لاحقًا");
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+          setTimeout(() => {
+            document.getElementById('alertContainer').innerHTML='';
+            
+          }, 9000);
           return;
         })
 
@@ -457,7 +485,11 @@ $(document).ready(function () {
  if(deleted){
   $(".loader").hide();
 
-  alert("تم حذف الطالب/الطلاب");
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم حذف الطالب/الطلاب</p> </div>';
+  setTimeout(() => {
+    document.getElementById('alertContainer').innerHTML='';
+    
+  }, 9000);
  }else{
   
  }
@@ -498,7 +530,6 @@ $(document).ready(function () {
           if(data.status == 'Successfull'){
             deleteDoc(docRef).then(() => {
               $(".loader").hide();
-              alert("تم حذف المعلم");
               window.location.reload(true);
             })
               .catch(error => {
@@ -508,7 +539,11 @@ $(document).ready(function () {
           }
           else{
             $(".loader").hide();
-            alert("حصل خطأ بالنظام، الرجاء المحاولة لاحقًا");
+            document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+            setTimeout(() => {
+              document.getElementById('alertContainer').innerHTML='';
+              
+            }, 9000);
           }
         });///End of new code
 
@@ -525,7 +560,11 @@ $(document).ready(function () {
         }
         else{
           $(".loader").hide();
-          alert("حصل خطأ، الرجاء المحاولة لاحقًا.");
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+          setTimeout(() => {
+            document.getElementById('alertContainer').innerHTML='';
+            
+          }, 9000);
         }
     }
 
@@ -545,7 +584,6 @@ $(document).ready(function () {
         $(".loader").show();
       deleteDoc(docRef).then(() =>{
         $(".loader").hide();
-        alert("تم حذف الفصل");
         window.location.reload(true);
       })
       .catch(error => {
@@ -555,7 +593,12 @@ $(document).ready(function () {
       }
      }
      else{
-      alert("هذا الفصل يحتوي على طلاب. ليتم حذف الفصل يجب ألا يحتوي على أي طالب.");
+ 
+      document.getElementById('alertContainerClass').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">هذا الفصل يحتوي على طلاب. ليتم حذف الفصل يجب ألا يحتوي على أي طالب</p> </div>';
+      setTimeout(() => {
+        document.getElementById('alertContainerClass').innerHTML='';
+        
+      }, 9000);
   }
   
   });
@@ -569,7 +612,12 @@ $(document).ready(function () {
         if (abcense.exists()) {
           abenceTaken = true;
           breakOut = true;
-          alert("لقد تم نسجيل الحضور مسبقًا لهذا الفصل");
+      
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لقد تم نسجيل الحضور مسبقًا لهذا الفصل</p> </div>';
+          setTimeout(() => {
+            document.getElementById('alertContainer').innerHTML='';
+            
+          }, 5000);
           return false;
         }
         else{
@@ -589,8 +637,14 @@ $(document).ready(function () {
       }
               });
            
-              if(abenceTaken == false)
-              alert("تم نسجيل الحضور");
+              if(abenceTaken == false){
+              
+              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم نسجيل الحضور</p> </div>';
+              setTimeout(() => {
+                document.getElementById('alertContainer').innerHTML='';
+                
+              }, 5000);
+            }
               console.log(date);
   });
   

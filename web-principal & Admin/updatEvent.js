@@ -53,36 +53,60 @@ if(event.data().image!=""){
       
       const img = document.createElement("img");
       img.setAttribute('src', url);
-      img.setAttribute('style','width:30%; hight:30%;')
-      document.getElementById("foorm").appendChild(img);
+      img.setAttribute('style','width:100%; hight:100%;')
+      document.getElementById("previewPhoto").appendChild(img);
     })
 
 }
+$('.loader').hide();
 }
 const save=document.getElementById("eventButton");
 save.addEventListener('click', async (e) => {
+  $('.loader').show();
   e.preventDefault();
+  if(document.getElementById("eventTitle").value ==''){
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين اسم للحدث </p> </div>';
+    setTimeout(() => {
+            
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML ='';
+    }, 5000);
+    return false;
+  }
+  let event = await getDoc(reference);
+  var imageName = event.data().image;
 
-const desertRef = ref(storage, document.querySelector("#image").files[0].name+eventID );
+  if(document.getElementById('image').files[0] != null){
+    if(imageName != ''){
+const oldImageRef = ref(storage, event.data().image );
 
 // Delete the file
-await deleteObject(desertRef).then(() => {
+await deleteObject(oldImageRef).then(() => {
   // File deleted successfully
 }).catch((error) => {
   // Uh-oh, an error occurred!
 });
+   }
+
 const metadata = {
   contentType: document.querySelector("#image").files[0].type
 };
 const storageRef = ref(storage, 'images/' + document.querySelector("#image").files[0].name+eventID);
 const uploadTask = await uploadBytesResumable(storageRef, document.querySelector("#image").files[0], metadata);
-
+imageName = document.querySelector("#image").files[0].name+eventID;
+  }
 await updateDoc(reference,{
   title: document.getElementById("eventTitle").value,
   content: document.getElementById("content").value,
-  image:document.querySelector("#image").files[0].name+eventID,
+  image:imageName,
 
 }).then(() => {
-  alert("تم التعديل بنجاح");
+  $('.loader').hide();
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم التعديل بنجاح </p> </div>';
+  setTimeout(() => {
+          
+    // 👇️ replace element from DOM
+    document.getElementById('alertContainer').innerHTML ='';
+  }, 5000);
 })
 });

@@ -33,12 +33,12 @@ const auth = getAuth();
 const db = getFirestore(app);
 var reference;
 var srefrence
-var eventID;
+var announcmentID;
 export async function updateAnnouncement(annId, schoolId){ 
      reference = doc(db,"School", schoolId,"Announcement", annId);
      srefrence = doc(db, "School", schoolId);
     const qc = collection(srefrence, "Announcement");
-    eventID=annId;
+    announcmentID=annId;
 
     let event = await getDoc(reference);
 document.getElementById("eventTitle").value=event.data().title;
@@ -52,14 +52,29 @@ const save=document.getElementById("eventButton");
 save.addEventListener('click', async (e) => {
   e.preventDefault();
 
-
+  if(document.getElementById("Title").value ==''){
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين عنوان للإعلان </p> </div>';
+    setTimeout(() => {
+            
+      // 👇️ replace element from DOM
+      document.getElementById('alertContainer').innerHTML ='';
+    }, 5000);
+    return false;
+  }
 
 await updateDoc(reference,{
-  title: document.getElementById("eventTitle").value,
+  title: document.getElementById("Title").value,
   content: document.getElementById("content").value,
  
 
 }).then(() => {
-  alert("تم التعديل بنجاح");
+
+  $('.loader').hide();
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم التعديل بنجاح </p> </div>';
+  setTimeout(() => {
+          
+    // 👇️ replace element from DOM
+    document.getElementById('alertContainer').innerHTML ='';
+  }, 5000);
 })
 });

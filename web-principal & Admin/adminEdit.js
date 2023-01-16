@@ -85,13 +85,25 @@ export { query, orderBy, limit, where, onSnapshot };
   if (Password.value!="undefined"){
     updatePassword(auth.currentUser, Password.value);
   }
-  alert("تم حفظ التعديلات بنجاح");
-  document.getElementById("myForm").style.display = "none";
   $(".loader").hide();
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم حفظ التعديلات بنجاح"</p> </div>';
+  setTimeout(() => {
+  
+    // 👇️ replace element from DOM
+    document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+
+  }, 9000);
+  document.getElementById("myForm").style.display = "none";
+  
      }).catch(()=>{
-      alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
-      document.getElementById("myForm").style.display = "none";
       $(".loader").hide();
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+      setTimeout(() => {
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+      }, 9000);
+      document.getElementById("myForm").style.display = "none";
+      
 
     })
   })
@@ -100,11 +112,22 @@ export { query, orderBy, limit, where, onSnapshot };
     if(error.message==="Firebase: Error (auth/wrong-password)."){
       $('.loader').hide();
       alert("هناك خطأ في البريد الإلكتروني أو كلمة المرور ");
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">هناك خطأ في البريد الإلكتروني أو كلمة المرور</p> </div>';
+      setTimeout(() => {
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+      }, 9000);
     }
     else{
-    alert("حدث خطأ يرجى المحاولة في وقتٍ لاحق");
+      $(".loader").hide();
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">حصل خطأ، الرجاء المحاولة لاحقًا</p> </div>';
+    setTimeout(() => {
+      document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+      
+    }, 9000);
     document.getElementById("myForm").style.display = "none";
-    $(".loader").hide();}
+    
+  }
 
   })
 
@@ -113,11 +136,21 @@ export { query, orderBy, limit, where, onSnapshot };
    function validate() {
   
     if(Email.value==""||Password.value==""){
-      alert("جميع الحقول مطلوبة يرجى التحقق من تعبئتها");
+      $(".loader").hide();
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">جميع الحقول مطلوبة يرجى التحقق من تعبئتها</p> </div>';
+      setTimeout(() => {
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+      }, 9000);
       return false;
     }
     else if (Password.value.length < 6) {
-      alert(" لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام ");
+      $(".loader").hide();
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام </p> </div>';
+      setTimeout(() => {
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+        
+      }, 9000);
       return false;
     }
   
