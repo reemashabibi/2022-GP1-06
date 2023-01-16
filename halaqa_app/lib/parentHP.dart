@@ -2,24 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:halaqa_app/viewEvents.dart';
-//import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
-<<<<<<< HEAD
-//import 'package:halaqa_app/viewDocuments.dart';
-import 'package:halaqa_app/pickup.dart';
-
-import 'ParentEdit.dart';
-//import 'package:halaqa_app/viewAbcense.dart';
-=======
 import 'package:halaqa_app/viewDocuments.dart';
 import 'package:halaqa_app/viewAbcense.dart';
+import 'package:halaqa_app/viewAnnouncement.dart';
 import 'package:halaqa_app/pickup.dart';
 
 import 'ParentEdit.dart';
->>>>>>> fdf9783d9b953822719c83b387f1785f4ca05dfc
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -112,83 +104,10 @@ class _parentHPState extends State<parentHP> {
     super.initState();
   }
 
+  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Image.asset(
-          "images/logo.png",
-          scale: 9,
-        ),
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        elevation: 1,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: () {
-              //conformation message
-              showAlertDialog(context);
-            },
-            icon: Icon(
-              Icons.logout,
-              color: Colors.black,
-            ),
-            iconSize: 30,
-          ),
-          IconButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                    builder: (context) => EditProfilePage(
-                          schoolId: schoolID,
-                        )),
-              );
-            },
-            icon: Icon(
-              Icons.account_circle_rounded,
-              color: Colors.black,
-            ),
-            iconSize: 30,
-          ),
-        ],
-      ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          //currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Colors.black,
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            currentIndex:
-            index;
-            if (index == 1) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => viewEvents(),
-                ),
-              );
-            }
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -242,7 +161,7 @@ class _parentHPState extends State<parentHP> {
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
-                                borderRadius: BorderRadius.circular(100.0),
+                                borderRadius: BorderRadius.circular(10.0),
                                 boxShadow: [
                                   BoxShadow(
                                       color: Colors.grey,
@@ -264,146 +183,174 @@ class _parentHPState extends State<parentHP> {
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    viewChildSubjcets(
-                                                      classRef: ClassID[
-                                                          _FNList.indexOf(e)],
-                                                      studentName: e +
-                                                          " " +
-                                                          _LNList[
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 44,
+                                        height: 44,
+                                        child: FittedBox(
+                                          child: FloatingActionButton(
+                                            heroTag: null,
+                                            backgroundColor: Color.fromARGB(
+                                                255, 199, 248, 248),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        viewChildSubjcets(
+                                                          classRef: ClassID[
                                                               _FNList.indexOf(
                                                                   e)],
-                                                      stRef: studentRefList[
-                                                          _FNList.indexOf(e)],
-                                                      schoolID: schoolID,
-                                                      classId: ClassID[
+                                                          studentName: e +
+                                                              " " +
+                                                              _LNList[_FNList
+                                                                  .indexOf(e)],
+                                                          stRef: studentRefList[
                                                               _FNList.indexOf(
-                                                                  e)]
-                                                          .id,
-                                                    )),
-                                          );
-                                        },
-                                        child: Image.asset(
-                                          "images/subjectsIcon.png",
-                                          width: 55,
-                                          height: 55,
-                                          fit: BoxFit.cover,
+                                                                  e)],
+                                                          schoolID: schoolID,
+                                                          classId: ClassID[
+                                                                  _FNList
+                                                                      .indexOf(
+                                                                          e)]
+                                                              .id,
+                                                        )),
+                                              );
+                                            },
+                                            child: Image.asset(
+                                              "images/subjectsIcon.png",
+                                              width: 55,
+                                              height: 55,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("المقررات"),
+                                    ],
                                   ),
                                   SizedBox(
                                     width: 15,
                                   ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    viewDocuments(
-                                                        ref:
-                                                            ClassID[_FNList
-                                                                .indexOf(e)],
-                                                        studentRef:
-                                                            studentRefList[
-                                                                _FNList.indexOf(
-                                                                    e)])),
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.folder,
-                                          color: Colors.black,
-                                          size: 40,
+                                  Column(children: [
+                                    SizedBox(
+                                      width: 44,
+                                      height: 44,
+                                      child: FittedBox(
+                                        child: FloatingActionButton(
+                                          heroTag: null,
+                                          backgroundColor: Color.fromARGB(
+                                              255, 199, 248, 248),
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      viewDocuments(
+                                                          ref: ClassID[_FNList
+                                                              .indexOf(e)],
+                                                          studentRef:
+                                                              studentRefList[
+                                                                  _FNList
+                                                                      .indexOf(
+                                                                          e)])),
+                                            );
+                                          },
+                                          child: Icon(
+                                            Icons.folder,
+                                            color: Colors.black,
+                                            size: 40,
+                                          ),
                                         ),
                                       ),
                                     ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text("الملفات"),
+                                  ]),
+                                  SizedBox(
+                                    width: 15,
+                                  ),
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 44,
+                                        height: 44,
+                                        child: FittedBox(
+                                          child: FloatingActionButton(
+                                            heroTag: null,
+                                            backgroundColor: Color.fromARGB(
+                                                255, 199, 248, 248),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        viewAbcense(
+                                                          ref: studentRefList[
+                                                              _FNList.indexOf(
+                                                                  e)],
+                                                        )),
+                                              );
+                                            },
+                                            child: Image.asset(
+                                              "images/absenceIcon.png",
+                                              width: 44,
+                                              height: 44,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 5,
+                                      ),
+                                      Text("الحضور"),
+                                    ],
                                   ),
                                   SizedBox(
                                     width: 15,
                                   ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    viewAbcense(
-                                                      ref: studentRefList[
-                                                          _FNList.indexOf(e)],
-                                                    )),
-                                          );
-                                        },
-                                        child: Image.asset(
-                                          "images/absenceIcon.png",
-                                          width: 44,
-                                          height: 44,
-                                          fit: BoxFit.cover,
+                                  Column(
+                                    children: [
+                                      SizedBox(
+                                        width: 44,
+                                        height: 44,
+                                        child: FittedBox(
+                                          child: FloatingActionButton(
+                                            heroTag: null,
+                                            backgroundColor: Color.fromARGB(
+                                                255, 199, 248, 248),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        pickup(
+                                                          stRef: studentRefList[
+                                                              _FNList.indexOf(
+                                                                  e)],
+                                                        )),
+                                              );
+                                            },
+                                            child: Icon(
+                                              Icons.airport_shuttle_rounded,
+                                              color: Colors.black,
+                                              size: 40,
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-<<<<<<< HEAD
-                                                builder: (context) =>
-                                                    pickup (
-                                       //              stRef: studentRefList[
-                                        //                  _FNList.indexOf(e)],
-=======
-                                                builder: (context) => pickup(
-                                                      stRef: studentRefList[
-                                                          _FNList.indexOf(e)],
->>>>>>> fdf9783d9b953822719c83b387f1785f4ca05dfc
-                                                    )),
-                                          );
-                                        },
-                                        child: Icon(
-                                          Icons.airport_shuttle_rounded,
-                                          color: Colors.black,
-                                          size: 40,
-                                        ),
+                                      SizedBox(
+                                        height: 5,
                                       ),
-                                    ),
+                                      Text("الاصطحاب"),
+                                    ],
                                   ),
                                 ],
                               ))
@@ -474,6 +421,7 @@ class _parentHPState extends State<parentHP> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        print(alert);
         return alert;
       },
     );
