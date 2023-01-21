@@ -151,7 +151,8 @@ onAuthStateChanged(authPrin, (user) => {
                     FirstName: registerFname,
                     LastName: registerlname,
                     OfficeHours:"لم يتم التحديد بعد",
-                    Subjects: [],               
+                    Subjects: [],   
+                    msg_count:0            
                   })
                // alert(" after ");
                $(".loader").hide();

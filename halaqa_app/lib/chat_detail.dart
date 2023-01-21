@@ -53,7 +53,7 @@ class _ChatdetailState extends State<Chatdetail> {
         'msg': msg,
       }).then(((value) {
         print('sent');
-        _textController.text ="";
+        _textController.clear();
         FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class').doc(widget.classId).collection("Subject").doc(widget.subjectId).update({
           "msg_count" : count++
         });
@@ -86,7 +86,7 @@ String? classId;
 
    void initState ()  {
    super.initState();
-   print("CCCCCCCCCCCHHHHHHHHHHHHHHAAAAAAAAAAAAAAATTTTTTTTTTTTTTTTTTT ${widget.schoolId}, ${widget.friendUid}");
+   print("CCCCCCCCCCCHHHHHHHHHHHHHHAAAAAAAAAAAAAAATTTTTTTTTTTTTTTTTTT ${widget.schoolId}, ${widget.friendUid}, ${widget.subjectId}");
    chats = FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats');
   
      chats.where('users',isEqualTo: {currentuserUserId : null, friendUid:null})

@@ -14,8 +14,6 @@ import 'package:dio/dio.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:downloads_path_provider_28/downloads_path_provider_28.dart';
-
 import 'package:url_launcher/url_launcher.dart';
 
 class viewDocuments extends StatefulWidget {
@@ -247,14 +245,13 @@ class _viewDocuments extends State<viewDocuments> {
                           if (!hasPermission) return;
 
                           // gets the directory where we will download the file.
-                          var dir =
-                              await DownloadsPathProvider.downloadsDirectory;
+                          var dir = await getExternalStorageDirectory();
 
                           // You should put the name you want for the file here.
                           // Take in account the extension.
                           if (dir != null) {
                             String fileName = docInfoList[index].fileName;
-                            String savePath = dir.path + "/$fileName";
+                            String savePath = "${dir.path}/$fileName";
                             print(savePath);
                             // downloads the file
                             try {

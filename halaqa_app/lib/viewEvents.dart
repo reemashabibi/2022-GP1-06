@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
-import 'package:full_screen_network_image/full_screen_network_image.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';

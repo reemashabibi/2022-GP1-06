@@ -344,6 +344,22 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                       ),
                                     ),
                                   ),
+                                  //////does nit show?
+                                      e['msg_count'] == 0 ? Container() : Positioned(
+                                        child: Container(
+                                        height: 14,
+                                        width: 14,
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle
+                                        ),
+                                        child: Center(child: Text("${e['msg_count']}",style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 7
+                                        ),)),
+                                      ))
+
+
                                 ],
                               ))
 

@@ -26,7 +26,7 @@ class _teacherHPState extends State<teacherHP> {
   late List _SubjectsRefList;
   late List _ClassNameList;
   late List _LevelNameList;
-  late List _SubjectsIdsList;
+  List<String> _SubjectsIdsList=[];
   var x = 0;
   var v = 0;
   var teacherName = "";
@@ -41,7 +41,7 @@ class _teacherHPState extends State<teacherHP> {
     _SubjectList = [""];
     _SubjectsNameList = [""];
     _SubjectsRefList = [""];
-    _SubjectsIdsList = [""];
+    // _SubjectsIdsList = [""];
     x++;
   }
 
@@ -147,7 +147,7 @@ class _teacherHPState extends State<teacherHP> {
               //conformation message
               showAlertDialog(context);
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.logout,
               color: Colors.black,
             ),
@@ -160,7 +160,7 @@ class _teacherHPState extends State<teacherHP> {
                     builder: (context) => const EditProfilePage()),
               );
             },
-            icon: Icon(
+            icon: const Icon(
               Icons.account_circle_rounded,
               color: Colors.black,
             ),
@@ -192,43 +192,45 @@ class _teacherHPState extends State<teacherHP> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
-                  new Container(
+                  Container(
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       teacherName,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
                         fontSize: 30,
                       ),
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                       children: _SubjectsNameList.map((e) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 30),
+                            margin: const EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                color: const Color.fromARGB(255, 231, 231, 231),
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
+                                  color: const Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
                                 borderRadius: BorderRadius.circular(100.0),
-                                boxShadow: [
+                                boxShadow: const [
                                   BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: new Column(children: [
-                              new Container(
+                            child: Column(children: [
+                              Container(
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(2),
                                 child: Text(
                                     e +
                                         "\nالفصل: " +
@@ -238,13 +240,11 @@ class _teacherHPState extends State<teacherHP> {
                                         _LevelNameList[
                                             _SubjectsNameList.indexOf(e)],
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
                               ),
-                              new Container(
+                              Container(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -255,7 +255,7 @@ class _teacherHPState extends State<teacherHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
@@ -279,7 +279,7 @@ class _teacherHPState extends State<teacherHP> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -289,7 +289,7 @@ class _teacherHPState extends State<teacherHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           Navigator.push(
                                             context,
@@ -314,7 +314,7 @@ class _teacherHPState extends State<teacherHP> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
                                   SizedBox(
@@ -324,9 +324,10 @@ class _teacherHPState extends State<teacherHP> {
                                       child: FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                            const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
-                                          print("ID############$schoolID");
+                                          print("SUBJECT ID $_SubjectsIdsList");
+                                          print("ID############$schoolID, ${_SubjectsIdsList[_SubjectsNameList.indexOf(e)]}");
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
@@ -367,12 +368,12 @@ class _teacherHPState extends State<teacherHP> {
               )));
             }
             if (_SubjectsNameList.length == 0 && x == 0) {
-              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+              return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
             if (_SubjectsNameList[0] == "" && v == 1) {
-              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+              return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -386,9 +387,9 @@ class _teacherHPState extends State<teacherHP> {
     // set up the buttons
     Widget continueButton = TextButton(
       //continueButton
-      child: Text("نعم"),
+      child: const Text("نعم"),
       onPressed: () async {
-        CircularProgressIndicator();
+        const CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
@@ -401,7 +402,7 @@ class _teacherHPState extends State<teacherHP> {
 
     Widget cancelButton = TextButton(
       //cancelButton
-      child: Text("إلغاء",
+      child: const Text("إلغاء",
           style: TextStyle(
             color: Colors.red,
           )),
@@ -413,7 +414,7 @@ class _teacherHPState extends State<teacherHP> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("AlertDialog"),
-      content: Text(
+      content: const Text(
         "هل تأكد تسجيل الخروج؟",
         textAlign: TextAlign.center,
       ),
@@ -504,21 +505,21 @@ class _MyWidgetState extends State<viewStudents> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Color.fromARGB(255, 255, 255, 255),
           ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => teacherHP()),
+              MaterialPageRoute(builder: (context) => const teacherHP()),
             );
           },
         ),
-        actions: [],
+        actions: const [],
       ),
       body: StreamBuilder<DocumentSnapshot>(
           stream: widget.ref.parent.parent?.snapshots(),
@@ -537,12 +538,12 @@ class _MyWidgetState extends State<viewStudents> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
-                  new Container(
+                  Container(
                     height: 100,
                     width: 500,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(50),
                           bottomLeft: Radius.circular(50)),
@@ -560,14 +561,14 @@ class _MyWidgetState extends State<viewStudents> {
                     child: Text(
                       className + " / " + levelName.toString(),
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
                         fontSize: 30,
                       ),
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
@@ -576,12 +577,12 @@ class _MyWidgetState extends State<viewStudents> {
                         return Container(
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(100.0),
-                              color: Color.fromARGB(255, 231, 231, 231),
+                              color: const Color.fromARGB(255, 231, 231, 231),
                               border: Border.all(
-                                color: Color(0xffEEEEEE),
+                                color: const Color(0xffEEEEEE),
                                 width: 2.0,
                               ),
-                              boxShadow: [
+                              boxShadow: const [
                                 BoxShadow(
                                     color: Colors.grey,
                                     blurRadius: 2.0,
@@ -589,10 +590,10 @@ class _MyWidgetState extends State<viewStudents> {
                               ]),
                           child: Text(e,
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
-                          margin: EdgeInsets.all(5),
-                          padding: EdgeInsets.all(15),
+                          margin: const EdgeInsets.all(5),
+                          padding: const EdgeInsets.all(15),
                           //   color: Color.fromARGB(255, 222, 227, 234),
                         );
                       }).toList(),
@@ -602,12 +603,12 @@ class _MyWidgetState extends State<viewStudents> {
               )));
             }
             if (_StudenNameList.length == 0 && x == 0) {
-              return Center(child: Text("لم يتم تعيين أي فصل بعد."));
+              return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
             if (_StudenNameList[0] == "" && v == 1) {
-              return Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
+              return const Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }),
     );
   }

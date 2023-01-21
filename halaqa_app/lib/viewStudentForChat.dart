@@ -38,7 +38,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
 
  
   void callChatDetailScreen(BuildContext context ,String name,  uid,String classID,String subjectId){
-    print("In function Student Name: "+ name);
+    print("In function Student Name: $name");
      print(uid);
      print(classID);
      Navigator.push(
@@ -62,7 +62,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
     x++;
   }
 
-  getStudents() async {
+getStudents() async {
     DocumentReference docRef = widget.ref.parent.parent as DocumentReference<Object?>;
          print("docref: ${widget.ref.parent.id}");
          ///classID
@@ -79,7 +79,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
         var stName = await docu.get().then((value) {
-          print("DDDDDDDDDDD ${value.id}");
+         // print("DDDDDDDDDDD ${value.id}");
           setState(() {
             _StudenNameList.add(value['FirstName'] + " " + value['LastName']);
             _StudentsRefList.add(docu);
@@ -110,7 +110,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
     return TextField(
       controller: controller,
       maxLines: 10,
-      // minLines: 1,
+       minLines: 1,
       decoration: InputDecoration(
         border: border,
         enabledBorder: border,
@@ -151,9 +151,10 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
               ),
               // const Spacer(),
               ElevatedButton(onPressed: () {
-                print("TEXT ${controller.text}");
+                // print("TEXT ${controller.text}");
                 if(controller.text.isNotEmpty) {
                   Navigator.pop(context);
+                  ///change the path
                   FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').get().then((value) {
                     for(var doc in value.docs) {
                       FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').doc(doc.id).collection("messages").add({
@@ -200,7 +201,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
       return StreamBuilder<DocumentSnapshot>(
           stream: widget.ref.parent.parent?.snapshots(),
           builder: (BuildContext context, AsyncSnapshot snap) {
-            print("@@@ ${snap.data}");
+            // print("@@@ ${snap.data}");
             if (snap.hasError) {
               return Center(
                   child: Text('Some error occurred ${snap.error}'));
@@ -213,9 +214,9 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
 
             if (snap.hasData && _StudenNameList[0] != "") {
               //Display the list
-               print("in");
+              //  print("in");
         return StreamBuilder <QuerySnapshot>(
-          ///get schoolID
+          ///get schoolID //it views all school's students
       stream : FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').snapshots(),
       builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
         if (snapshot.hasError){
@@ -244,10 +245,10 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
             slivers: [
               CupertinoSliverNavigationBar(
                 ///bad design
-                largeTitle: Text( className + " - " + levelName.toString(),
+                largeTitle: Text( "أولياء أمور "+className + " - " + levelName.toString(),
                 style: const TextStyle(
                     color: Color.fromARGB(255, 68, 68, 68),
-                  //  fontSize: 25,
+                    fontSize: 25,
                    //fontWeight: FontWeight.bold
                    ),),
                 ),
@@ -271,7 +272,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                           shape: BoxShape.circle
                         ),
                         child: Center(
-                          child: Text("${e['msg_count']}",style: TextStyle(
+                          child: Text("${e['msg_count']}",style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12
                           ),),
