@@ -525,7 +525,7 @@ const colRef = collection(db, 'Parent');
 
 
 //get collection data
-getDocs(colRef)
+await getDocs(colRef)
   .then((snapshot) => {
     let Parent = []
     snapshot.docs.forEach((doc) => {

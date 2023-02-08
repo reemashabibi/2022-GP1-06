@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
-import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc, updateDo,serverTimestamp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+import { collection, collectionGroup, getDocs, addDoc, Timestamp, deleteDoc, getDoc,serverTimestamp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
@@ -9,16 +9,15 @@ import { getAuth, createUserWithEmailAndPassword , updateProfile} from "https://
 
 
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
-        authDomain: "halaqa-89b43.firebaseapp.com",
-        projectId: "halaqa-89b43",
-        storageBucket: "halaqa-89b43.appspot.com",
-        messagingSenderId: "969971486820",
-        appId: "1:969971486820:web:40cc0abf19a909cc470f71",
-        measurementId: "G-PCYTHJF1SD",
-        storageBucket:"gs://halaqa-89b43.appspot.com"
-      };
+const firebaseConfig = {
+  apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+  authDomain: "halaqa-89b43.firebaseapp.com",
+  projectId: "halaqa-89b43",
+  storageBucket: "halaqa-89b43.appspot.com",
+  messagingSenderId: "969971486820",
+  appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+  measurementId: "G-PCYTHJF1SD"
+};
       const app = initializeApp(firebaseConfig);
   
       export { app, db, collection, getDocs, Timestamp, addDoc, setDoc };
@@ -85,7 +84,8 @@ a2.appendChild(i);
 
 
 
-div5.className = "job-right my-4 flex-shrink-0";
+div5.className = "job-center my-4 flex-shrink-0";
+div5.style.textAlign = 'center';
 const a1 = document.createElement('a');
 a1.className = "btn d-inline w-100 d-sm-inline-inline btn-light";
 a1.appendChild(document.createTextNode(" تعديل"));
@@ -108,11 +108,13 @@ $(".loader").hide();
 
 
 }
+$('.loader').hide();
 
 
 
 $(document).ready(function () {
   $(document).on('click', '.deletebtn', async function () {
+    if(confirm("هل تأكد حذف الإعلان ؟")){
     var eventID = $(this).attr('id');
     const docRef = doc(db, eventID);
     var eventDoc = await getDoc(docRef);
@@ -134,15 +136,13 @@ $(document).ready(function () {
         console.log(error);
       })
       
-   
+    }
   
   });
+  
 });
 
-const title = document.getElementById("announcmentTitle");
-    const content = document.getElementById("content");
-    
-    
+
     $(document).on('click','#eventButton', async function(e) {
       e.preventDefault();
       $('.loader').show();
@@ -172,15 +172,31 @@ const title = document.getElementById("announcmentTitle");
     const reference = doc(db, "School", schoolId);
     const q = await collection(reference, "Announcement");
      
-    
-      
 
-      await setDoc(q, {
+      await addDoc(q, {
               title: title.value,
               content: content.value,
               time: serverTimestamp(),
             }).then(async (e) =>{
       
+                    //get tokens 
+             const parentsQ = query(collection(db, "School",schoolId,'Parent'), where("token", "!=", null));
+             const parents = await getDocs(parentsQ);
+             parents.forEach((doc) => {
+              if(doc.data().token)
+                 //send the notfication
+              $.post("http://localhost:8080/announcment",
+              {
+                token: doc.data().token,
+                announcementTitle: title.value,
+                announcementContent: content.value,
+             },
+             function (data, stat) {
+   
+             });
+
+             });
+            
               $('.loader').hide();
               document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم إضافة الإعلان بنجاح </p> </div>';
               setTimeout(() => {

@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:halaqa_app/viewEvents.dart';
 //import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
@@ -23,6 +25,8 @@ class parentHP extends StatefulWidget {
 }
 
 class _parentHPState extends State<parentHP> {
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   var className = "";
   var level = "";
   late List studentRefList;
@@ -99,10 +103,163 @@ class _parentHPState extends State<parentHP> {
 
   @override
   void initState() {
-    getSubjects();
+    //  getSubjects();
+
+    requestPremission();
+    getToken();
+    initInfo();
 
     super.initState();
   }
+
+//method to set the setting of the notification in foregroud
+  initInfo() {
+    var androidInitialize =
+        const AndroidInitializationSettings('images/logo.png');
+    var IOSInitialize = const IOSInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true);
+    var initializationSettings =
+        InitializationSettings(android: androidInitialize, iOS: IOSInitialize);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+      try {
+        if (payload != null && payload.isNotEmpty) {
+          List<String> info = payload.split("~");
+          print(info[0]);
+          if (info[0] == 'document') {
+            setState(() {
+              counter++;
+            });
+          } else if (info[0] == 'event') {
+            await Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => viewEvents(),
+              ),
+            );
+          } else if (info[0] == 'absence') {
+            DocumentReference sturef = FirebaseFirestore.instance.doc(info[1]);
+            await Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (context) => viewAbcense(
+                        ref: sturef,
+                      )),
+            );
+          } else if (info[0] == 'announcment') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => viewEvents(),
+              ),
+            );
+          } else {}
+        } else {}
+      } catch (e) {}
+      return;
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(
+          'onMessage: ${message.notification?.title}/${message.notification?.body}');
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+      AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails('dbfood', 'dbfood',
+              importance: Importance.high,
+              styleInformation: bigTextStyleInformation,
+              priority: Priority.high,
+              playSound: true);
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+          android: androidNotificationDetails,
+          iOS: const IOSNotificationDetails(
+              presentAlert: true, presentBadge: true, presentSound: true));
+
+      await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, platformChannelSpecifics,
+          payload: message.data['type']);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      var payload = message.data['type'];
+      if (payload != null && payload.isNotEmpty) {
+        List<String> info = payload.split("~");
+        print(info[0]);
+        if (info[0] == 'document') {
+        } else if (info[0] == 'event') {
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => viewEvents(),
+            ),
+          );
+        } else if (info[0] == 'absence') {
+          DocumentReference sturef = FirebaseFirestore.instance.doc(info[1]);
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+                builder: (context) => viewAbcense(
+                      ref: sturef,
+                    )),
+          );
+        } else if (info[0] == 'announcment') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => viewEvents(),
+            ),
+          );
+        } else {}
+      } else {}
+    });
+  }
+
+//method to get token for notification
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      saveToken(token!); //to firestore
+    });
+  }
+
+//save token to the user document
+  void saveToken(String token) async {
+    await getSubjects();
+    FirebaseFirestore.instance
+        .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
+        .update({'token': token});
+  }
+
+  //method to request premission to send notification
+  void requestPremission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('user granted notfication');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('user granted provisional');
+    } else {
+      print('user declined notification');
+    }
+  }
+
+  int counter = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -303,7 +460,8 @@ class _parentHPState extends State<parentHP> {
                                     width: 44,
                                     height: 44,
                                     child: FittedBox(
-                                      child: FloatingActionButton(
+                                        child: Stack(children: [
+                                      FloatingActionButton(
                                         heroTag: null,
                                         backgroundColor:
                                             Color.fromARGB(255, 199, 248, 248),
@@ -328,7 +486,33 @@ class _parentHPState extends State<parentHP> {
                                           size: 40,
                                         ),
                                       ),
-                                    ),
+                                      counter != 0
+                                          ? new Positioned(
+                                              right: 11,
+                                              top: 11,
+                                              child: new Container(
+                                                padding: EdgeInsets.all(2),
+                                                decoration: new BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(6),
+                                                ),
+                                                constraints: BoxConstraints(
+                                                  minWidth: 14,
+                                                  minHeight: 14,
+                                                ),
+                                                child: Text(
+                                                  '$counter',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 8,
+                                                  ),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ),
+                                            )
+                                          : new Container()
+                                    ])),
                                   ),
                                   SizedBox(
                                     width: 15,

@@ -448,7 +448,7 @@ class _Excuse extends State<Excuse> {
                               style: TextStyle(fontSize: 20),
                             ),
                             icon: Icon(
-                              Icons.download,
+                              Icons.file_upload_outlined,
                               size: 24.0,
                             ),
                             onPressed: () async {
