@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/grades.dart';
+import 'package:full_screen_network_image/full_screen_network_image.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
@@ -11,33 +12,33 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'package:halaqa_app/viewAnnouncement.dart';
 import 'package:intl/intl.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
-class viewEvents extends StatefulWidget {
-  const viewEvents({super.key});
+class viewAnnouncement extends StatefulWidget {
+  const viewAnnouncement({super.key});
 
   @override
-  State<viewEvents> createState() => _viewEventsState();
+  State<viewAnnouncement> createState() => _viewAnnouncementState();
 }
 
-class events {
+class announcements {
   String content;
-  String image;
   String title;
   DateTime time;
 
-  events(this.content, this.image, this.title, this.time);
+  announcements(this.content, this.title, this.time);
 
   @override
   String toString() {
     // TODO: implement toString
-    return "content  $content  image $image   title   $title";
+    return "content  $content    title   $title";
   }
 }
 
-class _viewEventsState extends State<viewEvents> {
-  List<events> eventList = [];
+class _viewAnnouncementState extends State<viewAnnouncement> {
+  List<announcements> announcementsList = [];
   List imageList = <String>[];
 
   var x = 0;
@@ -47,12 +48,11 @@ class _viewEventsState extends State<viewEvents> {
   User? user = FirebaseAuth.instance.currentUser;
 
   getData() {
-    eventList.add(events("", "", "", DateTime.now()));
-    imageList.add("start");
+    announcementsList.add(announcements("", "", DateTime.now()));
     x++;
   }
 
-  getSubjects() async {
+  getAnnouncements() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -68,162 +68,71 @@ class _viewEventsState extends State<viewEvents> {
     DocumentReference docRef =
         await FirebaseFirestore.instance.doc('School/' + '$schoolID');
 
-    var EventRefs = await docRef.collection("Event").get();
+    var EventRefs = await docRef.collection("Announcement").get();
     if (EventRefs.docs.length > 0) {
-      await docRef.collection("Event").get().then((querySnapshot) {
+      await docRef.collection("Announcement").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) async {
-          eventList.add(events(
-              documentSnapshot['content'],
-              documentSnapshot['image'],
-              documentSnapshot['title'],
-              documentSnapshot['Time'].toDate()));
+          announcementsList.add(announcements(documentSnapshot['content'],
+              documentSnapshot['title'], documentSnapshot['time'].toDate()));
         });
       });
     }
 
     setState(() {
-      if (eventList.length > 1) {
-        eventList.removeAt(0);
+      if (announcementsList.length > 1) {
+        announcementsList.removeAt(0);
       }
-      eventList.sort((a, b) {
+      announcementsList.sort((a, b) {
         return a.time.compareTo(b.time);
       });
     });
-    for (int i = 0; i < eventList.length; i++) {
-      imageList.add(await getImage(eventList[i].image));
-    }
 
     setState(() {
       if (imageList.length > 1) {
         imageList.removeAt(0);
       }
     });
-    if (eventList[0].content == "") {
+    if (announcementsList[0].content == "") {
       v++;
-    }
-  }
-
-  Future<void> getSchoolID() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Teacher')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-  }
-
-  Future<String?> getImage(img) async {
-    if (img == "") {
-      return "";
-    }
-    try {
-      var downloadURL = await FirebaseStorage.instance
-          .ref()
-          .child("images/")
-          .child(img)
-          .getDownloadURL();
-
-      return downloadURL;
-    } catch (e) {
-      return null;
     }
   }
 
   @override
   void initState() {
-    // getSchoolID();
-    getSubjects();
+    getAnnouncements();
 
     super.initState();
   }
+
+  int _selectedIndex = 0;
+
+  static const List<Widget> _widgetOptions = <Widget>[
+    parentHP(),
+    viewAnnouncement(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
-      appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
-        elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => parentHP(),
-              ),
-            );
-          },
-        ),
-        actions: [],
-      ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            setState(() {
-              currentIndex:
-              index;
-            });
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {}
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
 
-      body: FutureBuilder(
-          future: FirebaseFirestore.instance
-              .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
-              .get(),
+      body: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection('School/$schoolID/Announcement')
+              .snapshots(),
           builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
             }
-
             //Check if data arrived
             if (x == 0) {
               getData();
             }
 
-            if (snapshot.hasData &&
-                eventList[0].content != "" &&
-                imageList[0] != "start") {
+            if (snapshot.hasData && announcementsList[0].content != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
@@ -250,7 +159,7 @@ class _viewEventsState extends State<viewEvents> {
                     ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
-                      "الأحداث",
+                      "الإعلانات",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
@@ -265,12 +174,12 @@ class _viewEventsState extends State<viewEvents> {
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                       //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                      children: eventList.map((e) {
+                      children: announcementsList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 231, 231, 231),
+                                color: Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
@@ -312,27 +221,6 @@ class _viewEventsState extends State<viewEvents> {
                                 margin: EdgeInsets.all(4),
                                 padding: EdgeInsets.all(2),
                               ),
-                              new Container(
-                                  child: FullScreenWidget(
-                                child: InteractiveViewer(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: FadeInImage(
-                                      image: NetworkImage(
-                                          imageList[eventList.indexOf(e)] ??
-                                              ""),
-                                      fit: BoxFit.contain,
-                                      imageErrorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return const Text('');
-                                      },
-                                      placeholder:
-                                          AssetImage("images/logo.png"),
-                                    ),
-                                  ),
-                                ),
-                              )),
                             ]));
                       }).toList(),
                     ),
@@ -340,11 +228,11 @@ class _viewEventsState extends State<viewEvents> {
                 ],
               )));
             }
-            if (eventList.length == 0 && x == 0) {
-              return Center(child: Text("لا توجد أحداث بالوقت الحالي"));
+            if (announcementsList.length == 0 && x == 0) {
+              return Center(child: Text("لا توجد إعلانات بالوقت الحالي"));
             }
-            if (eventList[0].content == "" && v == 1) {
-              return Center(child: Text("لا توجد أحداث بالوقت الحالي"));
+            if (announcementsList[0].content == "" && v == 1) {
+              return Center(child: Text("لا توجد إعلانات بالوقت الحالي"));
             }
             return Center(child: CircularProgressIndicator());
           }),

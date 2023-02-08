@@ -19,14 +19,16 @@ class Chatdetail extends StatefulWidget {
   final String schoolId;
   final String classId;
   final String subjectId;
+  Function(int) msgCount;
   @override
-  const Chatdetail(
+  Chatdetail(
       {Key? key,
       required this.friendUid,
       required this.friendName,
       required this.schoolId,
       required this.classId,
-      required this.subjectId})
+      required this.subjectId,
+      required this.msgCount})
       : super(key: key);
 
   State<Chatdetail> createState() => _ChatdetailState(friendUid, friendName);
@@ -44,27 +46,35 @@ class _ChatdetailState extends State<Chatdetail> {
 
   _ChatdetailState(this.friendUid, this.friendName);
   @override
-  int count = 1;
+  int count = 0;
 
   void sendMessage(String msg) {
-    if (msg == "")
+    if (msg == "") {
       return;
-    else {
+    } else {
       // print("Chat DocumentID:");
       //  print(chatDocID.id);
       chats.doc(chatDocID).collection('messages').add({
         'createdOn': FieldValue.serverTimestamp(),
         'uid': currentuserUserId,
         'msg': msg,
-      }).then(((value) {
-        print('sent');
-        _textController.text = "";
+      }).then(((value) async {
+        print('sent ${widget.subjectId}');
+        _textController.clear();
+        DocumentSnapshot dc = await FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Class')
+            .doc(widget.classId)
+            .collection("Subject")
+            .doc(widget.subjectId)
+            .get();
+        count = dc.get("msg_count") + 1;
+        print("COUNT MSG $count");
         FirebaseFirestore.instance
             .collection('School/${widget.schoolId}/Class')
             .doc(widget.classId)
             .collection("Subject")
             .doc(widget.subjectId)
-            .update({"msg_count": count++});
+            .update({"msg_count": count});
 
         //send notification
 
@@ -145,50 +155,60 @@ class _ChatdetailState extends State<Chatdetail> {
 
   readMsg() {
     FirebaseFirestore.instance
-        .collection('School/${widget.schoolId}/Student')
-        .doc("${widget.friendUid}")
+        .collection('School/${widget.schoolId}/Teacher')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .collection("subjects")
+        .doc(widget.subjectId)
         .update({"msg_count": 0});
+    setState(() {
+      widget.msgCount(0);
+    });
+    // FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').doc("${widget.friendUid}").update({
+    //   "msg_count" : 0
+    // });
   }
 
   void initState() {
     super.initState();
     print(
-        "CCCCCCCCCCCHHHHHHHHHHHHHHAAAAAAAAAAAAAAATTTTTTTTTTTTTTTTTTT ${widget.schoolId}, ${widget.friendUid}");
+        "CCCCCCCCCCCHHHHHHHHHHHHHHAAAAAAAAAAAAAAATTTTTTTTTTTTTTTTTTT ${widget.schoolId}, ${widget.friendUid}, ${widget.subjectId}");
+
     chats = FirebaseFirestore.instance
         .collection('School/${widget.schoolId}/Chats');
 
-    chats
-        .where('users', isEqualTo: {currentuserUserId: null, friendUid: null})
-        .limit(1)
-        .get()
-        .then(
-          (QuerySnapshot querySnapshot) {
-            // print("#################### ");
-            /// We have chat between these two users
-            if (querySnapshot.docs.isNotEmpty) {
-              // print("!!!!!!!!!!! ${querySnapshot.docs.single.id}");
-
-              // chatDocID = querySnapshot.docs.single.id;
-              chatDocID = querySnapshot.docs.single.id;
-              // print("CHAT DOC ID $chatDocID");
-              // print("DocumentID: ${querySnapshot.docs.single.id}");
-              setState(() {});
-            } else {
-              ///Adding a Map
-              chats.add({
-                'users': {
-                  currentuserUserId: null,
-                  friendUid: null,
-                }
-              }).then((value) {
-                //in case we do not have a document created between these two user we create one
-                //and wait for the call back to assaign the dicumentId to chatDocID
-                chatDocID = value.id;
-              });
-            }
-          },
-        )
-        .catchError((error) {});
+    ///because we got an issue when we create broadcast and write a message so i create a new chatId
+    ///and we do broadcast based on subject between teacher and parent
+    ///so first i take subjectId_studentId_parentId
+    chatDocID = "${widget.subjectId}_${widget.friendUid}_$currentuserUserId";
+    print("CHAAT ID $chatDocID");
+    // chats.where('users',isEqualTo: {currentuserUserId : null, friendUid:null})
+    // .limit(1)
+    // .get()
+    // .then(
+    //  (QuerySnapshot querySnapshot){
+    //    // print("#################### ");
+    //    /// We have chat between these two users
+    //    if (querySnapshot.docs.isNotEmpty){
+    //      // print("!!!!!!!!!!! ${querySnapshot.docs.single.id}");
+    //
+    //       // chatDocID = querySnapshot.docs.single.id;
+    //       chatDocID = querySnapshot.docs.single.id;
+    //       // print("CHAT DOC ID $chatDocID");
+    //     // print("DocumentID: ${querySnapshot.docs.single.id}");
+    //     setState(() {});
+    //    }else{
+    //      ///Adding a Map
+    //      chats.add({
+    //        'users':{ currentuserUserId : null, friendUid : null,}
+    //      }).then((value) {
+    //       //in case we do not have a document created between these two user we create one
+    //       //and wait for the call back to assaign the dicumentId to chatDocID
+    //       // chatDocID = value.id;
+    //       chatDocID = "${widget.subjectId}_${currentuserUserId}_${widget.friendUid}";
+    //      });
+    //    }
+    //  },
+    //  ) .catchError((error){});
     readMsg();
   }
 

@@ -383,6 +383,10 @@ excel_file.addEventListener('change', (event) => {
                       LastName: registerlname,
                       ClassID: docRefClass,
                       ParentID: docRef,
+                      ///new
+                      CommissionerId: [],
+                      msg_count:0
+
                     }).then(docu => {
                       const StuRef = doc(db, "School", schoolID, "Student", docu.id);
                       updateDoc(docRefClass, { Students: arrayUnion(StuRef) })

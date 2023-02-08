@@ -45,15 +45,17 @@ app.post('/addUser', async (req, res) => {
     console.log(userData);
 
     getAuth()
+    ////changes:
     .createUser({
       email: userData.email,
-      password: 'secretPassword',
+      password: userData.pass,
       disabled: false,
     })
     .then((userRecord) => {
       // See the UserRecord reference doc for the contents of userRecord.
       console.log('Successfully created new user:', userRecord.uid);
       res.json({"status": "Successfull" , "uid": userRecord.uid});
+     
     })
     .catch((error) => {
         console.log(error.code);
@@ -81,11 +83,41 @@ app.post('/addUser', async (req, res) => {
   })
 
 
+
+   ///Update user
+ app.post('/updateUser', async (req, res) => {
+  const userData = req.body;
+  console.log(userData);
+  getAuth()
+  .updateUser(userData.uid, {
+    email: userData.email,
+    //password: userData.pass, ??
+    disabled: false,
+  })
+  .then((userRecord) => {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log('Successfully updated user');
+    res.json({"status": "Successfull" })
+  })
+  .catch((error) => {
+    console.log(error.code);
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    if (errorCode =="auth/email-already-exists"){
+        res.json({"status":'used'});}
+    else
+    res.end('error');
+
+    console.log('Error updating user:', error);
+  });
+
+});
+
+
 // Delete user
   app.post('/deleteUser',  async (req, res) => {
     const userData = req.body;
     console.log(userData);
-
     getAuth()
   .deleteUser(userData.uid)
   .then(() => {
@@ -304,3 +336,6 @@ app.post('/announcment',  async (req, res) => {
   app.listen(8080,() => {
     console.log("Started on PORT 8080");
     })
+
+
+
