@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/teacherHP.dart';
-import 'package:halaqa_app/viewAnnouncement.dart';
 import 'package:intl/intl.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
@@ -53,7 +52,7 @@ class _viewEventsState extends State<viewEvents> {
     x++;
   }
 
-  getEvents() async {
+  getSubjects() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -136,30 +135,82 @@ class _viewEventsState extends State<viewEvents> {
   @override
   void initState() {
     // getSchoolID();
-    getEvents();
+    getSubjects();
 
     super.initState();
   }
-
-  int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    parentHP(),
-    viewAnnouncement(),
-  ];
 
   @override
   Widget build(BuildContext context) {
     // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        elevation: 1,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromARGB(255, 255, 255, 255),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => parentHP(),
+              ),
+            );
+          },
+        ),
+        actions: [],
+      ),
+      bottomNavigationBar: TitledBottomNavigationBar(
+          currentIndex: 1, // Use this to update the Bar giving a position
+          inactiveColor: Color.fromARGB(255, 9, 18, 121),
+          indicatorColor: Color.fromARGB(255, 76, 170, 175),
+          activeColor: Color.fromARGB(255, 76, 170, 175),
+          onTap: (index) {
+            setState(() {
+              currentIndex:
+              index;
+            });
+            if (index == 0) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => parentHP(),
+                ),
+              );
+            }
+            if (index == 1) {}
+          },
+          items: [
+            TitledNavigationBarItem(
+                title: Text('الصفحة الرئيسية',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                icon: const Icon(Icons.home)),
+            TitledNavigationBarItem(
+              title: Text('الأحداث',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.calendar_today),
+            ), /*
+            TitledNavigationBarItem(
+              title: Text('Events'),
+              icon: Image.asset(
+                "images/eventsIcon.png",
+                width: 20,
+                height: 20,
+                //fit: BoxFit.cover,
+              ),
+            ),*/
+          ]),
 
-      body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection('School/$schoolID/Event')
-              .snapshots(),
+      body: FutureBuilder(
+          future: FirebaseFirestore.instance
+              .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
+              .get(),
           builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
             if (snapshot.hasError) {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
@@ -219,7 +270,7 @@ class _viewEventsState extends State<viewEvents> {
                             margin: EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 251, 250, 250),
+                                color: Color.fromARGB(255, 231, 231, 231),
                                 border: Border.all(
                                   color: Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,

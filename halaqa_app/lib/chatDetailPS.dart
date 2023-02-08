@@ -24,12 +24,10 @@ class ChatdetailPS extends StatefulWidget {
 }
 
 class _ChatdetailPSState extends State<ChatdetailPS> {
-  //Get schoolID #######
   late CollectionReference chats;
   final  TeacherUid; 
   final  TeacherName; 
   final  StudentUid;
-   //it's childUID 'studentUID':
   get currentuserUserId => StudentUid;
   var   chatDocID;
   var  _textController = new TextEditingController();
@@ -38,7 +36,7 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
   _ChatdetailPSState(this.TeacherUid, this.TeacherName, this.StudentUid);
   @override
 
-  int count = 1;
+  int count = 0;
 
 
   void sendMessage(String msg) {
@@ -52,12 +50,19 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
         'createdOn': FieldValue.serverTimestamp(),
         'uid':currentuserUserId,
         'msg': msg,
-      }).then(((value) {
+      }).then(((value) async {
         print('sent');
         _textController.text ="";
-        FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').doc(widget.StudentUid).update({
-          "msg_count" : count++,
+        ///while we send a message from parent side we need to set subcollection because we have 3 student and we send msg to partucular
+        DocumentSnapshot dc = await FirebaseFirestore.instance.collection('School/${widget.schoolId}/Teacher').doc(widget.TeacherUid).collection("subjects").doc(widget.subjectId).get();
+        count = dc.get("msg_count") + 1;
+        FirebaseFirestore.instance.collection('School/${widget.schoolId}/Teacher').doc(widget.TeacherUid).collection("subjects").doc(widget.subjectId).set({
+          "msg_count" : count,
+          "student_id" : widget.StudentUid
         });
+        // FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').doc(widget.StudentUid).update({
+        //   "msg_count" : count++,
+        // });
       } ));
       setState(() { });
      }
@@ -108,34 +113,38 @@ Alignment getAlignment (freind){
    super.initState();
    getSchoolID();
    print("{{{{{{{{{{{{object}}}}}}}}}}}} ${widget.TeacherUid}");
+   chats = FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats');
 
-   chats.where('users',isEqualTo: {currentuserUserId : null, TeacherUid:null})
-     .limit(1)
-     .get()
-     .then(
-      (QuerySnapshot querySnapshot){
-        /// We have chat between these two users
-        if (querySnapshot.docs.isNotEmpty){
-           chatDocID = querySnapshot.docs.single.id;
-         print("DocumentID: ${querySnapshot.docs.single.id}");
-         setState(() {
-
-         });
-        }else{
-          ///Adding a Map
-          chats.add({
-            'users':{ currentuserUserId : null, TeacherUid : null,} 
-          }).then((value) {
-            print("&&&&& $value");
-           //in case we do not have a document created between these two user we create one
-           //and wait for the call back to assaign the dicumentId to chatDocID
-           setState(() {
-             chatDocID = value.id;
-           });
-          });
-        }
-      },   
-      );
+   // chats.where('users',isEqualTo: {currentuserUserId : null, TeacherUid:null})
+   //   .limit(1)
+   //   .get()
+   //   .then(
+   //    (QuerySnapshot querySnapshot){
+   //      /// We have chat between these two users
+   //      if (querySnapshot.docs.isNotEmpty){
+   //         chatDocID = querySnapshot.docs.single.id;
+   //       print("DocumentID: ${querySnapshot.docs.single.id}");
+   //       setState(() {
+   //
+   //       });
+   //      }else{
+   //        ///Adding a Map
+   //        chats.add({
+   //          'users':{ currentuserUserId : null, TeacherUid : null,}
+   //        }).then((value) {
+   //          print("&&&&& $value");
+   //         //in case we do not have a document created between these two user we create one
+   //         //and wait for the call back to assaign the dicumentId to chatDocID
+   //         setState(() {
+   //           //subjectid/senderid/receiverid
+   //           // chatDocID = value.id;
+   //           chatDocID = "${widget.subjectId}_${currentuserUserId}_${widget.TeacherUid}";
+   //         });
+   //        });
+   //      }
+   //    },
+   //    );
+   chatDocID = "${widget.subjectId}_${currentuserUserId}_${widget.TeacherUid}";
    readMsg();
      
   }///end initState

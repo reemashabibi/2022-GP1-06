@@ -4,32 +4,22 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:halaqa_app/commissioner/add_commissioner.dart';
 import 'package:halaqa_app/commissioner/commisioner_list.dart';
 import 'package:halaqa_app/viewEvents.dart';
-<<<<<<< HEAD
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
-=======
->>>>>>> 36135f4dbcdac0f8e7c75edf79708dd1e167ce45
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
-<<<<<<< HEAD
 import 'package:halaqa_app/viewDocuments.dart';
 import 'package:halaqa_app/pickup.dart';
 
 import 'ParentEdit.dart';
 import 'package:halaqa_app/viewAbcense.dart';
-=======
->>>>>>> 36135f4dbcdac0f8e7c75edf79708dd1e167ce45
 import 'package:halaqa_app/viewDocuments.dart';
 import 'package:halaqa_app/viewAbcense.dart';
-import 'package:halaqa_app/viewAnnouncement.dart';
 import 'package:halaqa_app/pickup.dart';
 
 import 'ParentEdit.dart';
-<<<<<<< HEAD
 
-=======
->>>>>>> 36135f4dbcdac0f8e7c75edf79708dd1e167ce45
 
 class parentHP extends StatefulWidget {
   const parentHP({
@@ -121,11 +111,9 @@ class _parentHPState extends State<parentHP> {
     super.initState();
   }
 
-  int currentIndex = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       appBar: AppBar(
         title: Image.asset(
           "images/logo.png",
@@ -215,8 +203,6 @@ class _parentHPState extends State<parentHP> {
               ),
             ),*/
           ]),
-=======
->>>>>>> 36135f4dbcdac0f8e7c75edf79708dd1e167ce45
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -257,7 +243,6 @@ class _parentHPState extends State<parentHP> {
                     shrinkWrap: true,
                     padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
 
-<<<<<<< HEAD
                     //padding: EdgeInsets.only(right: 8.0, left: 8.0),
                     children: _FNList.map((e) {
                       return Container(
@@ -297,28 +282,19 @@ class _parentHPState extends State<parentHP> {
                               child: FittedBox(
                                 child: FloatingActionButton(
                                   heroTag: null,
-                                  backgroundColor:
-                                      const Color.fromARGB(255, 199, 248, 248),
+                                  backgroundColor: const Color.fromARGB(255, 199, 248, 248),
                                   onPressed: () {
+                                    print("(((((((((object))))))))) ${studentRefList[_FNList.indexOf(e)]}");
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
                                               viewChildSubjcets(
-                                                classRef: ClassID[
-                                                    _FNList.indexOf(e)],
-                                                studentName: e +
-                                                    " " +
-                                                    _LNList[
-                                                        _FNList.indexOf(
-                                                            e)],
-                                                stRef: studentRefList[
-                                                    _FNList.indexOf(e)],
+                                                classRef: ClassID[_FNList.indexOf(e)],
+                                                studentName: e + " " + _LNList[_FNList.indexOf(e)],
+                                                stRef: studentRefList[_FNList.indexOf(e)],
                                                 schoolID: schoolID,
-                                                classId: ClassID[
-                                                        _FNList.indexOf(
-                                                            e)]
-                                                    .id,
+                                                classId: ClassID[_FNList.indexOf(e)].id,
                                               )),
                                     );
                                   },
@@ -428,210 +404,6 @@ class _parentHPState extends State<parentHP> {
                                     Icons.airport_shuttle_rounded,
                                     color: Colors.black,
                                     size: 40,
-=======
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                      children: _FNList.map((e) {
-                        return Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color.fromARGB(255, 251, 250, 250),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
-                            child: new Column(children: [
-                              new Container(
-                                child: Text(
-                                    e + " " + _LNList[_FNList.indexOf(e)],
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 44,
-                                        height: 44,
-                                        child: FittedBox(
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 199, 248, 248),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        viewChildSubjcets(
-                                                          classRef: ClassID[
-                                                              _FNList.indexOf(
-                                                                  e)],
-                                                          studentName: e +
-                                                              " " +
-                                                              _LNList[_FNList
-                                                                  .indexOf(e)],
-                                                          stRef: studentRefList[
-                                                              _FNList.indexOf(
-                                                                  e)],
-                                                          schoolID: schoolID,
-                                                          classId: ClassID[
-                                                                  _FNList
-                                                                      .indexOf(
-                                                                          e)]
-                                                              .id,
-                                                        )),
-                                              );
-                                            },
-                                            child: Image.asset(
-                                              "images/subjectsIcon.png",
-                                              width: 55,
-                                              height: 55,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("المقررات"),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Column(children: [
-                                    SizedBox(
-                                      width: 44,
-                                      height: 44,
-                                      child: FittedBox(
-                                        child: FloatingActionButton(
-                                          heroTag: null,
-                                          backgroundColor: Color.fromARGB(
-                                              255, 199, 248, 248),
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      viewDocuments(
-                                                          ref: ClassID[_FNList
-                                                              .indexOf(e)],
-                                                          studentRef:
-                                                              studentRefList[
-                                                                  _FNList
-                                                                      .indexOf(
-                                                                          e)])),
-                                            );
-                                          },
-                                          child: Icon(
-                                            Icons.folder,
-                                            color: Colors.black,
-                                            size: 40,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text("الملفات"),
-                                  ]),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 44,
-                                        height: 44,
-                                        child: FittedBox(
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 199, 248, 248),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        viewAbcense(
-                                                          ref: studentRefList[
-                                                              _FNList.indexOf(
-                                                                  e)],
-                                                        )),
-                                              );
-                                            },
-                                            child: Image.asset(
-                                              "images/absenceIcon.png",
-                                              width: 44,
-                                              height: 44,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("الحضور"),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        width: 44,
-                                        height: 44,
-                                        child: FittedBox(
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            backgroundColor: Color.fromARGB(
-                                                255, 199, 248, 248),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        pickup(
-                                                          stRef: studentRefList[
-                                                              _FNList.indexOf(
-                                                                  e)],
-                                                        )),
-                                              );
-                                            },
-                                            child: Icon(
-                                              Icons.airport_shuttle_rounded,
-                                              color: Colors.black,
-                                              size: 40,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text("الاصطحاب"),
-                                    ],
->>>>>>> 36135f4dbcdac0f8e7c75edf79708dd1e167ce45
                                   ),
                                 ),
                               ),
@@ -704,7 +476,6 @@ class _parentHPState extends State<parentHP> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        print(alert);
         return alert;
       },
     );

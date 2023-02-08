@@ -11,7 +11,7 @@ app.use("/",router);
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("/Users/maca7/Downloads/halaqa-89b43-firebase-adminsdk-j33v0-cfd72dd807.json");
+var serviceAccount = require("/Users/reemafahad/Desktop/halaqa-89b43-firebase-adminsdk-j33v0-89eea436f9.json");
 
 // Intialize the firebase-admin project/account
 admin.initializeApp({
@@ -43,15 +43,17 @@ app.post('/addUser', async (req, res) => {
     console.log(userData);
 
     getAuth()
+    ////changes:
     .createUser({
       email: userData.email,
-      password: 'secretPassword',
+      password: userData.pass,
       disabled: false,
     })
     .then((userRecord) => {
       // See the UserRecord reference doc for the contents of userRecord.
       console.log('Successfully created new user:', userRecord.uid);
       res.json({"status": "Successfull" , "uid": userRecord.uid});
+     
     })
     .catch((error) => {
         console.log(error.code);
@@ -79,11 +81,33 @@ app.post('/addUser', async (req, res) => {
   })
 
 
+
+   ///Update user
+ app.post('/updateUser', async (req, res) => {
+  const userData = req.body;
+  console.log(userData);
+  getAuth()
+  .updateUser(userData.uid, {
+    email: userData.email,
+  //  disabled: false,
+  })
+  .then((userRecord) => {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log('Successfully updated user');
+    res.json({"status": "Successfull" })
+  })
+  .catch((error) => {
+    console.log('Error updating user:', error);
+    es.end('error');
+  });
+
+});
+
+
 // Delete user
   app.post('/deleteUser',  async (req, res) => {
     const userData = req.body;
     console.log(userData);
-
     getAuth()
   .deleteUser(userData.uid)
   .then(() => {
@@ -96,6 +120,11 @@ app.post('/addUser', async (req, res) => {
   });
   })
 
+
+
   app.listen(8080,() => {
     console.log("Started on PORT 8080");
     })
+
+
+

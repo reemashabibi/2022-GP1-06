@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 
 
 class AddCommissioner extends StatefulWidget {
@@ -51,7 +53,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
 
   List<dynamic> students = [];
   List<String> studentsName = [];
-  String? checkStudentId;
+  List<String> checkStudentId = [];
+  var Uid ;
 
 
   getStudent() async{
@@ -67,16 +70,14 @@ class _AddCommissionerState extends State<AddCommissioner> {
     });
 
     if (widget.isUpdate == true) {
-      print(students);
+      List list = widget.snapshot!.get("Students");
       email.text = widget.snapshot!.get("Email");
       fName.text = widget.snapshot!.get("FirstName");
       lName.text = widget.snapshot!.get("LastName");
-      for (var element in students) {
-        DocumentSnapshot dc = await FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(element.id).get();
-        if (widget.snapshot!.get("Students").id == element.id) {
-          checkStudentId = element.id;
-        }
+      for (var element in list) {
+        checkStudentId.add(element.id);
       }
+      // print("CC $checkStudentId");
       setState(() {
 
       });
@@ -133,7 +134,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                     textInputType: TextInputType.text,
                     validator: (s) {
                       if (s!.isEmpty) {
-                        return "اسم العائلة مطلوب";
+                        return "الاسم الأخير مطلوب";
                       }
                       return null;
                     }
@@ -142,10 +143,10 @@ class _AddCommissionerState extends State<AddCommissioner> {
                           height: 10,
                         ),
                 customTextFiled(
-                    hintText: "بريد إلكتروني",
+                    hintText: "البريد إلكتروني",
                     controller: email,
                     icon: Icons.email,
-                    enabled: widget.isUpdate == true ? false : true,
+                  //  enabled: widget.isUpdate == true ? false : true,
                     textInputType: TextInputType.emailAddress,
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -157,25 +158,41 @@ class _AddCommissionerState extends State<AddCommissioner> {
                       return null;
                     }
                 ),
-                if (widget.isUpdate == false)
-                     SizedBox(
-                          height: 10,
-                        ),
-                customTextFiled(
-                    hintText: "كلمة المرور",
-                    controller: password,
-                    icon: Icons.lock,
-                    textInputType: TextInputType.text,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                          return "كلمة المرور مطلوبة";
-                        } else if (value.length < 6) {
-                           return ("لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام");
-                        }
-                        return null;
-                      }
-                ),
-                
+              //   if (widget.isUpdate == false){},
+
+                   Container(
+                       child:LayoutBuilder(builder: (context, constraints) { 
+                             if(widget.isUpdate == false){
+                               return   Column( 
+                                    children: [
+                                     SizedBox(
+                                    height: 10,
+                                   ),
+
+                         customTextFiled(
+                             hintText: "كلمة المرور",
+                             controller: password,
+                             icon: Icons.lock,
+                             textInputType: TextInputType.text,
+                             validator: (value) {
+                               if (value!.isEmpty) {
+                                 return "كلمة المرور مطلوبة";
+                               } else if (value.length < 6) {
+                                 return ("لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام");
+                               }
+                               return null;
+                             }
+                         ),   
+                       ],
+                     );
+                               //Text("Y is greater than or equal to 10");
+                             }else{
+                                 return Text("");
+                             }  
+                         })
+                     ),
+ 
+                     
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -189,7 +206,12 @@ class _AddCommissionerState extends State<AddCommissioner> {
                       padding: const EdgeInsets.symmetric(horizontal:12.0,vertical: 7),
                       child: GestureDetector(
                         onTap: () {
-                          checkStudentId = data.id;
+                          // checkStudentId = data.id;
+                          if (!checkStudentId.contains(data.id)) {
+                            checkStudentId.add(data.id);
+                          } else {
+                            checkStudentId.remove(data.id);
+                          }
                           setState(() {
 
                           });
@@ -203,8 +225,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                 color: Colors.black
                               ),)),
                               Icon(
-                                checkStudentId != students[i].id ? Icons.check_box_outline_blank : Icons.check_box,
-                                color:checkStudentId != students[i].id  ? Colors.black : Colors.blueAccent,
+                                !checkStudentId.contains(students[i].id)  ? Icons.check_box_outline_blank : Icons.check_box,
+                                color:!checkStudentId.contains(students[i].id)  ? Colors.black : Color.fromARGB(255, 116, 195, 255),
                               )
                             ],
                           ),
@@ -216,45 +238,113 @@ class _AddCommissionerState extends State<AddCommissioner> {
 
 
                 GestureDetector(
-                  onTap: () {
+                  onTap: () async{
                     if (formKey.currentState!.validate()) {
                       if (widget.isUpdate == true) {
-                        ///change the path to what i sent you 
+                        if (checkStudentId.isEmpty){
+                         Fluttertoast.showToast(msg: "فضلًا اختَر طالِب",backgroundColor: Color.fromARGB(255, 221, 33, 30) );
+                        }
+                        else{
+                       // FirebaseApp app = await Firebase.initializeApp(name: 'secondary', options: Firebase.app().options);
                         FirebaseFirestore.instance.collection("School/${widget.schoolId}/Commissioner/").doc(widget.snapshot!.id).update({
                           "FirstName" : fName.text,
                           "LastName" : lName.text,
-                          "Students" :  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(checkStudentId)
-                        });
-                        FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(checkStudentId).update({
-                          "CommissionerId" : FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').doc(widget.snapshot!.id)
+                          "Email" : email.text,
+                         // "Password": password.text,
+                          // "Students" :  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(checkStudentId)
+                          "Students" :  List.generate(checkStudentId.length, (index) => FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(checkStudentId[index]))
                         });
 
-                        for(int i=0;i<students.length;i++) {
-                         if (students[i].id != checkStudentId) {
-                           FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(students[i].id).update({
-                             "CommissionerId" : null
-                           });
-                         }
+                        for (var element in checkStudentId) {
+                          FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(element).update({
+                            "CommissionerId" : FieldValue.arrayUnion([FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').doc(widget.snapshot!.id)])
+                          });
+                           Uid = widget.snapshot!.id;
+                           print("Com ID:");
+                           print(Uid);
                         }
+                        print("Com ID 2222222222:");
+                           print(Uid);
+                      //    updateUser(Uid, email.text );
+                          updateUser(Uid, email.text ).then((data) async {
+                         //   print(Uid.runtimeType);
+                            print("Printingggg");
+                            var responseData = json.decode(data.body);
+                         //  var responseData= await json.decode(json.encode(data.body)); 
+                          // responseData = responseData[0]; 
+                           print(responseData);
 
-                        Fluttertoast.showToast(msg: "تم تحديث  معلومات المفوض");
-                      } else {
-                        if (checkStudentId == null) {
-                          Fluttertoast.showToast(msg: "Please select student");
+                            if(responseData["status"] == "Successfull" ){
+                             Fluttertoast.showToast(msg: "تم تحديث  معلومات المفوض" ,backgroundColor: Color.fromARGB(255, 97, 200, 0));
+                            }
+
+                         else 
+                            if(responseData["status"] == "used"){
+                            print ("email already in use");
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text("البريد الإلكتروني مستخدم من قبل",
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  );
+                                }
+                            );
+  
+                            }
+                          }).catchError((e) {
+                            print("EERRROR ${e.toString()}");
+                            ///
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text(e.toString(),
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  );
+                                }
+                            );
+                            ///
+                          });
+                          
+                      //  Fluttertoast.showToast(msg: "تم تحديث  معلومات المفوض" ,backgroundColor: Color.fromARGB(255, 97, 200, 0));
+                      }
+                      
+                      } //end if the widget is update
+
+
+                      else {///if the widget is add
+                        if (checkStudentId.isEmpty) {
+                          Fluttertoast.showToast(msg: "فضلًا اختَر طالِب",backgroundColor: Color.fromARGB(255, 221, 33, 30) );
                         } else {
-                          //// becouse this method let the new user sign-in automatcly please use Nofe.js for flutter i sent the simmiler files to the group
-                          FirebaseAuth.instance.createUserWithEmailAndPassword(email: email.text, password: password.text).then((value) async {
-                            ////chane the path please
-                            FirebaseFirestore.instance.collection("School/${widget.schoolId}/Commissioner/").doc(value.user!.uid).set({
+                          //// Node.js
+                           createUser(email.text, password.text).then((data) async {
+                            var responseData = json.decode(data.body);
+                            print(responseData);
+                            if(responseData["status"] == "Successfull" ){
+                            print (responseData["uid"]);
+                            var COMuid = responseData["uid"];
+                                FirebaseFirestore.instance.collection("School/${widget.schoolId}/Commissioner/").doc(COMuid).set({
                               "FirstName" : fName.text,
                               "LastName" : lName.text,
                               "Email" : email.text,
-                              "Students" :  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(checkStudentId)
+                              "ParentId" : FirebaseAuth.instance.currentUser!.uid,
+                              //"Password" : password.text,
+                              // "Students" :  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(checkStudentId)
+                              "Students" :  List.generate(checkStudentId.length, (index) => FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student/').doc(checkStudentId[index]))
                             });
-                            FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(checkStudentId).update({
-                              "CommissionerId" : FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').doc(value.user!.uid)
-                            });
-                            Fluttertoast.showToast(msg: "تمت إضافةالمفوض بنجاح");
+                            for (var element in checkStudentId) {
+                              FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(element).update({
+                                "CommissionerId" : FieldValue.arrayUnion([FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').doc(COMuid)])
+                              });
+                            }
+                         Fluttertoast.showToast(msg: "تمت إضافةالمفوّض بنجاح",backgroundColor: Color.fromARGB(255, 97, 200, 0));
                             await FirebaseAuth.instance.sendPasswordResetEmail(email: email.text).then((value) {
                               ////
                               showDialog(
@@ -269,16 +359,43 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                     );
                                   }
                               );
-                              ///
+                              ///Delete Later
                             });
+                           
                             fName.clear();
                             lName.clear();
                             email.clear();
                             password.clear();
-                            checkStudentId = null;
+                            checkStudentId = [];
                             setState(() {
 
                             });
+                            }///end line 258
+
+                         else 
+                            if(responseData["status"] == "used"){
+                            print ("email already in use");
+                            showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Text("البريد الإلكتروني مستخدم من قبل",
+                                      style: const TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  );
+                                }
+                            );
+                            fName.clear();
+                            lName.clear();
+                            email.clear();
+                            password.clear();
+                            checkStudentId = [];
+                            setState(() {
+
+                            });
+                            }
                           }).catchError((e) {
                             print("EERRROR ${e.toString()}");
                             ///
@@ -297,6 +414,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                             ///
                           });
                         }
+                        
                       }
                     }
                   },
@@ -321,7 +439,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                       ],
                     ),
                     child: const Text(
-                      "إضافة مفوض",
+                      "حفظ",
                       style: TextStyle(
                           fontSize: 20,
                           color: Colors.white
@@ -337,4 +455,36 @@ class _AddCommissionerState extends State<AddCommissioner> {
       ),
     );
   }
+  Future<http.Response> updateUser(String email, String pass) async {
+  //Andorid??
+  return http.post(
+        Uri.parse("http://127.0.0.1:8080/updateUser"),
+        headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(<String, String>{
+            'email': email,
+            'pass': pass
+        })
+     
+    );     
+}
+
+Future<http.Response> createUser(String email, String pass) async {
+  //Andorid??
+  return http.post(
+        Uri.parse("http://127.0.0.1:8080/addUser"),
+        headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(<String, String>{
+            'email': email,
+            'pass': pass
+        })
+     
+    );     
+}
+
+
+
 }

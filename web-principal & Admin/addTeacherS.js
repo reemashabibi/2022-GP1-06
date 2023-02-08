@@ -275,6 +275,7 @@ excel_file.addEventListener('change', (event) => {
             LastName: registerlname,
             OfficeHours:"لم يتم التحديد بعد",
             Subjects: [],  
+            //new
             msg_count:0             
           })
              sendPasswordResetEmail(auth,registerEmail).then(() => {

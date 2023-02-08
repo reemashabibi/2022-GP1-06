@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/commissioner/add_commissioner.dart';
+import 'package:http/http.dart' as http;
 
 
 class CommissionerList extends StatefulWidget {
@@ -48,7 +50,7 @@ class _CommissionerListState extends State<CommissionerList> {
         ],
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').snapshots(),
+        stream: FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').where("ParentId",isEqualTo: FirebaseAuth.instance.currentUser!.uid).snapshots(),
         builder: (context,snapshot) {
           if (!snapshot.hasData) {
             return const Center(
@@ -102,7 +104,9 @@ class _CommissionerListState extends State<CommissionerList> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => AddCommissioner(schoolId: widget.schoolId,isUpdate: true,
+                                          builder: (context) => AddCommissioner(
+                                          schoolId: widget.schoolId,
+                                          isUpdate: true,
                                           snapshot: data,
                                           ),
                                         ),
@@ -145,7 +149,7 @@ class _CommissionerListState extends State<CommissionerList> {
                                                           onTap: () => Navigator.pop(context),
                                                           child: Container(
                                                             decoration: BoxDecoration(
-                                                              color: Color.fromARGB(255, 255, 255, 255),
+                                                              color: const Color.fromARGB(255, 255, 255, 255),
                                                               borderRadius: BorderRadius.circular(10)
                                                             ),
                                                             child: const Padding(
@@ -163,17 +167,21 @@ class _CommissionerListState extends State<CommissionerList> {
                                                         GestureDetector(
                                                           onTap: () async{
                                                             Navigator.pop(context);
-                                                            await FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(data.get("Students").id.toString()).update({
-                                                              "CommissionerId" : null
-                                                            });
+                                                            List list  = data.get("Students");
+                                                            for (var element in list) {
+                                                              await FirebaseFirestore.instance.collection("School/${widget.schoolId}/Student/").doc(element.id.toString()).update({
+                                                                "CommissionerId" : FieldValue.arrayRemove([FirebaseFirestore.instance.collection('School/${widget.schoolId}/Commissioner/').doc(data.id)])
+                                                              });
+                                                            }
+                                                            print(data.id);
+                                                            deletUser(data.id);
                                                             await FirebaseFirestore.instance.collection("School/${widget.schoolId}/Commissioner/").doc(data.id).delete();
-
                                                             Fluttertoast.showToast(msg: "تم حذف المفوّض بنجاح",backgroundColor: Colors.red);
 
                                                           },
                                                           child: Container(
                                                             decoration: BoxDecoration(
-                                                                color: Color.fromARGB(255, 255, 255, 255),
+                                                                color: const Color.fromARGB(255, 255, 255, 255),
                                                                 borderRadius: BorderRadius.circular(10)
                                                             ),
                                                             child: const Padding(
@@ -212,4 +220,21 @@ class _CommissionerListState extends State<CommissionerList> {
       )
     );
   }
+
+  Future<http.Response> deletUser(String uid) {
+    return http.post(
+      ///Android??
+        Uri.parse("http://127.0.0.1:8080/deleteUser"),
+        headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(<String, String>{
+            'uid': uid,
+        }),
+        
+    );
+    print("done deleting");
+    
+}
+
 }

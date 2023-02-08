@@ -37,23 +37,6 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
   var numOfStudents;
 
  
-  void callChatDetailScreen(BuildContext context ,String name,  uid,String classID,String subjectId){
-    print("In function Student Name: $name");
-     print(uid);
-     print(classID);
-     Navigator.push(
-        context,
-        CupertinoPageRoute(
-        builder: (context) => Chatdetail(
-         friendName: name,
-         friendUid: uid,
-         schoolId: widget.schoolId,
-          classId: classID,
-          subjectId: subjectId,
-
-          )));
-
-  }
 
   getData() {
     _StudentList = [""];
@@ -62,11 +45,15 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
     x++;
   }
 
-getStudents() async {
+  String? classId;
+
+  getStudents() async {
+    print("AA ${widget.ref.parent.parent!.path}");
     DocumentReference docRef = widget.ref.parent.parent as DocumentReference<Object?>;
          print("docref: ${widget.ref.parent.id}");
          ///classID
-        print(docRef);
+        print(docRef.id);
+        classId = docRef.id;
         print(docRef);
 
     docRef.get().then((DocumentSnapshot ds) async {
@@ -79,7 +66,7 @@ getStudents() async {
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
         var stName = await docu.get().then((value) {
-         // print("DDDDDDDDDDD ${value.id}");
+          // print("DDDDDDDDDDD ${value.id}");
           setState(() {
             _StudenNameList.add(value['FirstName'] + " " + value['LastName']);
             _StudentsRefList.add(docu);
@@ -98,6 +85,17 @@ getStudents() async {
         v++;
       }
     });
+
+    ///show count of msg from inside teacher collection and inside of this subcollection subjects
+    FirebaseFirestore.instance.collection('School/${widget.schoolId}/Teacher')
+        .doc(FirebaseAuth.instance.currentUser!.uid).collection("subjects")
+        .doc(widget.subjectId).get().then((value) {
+      setState(() {
+        msgCount = value.get("msg_count");
+        studentId = value.get("student_id");
+      });
+    });
+
   }
 
 
@@ -120,6 +118,36 @@ getStudents() async {
       ),
     );
   }
+
+  void callChatDetailScreen(BuildContext context ,String name,  uid,String classID,String subjectId){
+    print("In function Student Name: $name");
+    print(uid);
+    print(classID);
+    Navigator.push(
+        context,
+        CupertinoPageRoute(
+            builder: (context) => Chatdetail(
+              friendName: name,
+              friendUid: uid,
+              schoolId: widget.schoolId,
+              classId: classID,
+              subjectId: subjectId,
+              ///after read msg update a variable
+              msgCount: (s) {
+                msgCount = s;
+                // setState(() {
+                //
+                // });
+              },
+            )));
+    setState(() {
+
+    });
+
+  }
+
+  int count = 0;
+
 
   sendMsgAll() {
     return showDialog(context: context, builder: (_) => Dialog(
@@ -150,20 +178,35 @@ getStudents() async {
                 child: customTextFiled(),
               ),
               // const Spacer(),
-              ElevatedButton(onPressed: () {
-                // print("TEXT ${controller.text}");
+              ElevatedButton(onPressed: () async{
+                String classId = FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class/').doc(widget.ref.parent.parent!.id).id;
+                // print("TEXT ${widget.ref}");
+                QuerySnapshot qr = await FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').where("ClassID",isEqualTo: FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class/').doc(widget.ref.parent.parent!.id)).get();
+
+
+
                 if(controller.text.isNotEmpty) {
                   Navigator.pop(context);
-                  ///change the path
-                  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').get().then((value) {
-                    for(var doc in value.docs) {
-                      FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').doc(doc.id).collection("messages").add({
-                        'createdOn': FieldValue.serverTimestamp(),
-                        'uid':FirebaseAuth.instance.currentUser?.uid,
-                        'msg': controller.text,
+                  FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').get().then((value) async {
+                    // for(var doc in value.docs) {
+                      for (int i=0;i<qr.docs.length;i++) {
+                        // print("SUBJECT ID ${widget.subjectId}_${qr.docs[i].id}_${FirebaseAuth.instance.currentUser?.uid}");
+                        // print("## ${qr.docs[i].id}");
+                        FirebaseFirestore.instance.collection('School/${widget.schoolId}/Chats').doc("${widget.subjectId}_${qr.docs[i].id}_${FirebaseAuth.instance.currentUser?.uid}").collection("messages").add({
+                          'createdOn': FieldValue.serverTimestamp(),
+                          'uid':FirebaseAuth.instance.currentUser?.uid,
+                          'msg': "📢"+"\n"+"\n"+controller.text,
+                        });
+                      }
+
+                      DocumentSnapshot dc = await FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class').doc(classId).collection("Subject").doc(widget.subjectId).get();
+                      count = dc.get("msg_count") + 1;
+                      print("COUNT MSG $count");
+                      FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class').doc(classId).collection("Subject").doc(widget.subjectId).update({
+                        "msg_count" : count
                       });
                       // FirebaseFirestore.instance.collection("sc")
-                    }
+                    // }
 
                   });
 
@@ -183,6 +226,9 @@ getStudents() async {
     ));
   }
 
+  Stream<QuerySnapshot<Object?>>? stream;
+  int msgCount = 0;
+  String? studentId;
 
   @override
   void initState() {
@@ -194,14 +240,14 @@ getStudents() async {
   bool visible = false;
   @override
   Widget build(BuildContext context) {
+    // print("_+_++_+ ${FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class/').doc(widget.ref.parent.parent!.id)}");
     // DocumentReference ref = widget.ref;
     // DocumentReference str = ref.parent.parent as DocumentReference<Object?>;
-    
+
     
       return StreamBuilder<DocumentSnapshot>(
           stream: widget.ref.parent.parent?.snapshots(),
-          builder: (BuildContext context, AsyncSnapshot snap) {
-            // print("@@@ ${snap.data}");
+          builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snap) {
             if (snap.hasError) {
               return Center(
                   child: Text('Some error occurred ${snap.error}'));
@@ -216,9 +262,10 @@ getStudents() async {
               //Display the list
               //  print("in");
         return StreamBuilder <QuerySnapshot>(
-          ///get schoolID //it views all school's students
-      stream : FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').snapshots(),
+          ///get schoolID
+      stream : FirebaseFirestore.instance.collection('School/${widget.schoolId}/Student').where("ClassID",isEqualTo: FirebaseFirestore.instance.collection('School/${widget.schoolId}/Class/').doc(widget.ref.parent.parent!.id)).snapshots(),
       builder: (BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
+
         if (snapshot.hasError){
           return const Center(child: Text("Something went wrong"),);
         }
@@ -245,7 +292,7 @@ getStudents() async {
             slivers: [
               CupertinoSliverNavigationBar(
                 ///bad design
-                largeTitle: Text( "أولياء أمور "+className + " - " + levelName.toString(),
+                largeTitle: Text( "${"أولياء أمور "+className} - $levelName",
                 style: const TextStyle(
                     color: Color.fromARGB(255, 68, 68, 68),
                     fontSize: 25,
@@ -256,15 +303,18 @@ getStudents() async {
                 SliverList(
                   delegate: SliverChildListDelegate (
                       snapshot.data!.docs.map((e) {
-                       // print("${e.data()}");
+                       // print("+++999 9+9 ${e.id}");
                 // Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+
+
                  return CupertinoListTile(
                   onTap: () {
                     callChatDetailScreen(context ,e['FirstName'] + " " + e['LastName'], e.id,e["ClassID"].id,widget.subjectId);
                     },
                   title: Row(
                     children: [
-                      e['msg_count'] == 0 ? Container() : Container(
+                      if(e.id == studentId)
+                      msgCount == 0 ? Container() : Container(
                         height: 25,
                         width: 25,
                         decoration: const BoxDecoration(
@@ -272,7 +322,7 @@ getStudents() async {
                           shape: BoxShape.circle
                         ),
                         child: Center(
-                          child: Text("${e['msg_count']}",style: const TextStyle(
+                          child: Text(msgCount.toString(),style: const TextStyle(
                             color: Colors.white,
                             fontSize: 12
                           ),),

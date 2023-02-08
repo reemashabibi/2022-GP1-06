@@ -58,10 +58,12 @@ class _teacherHPState extends State<teacherHP> {
       break;
     }
 
-    DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/' + '$schoolID' + '/Teacher/' + user.uid);
+    DocumentReference docRef = FirebaseFirestore.instance
+        .doc('School/$schoolID/Teacher/${user.uid}');
 
     docRef.get().then((DocumentSnapshot ds) async {
+      print("MMM ${ds.id}");
+      print("MMM ${ds.data()}");
       // use ds as a snapshot
 
       numOfSubjects = ds['Subjects'].length;
@@ -71,6 +73,7 @@ class _teacherHPState extends State<teacherHP> {
 
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference str = ds['Subjects'][i].parent.parent;
+        print("ZZZZZZZZ ${ds['Subjects'][i].parent.parent.id}");
 
         var clsName = await str.get().then((value) {
           setState(() {
@@ -171,7 +174,7 @@ class _teacherHPState extends State<teacherHP> {
 
       body: FutureBuilder(
           future: FirebaseFirestore.instance
-              .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
+              .doc('School/$schoolID/Teacher/${user!.uid}')
               .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -323,27 +326,21 @@ class _teacherHPState extends State<teacherHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor:
-                                            const Color.fromARGB(255, 199, 248, 248),
+                                        backgroundColor: const Color.fromARGB(255, 199, 248, 248),
                                         onPressed: () {
                                           print("SUBJECT ID $_SubjectsIdsList");
                                           print("ID############$schoolID, ${_SubjectsIdsList[_SubjectsNameList.indexOf(e)]}");
+                                          print("***** ${_SubjectsRefList[_SubjectsNameList.indexOf(e)]}");
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       viewStudentsForChat(
-                                                        ref: _SubjectsRefList[
-                                                            _SubjectsNameList
-                                                                .indexOf(e)],
+                                                        ref: _SubjectsRefList[_SubjectsNameList.indexOf(e)],
                                                         schoolId: schoolID,
-                                                        subjectId:
-                                                            _SubjectsIdsList[
-                                                                _SubjectsNameList
-                                                                    .indexOf(
-                                                                        e)],
-                                                      )),
+                                                        subjectId: _SubjectsIdsList[_SubjectsNameList.indexOf(e)],
+                                            )),
                                             );
                                           }
                                         },
