@@ -191,14 +191,29 @@ class _AddCommissionerState extends State<AddCommissioner> {
                              }  
                          })
                      ),
- 
-                     
+
+                                 SizedBox(
+                                    height: 20,
+                                   ),
+
+                     Container(
+                      alignment: Alignment.bottomRight,
+                      child: Text(' تعيين المفوّض لـ: ',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(fontWeight: FontWeight.bold,
+                      fontSize: 17,
+                      )
+                      ),
+                   ),
+               
+                                 SizedBox(
+                                    height: 5,
+                                   ),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: students.length,
                   itemBuilder: (c,i) {
-
                     var data = students[i];
                     print("@@ $checkStudentId");
 
@@ -219,9 +234,10 @@ class _AddCommissionerState extends State<AddCommissioner> {
                         child: Container(
                           color: Colors.transparent,
                           child: Row(
+                            
                             children: [
                               Expanded(child: Text(studentsName[i].toString(),style: const TextStyle(
-                                fontSize: 15,
+                                fontSize: 16,
                                 color: Colors.black
                               ),)),
                               Icon(
@@ -263,16 +279,12 @@ class _AddCommissionerState extends State<AddCommissioner> {
                            print("Com ID:");
                            print(Uid);
                         }
-                        print("Com ID 2222222222:");
+                        print("Com ID 2:");
                            print(Uid);
-                      //    updateUser(Uid, email.text );
                           updateUser(Uid, email.text ).then((data) async {
-                         //   print(Uid.runtimeType);
                             print("Printingggg");
                             var responseData = json.decode(data.body);
-                         //  var responseData= await json.decode(json.encode(data.body)); 
-                          // responseData = responseData[0]; 
-                           print(responseData);
+                            print(responseData);
 
                             if(responseData["status"] == "Successfull" ){
                              Fluttertoast.showToast(msg: "تم تحديث  معلومات المفوض" ,backgroundColor: Color.fromARGB(255, 97, 200, 0));
@@ -281,6 +293,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                          else 
                             if(responseData["status"] == "used"){
                             print ("email already in use");
+                            Fluttertoast.showToast(msg:  "البريد الإلكتروني مستخدم من قبل",backgroundColor: Color.fromARGB(255, 221, 33, 30) );
+                            /*
                             showDialog(
                                 context: context,
                                 builder: (context) {
@@ -292,8 +306,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                     ),
                                   );
                                 }
-                            );
-  
+                            ); 
+                              */
                             }
                           }).catchError((e) {
                             print("EERRROR ${e.toString()}");
@@ -375,6 +389,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                          else 
                             if(responseData["status"] == "used"){
                             print ("email already in use");
+                            Fluttertoast.showToast(msg:  "البريد الإلكتروني مستخدم من قبل",backgroundColor: Color.fromARGB(255, 221, 33, 30) );
+                           /*
                             showDialog(
                                 context: context,
                                 builder: (context) {
@@ -387,6 +403,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                   );
                                 }
                             );
+                            */
                             fName.clear();
                             lName.clear();
                             email.clear();
@@ -438,13 +455,10 @@ class _AddCommissionerState extends State<AddCommissioner> {
                         ),
                       ],
                     ),
-                    child: const Text(
-                      "حفظ",
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white
-                      ),
-                    ),
+                    
+                    child: widget.isUpdate == false? const Text( "إضافة مفوّض", style: TextStyle(fontSize: 20,color: Colors.white  ),) :
+                    const Text( "حفظ", style: TextStyle(fontSize: 20,color: Colors.white  ),),
+
                   ),
                 ),
 
@@ -455,7 +469,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
       ),
     );
   }
-  Future<http.Response> updateUser(String email, String pass) async {
+  Future<http.Response> updateUser(String uid, String email) async {
   //Andorid??
   return http.post(
         Uri.parse("http://127.0.0.1:8080/updateUser"),
@@ -463,8 +477,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
             'Content-Type': 'application/json; charset=UTF-8'
         },
         body: jsonEncode(<String, String>{
-            'email': email,
-            'pass': pass
+            'uid': uid,
+            'email': email
         })
      
     );     

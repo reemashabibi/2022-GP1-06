@@ -89,7 +89,8 @@ app.post('/addUser', async (req, res) => {
   getAuth()
   .updateUser(userData.uid, {
     email: userData.email,
-  //  disabled: false,
+    //password: userData.pass, ??
+    disabled: false,
   })
   .then((userRecord) => {
     // See the UserRecord reference doc for the contents of userRecord.
@@ -97,8 +98,15 @@ app.post('/addUser', async (req, res) => {
     res.json({"status": "Successfull" })
   })
   .catch((error) => {
+    console.log(error.code);
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    if (errorCode =="auth/email-already-exists"){
+        res.json({"status":'used'});}
+    else
+    res.end('error');
+
     console.log('Error updating user:', error);
-    es.end('error');
   });
 
 });

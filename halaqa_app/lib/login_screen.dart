@@ -26,7 +26,7 @@ class StartState extends State<LoginScreen> {
     var options = [
     'معلم',
     'ولي أمر',
-    'وسيط',
+    'مفوّض',
   ];
   var _currentItemSelected = "معلم";
   var role = "معلم"; //role
@@ -438,8 +438,56 @@ else if (role == "ولي أمر"){
    }
 }//end "Parent"
 
-else if (role =="وسيط"){
-  //next sprint
+else if (role =="مفوّض"){
+      var schoolID ="x";
+   User? user = FirebaseAuth.instance.currentUser;
+   print("USER ~~~~~~~~~~~~~~~~~ ${user!.uid}");
+   print("USER EMAIL ~~~~~~~~~~~~~~~~~ ${user.email}");
+   if(role == "مفوّض"){
+   var col = FirebaseFirestore.instance.collectionGroup('Commissioner').where('Email', isEqualTo: user.email);
+     var snapshot = await col.get();
+     for (var doc in snapshot.docs) {
+       print("DATA OF DATA ${doc.data()}");
+       schoolID = doc.reference.parent.parent!.id;
+       print(doc.reference.parent.parent?.id);
+       break;
+    }
+    var kk = FirebaseFirestore.instance
+            .collection('School/'+schoolID+'/Commissioner')
+            .doc(user!.uid)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        if (documentSnapshot.get('Email') == user?.email) {
+         //  Navigator.pushReplacement(
+        //  context,
+        //  MaterialPageRoute(
+            //builder: (context) =>  parentHP(),
+         // ),
+       // );
+        }
+      } else {
+           showDialog(
+           context: context,
+           builder: (context) {
+              return AlertDialog(
+                 content: Text("لا يوجد مفوّض بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                  style: TextStyle(
+                 color: Colors.red,
+          ),
+          ),
+               );
+            }
+         );
+        print('Document does not exist on the database');
+        print(user!.uid);
+         setState(() {
+                 visible = false;
+                });
+      }
+    });
+   } 
+
 }//end "Com"
 
 }//end rout
