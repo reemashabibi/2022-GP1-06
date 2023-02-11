@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -108,7 +109,7 @@ class _viewAbcense extends State<viewAbcense> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => parentHP(),
+                builder: (context) => appBars(),
               ),
             );
           },
@@ -448,7 +449,7 @@ class _Excuse extends State<Excuse> {
                               style: TextStyle(fontSize: 20),
                             ),
                             icon: Icon(
-                              Icons.download,
+                              Icons.file_upload_outlined,
                               size: 24.0,
                             ),
                             onPressed: () async {

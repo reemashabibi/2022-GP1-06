@@ -234,6 +234,10 @@ addStudentForm.addEventListener('submit', async (e) => {
                   LastName: addStudentForm.Lname.value,
                   ClassID: docRefClass,
                   ParentID: docRef,
+                  ///new
+                  CommissionerId: [],
+                  msg_count:0
+
                 })
                 .then( async (d) => {
                   
@@ -385,6 +389,10 @@ addStudentForm.addEventListener('submit', async (e) => {
                   LastName: addStudentForm.Lname.value,
                   ClassID: docRefClass,
                   ParentID: docRef,
+                  ///new
+                  CommissionerId: [],
+                  msg_count:0
+
                 })
                   .then(d => {
 
@@ -525,7 +533,7 @@ const colRef = collection(db, 'Parent');
 
 
 //get collection data
-getDocs(colRef)
+await getDocs(colRef)
   .then((snapshot) => {
     let Parent = []
     snapshot.docs.forEach((doc) => {

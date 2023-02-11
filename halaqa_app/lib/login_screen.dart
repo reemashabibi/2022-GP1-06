@@ -27,7 +27,7 @@ class StartState extends State<LoginScreen> {
   var options = [
     'معلم',
     'ولي أمر',
-    'وسيط',
+    'مفوّض',
   ];
   var _currentItemSelected = "معلم";
   var role = "معلم"; //role
@@ -345,12 +345,13 @@ class StartState extends State<LoginScreen> {
 
       ///******* END *******////
       var kk = FirebaseFirestore.instance
-          .collection('School/' + schoolID + '/Teacher')
-          .doc(user!.uid)
+          .collection('School/$schoolID/Teacher')
+          .doc(user.uid)
           .get()
           .then((DocumentSnapshot documentSnapshot) {
+        print("TEACHER ID ## ${user.uid}");
         if (documentSnapshot.exists) {
-          if (documentSnapshot.get('Email') == user?.email) {
+          if (documentSnapshot.get('Email') == user.email) {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -433,12 +434,12 @@ class StartState extends State<LoginScreen> {
       }
     } //end "Parent"
 
-    else if (role == "وسيط") {
+    else if (role == "مفوّض") {
       var schoolID = "x";
       User? user = FirebaseAuth.instance.currentUser;
       print("USER ~~~~~~~~~~~~~~~~~ ${user!.uid}");
       print("USER EMAIL ~~~~~~~~~~~~~~~~~ ${user.email}");
-      if (role == "وسيط") {
+      if (role == "مفوّض") {
         var col = FirebaseFirestore.instance
             .collectionGroup('Commissioner')
             .where('Email', isEqualTo: user.email);

@@ -8,6 +8,12 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "args",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/args-2.3.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "async",
       "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.9.0",
       "packageUri": "lib/",
@@ -104,6 +110,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "dbus",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/dbus-0.7.4",
+      "packageUri": "lib/",
+      "languageVersion": "2.15"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/dio-4.0.6",
       "packageUri": "lib/",
@@ -194,6 +206,24 @@
       "languageVersion": "2.16"
     },
     {
+      "name": "firebase_messaging",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging-14.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_messaging_platform_interface",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_platform_interface-4.2.10",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
+      "name": "firebase_messaging_web",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_messaging_web-3.2.11",
+      "packageUri": "lib/",
+      "languageVersion": "2.16"
+    },
+    {
       "name": "firebase_storage",
       "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-11.0.10",
       "packageUri": "lib/",
@@ -240,6 +270,24 @@
       "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "flutter_local_notifications",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications-9.9.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_local_notifications_linux",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_linux-0.5.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "flutter_local_notifications_platform_interface",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_local_notifications_platform_interface-5.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
     },
     {
       "name": "flutter_localizations",
@@ -470,6 +518,12 @@
       "languageVersion": "2.14"
     },
     {
+      "name": "petitparser",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/petitparser-5.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/platform-3.1.0",
       "packageUri": "lib/",
@@ -550,6 +604,12 @@
     {
       "name": "test_api",
       "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/test_api-0.4.12",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "timezone",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/timezone-0.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -644,13 +704,19 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "xml",
+      "rootUri": "file:///Users/maca7/flutter/.pub-cache/hosted/pub.dartlang.org/xml-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "halaqa_app",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     }
   ],
-  "generated": "2023-01-25T21:32:09.412148Z",
+  "generated": "2023-02-11T18:37:24.985966Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

@@ -604,9 +604,12 @@ $(document).ready(function () {
   });
   // check Absence
   $(document).on('click', '#saveAttendence', async function () {
-   var abenceTaken = true;
+   var abenceTaken;
    var breakOut;
+   var tokens;
+
     $('#schedule tr').each( async function() {
+      tokens = [];
       var refre =  $(this).attr('id');
       var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
         if (abcense.exists()) {
@@ -634,6 +637,18 @@ $(document).ready(function () {
           excuse: "", 
           FileName: '' 
      });
+    var stu = await getDoc(doc(db, refre));
+    var pref = stu.data().ParentID
+    var parentDoc = await getDoc(pref);
+            //send the notfication
+            $.post("http://localhost:8080/absence",
+            {
+              token: parentDoc.data().token,
+              stuRef: refre,
+           },
+           function (data, stat) {
+
+           });
       }
               });
            
@@ -645,7 +660,11 @@ $(document).ready(function () {
                 
               }, 5000);
             }
-              console.log(date);
+              
+             
+             
+    
+
   });
   
   $(document).on('click', '.abcenseBtn', async function () {

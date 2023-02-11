@@ -2,14 +2,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:groovin_widgets/groovin_widgets.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:halaqa_app/commissioner/add_commissioner.dart';
+import 'package:halaqa_app/commissioner/commisioner_list.dart';
 import 'package:halaqa_app/viewEvents.dart';
+import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
 import 'package:halaqa_app/viewDocuments.dart';
+import 'package:halaqa_app/pickup.dart';
+
+import 'ParentEdit.dart';
 import 'package:halaqa_app/viewAbcense.dart';
-import 'package:halaqa_app/viewAnnouncement.dart';
+import 'package:halaqa_app/viewDocuments.dart';
+import 'package:halaqa_app/viewAbcense.dart';
 import 'package:halaqa_app/pickup.dart';
 
 import 'ParentEdit.dart';
@@ -24,6 +33,8 @@ class parentHP extends StatefulWidget {
 }
 
 class _parentHPState extends State<parentHP> {
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   var className = "";
   var level = "";
   late List studentRefList;
@@ -64,7 +75,7 @@ class _parentHPState extends State<parentHP> {
     }
 
     DocumentReference docRef = await FirebaseFirestore.instance
-        .doc('School/' + '$schoolID' + '/Parent/' + user.uid);
+        .doc('School/$schoolID/Parent/${user.uid}');
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
@@ -104,12 +115,164 @@ class _parentHPState extends State<parentHP> {
 
   @override
   void initState() {
-    getStudents();
+    //getStudents();
+
+    requestPremission();
+    getToken();
+    initInfo();
 
     super.initState();
   }
 
-  int currentIndex = 0;
+//method to set the setting of the notification in foregroud
+  initInfo() {
+    var androidInitialize =
+        const AndroidInitializationSettings('images/logo.png');
+    var IOSInitialize = const IOSInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true);
+    var initializationSettings =
+        InitializationSettings(android: androidInitialize, iOS: IOSInitialize);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+      try {
+        if (payload != null && payload.isNotEmpty) {
+          List<String> info = payload.split("~");
+          print(info[0]);
+          if (info[0] == 'document') {
+            setState(() {
+              counter++;
+            });
+          } else if (info[0] == 'event') {
+            await Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                builder: (context) => viewEvents(),
+              ),
+            );
+          } else if (info[0] == 'absence') {
+            DocumentReference sturef = FirebaseFirestore.instance.doc(info[1]);
+            await Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (context) => viewAbcense(
+                        ref: sturef,
+                      )),
+            );
+          } else if (info[0] == 'announcment') {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => viewEvents(),
+              ),
+            );
+          } else {}
+        } else {}
+      } catch (e) {}
+      return;
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(
+          'onMessage: ${message.notification?.title}/${message.notification?.body}');
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+      AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails('dbfood', 'dbfood',
+              importance: Importance.high,
+              styleInformation: bigTextStyleInformation,
+              priority: Priority.high,
+              playSound: true);
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+          android: androidNotificationDetails,
+          iOS: const IOSNotificationDetails(
+              presentAlert: true, presentBadge: true, presentSound: true));
+
+      await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, platformChannelSpecifics,
+          payload: message.data['type']);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      var payload = message.data['type'];
+      if (payload != null && payload.isNotEmpty) {
+        List<String> info = payload.split("~");
+        print(info[0]);
+        if (info[0] == 'document') {
+        } else if (info[0] == 'event') {
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+              builder: (context) => viewEvents(),
+            ),
+          );
+        } else if (info[0] == 'absence') {
+          DocumentReference sturef = FirebaseFirestore.instance.doc(info[1]);
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+                builder: (context) => viewAbcense(
+                      ref: sturef,
+                    )),
+          );
+        } else if (info[0] == 'announcment') {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => viewEvents(),
+            ),
+          );
+        } else {}
+      } else {}
+    });
+  }
+
+//method to get token for notification
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      saveToken(token!); //to firestore
+    });
+  }
+
+//save token to the user document
+  void saveToken(String token) async {
+    await getStudents();
+    FirebaseFirestore.instance
+        .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
+        .update({'token': token});
+  }
+
+  //method to request premission to send notification
+  void requestPremission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('user granted notfication');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('user granted provisional');
+    } else {
+      print('user declined notification');
+    }
+  }
+
+  int counter = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,31 +295,12 @@ class _parentHPState extends State<parentHP> {
             if (snapshot.hasData && refreshed) {
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
                   new Container(
-                    //   height: double.infinity,
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.only(
-                          //    topLeft: Radius.circular(10),
-                          ///    topRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
                       parentName,
-                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 30,
@@ -411,12 +555,13 @@ class _parentHPState extends State<parentHP> {
               )));
             }
             if (_FNList.length == 0 && x == 0) {
-              return Center(child: Text(""));
+              return const Center(child: Text(""));
             }
             if (_FNList[0] == "" && v == 1) {
-              return Center(child: Text("لا يوجد طلاب تابعين لولي الآمر"));
+              return const Center(
+                  child: Text("لا يوجد طلاب تابعين لولي الآمر"));
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -430,9 +575,9 @@ class _parentHPState extends State<parentHP> {
     // set up the buttons
     Widget continueButton = TextButton(
       //continueButton
-      child: Text("نعم"),
+      child: const Text("نعم"),
       onPressed: () async {
-        CircularProgressIndicator();
+        const CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
@@ -445,7 +590,7 @@ class _parentHPState extends State<parentHP> {
 
     Widget cancelButton = TextButton(
       //cancelButton
-      child: Text("إلغاء",
+      child: const Text("إلغاء",
           style: TextStyle(
             color: Colors.red,
           )),
@@ -457,7 +602,7 @@ class _parentHPState extends State<parentHP> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("AlertDialog"),
-      content: Text(
+      content: const Text(
         "هل تأكد تسجيل الخروج؟",
         textAlign: TextAlign.center,
       ),
@@ -468,7 +613,6 @@ class _parentHPState extends State<parentHP> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        print(alert);
         return alert;
       },
     );

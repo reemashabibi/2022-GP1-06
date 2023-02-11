@@ -56,7 +56,6 @@
 <script src="navbar.js"></script>
 <link rel="stylesheet" href="events.css"/>
 <link rel="stylesheet" href="style.css"/>
-
 <link href="students.css" rel="stylesheet">
 
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
@@ -106,10 +105,20 @@
     </div>
 </nav>
   <!--end of nav -->
-  <br>
-  <h2> قائمة الإعلانات </h2>
-  <button class="button-5" type="button" onclick="window.location.href='addAnnouncement.html'">إضافة</button>
-  <div class="loader topTitle" style="top: 25vmax;"></div>
+ 
+
+  <div class="row">
+    <div class="col-lg-10 mx-auto mb-4">
+       <div class="section-title text-center ">
+       <h2 class="topTitle"> قائمة الإعلانات </h2>
+       <div class="loader topTitle" style="top: 25vmax;"></div>
+          <div id="alertContainer"></div>
+          <button class="button-5" type="button" id = 'addAnnouncement' onclick="window.location.href='addAnnouncement.html'">إضافة</button>
+        </div>
+
+   </div>
+</div>
+
   <div class="row">
     <div class="col-lg-10 mx-auto">
         <div class="career-search mb-60">

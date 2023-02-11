@@ -182,7 +182,7 @@ export async function viewDocuments(){
 
               var table = document.createElement('table');
                     table.ClassName = "table user-list";
-
+                    table.id= doc.ref.path;
                     var tableHead = document.createElement('thead');
                     var trHead = document.createElement('tr');
                     var th =  document.createElement('th');
@@ -620,6 +620,8 @@ export async function viewDocuments(){
 
         if(confirm(" هل أنت تأكد حذف المستند؟")){
           $(".loader").show();
+          if(classesRef.length == 1){
+            alert('1')
        await deleteDoc(docRef).then(async () =>{
             for(var r=0; r<classesRef.length; r++){
             await updateDoc(classesRef[r], {
@@ -643,10 +645,24 @@ export async function viewDocuments(){
           $(".loader").hide();
           console.log(error);
         })
+      }
+      else{
+        var tableID = doc(db, $(this).closest('table').attr('id'));
+        alert('j')
+            alert('in')
+          await updateDoc(tableID, {
+              Documents: arrayRemove(docRef)
+          });
+          await updateDoc(docRef, { Classes: arrayRemove(tableID)})
+          
+          $(this).closest('tr').remove();
+      $(".loader").hide();
+      }
         }
        
     
     });
+
 //add new document
 $(document).on('submit', '.docForm', async function (e){
 
@@ -717,14 +733,42 @@ if(!classDocForm.allowReply.checked){
         })
    
     });
-    $(".loader").hide();
+    
+    //notification
+
+    //get student to get their parents
+    const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", classesRef));
+
+    const querySnapshot = await getDocs(q);
+    
+    querySnapshot.forEach(async(doc) => {
+      //get each parent of a student token
+      const pDoc = await getDoc(doc.data().ParentID);
+      if(pDoc.data().token != null){
+      $.post("http://localhost:8080/document",
+      {
+        token: pDoc.data().token,
+        documentName: classDocForm.Dname.value,
+     },
+     function (data, stat) {
+  
+     });}
+    });
+    
+    
+   //end notification
+
+   $(".loader").hide();
+
     document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح</p> </div>';
     setTimeout(() => {
               
       // 👇️ replace element from DOM
       document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
 
-    }, 9000);
+    }, 6000);
+    
+    
 })
    .catch(error => {
     $(".loader").hide();
@@ -741,7 +785,7 @@ if(!classDocForm.allowReply.checked){
       
       })
 });
-//edit uploaded document
+//update uploaded document
 $(document).on('click', '.changeDocSubmit',async function (e) {
   e.preventDefault();
 
@@ -808,7 +852,30 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
     });
     }
     await updateDoc(docRef, data)
-    .then(docRef => {
+    .then(async (docRef) => {
+          //notification
+
+    //get student to get their parents
+    const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", docRef.Classes));
+
+    const querySnapshot = await getDocs(q);
+    
+    querySnapshot.forEach(async(doc) => {
+      //get each parent of a student token
+      const pDoc = await getDoc(doc.data().ParentID);
+      if(pDoc.data().token != null){
+      $.post("http://localhost:8080/documentUpdate",
+      {
+        token: pDoc.data().token,
+        documentName: DocForm.NewDocname.value,
+     },
+     function (data, stat) {
+  
+     });}
+    });
+    
+    
+   //end notification
       $('.loader').hide();
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم التغيير بنجاح</p> </div>';
       setTimeout(() => {

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:halaqa_app/ParentEdit.dart';
 import 'package:halaqa_app/commissioner.dart';
+import 'package:halaqa_app/commissioner/commisioner_list.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/viewAnnouncement.dart';
 import 'package:halaqa_app/viewEvents.dart';
@@ -39,7 +40,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   static const List<Widget> _widgetOptions = <Widget>[
     parentHP(),
     viewAnnouncement(),
-    commissionerHP(),
+    CommissionerList(),
     viewEvents(),
   ];
 

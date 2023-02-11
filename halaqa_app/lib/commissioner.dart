@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
 import 'package:halaqa_app/appBars.dart';
+import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
@@ -23,6 +24,7 @@ class students {
 
 class _commissionerHPState extends State<commissionerHP> {
   var x = 0;
+  var v = 0;
 
   String _textToShow = "";
   var schoolID = "xx";
@@ -37,31 +39,31 @@ class _commissionerHPState extends State<commissionerHP> {
     x++;
   }
 
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
+
   Future<void> getStudents() async {
-    /*
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
     var col = FirebaseFirestore.instance
         .collectionGroup('Commissioner')
-        // .where('Email', isEqualTo: user.email);
+        .where('Email', isEqualTo: user!.email);
     var snapshot = await col.get();
 
     for (var doc in snapshot.docs) {
       schoolID = doc.reference.parent.parent!.id;
       break;
     }
-    */
+
     DocumentReference docRef = await FirebaseFirestore.instance
-        // .doc('School/' + 'schoolID' + '/Commissioner/' + user.uid);
-        .doc(
-            "/School/PuEQssWXBdcfjgchxKRAfnDxAcE2/Commissioner/1cHe9AZt64ZmCZVQX7jqArFtXC22");
+        .doc('School/' + schoolID + '/Commissioner/' + user!.uid);
 
     docRef.get().then((DocumentSnapshot ds) async {
       // use ds as a snapshot
 
       studentsNum = ds['Students'].length;
-
+      v++;
       for (var i = 0; i < studentsNum; i++) {
         DocumentReference str = ds['Students'][i];
         comName = ds['FirstName'] + " " + ds['LastName'];
@@ -100,11 +102,31 @@ class _commissionerHPState extends State<commissionerHP> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Image.asset(
+          "images/logo.png",
+          scale: 9,
+        ),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        elevation: 1,
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            onPressed: () {
+              //conformation message
+              showAlertDialog(context);
+            },
+            icon: Icon(
+              Icons.logout,
+              color: Colors.black,
+            ),
+            iconSize: 30,
+          ),
+        ],
+      ),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
-              .doc(
-                  "/School/PuEQssWXBdcfjgchxKRAfnDxAcE2/Commissioner/NnBA2G9ENNY5wnsE3RxYOg36vBj2")
-              //.doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
+              .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
               .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -296,15 +318,62 @@ class _commissionerHPState extends State<commissionerHP> {
                 ],
               ))));
             }
-
-            if (studentName[0].name == "") {
+            if (studentName[0].name == "" && x == 1 && v == 0) {
               return Center(child: CircularProgressIndicator());
             }
-            if (studentsNum == 0) {
-              return Center(child: Text("لا يوجد طلاب تابعين لولي الآمر"));
+            if (studentsNum == 0 && v == 1) {
+              return Center(child: Text("لا يوجد طلاب تابعين"));
             }
+
             return Center(child: CircularProgressIndicator());
           }),
+    );
+  }
+
+  showAlertDialog(BuildContext context) async {
+    // set up the buttons
+    Widget continueButton = TextButton(
+      //continueButton
+      child: Text("نعم"),
+      onPressed: () async {
+        CircularProgressIndicator();
+        await FirebaseAuth.instance.signOut();
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LoginScreen(),
+          ),
+        );
+      },
+    );
+
+    Widget cancelButton = TextButton(
+      //cancelButton
+      child: Text("إلغاء",
+          style: TextStyle(
+            color: Colors.red,
+          )),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      //title: Text("AlertDialog"),
+      content: Text(
+        "هل تأكد تسجيل الخروج؟",
+        textAlign: TextAlign.center,
+      ),
+      actions: [continueButton, cancelButton],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
 }

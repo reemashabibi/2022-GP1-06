@@ -54,23 +54,25 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
     x++;
   }
 
-  String studentId = "";
+  // String studentId = "";
 
   void callChatDetailScreen(DocumentReference<Map<String, dynamic>> teacherId,
       String subjectId) async {
-    print("In function Student Name: " + "tst ${teacherId.id}");
+    print("??????????????????????????????????????");
+    // print("^^^^^^^ ${widget.stRef.id}");
+    print("In function Student Name: " "tst ${teacherId.id}");
     print(user!.uid);
     print(subjectId);
     print(widget.classId);
-    var dc =
-        FirebaseFirestore.instance.doc("School/$schoolID/Parent/${user!.uid}");
-    dc.get().then((value) async {
-      print(value.get("Students"));
-      for (DocumentReference<Map<String, dynamic>> s in value.get("Students")) {
-        print("STUDENT ID ${s.id}");
-        studentId = s.id;
-      }
-    });
+    // var dc =
+    //     FirebaseFirestore.instance.doc("School/$schoolID/Parent/${user!.uid}");
+    // dc.get().then((value) async {
+    //   print(value.get("Students"));
+    //   for (DocumentReference<Map<String, dynamic>> s in value.get("Students")) {
+    //     print("STUDENT ID ${s.id}");
+    //     studentId = s.id;
+    //   }
+    // });
     DocumentSnapshot teacherDs = await FirebaseFirestore.instance
         .doc("School/$schoolID/Teacher/${teacherId.id}")
         .get();
@@ -86,7 +88,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                   TeacherName:
                       "${teacherDs.get("FirstName")} ${teacherDs.get("LastName")}",
                   TeacherUid: teacherId.id,
-                  StudentUid: studentId,
+                  StudentUid: widget.stRef.id,
                   schoolId: schoolID,
                   subjectId: subjectId,
                   classID: widget.classId,
@@ -97,7 +99,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
     DocumentReference docRef = widget.classRef;
     var subRefs = await docRef.collection("Subject").get();
     if (subRefs.docs.length > 0) {
-      await await docRef.collection("Subject").get().then((querySnapshot) {
+      await docRef.collection("Subject").get().then((querySnapshot) {
         querySnapshot.docs.forEach((documentSnapshot) {
           _SubjectsNameList.add({
             "name": documentSnapshot.get('SubjectName'),
@@ -143,10 +145,10 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 31, 146, 139),
+        backgroundColor: const Color.fromARGB(255, 31, 146, 139),
         elevation: 1,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back,
             color: Color.fromARGB(255, 255, 255, 255),
           ),
@@ -154,13 +156,47 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => appBars(),
+                builder: (context) => const appBars(),
               ),
             );
           },
         ),
         actions: [],
       ),
+      bottomNavigationBar: TitledBottomNavigationBar(
+          currentIndex: 2, // Use this to update the Bar giving a position
+          inactiveColor: const Color.fromARGB(255, 9, 18, 121),
+          indicatorColor: const Color.fromARGB(255, 76, 170, 175),
+          activeColor: const Color.fromARGB(255, 76, 170, 175),
+          onTap: (index) {
+            if (index == 0) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const parentHP(),
+                ),
+              );
+            }
+            if (index == 1) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const viewEvents(),
+                ),
+              );
+            }
+          },
+          items: [
+            TitledNavigationBarItem(
+                title: const Text('الصفحة الرئيسية',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                icon: const Icon(Icons.home)),
+            TitledNavigationBarItem(
+              title: const Text('الأحداث',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              icon: const Icon(Icons.calendar_today),
+            ),
+          ]),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('School/$schoolID/Class')
@@ -185,12 +221,12 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
 
               return Container(
                   child: SingleChildScrollView(
-                      child: new Column(
+                      child: Column(
                 children: [
-                  new Container(
+                  Container(
                     height: 150,
                     width: 500,
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
                           bottomRight: Radius.circular(50),
                           bottomLeft: Radius.circular(50)),
@@ -208,47 +244,48 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                     child: Text(
                       widget.studentName + "\n" + className,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
                         fontSize: 30,
                       ),
                     ),
                   ),
-                  new Container(
+                  Container(
                     child: ListView(
-                      padding: EdgeInsets.only(right: 40.0, left: 40.0),
+                      padding: const EdgeInsets.only(right: 40.0, left: 40.0),
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       //  padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                       children: snapshot.data!.docs.map((e) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 30),
+                            margin: const EdgeInsets.only(bottom: 30),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 251, 250, 250),
+                                color: const Color.fromARGB(255, 251, 250, 250),
                                 border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
+                                  color:
+                                      const Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
                                 borderRadius: BorderRadius.circular(100.0),
                                 boxShadow: [
-                                  BoxShadow(
+                                  const BoxShadow(
                                       color: Colors.grey,
                                       blurRadius: 2.0,
                                       offset: Offset(2.0, 2.0))
                                 ]),
-                            child: new Column(children: [
-                              new Container(
+                            child: Column(children: [
+                              Container(
                                 child: Text("${e.get("SubjectName")}",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 25,
                                         fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
+                                margin: const EdgeInsets.all(4),
+                                padding: const EdgeInsets.all(2),
                               ),
-                              new Container(
+                              Container(
                                   child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -258,8 +295,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 199, 248, 248),
                                         onPressed: () {
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
@@ -282,35 +319,64 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                       ),
                                     ),
                                   ),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 15,
                                   ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          callChatDetailScreen(
-                                              e['TeacherID'], e.id
-                                              //     context ,
-                                              //     "faisal naser",
-                                              //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
-
-                                              );
-                                        },
-                                        child: Image.asset(
-                                          "images/chatIcon.png",
+                                  if (e['TeacherID'] != null)
+                                    Stack(
+                                      children: [
+                                        SizedBox(
                                           width: 44,
                                           height: 44,
-                                          fit: BoxFit.cover,
+                                          child: FittedBox(
+                                            child: FloatingActionButton(
+                                              heroTag: null,
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 199, 248, 248),
+                                              onPressed: () {
+                                                callChatDetailScreen(
+                                                    e['TeacherID'], e.id
+                                                    //     context ,
+                                                    //     "faisal naser",
+                                                    //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
+
+                                                    );
+                                              },
+                                              child: Image.asset(
+                                                "images/chatIcon.png",
+                                                width: 44,
+                                                height: 44,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            ),
+                                          ),
                                         ),
-                                      ),
+                                        e['msg_count'] == 0
+                                            ? Container()
+                                            : Positioned(
+                                                top: 0,
+                                                right: 0,
+                                                child: Container(
+                                                  height: 14,
+                                                  width: 14,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: Colors.red,
+                                                          shape:
+                                                              BoxShape.circle),
+                                                  child: Center(
+                                                      child: Text(
+                                                    "${e['msg_count']}",
+                                                    style: const TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 7),
+                                                  )),
+                                                ),
+                                              )
+                                      ],
                                     ),
-                                  ),
+                                  //////does nit show?
                                 ],
                               ))
 
@@ -323,12 +389,12 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               )));
             }
             if (/*_SubjectsNameList.length == 0 &&*/ x == 0) {
-              return Center(child: Text(""));
+              return const Center(child: Text(""));
             }
             if (/*_SubjectsNameList[0] == "" &&*/ v == 1) {
-              return Center(child: Text("لا يوجد مواد مسجلة"));
+              return const Center(child: Text("لا يوجد مواد مسجلة"));
             }
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }),
     );
   }
@@ -342,9 +408,9 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
     // set up the buttons
     Widget continueButton = TextButton(
       //continueButton
-      child: Text("نعم"),
+      child: const Text("نعم"),
       onPressed: () async {
-        CircularProgressIndicator();
+        const CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
         Navigator.pushReplacement(
           context,
@@ -357,7 +423,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
 
     Widget cancelButton = TextButton(
       //cancelButton
-      child: Text("إلغاء",
+      child: const Text("إلغاء",
           style: TextStyle(
             color: Colors.red,
           )),
@@ -369,7 +435,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
       //title: Text("AlertDialog"),
-      content: Text(
+      content: const Text(
         "هل تأكد تسجيل الخروج؟",
         textAlign: TextAlign.center,
       ),
