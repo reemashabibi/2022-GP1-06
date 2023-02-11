@@ -44,6 +44,9 @@ class _viewEventsState extends State<viewEvents> {
 
   var x = 0;
   var v = 0;
+  bool ImageRefreshed = false;
+  bool refreshed = false;
+  bool refreshedIm = false;
   var schoolID = "xx";
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
@@ -78,59 +81,52 @@ class _viewEventsState extends State<viewEvents> {
               documentSnapshot['content'],
               documentSnapshot['image'],
               documentSnapshot['title'],
-              documentSnapshot['Time'].toDate()));
+              documentSnapshot['time'].toDate()));
         });
       });
     }
 
     setState(() {
-      if (eventList.length > 1) {
+      if (eventList.length > 1 && !refreshed) {
         eventList.removeAt(0);
+        refreshed = true;
       }
       eventList.sort((a, b) {
-        return a.time.compareTo(b.time);
+        // print(b.time.compareTo(a.time));
+        return b.time.compareTo(a.time);
       });
     });
+
     for (int i = 0; i < eventList.length; i++) {
-      imageList.add(await getImage(eventList[i].image));
+      //if()
+      //print(eventList[i].title);
+      if (eventList[i].image == "") {
+        imageList.add("");
+      } else {
+        var downloadURL = await FirebaseStorage.instance
+            .ref()
+            .child("images/")
+            .child(eventList[i].image)
+            .getDownloadURL();
+        imageList.add(downloadURL);
+      }
+
+      //imageList.add(await getImage(eventList[i].image));
+
+      if (ImageRefreshed) {
+        // print(i);
+        imageList.removeAt(0);
+      }
     }
 
     setState(() {
-      if (imageList.length > 1) {
+      if (imageList.length > 1 && !refreshedIm && !ImageRefreshed) {
         imageList.removeAt(0);
+        refreshedIm = true;
       }
     });
     if (eventList[0].content == "") {
       v++;
-    }
-  }
-
-  Future<void> getSchoolID() async {
-    User? user = FirebaseAuth.instance.currentUser;
-    var col = FirebaseFirestore.instance
-        .collectionGroup('Teacher')
-        .where('Email', isEqualTo: user!.email);
-    var snapshot = await col.get();
-    for (var doc in snapshot.docs) {
-      schoolID = doc.reference.parent.parent!.id;
-      break;
-    }
-  }
-
-  Future<String?> getImage(img) async {
-    if (img == "") {
-      return "";
-    }
-    try {
-      var downloadURL = await FirebaseStorage.instance
-          .ref()
-          .child("images/")
-          .child(img)
-          .getDownloadURL();
-
-      return downloadURL;
-    } catch (e) {
-      return null;
     }
   }
 
@@ -171,9 +167,7 @@ class _viewEventsState extends State<viewEvents> {
               getData();
             }
 
-            if (snapshot.hasData &&
-                eventList[0].content != "" &&
-                imageList[0] != "start") {
+            if (snapshot.hasData && refreshed && imageList[0] != "start") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
@@ -210,83 +204,99 @@ class _viewEventsState extends State<viewEvents> {
                     ),
                   ),
                   new Container(
-                    child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                      children: eventList.map((e) {
-                        return Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 251, 250, 250),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
-                            child: new Column(children: [
-                              new Container(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                    DateFormat('MMM d, h:mm a').format(e.time),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                child: Text(e.title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                child: Text(e.content,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                  child: FullScreenWidget(
-                                child: InteractiveViewer(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child: FadeInImage(
-                                      image: NetworkImage(
-                                          imageList[eventList.indexOf(e)] ??
-                                              ""),
-                                      fit: BoxFit.contain,
-                                      imageErrorBuilder: (BuildContext context,
-                                          Object exception,
-                                          StackTrace? stackTrace) {
-                                        return const Text('');
-                                      },
-                                      placeholder:
-                                          AssetImage("images/logo.png"),
+                    child: RefreshIndicator(
+                      color: Colors.black,
+                      onRefresh: () async {
+                        eventList.clear();
+                        //  print("object")
+                        //  imageList.clear();
+                        ImageRefreshed = true;
+                        await getEvents();
+                      },
+                      child: Container(
+                          height: 550,
+                          child: ListView(
+                            //  physics: AlwaysScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            padding:
+                                const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                            children: eventList.map((e) {
+                              return Container(
+                                  margin: EdgeInsets.only(bottom: 30),
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 251, 250, 250),
+                                      border: Border.all(
+                                        color:
+                                            Color.fromARGB(255, 130, 126, 126),
+                                        width: 2.5,
+                                      ),
+                                      borderRadius: BorderRadius.circular(10.0),
+                                      boxShadow: [
+                                        BoxShadow(
+                                            color: Colors.grey,
+                                            blurRadius: 2.0,
+                                            offset: Offset(2.0, 2.0))
+                                      ]),
+                                  child: new Column(children: [
+                                    new Container(
+                                      alignment: Alignment.topLeft,
+                                      child: Text(
+                                          DateFormat('MMM d, h:mm a')
+                                              .format(e.time),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold)),
+                                      margin: EdgeInsets.all(4),
+                                      padding: EdgeInsets.all(2),
                                     ),
-                                  ),
-                                ),
-                              )),
-                            ]));
-                      }).toList(),
+                                    new Container(
+                                      child: Text(e.title,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 25,
+                                              fontWeight: FontWeight.bold)),
+                                      margin: EdgeInsets.all(4),
+                                      padding: EdgeInsets.all(2),
+                                    ),
+                                    new Container(
+                                      child: Text(e.content,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      margin: EdgeInsets.all(4),
+                                      padding: EdgeInsets.all(2),
+                                    ),
+                                    new Container(
+                                        child: FullScreenWidget(
+                                      child: InteractiveViewer(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: FadeInImage(
+                                            image: NetworkImage(imageList[
+                                                    eventList.indexOf(e)] ??
+                                                ""),
+                                            fit: BoxFit.contain,
+                                            imageErrorBuilder:
+                                                (BuildContext context,
+                                                    Object exception,
+                                                    StackTrace? stackTrace) {
+                                              return const Text('');
+                                            },
+                                            placeholder:
+                                                AssetImage("images/logo.png"),
+                                          ),
+                                        ),
+                                      ),
+                                    )),
+                                  ]));
+                            }).toList(),
+                          )),
                     ),
-                  )
+                  ),
                 ],
               )));
             }

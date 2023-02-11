@@ -143,7 +143,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 31, 146, 139),
         elevation: 1,
         leading: IconButton(
           icon: Icon(

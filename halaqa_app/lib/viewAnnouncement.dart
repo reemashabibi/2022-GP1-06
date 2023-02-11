@@ -44,6 +44,7 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
   var x = 0;
   var v = 0;
   var schoolID = "xx";
+  bool refreshed = false;
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -79,19 +80,15 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
     }
 
     setState(() {
-      if (announcementsList.length > 1) {
+      if (announcementsList.length > 1 && !refreshed) {
         announcementsList.removeAt(0);
+        refreshed = true;
       }
       announcementsList.sort((a, b) {
-        return a.time.compareTo(b.time);
+        return b.time.compareTo(a.time);
       });
     });
 
-    setState(() {
-      if (imageList.length > 1) {
-        imageList.removeAt(0);
-      }
-    });
     if (announcementsList[0].content == "") {
       v++;
     }
@@ -113,10 +110,7 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
-      //appBar: AppBar(title: const Text("Teacher")),
-
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('School/$schoolID/Announcement')
@@ -132,101 +126,114 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
               getData();
             }
 
-            if (snapshot.hasData && announcementsList[0].content != "") {
-              //  dataGet();
-              // _SubjectList = snapshot.data!['Subjects'];
-
-              return Container(
-                  child: SingleChildScrollView(
-                      child: new Column(
-                children: [
-                  new Container(
-                    height: 120,
-                    width: 500,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(50),
-                          bottomLeft: Radius.circular(50)),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 76, 170, 175),
-                          Color.fromARGB(255, 255, 255, 255)
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+            if (snapshot.hasData && refreshed) {
+              return SingleChildScrollView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  child: new Column(
+                    children: [
+                      new Container(
+                        height: 120,
+                        width: 500,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.only(
+                              //    topLeft: Radius.circular(10),
+                              ///    topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
+                        ),
+                        padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
+                        child: Text(
+                          "الإعلانات",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 80, 80, 80),
+                            fontSize: 30,
+                          ),
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
-                    child: Text(
-                      "الإعلانات",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 80, 80, 80),
-                        fontSize: 30,
+                      RefreshIndicator(
+                        color: Colors.black,
+                        onRefresh: () async {
+                          announcementsList.clear();
+                          await getAnnouncements();
+                        },
+                        child: Container(
+                            height: 550,
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                              //padding: EdgeInsets.only(right: 8.0, left: 8.0),
+                              children: announcementsList.map((e) {
+                                return Container(
+                                    margin: EdgeInsets.only(bottom: 30),
+                                    padding: const EdgeInsets.all(10),
+                                    decoration: BoxDecoration(
+                                      color: Color.fromARGB(255, 225, 230, 230),
+                                      borderRadius: BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 5,
+                                          blurRadius: 7,
+                                          offset: Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: new Column(children: [
+                                      new Container(
+                                        alignment: Alignment.topLeft,
+                                        child: Text(
+                                            DateFormat('MMM d, h:mm a')
+                                                .format(e.time),
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 13,
+                                                fontWeight: FontWeight.bold)),
+                                        margin: EdgeInsets.all(4),
+                                        padding: EdgeInsets.all(2),
+                                      ),
+                                      new Container(
+                                        child: Text(e.title,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 25,
+                                                fontWeight: FontWeight.bold)),
+                                        margin: EdgeInsets.all(4),
+                                        padding: EdgeInsets.all(2),
+                                      ),
+                                      new Container(
+                                        child: Text(e.content,
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold)),
+                                        margin: EdgeInsets.all(4),
+                                        padding: EdgeInsets.all(2),
+                                      ),
+                                    ]));
+                              }).toList(),
+                            )),
                       ),
-                    ),
-                  ),
-                  new Container(
-                    child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      //padding: EdgeInsets.only(right: 8.0, left: 8.0),
-                      children: announcementsList.map((e) {
-                        return Container(
-                            margin: EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 251, 250, 250),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(10.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
-                            child: new Column(children: [
-                              new Container(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                    DateFormat('MMM d, h:mm a').format(e.time),
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                child: Text(e.title,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                              new Container(
-                                child: Text(e.content,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                                margin: EdgeInsets.all(4),
-                                padding: EdgeInsets.all(2),
-                              ),
-                            ]));
-                      }).toList(),
-                    ),
-                  )
-                ],
-              )));
+                    ],
+                  ));
             }
             if (announcementsList.length == 0 && x == 0) {
               return Center(child: Text("لا توجد إعلانات بالوقت الحالي"));

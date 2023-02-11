@@ -49,6 +49,9 @@ class _classGradesState extends State<classGrades> {
   var gradeID;
   var x = 0;
   var y = 0;
+
+  late bool checked = false;
+  late bool changed = false;
   getData() {
     assessmentsList.add(assessment("", 0));
     studentAssessmentsList.add(assessment("", 0));
@@ -168,9 +171,11 @@ class _classGradesState extends State<classGrades> {
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
-                f = await conform();
+                f = await confirmDeleltingStudentGrades();
               }
               if (f) {
+                checked = false;
+                changed = false;
                 updateDatabase();
               }
             },
@@ -187,16 +192,42 @@ class _classGradesState extends State<classGrades> {
             Icons.arrow_back,
             color: Color.fromARGB(255, 255, 255, 255),
           ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => grades(
-                  subRef: widget.subjectRef,
-                  subName: subName,
+          onPressed: () async {
+            if (changed && !checked) {
+              if (await confirmBackArrow() &&
+                  await confirmDeleltingStudentGrades()) {
+                updateDatabase();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => grades(
+                      subRef: widget.subjectRef,
+                      subName: subName,
+                    ),
+                  ),
+                );
+              } else {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => grades(
+                      subRef: widget.subjectRef,
+                      subName: subName,
+                    ),
+                  ),
+                );
+              }
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => grades(
+                    subRef: widget.subjectRef,
+                    subName: subName,
+                  ),
                 ),
-              ),
-            );
+              );
+            }
           },
         ),
         actions: [],
@@ -229,6 +260,7 @@ class _classGradesState extends State<classGrades> {
                           new Flexible(
                             child: TextFormField(
                               onChanged: (newText) {
+                                changed = true;
                                 setState(() {
                                   state = int.parse(newText);
                                 });
@@ -250,14 +282,14 @@ class _classGradesState extends State<classGrades> {
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  return "ادخل درجة المتطلب";
+                                  value = "0";
                                 }
                                 if (int.parse(value) < 0 ||
                                     int.parse(value) >
                                         int.parse(assessmentsList[position]
                                             .grade
                                             .toString())) {
-                                  return "يجب ان تكون حدود الدرجة من ٠ الى " +
+                                  return "يجب ان تكون حدود الدرجة من 0 الى " +
                                       assessmentsList[position]
                                           .grade
                                           .toString();
@@ -400,6 +432,55 @@ class _classGradesState extends State<classGrades> {
             );
           });
     }
+  }
+
+  Future<bool> confirmBackArrow() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        content: Text("لم يتم حفظ التعديلات؟ هل تريد حفظ التعديلات؟"),
+        actions: [
+          TextButton(
+              child: Text("لا",
+                  style: TextStyle(color: Color.fromARGB(255, 208, 16, 16))),
+              onPressed: () {
+                Navigator.pop(context, false);
+              }),
+          TextButton(
+              child: Text("نعم", style: TextStyle(color: Colors.blue)),
+              onPressed: () {
+                checked = true;
+                Navigator.pop(context, true);
+              })
+        ],
+      ),
+    );
+  }
+
+  Future<bool> confirmDeleltingStudentGrades() async {
+    return await showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title:
+            const Text("هل تريد تأكيد عملية حفظ التعديلات لجميع طلاب الفصل؟"),
+        content: const Text(
+            'تنبيه!\nعند تأكيد عملية الحفظ سيتم حذف جميع درجات الطلاب اللتي تم رصدها مسبقاً.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text("لا",
+                style: TextStyle(color: Color.fromARGB(255, 208, 16, 16))),
+          ),
+          TextButton(
+            onPressed: (() {
+              checked = true;
+              Navigator.pop(context, true);
+            }),
+            child: Text("نعم", style: TextStyle(color: Colors.blue)),
+          ),
+        ],
+      ),
+    );
   }
 } //end class
 

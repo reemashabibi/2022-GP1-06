@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:halaqa_app/appBars.dart';
+import 'package:halaqa_app/commissioner.dart';
 import 'package:halaqa_app/main.dart';
 import 'package:halaqa_app/teacher.dart';
 import 'package:halaqa_app/forgot_pw_screen.dart';
@@ -433,7 +434,56 @@ class StartState extends State<LoginScreen> {
     } //end "Parent"
 
     else if (role == "وسيط") {
-      //next sprint
+      var schoolID = "x";
+      User? user = FirebaseAuth.instance.currentUser;
+      print("USER ~~~~~~~~~~~~~~~~~ ${user!.uid}");
+      print("USER EMAIL ~~~~~~~~~~~~~~~~~ ${user.email}");
+      if (role == "وسيط") {
+        var col = FirebaseFirestore.instance
+            .collectionGroup('Commissioner')
+            .where('Email', isEqualTo: user.email);
+        var snapshot = await col.get();
+        for (var doc in snapshot.docs) {
+          print("DATA OF DATA ${doc.data()}");
+          schoolID = doc.reference.parent.parent!.id;
+          print(doc.reference.parent.parent?.id);
+          break;
+        }
+        var kk = FirebaseFirestore.instance
+            .collection('School/' + schoolID + '/Commissioner')
+            .doc(user!.uid)
+            .get()
+            .then((DocumentSnapshot documentSnapshot) {
+          if (documentSnapshot.exists) {
+            if (documentSnapshot.get('Email') == user?.email) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => commissionerHP(),
+                ),
+              );
+            }
+          } else {
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Text(
+                      "لا يوجد مفوّض بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                });
+            print('Document does not exist on the database');
+            print(user!.uid);
+            setState(() {
+              visible = false;
+            });
+          }
+        });
+      }
     } //end "Com"
   } //end rout
 

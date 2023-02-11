@@ -219,8 +219,9 @@ class _gradesState extends State<grades> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) =>
-                                      classGrades(subjectRef: widget.subRef)),
+                                  builder: (context) => classGrades(
+                                        subjectRef: widget.subRef,
+                                      )),
                             );
                           }, // button pressed
                           child: Column(
