@@ -15,32 +15,38 @@ import 'login_screen.dart';
 //void main() => runApp(const bottomNavBar());
 
 class appBars extends StatelessWidget {
-  const appBars({super.key});
+  final schoolId;
+  const appBars({super.key, required this.schoolId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: MyStatefulWidget(),
+      body: MyStatefulWidget(
+        schID: schoolId,
+      ),
     );
   }
 }
 
 class MyStatefulWidget extends StatefulWidget {
-  const MyStatefulWidget({super.key});
+  final schID;
+  const MyStatefulWidget({super.key, required this.schID});
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  var schoolID = "xx";
+  static String schID = "xx";
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     parentHP(),
     viewAnnouncement(),
-    CommissionerList(),
+    CommissionerList(
+      schoolID: schID,
+    ),
     viewEvents(),
   ];
 
@@ -52,7 +58,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
 
   @override
   void initState() {
-    getSchoolId();
+    schID = widget.schID;
+    //getSchoolId();
 
     super.initState();
   }
@@ -85,7 +92,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                     builder: (context) => EditProfilePage(
-                          schoolId: schoolID,
+                          schoolId: widget.schID,
                         )),
               );
             },
@@ -178,7 +185,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     );
   }
 
-  Future<void> getSchoolId() async {
+  /*Future<void> getSchoolId() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -190,6 +197,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       schoolID = doc.reference.parent.parent!.id;
       break;
     }
-  } //end method
+  } */ //end method
 
 }

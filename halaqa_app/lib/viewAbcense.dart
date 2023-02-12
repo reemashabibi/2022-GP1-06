@@ -109,7 +109,9 @@ class _viewAbcense extends State<viewAbcense> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => appBars(),
+                builder: (context) => appBars(
+                  schoolId: schoolID,
+                ),
               ),
             );
           },

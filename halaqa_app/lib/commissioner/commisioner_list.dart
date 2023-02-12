@@ -7,7 +7,8 @@ import 'package:halaqa_app/commissioner/add_commissioner.dart';
 import 'package:http/http.dart' as http;
 
 class CommissionerList extends StatefulWidget {
-  const CommissionerList({Key? key}) : super(key: key);
+  final schoolID;
+  const CommissionerList({Key? key, required this.schoolID}) : super(key: key);
 
   @override
   State<CommissionerList> createState() => _CommissionerListState();
@@ -18,7 +19,7 @@ class _CommissionerListState extends State<CommissionerList> {
 
   @override
   void initState() {
-    getSchoolId();
+    // getSchoolId();
 
     super.initState();
   }
@@ -42,14 +43,15 @@ class _CommissionerListState extends State<CommissionerList> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddCommissioner(schoolId: schoolID),
+                builder: (context) =>
+                    AddCommissioner(schoolId: widget.schoolID),
               ),
             );
           },
         ),
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
-              .collection('School/${schoolID}/Commissioner/')
+              .collection('School/${widget.schoolID}/Commissioner/')
               .where("ParentId",
                   isEqualTo: FirebaseAuth.instance.currentUser!.uid)
               .snapshots(),
@@ -112,7 +114,7 @@ class _CommissionerListState extends State<CommissionerList> {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       AddCommissioner(
-                                                    schoolId: schoolID,
+                                                    schoolId: widget.schoolID,
                                                     isUpdate: true,
                                                     snapshot: data,
                                                   ),
@@ -242,7 +244,7 @@ class _CommissionerListState extends State<CommissionerList> {
                                                                       await FirebaseFirestore
                                                                           .instance
                                                                           .collection(
-                                                                              "School/${schoolID}/Student/")
+                                                                              "School/${widget.schoolID}/Student/")
                                                                           .doc(element
                                                                               .id
                                                                               .toString())
@@ -251,7 +253,7 @@ class _CommissionerListState extends State<CommissionerList> {
                                                                             FieldValue.arrayRemove([
                                                                           FirebaseFirestore
                                                                               .instance
-                                                                              .collection('School/${schoolID}/Commissioner/')
+                                                                              .collection('School/${widget.schoolID}/Commissioner/')
                                                                               .doc(data.id)
                                                                         ])
                                                                       });
@@ -263,7 +265,7 @@ class _CommissionerListState extends State<CommissionerList> {
                                                                     await FirebaseFirestore
                                                                         .instance
                                                                         .collection(
-                                                                            "School/${schoolID}/Commissioner/")
+                                                                            "School/${widget.schoolID}/Commissioner/")
                                                                         .doc(data
                                                                             .id)
                                                                         .delete();

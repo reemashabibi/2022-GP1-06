@@ -145,23 +145,9 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 31, 146, 139),
+        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const appBars(),
-              ),
-            );
-          },
-        ),
-        actions: [],
+        automaticallyImplyLeading: true,
       ),
       bottomNavigationBar: TitledBottomNavigationBar(
           currentIndex: 2, // Use this to update the Bar giving a position

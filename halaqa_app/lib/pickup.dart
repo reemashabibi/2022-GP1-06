@@ -60,23 +60,9 @@ class _pick extends State<pickup> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
         elevation: 1,
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => appBars(),
-              ),
-            );
-          },
-        ),
-        actions: [],
+        automaticallyImplyLeading: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

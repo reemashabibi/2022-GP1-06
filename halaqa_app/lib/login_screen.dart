@@ -407,7 +407,9 @@ class StartState extends State<LoginScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => appBars(),
+                  builder: (context) => appBars(
+                    schoolId: schoolID,
+                  ),
                 ),
               );
             }

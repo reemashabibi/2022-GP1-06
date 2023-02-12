@@ -260,7 +260,9 @@ class _commissionerHPState extends State<commissionerHP> {
                                                   MaterialPageRoute(
                                                       builder: (BuildContext
                                                               context) =>
-                                                          appBars()));
+                                                          appBars(
+                                                            schoolId: schoolID,
+                                                          )));
                                             });
                                           },
                                           child: Container(
