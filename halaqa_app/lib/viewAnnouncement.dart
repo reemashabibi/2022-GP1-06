@@ -181,7 +181,7 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
                                     margin: EdgeInsets.only(bottom: 30),
                                     padding: const EdgeInsets.all(10),
                                     decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 225, 230, 230),
+                                      color: Color.fromARGB(255, 239, 240, 240),
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(10),
                                           topRight: Radius.circular(10),
