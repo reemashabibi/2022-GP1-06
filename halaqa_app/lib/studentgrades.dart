@@ -237,7 +237,6 @@ class _EditProfilePageState extends State<studentGrades> {
                 Text('حفظ')
               ],
             ),
-            shape: BeveledRectangleBorder(borderRadius: BorderRadius.zero),
             onPressed: () async {
               var f = false;
               if (_formkey.currentState!.validate()) {
@@ -255,12 +254,11 @@ class _EditProfilePageState extends State<studentGrades> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
           ),
           onPressed: () async {
             if (changed && !checked) {

@@ -113,6 +113,10 @@ class _viewEventsState extends State<viewEvents> {
         child: FutureBuilder(
       future: _images,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData && eventList.isEmpty) {
+          return Text("لا توجد أحداث بعد");
+          //
+        }
         if (snapshot.hasData) {
           return Container(
               child: SingleChildScrollView(
@@ -249,7 +253,7 @@ class _viewEventsState extends State<viewEvents> {
             ),
           ));
         } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+          return Text("لاتوجد احداث بعد.");
         } else {
           return CircularProgressIndicator();
         }

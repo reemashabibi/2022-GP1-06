@@ -101,13 +101,6 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
     super.initState();
   }
 
-  int _selectedIndex = 0;
-
-  static const List<Widget> _widgetOptions = <Widget>[
-    parentHP(),
-    viewAnnouncement(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -245,57 +238,4 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
           }),
     );
   }
-
-  Future<void> logout(BuildContext context) async {
-    showAlertDialog(BuildContext context) {}
-    ;
-  }
-
-  Future<void> showAlertDialog(BuildContext context) async {
-    // set up the buttons
-    Widget continueButton = TextButton(
-      //continueButton
-      child: Text("نعم"),
-      onPressed: () async {
-        CircularProgressIndicator();
-        await FirebaseAuth.instance.signOut();
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
-          ),
-        );
-      },
-    );
-
-    Widget cancelButton = TextButton(
-      //cancelButton
-      child: Text("إلغاء",
-          style: TextStyle(
-            color: Colors.red,
-          )),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      //title: Text("AlertDialog"),
-      content: Text(
-        "هل تأكد تسجيل الخروج؟",
-        textAlign: TextAlign.center,
-      ),
-      actions: [continueButton, cancelButton],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  } //end method
-
 }

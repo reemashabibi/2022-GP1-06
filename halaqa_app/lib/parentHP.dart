@@ -404,7 +404,7 @@ class _parentHPState extends State<parentHP> {
                                                         heroTag: null,
                                                         backgroundColor:
                                                             Color.fromARGB(255,
-                                                                44, 155, 144),
+                                                                54, 172, 172),
                                                         onPressed: () {
                                                           Navigator.push(
                                                             context,
@@ -450,7 +450,7 @@ class _parentHPState extends State<parentHP> {
                                                       heroTag: null,
                                                       backgroundColor:
                                                           Color.fromARGB(255,
-                                                              40, 158, 127),
+                                                              54, 172, 172),
                                                       onPressed: () {
                                                         Navigator.push(
                                                           context,
@@ -489,7 +489,7 @@ class _parentHPState extends State<parentHP> {
                                                         heroTag: null,
                                                         backgroundColor:
                                                             Color.fromARGB(255,
-                                                                31, 146, 139),
+                                                                54, 172, 172),
                                                         onPressed: () {
                                                           Navigator.push(
                                                             context,

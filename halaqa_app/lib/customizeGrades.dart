@@ -156,13 +156,10 @@ class _customizeGradesState extends State<customizeGrades> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
-          ),
+          icon: Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () async {
             int totalGrades = 0;
             for (int i = 0; i < assessmentsList.length; i++) {
