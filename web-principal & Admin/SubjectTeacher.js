@@ -435,7 +435,9 @@ console.log(currentSubjectsWithoutSomeChar);
 
             const data = {
               SubjectName: subjectName,
-              TeacherID: teacherRef
+              TeacherID: teacherRef,
+              msg_count:0, 
+          customized: false
             };
 
             setDoc(docRef, data)

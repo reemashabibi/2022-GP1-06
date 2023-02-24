@@ -169,52 +169,9 @@ class _viewChildGradesState extends State<viewChildGrades> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 2, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => viewEvents(),
-                ),
-              );
-            }
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -254,26 +211,19 @@ class _viewChildGradesState extends State<viewChildGrades> {
                   ),
                   new Container(
                     child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.only(right: 30.0, left: 30.0),
                       children: studentAssessmentsList.map((e) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 10),
+                            margin: EdgeInsets.only(bottom: 5),
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color.fromARGB(255, 251, 250, 250),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(100.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: Color.fromARGB(255, 239, 240, 240),
+                            ),
+                            // margin: EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(10),
                             child: new Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,

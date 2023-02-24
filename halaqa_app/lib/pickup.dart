@@ -210,9 +210,8 @@ class _pick extends State<pickup> {
           _buttonVisible
               ? Padding(
                   padding: const EdgeInsets.all(40.0),
-                  child: ElevatedButton(
-                    child: Text('تأكيد'),
-                    onPressed: () async {
+                  child: GestureDetector(
+                    onTap: () async {
                       if (x == 1) {
                         i = widget.stRef.path;
                         //var jsonObject = i.toJson();
@@ -262,8 +261,44 @@ class _pick extends State<pickup> {
                         });
                       });
                     },
-                  ),
-                )
+                    child: Container(
+                      width: 130,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Color.fromARGB(255, 113, 194, 186),
+                            Color.fromARGB(255, 54, 172, 172),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10),
+                            bottomRight: Radius.circular(10)),
+                        //   borderRadius: BorderRadius.circular(100),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(5, 5),
+                            blurRadius: 10,
+                          )
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          'تأكيد',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ))
               : Padding(
                   padding: const EdgeInsets.all(35.0),
                   child: Text(_textToShow),

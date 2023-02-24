@@ -49,6 +49,7 @@ class _classGradesState extends State<classGrades> {
   var gradeID;
   var x = 0;
   var y = 0;
+  var numOfStudentsInClass = 0;
 
   late bool checked = false;
   late bool changed = false;
@@ -84,6 +85,11 @@ class _classGradesState extends State<classGrades> {
   }
 
   checkCustomization() async {
+    DocumentReference subjectRef =
+        await widget.subjectRef.parent.parent as DocumentReference<Object?>;
+    subjectRef.get().then((DocumentSnapshot ds) async {
+      numOfStudentsInClass = ds['Students'].length;
+    });
     DocumentReference doc = await widget.subjectRef;
     await widget.subjectRef.get().then((value) async {
       setState(() {
@@ -240,7 +246,8 @@ class _classGradesState extends State<classGrades> {
           if (x == 0) {
             getData();
           }
-          if (assessmentsList.length == numOfAssess) {
+          if (assessmentsList.length == numOfAssess &&
+              numOfStudentsInClass > 0) {
             print("assessmentsList.grade[0] " +
                 assessmentsList.length.toString());
             //  if (assessmentStudentGradesList.length == assessmentsList.length) {
@@ -326,6 +333,8 @@ class _classGradesState extends State<classGrades> {
             //   } else {
             //   return Center(child: CircularProgressIndicator());
             //}
+          } else if (numOfStudentsInClass == 0) {
+            return Center(child: Text("لم يتم تعيين طلاب بالفصل بعد."));
           } else {
             return Center(child: CircularProgressIndicator());
           }
@@ -370,7 +379,7 @@ class _classGradesState extends State<classGrades> {
     for (int i = 0; i < assessmentsList.length; i++) {
       totalGrades += int.parse(studentAssessmentsList[i].grade.toString());
     }
-    if (totalGrades < 100) {
+    if (totalGrades <= 100) {
       DocumentReference subjectRef =
           await widget.subjectRef.parent.parent as DocumentReference<Object?>;
       subjectRef.get().then((DocumentSnapshot ds) async {

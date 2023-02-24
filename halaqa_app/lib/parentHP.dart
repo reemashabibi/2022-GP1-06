@@ -366,7 +366,7 @@ class _parentHPState extends State<parentHP> {
                                     Text(e + " " + _LNList[_FNList.indexOf(e)],
                                         style: TextStyle(
                                           fontWeight: FontWeight.w600,
-                                          fontSize: 20,
+                                          fontSize: 23,
                                           color: Colors.black,
                                         )),
                                 onExpansionChanged: (value) {

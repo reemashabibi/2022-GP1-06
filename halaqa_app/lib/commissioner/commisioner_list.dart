@@ -49,6 +49,7 @@ class _CommissionerListState extends State<CommissionerList> {
             );
           },
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.startFloat,
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('School/${widget.schoolID}/Commissioner/')
