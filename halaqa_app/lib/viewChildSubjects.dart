@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/viewChildGrades.dart';
@@ -55,7 +56,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
 
   // String studentId = "";
 
-  void callChatDetailScreen(DocumentReference<Map<String, dynamic>> teacherId, String subjectId) async {
+  void callChatDetailScreen(DocumentReference<Map<String, dynamic>> teacherId,
+      String subjectId) async {
     print("??????????????????????????????????????");
     // print("^^^^^^^ ${widget.stRef.id}");
     print("In function Student Name: " "tst ${teacherId.id}");
@@ -83,7 +85,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                   // TeacherName: "Faisal naser",
                   // TeacherUid: "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
                   // StudentUid: "koHNAlQnVjEmUklBkUtn",
-                  TeacherName: "${teacherDs.get("FirstName")} ${teacherDs.get("LastName")}",
+                  TeacherName:
+                      "${teacherDs.get("FirstName")} ${teacherDs.get("LastName")}",
                   TeacherUid: teacherId.id,
                   StudentUid: widget.stRef.id,
                   schoolId: schoolID,
@@ -142,58 +145,10 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const parentHP(),
-              ),
-            );
-          },
-        ),
-        actions: [],
+        automaticallyImplyLeading: true,
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 2, // Use this to update the Bar giving a position
-          inactiveColor: const Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: const Color.fromARGB(255, 76, 170, 175),
-          activeColor: const Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const viewEvents(),
-                ),
-              );
-            }
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: const Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: const Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ),
-          ]),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('School/$schoolID/Class')
@@ -221,23 +176,25 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       child: Column(
                 children: [
                   Container(
-                    height: 150,
+                    height: 120,
                     width: 500,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(50),
-                          bottomLeft: Radius.circular(50)),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 76, 170, 175),
-                          Color.fromARGB(255, 255, 255, 255)
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
+                          //    topLeft: Radius.circular(10),
+                          ///    topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
                     ),
-                    padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
+                    padding: const EdgeInsets.fromLTRB(20.0, 10, 20.0, 20),
                     child: Text(
                       widget.studentName + "\n" + className,
                       textAlign: TextAlign.center,
@@ -250,127 +207,146 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                   ),
                   Container(
                     child: ListView(
-                      padding: const EdgeInsets.only(right: 40.0, left: 40.0),
-                      physics: const NeverScrollableScrollPhysics(),
+                      // padding: const EdgeInsets.only(right: 40.0, left: 40.0),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      //  padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                      padding: const EdgeInsets.fromLTRB(30.0, 20, 30.0, 10),
                       children: snapshot.data!.docs.map((e) {
                         return Container(
-                            margin: const EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(10),
+                            margin: EdgeInsets.only(bottom: 5),
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 251, 250, 250),
-                                border: Border.all(
-                                  color: const Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(100.0),
-                                boxShadow: [
-                                  const BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
-                            child: Column(children: [
-                              Container(
-                                child: Text("${e.get("SubjectName")}",
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                                margin: const EdgeInsets.all(4),
-                                padding: const EdgeInsets.all(2),
-                              ),
-                              Container(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor:
-                                            const Color.fromARGB(255, 199, 248, 248),
-                                        onPressed: () {
-                                          if (_SubjectsRefList[0] != "") {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      viewChildGrades(
-                                                        subRef: e.reference,
-                                                        stRef: widget.stRef,
-                                                      )),
-                                            );
-                                          }
-                                        },
-                                        child: Image.asset(
-                                          "images/gradesIcon.png",
-                                          width: 45,
-                                          height: 45,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: Color.fromARGB(255, 239, 240, 240),
+                            ),
+                            // margin: EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    child: Text("${e.get("SubjectName")}",
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                        )),
+                                    margin: EdgeInsets.all(4),
+                                    padding: const EdgeInsets.fromLTRB(
+                                        0.0, 0, 10.0, 0),
                                   ),
-                                  const SizedBox(width: 15,),
-                                  if(e['TeacherID'] != null)
-                                  Stack(
-                                    children: [
-                                      SizedBox(
-                                        width: 44,
-                                        height: 44,
-                                        child: FittedBox(
-                                          child: FloatingActionButton(
-                                            heroTag: null,
-                                            backgroundColor:
-                                                const Color.fromARGB(255, 199, 248, 248),
-                                            onPressed: () {
-                                              callChatDetailScreen(
-                                                  e['TeacherID'], e.id
-                                                  //     context ,
-                                                  //     "faisal naser",
-                                                  //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
-
+                                  Container(
+                                      child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: <Widget>[
+                                      Column(children: [
+                                        SizedBox(
+                                          width: 44,
+                                          height: 44,
+                                          child: FittedBox(
+                                            child: FloatingActionButton(
+                                              heroTag: null,
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      255, 199, 248, 248),
+                                              onPressed: () {
+                                                if (_SubjectsRefList[0] != "") {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            viewChildGrades(
+                                                              subRef:
+                                                                  e.reference,
+                                                              stRef:
+                                                                  widget.stRef,
+                                                            )),
                                                   );
-                                            },
-                                            child: Image.asset(
-                                              "images/chatIcon.png",
-                                              width: 44,
-                                              height: 44,
-                                              fit: BoxFit.cover,
+                                                }
+                                              },
+                                              child: Image.asset(
+                                                "images/gradesIcon.png",
+                                                width: 45,
+                                                height: 45,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
                                         ),
+                                        SizedBox(height: 5),
+                                        Text("الدرجات"),
+                                      ]),
+
+                                      const SizedBox(
+                                        width: 15,
                                       ),
-                                      e['msg_count'] == 0 ? Container() : Positioned(
-                                        top: 0,
-                                        right: 0,
-                                        child: Container(
-                                          height: 14,
-                                          width: 14,
-                                          decoration: const BoxDecoration(
-                                              color: Colors.red,
-                                              shape: BoxShape.circle
-                                          ),
-                                          child: Center(child: Text("${e['msg_count']}",style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 7
-                                          ),)),
+                                      if (e['TeacherID'] != null)
+                                        Stack(
+                                          children: [
+                                            Column(children: [
+                                              SizedBox(
+                                                width: 44,
+                                                height: 44,
+                                                child: FittedBox(
+                                                  child: FloatingActionButton(
+                                                    heroTag: null,
+                                                    backgroundColor:
+                                                        const Color.fromARGB(
+                                                            255, 199, 248, 248),
+                                                    onPressed: () {
+                                                      callChatDetailScreen(
+                                                          e['TeacherID'], e.id
+                                                          //     context ,
+                                                          //     "faisal naser",
+                                                          //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
+
+                                                          );
+                                                    },
+                                                    child: Image.asset(
+                                                      "images/chatIcon.png",
+                                                      width: 44,
+                                                      height: 44,
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 5),
+                                              Text("المحادثات"),
+                                              e['msg_count'] == 0
+                                                  ? Container()
+                                                  : Positioned(
+                                                      top: 0,
+                                                      right: 0,
+                                                      child: Container(
+                                                        height: 14,
+                                                        width: 14,
+                                                        decoration:
+                                                            const BoxDecoration(
+                                                                color:
+                                                                    Colors.red,
+                                                                shape: BoxShape
+                                                                    .circle),
+                                                        child: Center(
+                                                            child: Text(
+                                                          "${e['msg_count']}",
+                                                          style:
+                                                              const TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 7),
+                                                        )),
+                                                      ),
+                                                    )
+                                            ]),
+                                          ],
                                         ),
-                                      )
+                                      //////does nit show?
                                     ],
-                                  ),
-                                  //////does nit show?
+                                  ))
 
-
-                                ],
-                              ))
-
-                              // color: Color.fromARGB(255, 222, 227, 234),
-                            ]));
+                                  // color: Color.fromARGB(255, 222, 227, 234),
+                                ]));
                       }).toList(),
                     ),
                   )

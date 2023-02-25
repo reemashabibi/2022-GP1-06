@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -97,64 +98,26 @@ class _viewAbcense extends State<viewAbcense> {
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromRGBO(255, 255, 255, 1),
           ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => parentHP(),
+                builder: (context) => appBars(
+                  schoolId: schoolID,
+                ),
               ),
             );
           },
         ),
         actions: [],
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            setState(() {
-              currentIndex:
-              index;
-            });
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {}
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
 
       body: FutureBuilder(
           future: FirebaseFirestore.instance

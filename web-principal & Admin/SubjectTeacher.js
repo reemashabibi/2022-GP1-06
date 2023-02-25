@@ -451,7 +451,10 @@ for (var l=0; l<currentSubjects.length; l++){
             
 
             const data = {
+              SubjectName: subjectName,
               TeacherID: teacherRef,
+              msg_count:0, 
+          customized: false
             };
 
             updateDoc(docRef, data)

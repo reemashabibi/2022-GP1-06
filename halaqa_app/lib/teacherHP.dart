@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:flutter/material.dart';
+import 'package:groovin_widgets/groovin_widgets.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
@@ -10,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/viewStudentForChat.dart';
+import 'package:http/http.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:halaqa_app/chat_detail.dart';
@@ -21,31 +23,44 @@ class teacherHP extends StatefulWidget {
   State<teacherHP> createState() => _teacherHPState();
 }
 
+class subject {
+  String subjectName;
+  DocumentReference? subjectRef;
+  String className;
+  String LevelName;
+  String subjectId;
+
+  subject(this.subjectName, this.subjectRef, this.className, this.LevelName,
+      this.subjectId);
+/*
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "content  $content  image $image   title   $title";
+  }*/
+}
+
 class _teacherHPState extends State<teacherHP> {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   var className = "";
-  var level = "";
-  late List _SubjectList;
-  late List _SubjectsNameList;
+  List<subject> subjectsList = [];
   late List _SubjectsRefList;
-  late List _ClassNameList;
-  late List _LevelNameList;
-  List<String> _SubjectsIdsList = [];
+  bool isExpanded = false;
+
   var x = 0;
   var v = 0;
   var teacherName = "";
+  var refreshed = false;
 
   var numOfSubjects;
   var schoolID = "xx";
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   getData() {
-    _ClassNameList = ["يتم التحميل...."];
-    _LevelNameList = ["يتم التحميل...."];
-    _SubjectList = [""];
-    _SubjectsNameList = [""];
+    subjectsList.add(subject("", null, "", "", ""));
+
     _SubjectsRefList = [""];
     // _SubjectsIdsList = [""];
     x++;
@@ -78,38 +93,38 @@ class _teacherHPState extends State<teacherHP> {
       });
 
       for (var i = 0; i < numOfSubjects; i++) {
+        DocumentReference docu = ds['Subjects'][i];
+
         DocumentReference str = ds['Subjects'][i].parent.parent;
         print("ZZZZZZZZ ${ds['Subjects'][i].parent.parent.id}");
+        // var classRef = await docRef.collection("Announcement").get();
 
         var clsName = await str.get().then((value) {
           setState(() {
-            _ClassNameList.add(value['ClassName']);
-
-            _LevelNameList.add(value['LevelName'].toString());
+            var subName = docu.get().then((valueIn) {
+              //   _ClassNameList.add(value['ClassName']);
+              subjectsList.add(subject(valueIn['SubjectName'], docu,
+                  value['ClassName'], value['LevelName'], valueIn.id));
+            });
           });
         });
-
-        DocumentReference docu = ds['Subjects'][i];
 
         var subName = await docu.get().then((value) {
           setState(() {
             print("SUBJECT ID ${value.id}");
-            _SubjectsIdsList.add(value.id);
-            _SubjectsNameList.add(value['SubjectName']);
 
             _SubjectsRefList.add(docu);
           });
         });
       }
       setState(() {
-        if (_SubjectsNameList.length > 1) {
-          _SubjectsNameList.removeAt(0);
-          _ClassNameList.removeAt(0);
-          _LevelNameList.removeAt(0);
+        if (_SubjectsRefList.length > 1 && !refreshed) {
+          subjectsList.removeAt(0);
           _SubjectsRefList.removeAt(0);
+          refreshed = true;
         }
       });
-      if (_SubjectsNameList[0] == "") {
+      if (_SubjectsRefList[0] == "") {
         v++;
       }
     });
@@ -335,7 +350,7 @@ class _teacherHPState extends State<teacherHP> {
               getData();
             }
 
-            if (snapshot.hasData && _SubjectsNameList[0] != "") {
+            if (snapshot.hasData && refreshed) {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
@@ -344,8 +359,25 @@ class _teacherHPState extends State<teacherHP> {
                       child: Column(
                 children: [
                   Container(
+                    height: 120,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.only(
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
+                      textAlign: TextAlign.center,
                       teacherName,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -355,175 +387,235 @@ class _teacherHPState extends State<teacherHP> {
                     ),
                   ),
                   Container(
-                    child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
-                      children: _SubjectsNameList.map((e) {
-                        return Container(
-                            margin: const EdgeInsets.only(bottom: 30),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 231, 231, 231),
-                                border: Border.all(
-                                  color:
-                                      const Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(100.0),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
-                            child: Column(children: [
-                              Container(
-                                margin: const EdgeInsets.all(4),
-                                padding: const EdgeInsets.all(2),
-                                child: Text(
-                                    e +
-                                        "\nالفصل: " +
-                                        _ClassNameList[
-                                            _SubjectsNameList.indexOf(e)] +
-                                        "\nالمرحلة: " +
-                                        _LevelNameList[
-                                            _SubjectsNameList.indexOf(e)],
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              Container(
-                                  child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
-                                        onPressed: () {
-                                          if (_SubjectsRefList[0] != "") {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      viewStudents(
-                                                        ref: _SubjectsRefList[
-                                                            _SubjectsNameList
-                                                                .indexOf(e)],
-                                                      )),
-                                            );
-                                          }
-                                        },
-                                        child: Image.asset(
-                                          "images/studentsIcon.png",
-                                          width: 44,
-                                          height: 44,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
+                      child: RefreshIndicator(
+                          color: Colors.black,
+                          onRefresh: () async {
+                            subjectsList.clear();
+                            _SubjectsRefList.clear();
+                            await getSubjects();
+                          },
+                          child: Container(
+                            child: ListView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              padding:
+                                  const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
+                              children: subjectsList.map((e) {
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    color: Color.fromARGB(255, 239, 240, 240),
+                                  ),
+                                  margin: EdgeInsets.only(bottom: 10),
+                                  padding: const EdgeInsets.all(15),
+                                  child: GroovinExpansionTile(
+                                    defaultTrailingIconColor:
+                                        Color.fromARGB(255, 82, 169, 151),
+                                    leading: Icon(
+                                      Icons.book,
+                                      color: Colors.black,
+                                      size: 35,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) => grades(
-                                                      subRef: _SubjectsRefList[
-                                                          _SubjectsNameList
-                                                              .indexOf(e)],
-                                                      subName:
-                                                          _SubjectsNameList[
-                                                              _SubjectsNameList
-                                                                  .indexOf(e)],
-                                                    )),
-                                          );
-                                        },
-                                        child: Image.asset(
-                                          "images/gradesIcon.png",
-                                          width: 44,
-                                          height: 44,
-                                          fit: BoxFit.cover,
+                                    title: Text(
+                                        e.subjectName +
+                                            "\nالفصل: " +
+                                            e.className +
+                                            "\nالمرحلة: " +
+                                            e.LevelName,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold)),
+                                    onExpansionChanged: (value) {
+                                      setState(() => isExpanded = value);
+                                    },
+                                    inkwellRadius: !isExpanded
+                                        ? const BorderRadius.all(
+                                            Radius.circular(8.0))
+                                        : const BorderRadius.only(
+                                            topRight: Radius.circular(8.0),
+                                            topLeft: Radius.circular(8.0),
+                                          ),
+                                    children: <Widget>[
+                                      ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          bottomLeft: Radius.circular(5.0),
+                                          bottomRight: Radius.circular(5.0),
                                         ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 15,
-                                  ),
-                                  SizedBox(
-                                    width: 44,
-                                    height: 44,
-                                    child: FittedBox(
-                                      child: FloatingActionButton(
-                                        heroTag: null,
-                                        backgroundColor: const Color.fromARGB(
-                                            255, 199, 248, 248),
-                                        onPressed: () {
-                                          print("SUBJECT ID $_SubjectsIdsList");
-                                          print(
-                                              "ID############$schoolID, ${_SubjectsIdsList[_SubjectsNameList.indexOf(e)]}");
-                                          print(
-                                              "***** ${_SubjectsRefList[_SubjectsNameList.indexOf(e)]}");
-                                          if (_SubjectsRefList[0] != "") {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      viewStudentsForChat(
-                                                        ref: _SubjectsRefList[
-                                                            _SubjectsNameList
-                                                                .indexOf(e)],
-                                                        schoolId: schoolID,
-                                                        subjectId:
-                                                            _SubjectsIdsList[
-                                                                _SubjectsNameList
-                                                                    .indexOf(
-                                                                        e)],
-                                                      )),
-                                            );
-                                          }
-                                        },
-                                        child: Image.asset(
-                                          "images/chatIcon.png",
-                                          width: 44,
-                                          height: 44,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ))
+                                        child: Column(children: <Widget>[
+                                          Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20.0, 20, 20.0, 10),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 44,
+                                                        height: 44,
+                                                        child: FittedBox(
+                                                          child:
+                                                              FloatingActionButton(
+                                                            heroTag: null,
+                                                            backgroundColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    54,
+                                                                    172,
+                                                                    172),
+                                                            onPressed: () {
+                                                              if (_SubjectsRefList[
+                                                                      0] !=
+                                                                  "") {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              viewStudents(
+                                                                                ref: _SubjectsRefList[subjectsList.indexOf(e)],
+                                                                              )),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Image.asset(
+                                                              "images/studentsIcon.png",
+                                                              width: 44,
+                                                              height: 44,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5.5,
+                                                      ),
+                                                      Text("الطلاب"),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 40,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 44,
+                                                        height: 44,
+                                                        child: FittedBox(
+                                                          child:
+                                                              FloatingActionButton(
+                                                            heroTag: null,
+                                                            backgroundColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    54,
+                                                                    172,
+                                                                    172),
+                                                            onPressed: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder:
+                                                                        (context) =>
+                                                                            grades(
+                                                                              subRef: _SubjectsRefList[subjectsList.indexOf(e)],
+                                                                              subName: e.subjectName,
+                                                                            )),
+                                                              );
+                                                            },
+                                                            child: Image.asset(
+                                                              "images/gradesIcon.png",
+                                                              width: 44,
+                                                              height: 44,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5.5,
+                                                      ),
+                                                      Text("الدرجات"),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                    width: 40,
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      SizedBox(
+                                                        width: 44,
+                                                        height: 44,
+                                                        child: FittedBox(
+                                                          child:
+                                                              FloatingActionButton(
+                                                            heroTag: null,
+                                                            backgroundColor:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    54,
+                                                                    172,
+                                                                    172),
+                                                            onPressed: () {
+                                                              print("SUBJECT ID " +
+                                                                  e.subjectId);
+                                                              print(
+                                                                  "ID############$schoolID, ${e.subjectId}");
 
-                              // color: Color.fromARGB(255, 222, 227, 234),
-                            ]));
-                      }).toList(),
-                    ),
-                  )
+                                                              if (_SubjectsRefList[
+                                                                      0] !=
+                                                                  "") {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              viewStudentsForChat(
+                                                                                ref: _SubjectsRefList[subjectsList.indexOf(e)],
+                                                                                schoolId: schoolID,
+                                                                                subjectId: e.subjectId,
+                                                                              )),
+                                                                );
+                                                              }
+                                                            },
+                                                            child: Image.asset(
+                                                              "images/chatIcon.png",
+                                                              width: 44,
+                                                              height: 44,
+                                                              fit: BoxFit.cover,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5.5,
+                                                      ),
+                                                      Text("المحادثات"),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ))
+
+                                          // color: Color.fromARGB(255, 222, 227, 234),
+                                        ]),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          )))
                 ],
               )));
             }
-            if (_SubjectsNameList.length == 0 && x == 0) {
+            if (subjectsList.length == 0 && x == 0) {
               return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
-            if (_SubjectsNameList[0] == "" && v == 1) {
+            if (_SubjectsRefList[0] == "" && v == 1) {
               return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
             return const Center(child: CircularProgressIndicator());
@@ -658,20 +750,8 @@ class _MyWidgetState extends State<viewStudents> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
-          ),
-          onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => const teacherHP()),
-            );
-          },
-        ),
         actions: const [],
       ),
       body: StreamBuilder<DocumentSnapshot>(
@@ -694,21 +774,21 @@ class _MyWidgetState extends State<viewStudents> {
                       child: Column(
                 children: [
                   Container(
-                    height: 100,
+                    height: 120,
                     width: 500,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(50),
-                          bottomLeft: Radius.circular(50)),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 76, 170, 175),
-                          Color.fromARGB(255, 255, 255, 255)
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
                     ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
@@ -723,30 +803,23 @@ class _MyWidgetState extends State<viewStudents> {
                   ),
                   Container(
                     child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      padding: const EdgeInsets.fromLTRB(10.0, 20, 10.0, 20),
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
                         return Container(
+                          width: MediaQuery.of(context).size.width,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100.0),
-                              color: const Color.fromARGB(255, 231, 231, 231),
-                              border: Border.all(
-                                color: const Color(0xffEEEEEE),
-                                width: 2.0,
-                              ),
-                              boxShadow: const [
-                                BoxShadow(
-                                    color: Colors.grey,
-                                    blurRadius: 2.0,
-                                    offset: Offset(2.0, 2.0))
-                              ]),
+                            borderRadius: BorderRadius.circular(15.0),
+                            color: Color.fromARGB(255, 239, 240, 240),
+                          ),
+                          margin: EdgeInsets.only(bottom: 10),
+                          padding: const EdgeInsets.all(15),
                           child: Text(e,
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold)),
-                          margin: const EdgeInsets.all(5),
-                          padding: const EdgeInsets.all(15),
+
                           //   color: Color.fromARGB(255, 222, 227, 234),
                         );
                       }).toList(),

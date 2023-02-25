@@ -74,8 +74,14 @@ dependencies:
   flutter_chat_bubble: ^2.0.0
   native_font: ^1.1.0
   intl_phone_field: ^3.1.0
+  selectable_container: ^1.0.7
+  dropdown_button2: ^1.9.2
+  division: ^0.9.0
+  styled_widget: ^0.4.1
+  groovin_widgets: ^3.1.0
   firebase_messaging: ^14.2.1
   http: ^0.13.5
+  dbus: ^0.7.4
 
 dev_dependencies:
   flutter_test:
@@ -111,7 +117,6 @@ flutter:
       - images/gradeIcon.png
       - images/eventsIcon.png
       - images/gradesIcon.png
-     # - images/announcementIcon.png
      
 
 

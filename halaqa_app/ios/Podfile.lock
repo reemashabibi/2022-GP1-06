@@ -602,7 +602,7 @@ PODS:
   - BoringSSL-GRPC/Implementation (0.0.24):
     - BoringSSL-GRPC/Interface (= 0.0.24)
   - BoringSSL-GRPC/Interface (0.0.24)
-  - cloud_firestore (4.2.0):
+  - cloud_firestore (4.3.1):
     - Firebase/Firestore (= 10.3.0)
     - firebase_core
     - Flutter
@@ -651,17 +651,24 @@ PODS:
   - Firebase/Firestore (10.3.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 10.3.0)
+  - Firebase/Messaging (10.3.0):
+    - Firebase/CoreOnly
+    - FirebaseMessaging (~> 10.3.0)
   - Firebase/Storage (10.3.0):
     - Firebase/CoreOnly
     - FirebaseStorage (~> 10.3.0)
-  - firebase_auth (4.2.0):
+  - firebase_auth (4.2.5):
     - Firebase/Auth (= 10.3.0)
     - firebase_core
     - Flutter
-  - firebase_core (2.4.0):
+  - firebase_core (2.4.1):
     - Firebase/CoreOnly (= 10.3.0)
     - Flutter
-  - firebase_storage (11.0.7):
+  - firebase_messaging (14.2.1):
+    - Firebase/Messaging (= 10.3.0)
+    - firebase_core
+    - Flutter
+  - firebase_storage (11.0.10):
     - Firebase/Storage (= 10.3.0)
     - firebase_core
     - Flutter
@@ -693,6 +700,20 @@ PODS:
     - "gRPC-C++ (~> 1.44.0)"
     - leveldb-library (~> 1.22)
     - nanopb (< 2.30910.0, >= 2.30908.0)
+  - FirebaseInstallations (10.5.0):
+    - FirebaseCore (~> 10.0)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - PromisesObjC (~> 2.1)
+  - FirebaseMessaging (10.3.0):
+    - FirebaseCore (~> 10.0)
+    - FirebaseInstallations (~> 10.0)
+    - GoogleDataTransport (~> 9.2)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.8)
+    - GoogleUtilities/Environment (~> 7.8)
+    - GoogleUtilities/Reachability (~> 7.8)
+    - GoogleUtilities/UserDefaults (~> 7.8)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
   - FirebaseStorage (10.3.0):
     - FirebaseAppCheckInterop (~> 10.0)
     - FirebaseAuthInterop (~> 10.0)
@@ -702,9 +723,15 @@ PODS:
   - Flutter (1.0.0)
   - flutter_chat_bubble (0.0.1):
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - fluttertoast (0.0.2):
     - Flutter
     - Toast
+  - GoogleDataTransport (9.2.1):
+    - GoogleUtilities/Environment (~> 7.7)
+    - nanopb (< 2.30910.0, >= 2.30908.0)
+    - PromisesObjC (< 3.0, >= 1.2)
   - GoogleUtilities/AppDelegateSwizzler (7.10.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
@@ -719,6 +746,8 @@ PODS:
     - GoogleUtilities/Reachability
   - "GoogleUtilities/NSData+zlib (7.10.0)"
   - GoogleUtilities/Reachability (7.10.0):
+    - GoogleUtilities/Logger
+  - GoogleUtilities/UserDefaults (7.10.0):
     - GoogleUtilities/Logger
   - "gRPC-C++ (1.44.0)":
     - "gRPC-C++/Implementation (= 1.44.0)"
@@ -807,9 +836,11 @@ DEPENDENCIES:
   - file_picker (from `.symlinks/plugins/file_picker/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
   - flutter_chat_bubble (from `.symlinks/plugins/flutter_chat_bubble/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - native_font (from `.symlinks/plugins/native_font/ios`)
   - open_file (from `.symlinks/plugins/open_file/ios`)
@@ -831,7 +862,10 @@ SPEC REPOS:
     - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseFirestore
+    - FirebaseInstallations
+    - FirebaseMessaging
     - FirebaseStorage
+    - GoogleDataTransport
     - GoogleUtilities
     - "gRPC-C++"
     - gRPC-Core
@@ -855,12 +889,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_messaging:
+    :path: ".symlinks/plugins/firebase_messaging/ios"
   firebase_storage:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
   flutter_chat_bubble:
     :path: ".symlinks/plugins/flutter_chat_bubble/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
   native_font:
@@ -877,15 +915,16 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   abseil: ebe5b5529fb05d93a8bdb7951607be08b7fa71bc
   BoringSSL-GRPC: 3175b25143e648463a56daeaaa499c6cb86dad33
-  cloud_firestore: cf019e947a49ebb56ddf4ae7f6f2ca13469da1b1
+  cloud_firestore: 5e5bb98722f66e820bf1aa7b3c98ffc9b2450ffb
   DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
   DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
   downloads_path_provider_28: 7425048683ec0b86238361bd93795e91c2bc61a2
   file_picker: 817ab1d8cd2da9d2da412a417162deee3500fc95
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
-  firebase_auth: 579a0dc15451491cc83fccaa5102296635f24938
-  firebase_core: 6f2f753e316765799d88568232ed59e300ff53db
-  firebase_storage: 341d522a3cd29069e1ce37e563103bc9baf6c045
+  firebase_auth: 3bab991fe1df91c2f948156e9dee976e01a19ab9
+  firebase_core: bf59c32d2e53814f558efa20840c1902fa2fe461
+  firebase_messaging: ee597229fc260f8fa491fa8f2d4a32dfbfa406fa
+  firebase_storage: 8b85bf19de50a1886f9387924fbddf066a718965
   FirebaseAppCheckInterop: 9fc57dfa08f0abb737b185ea065422b55355c909
   FirebaseAuth: 0e415d29d846c1dce2fb641e46f35e9888d9bec6
   FirebaseAuthInterop: 7a766bd56971347e0de4b7674aaa62ddc7820097
@@ -893,10 +932,14 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: 93d252fabdc9696bf14a73b04d84877ab9b3a832
   FirebaseCoreInternal: 29b76f784d607df8b2a1259d73c3f04f1210137b
   FirebaseFirestore: 244f71ff14ef44f39e00b44d356eac708ce03103
+  FirebaseInstallations: 935bc4abb6f7a035cab7a0c31cb777b2be3dd254
+  FirebaseMessaging: e345b219fd15d325f0cf2fef28cb8ce00d851b3f
   FirebaseStorage: 0efbff0ac978981866d89804191688ae50d64033
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_chat_bubble: cad6265ec611ba0f7bede70eabc26fdfce9bf2b0
-  fluttertoast: 74526702fea2c060ea55dde75895b7e1bde1c86b
+  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  fluttertoast: eb263d302cc92e04176c053d2385237e9f43fad0
+  GoogleDataTransport: ea169759df570f4e37bdee1623ec32a7e64e67c4
   GoogleUtilities: bad72cb363809015b1f7f19beb1f1cd23c589f95
   "gRPC-C++": 9675f953ace2b3de7c506039d77be1f2e77a8db2
   gRPC-Core: 943e491cb0d45598b0b0eb9e910c88080369290b
@@ -912,7 +955,7 @@ SPEC CHECKSUMS:
   SDWebImage: 9bec4c5cdd9579e1f57104735ee0c37df274d593
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
-  url_launcher_ios: 839c58cdb4279282219f5e248c3321761ff3c4de
+  url_launcher_ios: ae1517e5e344f5544fb090b079e11f399dfbe4d2
 
 PODFILE CHECKSUM: ef19549a9bc3046e7bb7d2fab4d021637c0c58a3
 
