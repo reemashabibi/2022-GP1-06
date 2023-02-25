@@ -139,56 +139,58 @@ class _pick extends State<pickup> {
                 ],
               ),
               _formVisible && _buttonVisible
-                  ? Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: " ادخل اسم الموكل كاملاً",
+                  ? SingleChildScrollView(
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: " ادخل اسم الموكل كاملاً",
+                                ),
+                                validator: (value) {
+                                  name = value!;
+                                  if (value == "") {
+                                    return ' يرجى إدخال اسم الموكل';
+                                  }
+                                  return null;
+                                },
                               ),
-                              validator: (value) {
-                                name = value!;
-                                if (value == "") {
-                                  return ' يرجى إدخال اسم الموكل';
-                                }
-                                return null;
-                              },
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "ادخل رقم جوال الموكل",
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "ادخل رقم جوال الموكل",
+                                ),
+                                validator: (value) {
+                                  phone = value!;
+                                  if (value == "") {
+                                    return ' يرجى إدخال رقم جوال الموكل';
+                                  }
+                                  return null;
+                                },
                               ),
-                              validator: (value) {
-                                phone = value!;
-                                if (value == "") {
-                                  return ' يرجى إدخال رقم جوال الموكل';
-                                }
-                                return null;
-                              },
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                hintText: "ادخل رقم هوية الموكل",
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                  hintText: "ادخل رقم هوية الموكل",
+                                ),
+                                validator: (value) {
+                                  nid = value!;
+                                  if (value == "") {
+                                    return ' يرجى إدخال رقم هوية الموكل';
+                                  }
+                                  return null;
+                                },
                               ),
-                              validator: (value) {
-                                nid = value!;
-                                if (value == "") {
-                                  return ' يرجى إدخال رقم هوية الموكل';
-                                }
-                                return null;
-                              },
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     )
 
