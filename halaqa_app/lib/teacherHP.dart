@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/TeacherEdit.dart';
 import 'package:halaqa_app/viewStudentForChat.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:halaqa_app/chat_detail.dart';
 
 class teacherHP extends StatefulWidget {
   const teacherHP({super.key});
@@ -19,6 +22,9 @@ class teacherHP extends StatefulWidget {
 }
 
 class _teacherHPState extends State<teacherHP> {
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
   var className = "";
   var level = "";
   late List _SubjectList;
@@ -26,7 +32,7 @@ class _teacherHPState extends State<teacherHP> {
   late List _SubjectsRefList;
   late List _ClassNameList;
   late List _LevelNameList;
-  List<String> _SubjectsIdsList=[];
+  List<String> _SubjectsIdsList = [];
   var x = 0;
   var v = 0;
   var teacherName = "";
@@ -58,8 +64,8 @@ class _teacherHPState extends State<teacherHP> {
       break;
     }
 
-    DocumentReference docRef = FirebaseFirestore.instance
-        .doc('School/$schoolID/Teacher/${user.uid}');
+    DocumentReference docRef =
+        FirebaseFirestore.instance.doc('School/$schoolID/Teacher/${user.uid}');
 
     docRef.get().then((DocumentSnapshot ds) async {
       print("MMM ${ds.id}");
@@ -128,7 +134,147 @@ class _teacherHPState extends State<teacherHP> {
     // getSchoolID();
     //remove();
 
+    requestPremission();
+    getToken();
+    initInfo();
+
     super.initState();
+  }
+
+//method to set the setting of the notification in foregroud
+  initInfo() {
+    var androidInitialize =
+        const AndroidInitializationSettings('images/logo.png');
+    var IOSInitialize = const IOSInitializationSettings(
+        requestAlertPermission: true,
+        requestBadgePermission: true,
+        requestSoundPermission: true);
+    var initializationSettings =
+        InitializationSettings(android: androidInitialize, iOS: IOSInitialize);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onSelectNotification: (String? payload) async {
+      try {
+        if (payload != null && payload.isNotEmpty) {
+          List<String> info = payload.split("~");
+          print(info[0]);
+
+          if (info[0] == 'chat') {
+            await Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (context) => Chatdetail(
+                        friendName: info[1],
+                        friendUid: info[2],
+                        schoolId: info[3],
+                        classId: info[4],
+                        subjectId: info[5],
+
+                        ///after read msg update a variable
+                        msgCount: (s) {
+                          var msgCount = s;
+                          // setState(() {
+                          //
+                          // });
+                        },
+                      )),
+            );
+          }
+        } else {}
+      } catch (e) {}
+      return;
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print(
+          'onMessage: ${message.notification?.title}/${message.notification?.body}');
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+      AndroidNotificationDetails androidNotificationDetails =
+          AndroidNotificationDetails('dbfood', 'dbfood',
+              importance: Importance.high,
+              styleInformation: bigTextStyleInformation,
+              priority: Priority.high,
+              playSound: true);
+      NotificationDetails platformChannelSpecifics = NotificationDetails(
+          android: androidNotificationDetails,
+          iOS: const IOSNotificationDetails(
+              presentAlert: true, presentBadge: true, presentSound: true));
+
+      await flutterLocalNotificationsPlugin.show(0, message.notification?.title,
+          message.notification?.body, platformChannelSpecifics,
+          payload: message.data['type']);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      var payload = message.data['type'];
+      if (payload != null && payload.isNotEmpty) {
+        List<String> info = payload.split("~");
+        print(info[0]);
+
+        if (info[0] == 'chat') {
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+                builder: (context) => Chatdetail(
+                      friendName: info[1],
+                      friendUid: info[2],
+                      schoolId: info[3],
+                      classId: info[4],
+                      subjectId: info[5],
+                      msgCount: (s) {
+                        var msgCount = s;
+                        // setState(() {
+                        //
+                        // });
+                      },
+                    )),
+          );
+        }
+      } else {}
+    });
+  }
+
+//method to get token for notification
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      saveToken(token!); //to firestore
+    });
+  }
+
+//save token to the user document
+  void saveToken(String token) async {
+    await getSubjects();
+    FirebaseFirestore.instance
+        .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
+        .update({'token': token});
+  }
+
+  //method to request premission to send notification
+  void requestPremission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('user granted notfication');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      print('user granted provisional');
+    } else {
+      print('user declined notification');
+    }
   }
 
   @override
@@ -220,7 +366,8 @@ class _teacherHPState extends State<teacherHP> {
                             decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 231, 231, 231),
                                 border: Border.all(
-                                  color: const Color.fromARGB(255, 130, 126, 126),
+                                  color:
+                                      const Color.fromARGB(255, 130, 126, 126),
                                   width: 2.5,
                                 ),
                                 borderRadius: BorderRadius.circular(100.0),
@@ -257,8 +404,8 @@ class _teacherHPState extends State<teacherHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor:
-                                            const Color.fromARGB(255, 199, 248, 248),
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 199, 248, 248),
                                         onPressed: () {
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
@@ -291,8 +438,8 @@ class _teacherHPState extends State<teacherHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor:
-                                            const Color.fromARGB(255, 199, 248, 248),
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 199, 248, 248),
                                         onPressed: () {
                                           Navigator.push(
                                             context,
@@ -326,21 +473,30 @@ class _teacherHPState extends State<teacherHP> {
                                     child: FittedBox(
                                       child: FloatingActionButton(
                                         heroTag: null,
-                                        backgroundColor: const Color.fromARGB(255, 199, 248, 248),
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 199, 248, 248),
                                         onPressed: () {
                                           print("SUBJECT ID $_SubjectsIdsList");
-                                          print("ID############$schoolID, ${_SubjectsIdsList[_SubjectsNameList.indexOf(e)]}");
-                                          print("***** ${_SubjectsRefList[_SubjectsNameList.indexOf(e)]}");
+                                          print(
+                                              "ID############$schoolID, ${_SubjectsIdsList[_SubjectsNameList.indexOf(e)]}");
+                                          print(
+                                              "***** ${_SubjectsRefList[_SubjectsNameList.indexOf(e)]}");
                                           if (_SubjectsRefList[0] != "") {
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
                                                       viewStudentsForChat(
-                                                        ref: _SubjectsRefList[_SubjectsNameList.indexOf(e)],
+                                                        ref: _SubjectsRefList[
+                                                            _SubjectsNameList
+                                                                .indexOf(e)],
                                                         schoolId: schoolID,
-                                                        subjectId: _SubjectsIdsList[_SubjectsNameList.indexOf(e)],
-                                            )),
+                                                        subjectId:
+                                                            _SubjectsIdsList[
+                                                                _SubjectsNameList
+                                                                    .indexOf(
+                                                                        e)],
+                                                      )),
                                             );
                                           }
                                         },
@@ -603,7 +759,8 @@ class _MyWidgetState extends State<viewStudents> {
               return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
             }
             if (_StudenNameList[0] == "" && v == 1) {
-              return const Center(child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
+              return const Center(
+                  child: Text("لم يتم تعيين أي طالب بالفصل بعد."));
             }
             return const Center(child: CircularProgressIndicator());
           }),

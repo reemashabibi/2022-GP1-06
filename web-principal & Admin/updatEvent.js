@@ -66,7 +66,8 @@ save.addEventListener('click', async (e) => {
   $('.loader').show();
   e.preventDefault();
   if(document.getElementById("eventTitle").value ==''){
-    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين اسم للحدث </p> </div>';
+    $('.loader').hide();
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto; "> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين اسم للحدث </p> </div>';
     setTimeout(() => {
             
       // 👇️ replace element from DOM
@@ -114,16 +115,16 @@ await updateDoc(reference,{
     $.post("http://localhost:8080/event",
     {
       token: tokens,
-      eventName: title.value,
+      eventName: document.getElementById("eventTitle").value,
    },
    function (data, stat) {
 
    });
    
   $('.loader').hide();
-  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم التعديل بنجاح </p> </div>';
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto; "> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم التعديل بنجاح </p> </div>';
   setTimeout(() => {
-          
+            
     // 👇️ replace element from DOM
     document.getElementById('alertContainer').innerHTML ='';
   }, 5000);

@@ -245,7 +245,6 @@ export async function viewStudents(classId, schoolId){
     
   const d = await getDoc(studentid);
 
-
     var firstName = d.data().FirstName;
     var lastName = d.data().LastName;
 
@@ -606,10 +605,10 @@ $(document).ready(function () {
   $(document).on('click', '#saveAttendence', async function () {
    var abenceTaken;
    var breakOut;
-   var tokens;
+   var i=0;
 
     $('#schedule tr').each( async function() {
-      tokens = [];
+      
       var refre =  $(this).attr('id');
       var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
         if (abcense.exists()) {
@@ -637,6 +636,8 @@ $(document).ready(function () {
           excuse: "", 
           FileName: '' 
      });
+     
+    // start send notification
     var stu = await getDoc(doc(db, refre));
     var pref = stu.data().ParentID
     var parentDoc = await getDoc(pref);
@@ -650,23 +651,25 @@ $(document).ready(function () {
 
            });
       }
-              });
-           
-              if(abenceTaken == false){
+       i++;
+      if(abenceTaken == false && i==1){
               
-              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم نسجيل الحضور</p> </div>';
-              setTimeout(() => {
-                document.getElementById('alertContainer').innerHTML='';
-                
-              }, 5000);
-            }
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم نسجيل الحضور</p> </div>';
+        setTimeout(() => {
+          document.getElementById('alertContainer').innerHTML='';
+          
+        }, 5000);
+      }
+              });
+          
               
              
              
     
 
   });
-  
+
+  //to change the absence button color 
   $(document).on('click', '.abcenseBtn', async function () {
     var abcenseBtn = $(this);
     if($(this).text() == "حاضر"){
@@ -718,7 +721,8 @@ $(document).ready(function () {
         })
     }
     else{
-      $('.transfer option:first').prop('selected',true);
+      $(".transfer option:selected").prop("selected", false);
+$(".transfer option:first").prop("selected", "selected");
     }
 
   });

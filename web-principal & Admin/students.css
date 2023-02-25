@@ -185,7 +185,7 @@ text-decoration:none;
 	border-radius: 72px 72px 72px 72px;
   z-index: -1 ;
 }
-@media (max-width: 767px) {
+@media (max-width:987px) {
   .screen__background__shape1 {
     display: none;
   }

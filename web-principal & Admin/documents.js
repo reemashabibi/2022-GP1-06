@@ -386,7 +386,7 @@ export async function viewDocuments(){
                     .catch((error) => {
                        // Handle any errors
                        console.log(error);
-                       a_anotherdoclink.innerHTML = "تعذر تحميل الملف";
+                       a_anotherdoclink.innerHTML = "<br>تعذر تحميل الملف";
                       });
                       var cells = document.getElementById(classDocsRef.indexOf(schoolFileDocSnap.id)).getElementsByTagName('td');
                       cells[0].appendChild(a_anotherdoclink);
@@ -618,17 +618,47 @@ export async function viewDocuments(){
         //get file name
         var fileName = $(this).closest('tr').find(".tdContent").html();
 
-        if(confirm(" هل أنت تأكد حذف المستند؟")){
+        if(confirm(" هل تُأكد حذف المستند؟ عند حذف المستند لفصلٍ معين، سيتم حذف مستندات أولياء الأمور طلاب الفصل المرفقة لهذا المستند")){
           $(".loader").show();
           if(classesRef.length == 1){
-            alert('1')
+      
        await deleteDoc(docRef).then(async () =>{
             for(var r=0; r<classesRef.length; r++){
             await updateDoc(classesRef[r], {
                 Documents: arrayRemove(docRef)
             });
         }
-        // Create a reference to the file to delete
+        //delete the parent documents for this school documents in this class
+        const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "==", classesRef[0]));
+
+const querySnapshot = await getDocs(q);
+querySnapshot.forEach(async (stuDoc) =>  {
+
+  var qForFilledDoc = query(collection(db, 'School', schoolID, 'Student',stuDoc.id, 'FilledDocuments'), where("DocumentID", "==", docRef));
+  var querySnapshotFilledDocuments = await getDocs(qForFilledDoc);
+
+  querySnapshotFilledDocuments.forEach(async (stuFilledDoc) =>  {
+    var parentFileName = stuFilledDoc.data().FileName;
+    var filledDocumentID = stuFilledDoc.id;
+
+    await deleteDoc(stuFilledDoc.ref).then(async () =>{
+      // Create a reference to the file to delete
+      const fileRef = ref(storage, 'Parent Files/'+parentFileName+"@"+filledDocumentID);
+
+      // Delete the file
+      await deleteObject(fileRef).then(() => {
+       // File deleted successfully
+     }).catch((error) => {
+     // Uh-oh, an error occurred!
+       });
+
+    });
+  });
+
+});
+//end of parent filled document deletion
+
+        // Create a reference to the school file to delete
        const fileRef = ref(storage, 'School Files/'+fileName+"@"+docID);
 
        // Delete the file
@@ -646,14 +676,44 @@ export async function viewDocuments(){
           console.log(error);
         })
       }
+      //if the document is not just for one class:
       else{
         var tableID = doc(db, $(this).closest('table').attr('id'));
-        alert('j')
-            alert('in')
+       
           await updateDoc(tableID, {
               Documents: arrayRemove(docRef)
           });
           await updateDoc(docRef, { Classes: arrayRemove(tableID)})
+
+                  //delete the parent documents for this school documents in this class
+        const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "==", tableID));
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (stuDoc) =>  {
+        
+          var qForFilledDoc = query(collection(db, 'School', schoolID, 'Student',stuDoc.id, 'FilledDocuments'), where("DocumentID", "==", docRef));
+          var querySnapshotFilledDocuments = await getDocs(qForFilledDoc);
+        
+          querySnapshotFilledDocuments.forEach(async (stuFilledDoc) =>  {
+            var parentFileName = stuFilledDoc.data().FileName;
+            var filledDocumentID = stuFilledDoc.id;
+        
+            await deleteDoc(stuFilledDoc.ref).then(async () =>{
+              // Create a reference to the file to delete
+              const fileRef = ref(storage, 'Parent Files/'+parentFileName+"@"+filledDocumentID);
+        
+              // Delete the file
+              await deleteObject(fileRef).then(() => {
+               // File deleted successfully
+             }).catch((error) => {
+             // Uh-oh, an error occurred!
+               });
+        
+            });
+          });
+        
+        });
+        //end of parent filled document deletion
           
           $(this).closest('tr').remove();
       $(".loader").hide();
@@ -670,8 +730,29 @@ $(document).on('submit', '.docForm', async function (e){
 
     e.preventDefault()
     var selectedClasses = $('#classes').val();
+
     if(!selectedClasses){
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب إختيار فصل واحد على الأقل </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 5000);
+      return false;
+    }
+    if(classDocForm.Dname.value == ''){
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب تعيين اسم للمستند </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 5000);
+      return false;
+    }
+    if(document.getElementById("file").files.length == 0){
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب ارفاق مستد </p> </div>';
       setTimeout(() => {
               
         // 👇️ replace element from DOM

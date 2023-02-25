@@ -316,7 +316,7 @@ app.post('/announcment',  async (req, res) => {
       },
         token: registrationTokens,
         data: {
-          type: 'chat',
+          type: 'chat~'+req.body.data,
         }
     };
     

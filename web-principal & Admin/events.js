@@ -46,7 +46,7 @@ export async function viewEvents(email){
 
   var i=0;
 const querySnapshot = await getDocs(q);
-querySnapshot.forEach((doc)  => {
+querySnapshot.forEach(async (doc)  => {
  
 
 
@@ -75,16 +75,17 @@ querySnapshot.forEach((doc)  => {
   }
 
   if(image!=""){
-    getDownloadURL(ref(storage, 'images/'+image))
+   await getDownloadURL(ref(storage, 'images/'+image))
      .then((url)  => {
        
-      const div6 = document.createElement("div");
+      const p = document.createElement("p");
+      p.style.textAlign = '-webkit-center';
        const img = document.createElement("img");
        img.setAttribute('src', url);
        img.setAttribute('style','width:40%; hight:40%; margin-left:18%; ');
        img.setAttribute('scrypt','onclick=window.location.href="'+url+'"');
-       
-       div5.appendChild(img);
+       p.appendChild(img);
+       div1.appendChild(p);
        
      })
      .catch((error) => {
@@ -111,6 +112,7 @@ a2.appendChild(i);
 
 
 div5.className = "job-right my-4 flex-shrink-0";
+div5.style.textAlign = 'center';
 const a1 = document.createElement('a');
 a1.className = "btn d-inline w-100 d-sm-inline-inline btn-light";
 a1.appendChild(document.createTextNode(" تعديل"));

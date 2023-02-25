@@ -13,7 +13,7 @@ import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/viewChildSubjects.dart';
 import 'package:halaqa_app/viewDocuments.dart';
 import 'package:halaqa_app/pickup.dart';
-
+import 'package:halaqa_app/chatDetailPS.dart';
 import 'ParentEdit.dart';
 import 'package:halaqa_app/viewAbcense.dart';
 import 'package:halaqa_app/viewDocuments.dart';
@@ -162,7 +162,20 @@ class _parentHPState extends State<parentHP> {
                 builder: (context) => viewEvents(),
               ),
             );
-          } else {}
+          } else if (info[0] == 'chat') {
+            await Navigator.push(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (context) => ChatdetailPS(
+                        TeacherName: info[1],
+                        TeacherUid: info[2],
+                        StudentUid: info[3],
+                        schoolId: info[4],
+                        subjectId: info[5],
+                        classID: info[6],
+                      )),
+            );
+          }
         } else {}
       } catch (e) {}
       return;
@@ -223,7 +236,20 @@ class _parentHPState extends State<parentHP> {
               builder: (context) => viewEvents(),
             ),
           );
-        } else {}
+        } else if (info[0] == 'chat') {
+          await Navigator.push(
+            context,
+            MaterialPageRoute<void>(
+                builder: (context) => ChatdetailPS(
+                      TeacherName: info[1],
+                      TeacherUid: info[2],
+                      StudentUid: info[3],
+                      schoolId: info[4],
+                      subjectId: info[5],
+                      classID: info[6],
+                    )),
+          );
+        }
       } else {}
     });
   }

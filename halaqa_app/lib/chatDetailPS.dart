@@ -77,64 +77,79 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
             .doc(widget.subjectId)
             .set({"msg_count": count, "student_id": widget.StudentUid});
 
-        //send notification
-
-        var senderName = '';
-        var recepientToken = '';
-
-        //get the sender name
-        FirebaseFirestore.instance
-            .collection('School/${widget.schoolId}/Parent')
-            .doc(currentuserUserId)
-            .get()
-            .then(
-          (DocumentSnapshot doc) {
-            senderName = "${doc['LastName']} ${doc['FirstName']}";
-            // ...
-          },
-          onError: (e) => print("Error getting document: $e"),
-        );
-
-        //get the sender student name
-        FirebaseFirestore.instance
-            .collection('School/${widget.schoolId}/Student')
-            .doc(widget.StudentUid)
-            .get()
-            .then(
-          (DocumentSnapshot doc) {
-            senderName += " (${doc['LastName']} ${doc['FirstName']} ولي أمر)";
-            // ...
-          },
-          onError: (e) => print("Error getting document: $e"),
-        );
-
-        //get the recepient token
-        FirebaseFirestore.instance
+        int hasChatOpen = 0;
+        var chatDoc = FirebaseFirestore.instance
             .collection('School/${widget.schoolId}/Teacher')
-            .doc(TeacherUid)
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .collection("subjects")
+            .doc(widget.subjectId)
             .get()
-            .then(
-          (DocumentSnapshot doc) {
-            recepientToken = doc['token'];
-            // ...
-          },
-          onError: (e) => recepientToken = '',
-        );
+            .then((value) => hasChatOpen = value.get('msg_count'));
 
-        if (recepientToken != '') {
-          http.post(
-            Uri.parse('http://10.0.2.2:8080/chat'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
+        if (hasChatOpen != 0) {
+          //send notification
+
+          var senderName = '';
+          var recepientToken = '';
+
+          //get the sender name
+          FirebaseFirestore.instance
+              .collection('School/${widget.schoolId}/Parent')
+              .doc(currentuserUserId)
+              .get()
+              .then(
+            (DocumentSnapshot doc) {
+              senderName = "${doc['LastName']} ${doc['FirstName']}";
+              // ...
             },
-            body: jsonEncode(<String, String>{
-              'name': senderName,
-              'content': msg,
-              'token': recepientToken
-            }),
+            onError: (e) => print("Error getting document: $e"),
           );
+
+          var studentName = '';
+          //get the sender student name
+          FirebaseFirestore.instance
+              .collection('School/${widget.schoolId}/Student')
+              .doc(widget.StudentUid)
+              .get()
+              .then(
+            (DocumentSnapshot doc) {
+              senderName += " (${doc['LastName']} ${doc['FirstName']} ولي أمر)";
+              studentName = '${doc['LastName']} ${doc['FirstName']}';
+              // ...
+            },
+            onError: (e) => print("Error getting document: $e"),
+          );
+
+          //get the recepient token
+          FirebaseFirestore.instance
+              .collection('School/${widget.schoolId}/Teacher')
+              .doc(TeacherUid)
+              .get()
+              .then(
+            (DocumentSnapshot doc) {
+              recepientToken = doc['token'];
+              // ...
+            },
+            onError: (e) => recepientToken = '',
+          );
+
+          if (recepientToken != '') {
+            http.post(
+              Uri.parse('http://10.0.2.2:8080/chat'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+              },
+              body: jsonEncode(<String, String>{
+                'name': senderName,
+                'content': msg,
+                'token': recepientToken,
+                'data':
+                    '$StudentUid~$studentName~$schoolID~${widget.classID}~${widget.subjectId}'
+              }),
+            );
+          }
+          //end notification
         }
-        //end notification
       }));
       setState(() {});
     }
@@ -299,6 +314,7 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
           }
 
           if (snapshot.hasData) {
+            readMsg();
             //= document.data()!;
             //initState () ;
             // super.initState();

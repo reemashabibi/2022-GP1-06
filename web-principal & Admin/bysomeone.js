@@ -66,7 +66,21 @@ querySnapshot.forEach((doc)  => {
     li.className = "table-row";
     li.id = doc.data().time;
     
-  
+    var currentTimestamp = Date.now()/1000;
+    var firestoreTimestamp = doc.data().time.seconds;
+    var differenceInMilliseconds = currentTimestamp - firestoreTimestamp;
+
+    if (differenceInMilliseconds > 28800 ){
+      updateDoc(doc.ref ,{
+        picked : "yes",
+        someone: "no" ,
+        fullname: "",
+        nid:"",
+        phone:"",
+
+    });
+    window.location.href="bysomeone.html";
+  }
     
     ul1.appendChild(li);
     
