@@ -1,5 +1,5 @@
 import 'dart:io' as io;
-
+import 'dart:io' show Platform;
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -190,9 +190,14 @@ class _viewDocuments extends State<viewDocuments> {
                           // requests permission for downloading the file
                           bool hasPermission = await _requestWritePermission();
                           if (!hasPermission) return;
-
+                          var dir;
                           // gets the directory where we will download the file.
-                          var dir = await getExternalStorageDirectory();
+                          if (Platform.isIOS) {
+                            // Platform is imported from 'dart:io' package
+                            dir = await getApplicationDocumentsDirectory();
+                          } else if (Platform.isAndroid) {
+                            dir = await getExternalStorageDirectory();
+                          }
 
                           // You should put the name you want for the file here.
                           // Take in account the extension.
@@ -466,46 +471,7 @@ class _UploadDocument extends State<UploadDocument> {
         ),
         actions: [],
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            setState(() {
-              currentIndex:
-              index;
-            });
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {}
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
+
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
