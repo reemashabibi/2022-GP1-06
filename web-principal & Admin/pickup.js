@@ -101,11 +101,7 @@ querySnapshot.forEach((doc)  => {
 //var differenceInMinutes = differenceInMilliseconds / (1000);
      //var dat= Math.abs(doc.data().time.minutes-timestamp);
      //alert(currentTimestamp-firestoreTimestamp );
-     if (doc.data().someone=="yes"){
-      let myInterval= setInterval(function () {li.setAttribute('style','background-color:blue; color:white;')}, 100);
-
-     }
-       else if (differenceInMilliseconds<300){
+     if (differenceInMilliseconds<300){
          let myInterval= setInterval(function () {li.setAttribute('style','background-color:green; color:white;')}, 100);
          
     }
@@ -114,25 +110,15 @@ querySnapshot.forEach((doc)  => {
     }
    // var refe = doc(db,"School", schoolId,"Announcement", doc.data().id);
 
-    if (doc.data().someone=="yes" ){
-      if (differenceInMilliseconds > 28800 ){
-      updateDoc(doc.ref ,{
-        picked : "yes",
-        someone: "no" ,
-        fullname: "",
-        nid:"",
-        phone:"",
-
-    });
-    window.location.href="pickup.html";
-  }
-  }
-    else if (differenceInMilliseconds > 300 ){
+    if (differenceInMilliseconds > 300 ){
       updateDoc(doc.ref ,{
         picked : "yes",
        
     });
   }
+  setInterval(function() {
+    location.reload();
+  }, 300000); 
 
     }
 

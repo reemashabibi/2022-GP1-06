@@ -49,7 +49,12 @@ export async function viewStudents(email){
     const q = await collection(reference, "Student");
     const eee= query(q , orderBy("time","desc"));
     const ul1=document.getElementById("1");
-    
+    const today = new Date();
+const monthNames = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
+const day=" "+monthNames[today.getMonth()]+" "+today.getDate();
     
     onSnapshot(eee,(querySnapshot)=>{
     //const querySnapshot = await getDocs(q);
@@ -59,28 +64,15 @@ while (ul1.hasChildNodes()) {
   ul1.removeChild(ul1.firstChild);
 }
 
-
 querySnapshot.forEach((doc)  => {
-  if (doc.data().picked=="no" && doc.data().someone=="yes"){
+
+ // alert(doc.data().date==" Feb 26")
+  if (doc.data().date==day && doc.data().someone=="yes"){
     const li = document.createElement("li");
     li.className = "table-row";
     li.id = doc.data().time;
     
-    var currentTimestamp = Date.now()/1000;
-    var firestoreTimestamp = doc.data().time.seconds;
-    var differenceInMilliseconds = currentTimestamp - firestoreTimestamp;
-
-    if (differenceInMilliseconds > 28800 ){
-      updateDoc(doc.ref ,{
-        picked : "yes",
-        someone: "no" ,
-        fullname: "",
-        nid:"",
-        phone:"",
-
-    });
-    window.location.href="bysomeone.html";
-  }
+   
     
     ul1.appendChild(li);
     
@@ -107,17 +99,7 @@ querySnapshot.forEach((doc)  => {
 
 
     //alert(doc.data().time);
-    const currentDate = new Date();
-     const timestamp = Math.floor(Date.now() /1000); 
-     
-     var dat= Math.abs(doc.data().time.seconds-timestamp);
-        if (dat<1000){
-         let myInterval= setInterval(function () {li.setAttribute('style','background-color:green; color:white;')}, 100);
-         
-    }
-    else{
-      li.setAttribute('style','background-color:white; color:black;')
-    }
+    
 
      
 

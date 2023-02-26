@@ -11,6 +11,8 @@ import 'package:halaqa_app/viewChildGrades.dart';
 import 'package:halaqa_app/viewEvents.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:flutter/src/rendering/box.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class pickup extends StatefulWidget {
   const pickup({this.stRef});
@@ -24,6 +26,8 @@ class _pick extends State<pickup> {
   var phone = "";
   var nid = "";
   var i = '';
+  TextEditingController dateInput = TextEditingController();
+  DateTime selectedDate = DateTime.now();
   final _formKey = GlobalKey<FormState>();
   //var schoolID = "xx";
   bool _buttonVisible = true;
@@ -41,7 +45,9 @@ class _pick extends State<pickup> {
       (DocumentSnapshot doc) {
         var data = doc["picked"];
         print(data);
-        if (data == 'no') {
+        if (data == 'no' ||
+            (doc["someone"] == "yes" &&
+                doc["date"] == DateFormat(' MMM d').format(DateTime.now()))) {
           setState(() {
             if (doc["someone"] == "no") {
               _textToShow = "تم إبلاغ المدرسة بقدومك ";
@@ -66,11 +72,9 @@ class _pick extends State<pickup> {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        textDirection: TextDirection.rtl,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            textDirection: TextDirection.rtl,
             children: [
               new Container(
                 padding: const EdgeInsets.all(18.0),
@@ -138,75 +142,105 @@ class _pick extends State<pickup> {
                   _buttonVisible ? Text('شخص آخر') : Container(),
                 ],
               ),
-              _formVisible && _buttonVisible
-                  ? SingleChildScrollView(
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: " ادخل اسم الموكل كاملاً",
-                                ),
-                                validator: (value) {
-                                  name = value!;
-                                  if (value == "") {
-                                    return ' يرجى إدخال اسم الموكل';
-                                  }
-                                  return null;
-                                },
-                              ),
+              if (_formVisible && _buttonVisible)
+                SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: " ادخل اسم الموكل كاملاً",
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "ادخل رقم جوال الموكل",
-                                ),
-                                validator: (value) {
-                                  phone = value!;
-                                  if (value == "") {
-                                    return ' يرجى إدخال رقم جوال الموكل';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: TextFormField(
-                                decoration: InputDecoration(
-                                  hintText: "ادخل رقم هوية الموكل",
-                                ),
-                                validator: (value) {
-                                  nid = value!;
-                                  if (value == "") {
-                                    return ' يرجى إدخال رقم هوية الموكل';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ],
+                            validator: (value) {
+                              name = value!;
+                              if (value == "") {
+                                return ' يرجى إدخال اسم الموكل';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                      ),
-                    )
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: "ادخل رقم جوال الموكل",
+                            ),
+                            validator: (value) {
+                              phone = value!;
+                              if (value == "") {
+                                return ' يرجى إدخال رقم جوال الموكل';
+                              }
+                              final regex = RegExp(
+                                  r'^[0-9\u0660-\u0669\u06F0-\u06F9]{10}$');
+                              if (regex.hasMatch(value)) {
+                                return 'يرجي التأكد من إدخال ١٠ أرقام فقط';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: TextFormField(
+                            decoration: InputDecoration(
+                              hintText: "ادخل رقم هوية الموكل",
+                            ),
+                            validator: (value) {
+                              nid = value!;
+                              if (value == "") {
+                                return ' يرجى إدخال رقم هوية الموكل';
+                              }
+                              final regex = RegExp(
+                                  r'^[0-9\u0660-\u0669\u06F0-\u06F9]{10}$');
+                              if (regex.hasMatch(value)) {
+                                return 'يرجي التأكد من إدخال ١٠ أرقام فقط';
+                              }
 
-                  // child: Text ('iiii' ) ,
+                              return null;
+                            },
+                          ),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Center(
+                                child: TextField(
+                              controller: dateInput,
 
-                  // Form fields here
+                              //editing controller of this TextField
+                              decoration: InputDecoration(
+                                  icon: Icon(Icons
+                                      .arrow_drop_down), //icon of text field
+                                  hintText:
+                                      "يرجى إدخال تاريخ قدوم الموكل" //label text of field
+                                  ),
 
-                  /*  
-  onChanged: (text) {
-    print('First text field: $text');
-    name = text;
-  },
-
-*/
-
-                  : Container(),
+                              readOnly: true,
+                              //set it true, so that user will not able to edit text
+                              onTap: () async {
+                                DatePicker.showDatePicker(
+                                  context,
+                                  //initialDate: selectedDate,
+                                  minTime: DateTime.now(),
+                                  maxTime:
+                                      DateTime.now().add(Duration(days: 1)),
+                                  onConfirm: (date) {
+                                    setState(() {
+                                      selectedDate = date;
+                                    });
+                                  },
+                                );
+                              },
+                            ))),
+                      ],
+                    ),
+                  ),
+                )
+              else
+                Container(),
             ],
           ),
           _buttonVisible
@@ -238,8 +272,7 @@ class _pick extends State<pickup> {
                           DocumentReference docRef =
                               await FirebaseFirestore.instance.doc(i);
                           docRef.update({
-                            "picked": "no",
-                            "time": FieldValue.serverTimestamp(),
+                            "date": DateFormat(' MMM d').format(selectedDate),
                             "someone": "yes",
                             "fullname": name,
                             "nid": nid,
