@@ -142,7 +142,7 @@ class _parentHPState extends State<parentHP> {
           print(info[0]);
           if (info[0] == 'document') {
             setState(() {
-              counter++;
+              studentClassesToBeNotifiedOfDocument = info[1];
             });
           } else if (info[0] == 'event') {
             await Navigator.push(
@@ -297,7 +297,7 @@ class _parentHPState extends State<parentHP> {
     }
   }
 
-  int counter = 0;
+  String studentClassesToBeNotifiedOfDocument = '';
 
   @override
   Widget build(BuildContext context) {
@@ -503,6 +503,26 @@ class _parentHPState extends State<parentHP> {
                                                   height: 5,
                                                 ),
                                                 Text("الملفات"),
+                                                studentClassesToBeNotifiedOfDocument
+                                                        .contains(ClassID[
+                                                                _FNList.indexOf(
+                                                                    e)]
+                                                            .id)
+                                                    ? Positioned(
+                                                        top: 0,
+                                                        right: 0,
+                                                        child: Container(
+                                                          height: 14,
+                                                          width: 14,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  shape: BoxShape
+                                                                      .circle),
+                                                        ),
+                                                      )
+                                                    : Container()
                                               ]),
                                               Column(
                                                 children: [

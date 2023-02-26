@@ -23,7 +23,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
 
-    <title>إضافة مستند</title>
+    <title>تعديل مستند</title>
 
     <script type="module">
       import{checkUser} from "./admin.js";
@@ -159,7 +159,7 @@ label {
               <span id="docLink" class="req" style="margin: 1%; "></span>
               </div>
               <div class="inputbox" id="alertContainer">
-                
+                <span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>
               </div>
        
             <div class="inputbox">
@@ -181,7 +181,9 @@ label {
 
     <!-- Add class style -->
     <style>
-
+.alert{
+  margin-right: 9%;
+}
 
 .center {
   display:inline;
@@ -336,6 +338,13 @@ label {
 	left: 77%;	
 	border-radius: 32px;
 }
+@media (max-width:1261px) {
+  .screen__background__shape3 {
+    display: none;
+  }
+}
+ 
+
 
 .screen__background__shape5 {
 	height: 540px;

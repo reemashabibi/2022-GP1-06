@@ -13,7 +13,7 @@ app.use("/",router);
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("/Users/maca7/Downloads/halaqa-89b43-firebase-adminsdk-j33v0-cfd72dd807.json");
+var serviceAccount = require("C:\\Users\\ree4m\\Downloads\\halaqa-89b43-firebase-adminsdk-j33v0-0d2cef029f.json");
 
 // Intialize the firebase-admin project/account
 admin.initializeApp({
@@ -229,7 +229,7 @@ app.post('/document',  async (req, res) => {
     },
       token: registrationTokens,
       data: {
-        type: 'document',
+        type: 'document~'+req.body.classes,
       }
   };
   
@@ -257,7 +257,7 @@ app.post('/document',  async (req, res) => {
       },
         token: registrationTokens,
         data: {
-          type: 'document',
+          type: 'document~'+req.body.classes,
         }
     };
     

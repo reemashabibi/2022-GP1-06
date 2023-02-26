@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -634,20 +635,6 @@ class _UploadDocument extends State<UploadDocument> {
         Navigator.of(context).pop();
       },
     );
-    // set up the AlertDialog
-    AlertDialog alertSuccesfull = AlertDialog(
-      title: Text("  تم رفع الملف بنجاح "),
-      content: InkWell(
-        onTap: () => launchUrl(Uri.parse(fileURL)),
-        child: Text(
-          'اضغط هنا لمشاهدة الملف',
-          style: TextStyle(
-              decoration: TextDecoration.underline, color: Colors.blue),
-        ),
-      ),
-      actions: [backbutton],
-    );
-    //end of show uploaded file url
 
     // set up the buttons
 
@@ -680,7 +667,9 @@ class _UploadDocument extends State<UploadDocument> {
           setState(() {
             isloading = !isloading;
           });
-          showDialog(context: context, builder: (_) => alertSuccesfull);
+          Fluttertoast.showToast(
+              msg: "تم رفع الملف بنجاح  ",
+              backgroundColor: Color.fromARGB(255, 97, 200, 0));
         });
       }, //end of onPressed yes
     );

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:flutter/material.dart';
@@ -450,15 +451,8 @@ class _Excuse extends State<Excuse> {
                             padding: EdgeInsets.only(left: 20, right: 20),
                             height: 54,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    (Color.fromARGB(255, 170, 243, 250)),
-                                    Color.fromARGB(255, 195, 196, 196)
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight),
+                              color: Color.fromARGB(255, 54, 172, 172),
                               borderRadius: BorderRadius.circular(50),
-                              color: Colors.grey[200],
                               boxShadow: [
                                 BoxShadow(
                                     offset: Offset(0, 10),
@@ -500,26 +494,9 @@ class _Excuse extends State<Excuse> {
 
   Future chackData() async {
     if (file == null && (textExcuse == '' || textExcuse.trim() == '')) {
-      Widget backbutton = TextButton(
-        child: Text("حسنًا"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      // set up the AlertDialog
-      AlertDialog alert = AlertDialog(
-        title: Text(" لم تقم بتعبأة البيانات "),
-        content:
-            Text('لرفع عذر غياب يجب على الأقل تعبئة صندوق النص او رفع ملف'),
-        actions: [backbutton],
-      );
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
+      Fluttertoast.showToast(
+          msg: 'لرفع عذر غياب يجب على الأقل تعبئة صندوق النص او رفع ملف',
+          backgroundColor: Color.fromARGB(255, 221, 33, 30));
     } else {
       uploadData();
     }
@@ -546,37 +523,10 @@ class _Excuse extends State<Excuse> {
         }
       }));
 
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text(
-                "تم رفع عذر الغياب بنجاح",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-              content: Icon(
-                Icons.check_circle_outline,
-                color: Colors.green,
-                size: 50.0,
-              ),
-              actions: [
-                TextButton(
-                  child: Text("حسنًا"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => viewAbcense(
-                                ref: widget.stuRef,
-                              )),
-                    );
-                  },
-                )
-              ],
-            );
-          });
+      Fluttertoast.showToast(
+          msg: "تم رفع عذر الغياب بنجاح",
+          backgroundColor: Color.fromARGB(255, 97, 200, 0));
+
       return;
     }
   }

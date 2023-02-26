@@ -816,7 +816,11 @@ if(!classDocForm.allowReply.checked){
     });
     
     //notification
-
+//the classes ids that will get the notification
+var classesIds = '';
+for(var i=0; k<classesRef.length; i++){
+  classesIds += classesRef[i].id+' ';
+}
     //get student to get their parents
     const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", classesRef));
 
@@ -830,6 +834,7 @@ if(!classDocForm.allowReply.checked){
       {
         token: pDoc.data().token,
         documentName: classDocForm.Dname.value,
+        classes: classesIds
      },
      function (data, stat) {
   
@@ -884,8 +889,8 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-        document.getElementById('alertContainer').innerHTML ='';
-      }, 5000);
+        document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
+      }, 9000);
       return false;
     }
 
@@ -923,7 +928,7 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-        document.getElementById('alertContainer').innerHTML ='';
+        document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
       }, 9000);
    
 
@@ -933,12 +938,16 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
     });
     }
     await updateDoc(docRef, data)
-    .then(async (docRef) => {
+    .then(async (documentRef) => {
           //notification
-
+          const documentDoc = await getDoc(docRef);
+          var documentClasses = documentDoc.data().Classes;
+          var docClassesIds='';
     //get student to get their parents
-    const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", docRef.Classes));
-
+    const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", documentDoc.data().Classes));
+    for(var i=0; i< documentClasses.length; i++){
+     docClassesIds += documentClasses[i].id+' ';
+    }
     const querySnapshot = await getDocs(q);
     
     querySnapshot.forEach(async(doc) => {
@@ -949,6 +958,7 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       {
         token: pDoc.data().token,
         documentName: DocForm.NewDocname.value,
+        classes: docClassesIds,
      },
      function (data, stat) {
   
@@ -962,19 +972,19 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-        document.getElementById('alertContainer').innerHTML ='';
+        document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
       }, 9000);
       
-      document.getElementById('alertContainer').innerHTML ='';
+      
    })
    .catch(error => {
     $('.loader').hide();
-
+    alert('hi '+ error);
     document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
     setTimeout(() => {
               
       // 👇️ replace element from DOM
-      document.getElementById('alertContainer').innerHTML ='';
+      document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
 
     }, 9000);
     
