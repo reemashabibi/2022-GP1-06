@@ -240,7 +240,7 @@ class _pick extends State<pickup> {
           ),
           _buttonVisible
               ? Padding(
-                  padding: const EdgeInsets.all(40.0),
+                  padding: const EdgeInsets.all(25.0),
                   child: GestureDetector(
                     onTap: () async {
                       if (x == 1) {
