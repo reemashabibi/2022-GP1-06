@@ -26,6 +26,7 @@ class _pick extends State<pickup> {
   var phone = "";
   var nid = "";
   var i = '';
+
   TextEditingController dateInput = TextEditingController();
   DateTime selectedDate = DateTime.now();
   final _formKey = GlobalKey<FormState>();
@@ -39,8 +40,10 @@ class _pick extends State<pickup> {
   @override
   Widget build(BuildContext context) {
     i = widget.stRef.path;
+
     DocumentReference docRef =
         FirebaseFirestore.instance.doc(widget.stRef.path);
+    final schoolID = docRef.parent.parent!.id;
     docRef.get().then(
       (DocumentSnapshot doc) {
         var data = doc["picked"];
@@ -65,280 +68,307 @@ class _pick extends State<pickup> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
-        automaticallyImplyLeading: true,
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              new Container(
-                padding: const EdgeInsets.all(18.0),
-                child: Text(
-                  'اصطحاب الطلاب',
-                  style: TextStyle(
-                    fontSize: 40,
-                  ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromRGBO(255, 255, 255, 1),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => appBars(
+                  schoolId: schoolID,
                 ),
               ),
-              Row(
-                // ignore: prefer_const_literals_to_create_immutables
-                children: [
-                  if (_buttonVisible)
-                    Padding(
-                      padding: const EdgeInsets.all(7.0),
-                      child: Text(
-                        'اختر مستلم الطالب لليوم :',
-                        style: TextStyle(
-                          fontSize: 25,
-                        ),
-                      ),
-                    )
-                  else
-                    Container(),
-                  SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  _buttonVisible
-                      ? Radio(
-                          value: 1,
-                          groupValue: x,
-                          onChanged: (value) {
-                            setState(() {
-                              x = value!;
-                              _formVisible = false;
-                            });
-                          },
-                        )
-                      : Container(),
-                  _buttonVisible ? Text('أنا') : Container(),
-                  SizedBox(height: 10),
-                ],
-              ),
-              Row(
-                children: [
-                  _buttonVisible
-                      ? Radio(
-                          value: 2,
-                          groupValue: x,
-                          onChanged: (value) {
-                            setState(() {
-                              x = value!;
-                            });
-                            setState(() {
-                              _formVisible = true;
-                            });
-                          },
-                        )
-                      : Container(),
-                  _buttonVisible ? Text('شخص آخر') : Container(),
-                ],
-              ),
-              if (_formVisible && _buttonVisible)
-                SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: " ادخل اسم الموكل كاملاً",
-                            ),
-                            validator: (value) {
-                              name = value!;
-                              if (value == "") {
-                                return ' يرجى إدخال اسم الموكل';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "ادخل رقم جوال الموكل",
-                            ),
-                            validator: (value) {
-                              phone = value!;
-                              if (value == "") {
-                                return ' يرجى إدخال رقم جوال الموكل';
-                              }
-                              final regex = RegExp(
-                                  r'^[0-9\u0660-\u0669\u06F0-\u06F9]{10}$');
-                              if (regex.hasMatch(value)) {
-                                return 'يرجي التأكد من إدخال ١٠ أرقام فقط';
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(18.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "ادخل رقم هوية الموكل",
-                            ),
-                            validator: (value) {
-                              nid = value!;
-                              if (value == "") {
-                                return ' يرجى إدخال رقم هوية الموكل';
-                              }
-                              final regex = RegExp(
-                                  r'^[0-9\u0660-\u0669\u06F0-\u06F9]{10}$');
-                              if (regex.hasMatch(value)) {
-                                return 'يرجي التأكد من إدخال ١٠ أرقام فقط';
-                              }
-
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Center(
-                                child: TextField(
-                              controller: dateInput,
-
-                              //editing controller of this TextField
-                              decoration: InputDecoration(
-                                  icon: Icon(Icons
-                                      .arrow_drop_down), //icon of text field
-                                  hintText:
-                                      "يرجى إدخال تاريخ قدوم الموكل" //label text of field
-                                  ),
-
-                              readOnly: true,
-                              //set it true, so that user will not able to edit text
-                              onTap: () async {
-                                DatePicker.showDatePicker(
-                                  context,
-                                  //initialDate: selectedDate,
-                                  minTime: DateTime.now(),
-                                  maxTime:
-                                      DateTime.now().add(Duration(days: 1)),
-                                  onConfirm: (date) {
-                                    setState(() {
-                                      selectedDate = date;
-                                    });
-                                  },
-                                );
-                              },
-                            ))),
-                      ],
+            );
+          },
+        ),
+        actions: [],
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                new Container(
+                  padding: const EdgeInsets.all(18.0),
+                  child: Text(
+                    'اصطحاب الطالب',
+                    style: TextStyle(
+                      fontSize: 40,
                     ),
                   ),
-                )
-              else
-                Container(),
-            ],
-          ),
-          _buttonVisible
-              ? Padding(
-                  padding: const EdgeInsets.all(40.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      if (x == 1) {
-                        i = widget.stRef.path;
-                        //var jsonObject = i.toJson();
-                        print(i);
-                        DocumentReference docRef =
-                            await FirebaseFirestore.instance.doc(i);
-                        docRef.update({
-                          "picked": "no",
-                          "time": FieldValue.serverTimestamp()
-                        });
-                        setState(() {
-                          _buttonVisible = false;
-                          _textToShow = "تم إبلاغ المدرسة بقدومك ";
-                        });
-                      } else if (x == 2) {
-                        if (_formKey.currentState!.validate()) {
-                          // Process data.
-                          print("2");
+                ),
+                Row(
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    if (_buttonVisible)
+                      Padding(
+                        padding: const EdgeInsets.all(7.0),
+                        child: Text(
+                          'اختر مستلم الطالب لليوم :',
+                          style: TextStyle(
+                            fontSize: 25,
+                          ),
+                        ),
+                      )
+                    else
+                      Container(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buttonVisible
+                        ? Radio(
+                            value: 1,
+                            groupValue: x,
+                            onChanged: (value) {
+                              setState(() {
+                                x = value!;
+                                _formVisible = false;
+                              });
+                            },
+                          )
+                        : Container(),
+                    _buttonVisible ? Text('أنا') : Container(),
+                    SizedBox(height: 10),
+                  ],
+                ),
+                Row(
+                  children: [
+                    _buttonVisible
+                        ? Radio(
+                            value: 2,
+                            groupValue: x,
+                            onChanged: (value) {
+                              setState(() {
+                                x = value!;
+                              });
+                              setState(() {
+                                _formVisible = true;
+                              });
+                            },
+                          )
+                        : Container(),
+                    _buttonVisible ? Text('شخص آخر') : Container(),
+                  ],
+                ),
+                if (_formVisible && _buttonVisible)
+                  SingleChildScrollView(
+                    child: Form(
+                      key: _formKey,
+                      child: Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 7),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: " ادخل اسم الموكل كاملاً",
+                                  ),
+                                  validator: (value) {
+                                    name = value!;
+                                    if (value == "") {
+                                      return ' يرجى إدخال اسم الموكل';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 7),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: "ادخل رقم جوال الموكل",
+                                  ),
+                                  validator: (value) {
+                                    phone = value!;
+                                    if (value == "") {
+                                      return ' يرجى إدخال رقم جوال الموكل';
+                                    }
+                                    final regex = RegExp(
+                                        r'^[0-9\u0660-\u0669\u06F0-\u06F9]{10}$');
+                                    if (regex.hasMatch(value)) {
+                                      return 'يرجي التأكد من إدخال ١٠ أرقام فقط';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 7),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                    hintText: "ادخل رقم هوية الموكل",
+                                  ),
+                                  validator: (value) {
+                                    nid = value!;
+                                    if (value == "") {
+                                      return ' يرجى إدخال رقم هوية الموكل';
+                                    }
+                                    final regex = RegExp(
+                                        r'^[0-9\u0660-\u0669\u06F0-\u06F9]{10}$');
+                                    if (regex.hasMatch(value)) {
+                                      return 'يرجي التأكد من إدخال ١٠ أرقام فقط';
+                                    }
+
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0, vertical: 7),
+                                  child: Center(
+                                      child: TextField(
+                                    controller: dateInput,
+
+                                    //editing controller of this TextField
+                                    decoration: InputDecoration(
+                                        icon: Icon(Icons
+                                            .arrow_drop_down), //icon of text field
+                                        hintText:
+                                            "يرجى إدخال تاريخ قدوم الموكل" //label text of field
+                                        ),
+
+                                    readOnly: true,
+                                    //set it true, so that user will not able to edit text
+                                    onTap: () async {
+                                      DatePicker.showDatePicker(
+                                        context,
+                                        //initialDate: selectedDate,
+                                        minTime: DateTime.now(),
+                                        maxTime: DateTime.now()
+                                            .add(Duration(days: 1)),
+                                        onConfirm: (date) {
+                                          setState(() {
+                                            selectedDate = date;
+                                          });
+                                        },
+                                      );
+                                    },
+                                  ))),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                else
+                  Container(),
+              ],
+            ),
+            _buttonVisible
+                ? Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (x == 1) {
                           i = widget.stRef.path;
                           //var jsonObject = i.toJson();
                           print(i);
                           DocumentReference docRef =
                               await FirebaseFirestore.instance.doc(i);
                           docRef.update({
-                            "date": DateFormat(' MMM d').format(selectedDate),
-                            "someone": "yes",
-                            "fullname": name,
-                            "nid": nid,
-                            "phone": phone,
+                            "picked": "no",
+                            "time": FieldValue.serverTimestamp()
                           });
                           setState(() {
                             _buttonVisible = false;
-                            _textToShow = "تم إبلاغ المدرسة بقدوم " + name;
+                            _textToShow = "تم إبلاغ المدرسة بقدومك ";
                           });
+                        } else if (x == 2) {
+                          if (_formKey.currentState!.validate()) {
+                            // Process data.
+                            print("2");
+                            i = widget.stRef.path;
+                            //var jsonObject = i.toJson();
+                            print(i);
+                            DocumentReference docRef =
+                                await FirebaseFirestore.instance.doc(i);
+                            docRef.update({
+                              "date": DateFormat(' MMM d').format(selectedDate),
+                              "someone": "yes",
+                              "fullname": name,
+                              "nid": nid,
+                              "phone": phone,
+                            });
+                            setState(() {
+                              _buttonVisible = false;
+                              _textToShow = "تم إبلاغ المدرسة بقدوم " + name;
+                            });
+                          }
+                        } else if (x == 0) {
+                          AlertDialog(
+                            title: Text("Sample Alert Dialog"),
+                          );
                         }
-                      } else if (x == 0) {
-                        AlertDialog(
-                          title: Text("Sample Alert Dialog"),
-                        );
-                      }
 
-                      Future.delayed(Duration(minutes: 15), () {
-                        setState(() {
-                          _textToShow = "";
-                          _buttonVisible = true;
+                        Future.delayed(Duration(minutes: 15), () {
+                          setState(() {
+                            _textToShow = "";
+                            _buttonVisible = true;
+                          });
                         });
-                      });
-                    },
-                    child: Container(
-                      width: 130,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            Color.fromARGB(255, 113, 194, 186),
-                            Color.fromARGB(255, 54, 172, 172),
+                      },
+                      child: Container(
+                        width: 130,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Color.fromARGB(255, 113, 194, 186),
+                              Color.fromARGB(255, 54, 172, 172),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          //   borderRadius: BorderRadius.circular(100),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black12,
+                              offset: Offset(5, 5),
+                              blurRadius: 10,
+                            )
                           ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
                         ),
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                        //   borderRadius: BorderRadius.circular(100),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            offset: Offset(5, 5),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Center(
-                        child: Text(
-                          'تأكيد',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
+                        child: Center(
+                          child: Text(
+                            'تأكيد',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ))
-              : Padding(
-                  padding: const EdgeInsets.all(35.0),
-                  child: Text(_textToShow),
-                ),
-        ],
+                    ))
+                : Padding(
+                    padding: const EdgeInsets.all(35.0),
+                    child: Text(_textToShow),
+                  ),
+          ],
+        ),
       ),
     );
   }

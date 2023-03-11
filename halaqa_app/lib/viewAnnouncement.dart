@@ -111,8 +111,7 @@ class _viewAnnouncementState extends State<viewAnnouncement> {
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.hasError) {
-              return Center(
-                  child: Text('Some error occurred ${snapshot.error}'));
+              return Center();
             }
             //Check if data arrived
             if (x == 0) {

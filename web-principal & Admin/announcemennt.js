@@ -106,6 +106,7 @@ $(".loader").hide();
 });
 
 
+$('.loader').hide();
 
 }
 $('.loader').hide();

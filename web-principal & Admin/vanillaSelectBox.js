@@ -298,8 +298,8 @@ function vanillaSelectBox(domSelector, options) {
         caret.classList.add("caret");
         if(this.keepInlineCaretStyles) {
             caret.style.position = "absolute";
-            caret.style.right = "8px";
-            caret.style.marginTop = "8px";
+            caret.style.right = "36px";
+            caret.style.marginTop = "16px";
         }
 
         if (self.userOptions.stayOpen) {

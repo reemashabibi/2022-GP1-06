@@ -1,6 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:halaqa_app/appBars.dart';
+import 'package:halaqa_app/commissioner.dart';
 import 'package:halaqa_app/login_screen.dart';
+import 'package:halaqa_app/parentHP.dart';
+import 'package:halaqa_app/teacherHP.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(SplashScreen());
@@ -12,7 +17,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class StartState extends State<SplashScreen> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -25,10 +29,30 @@ class StartState extends State<SplashScreen> {
     return new Timer(duration, route);
   }
 
-  route() {
-    Navigator.pushReplacement(context, MaterialPageRoute(
-      builder: (context) => LoginScreen()
-    ));
+  route() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var email = prefs.getString("email");
+    if (email != null) {
+      var type = prefs.getString("type");
+      if (type == 'T') {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => teacherHP()));
+      } else if (type == 'P') {
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => appBars(
+                schoolId: prefs.getString('school'),
+              ),
+            ));
+      } else if (type == 'C') {
+        Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => commissionerHP()));
+      }
+    } else {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+    }
   }
 
   @override
@@ -43,11 +67,10 @@ class StartState extends State<SplashScreen> {
           Container(
             decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
-                gradient: LinearGradient(colors: [(Color.fromARGB(255, 255, 255, 255)), Color.fromARGB(255, 255, 255, 255)],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter
-                )
-            ),
+                gradient: LinearGradient(colors: [
+                  (Color.fromARGB(255, 255, 255, 255)),
+                  Color.fromARGB(255, 255, 255, 255)
+                ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
           ),
           Center(
             child: Container(

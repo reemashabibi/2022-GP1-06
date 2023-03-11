@@ -129,6 +129,7 @@ excel_file.addEventListener('change', (event) => {
             table_output += '<th>' + sheet_data[row][cell] + '</th>';
           }
           else {
+            if(sheet_data[row][cell] !== undefined )
             table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
           }
         }
@@ -326,6 +327,7 @@ excel_file.addEventListener('change', (event) => {
             }
             if (cell == 7) {
               registerParentEmail = sheet_data[row][cell];
+              if(typeof registerParentEmail === "string" && registerParentEmail.trim() !== "")
               registerParentEmail = registerParentEmail.toLowerCase();
 
             }
@@ -395,6 +397,7 @@ excel_file.addEventListener('change', (event) => {
                       ClassID: docRefClass,
                       ParentID: docRef,
                       ///new
+                      picked:'',
                       CommissionerId: [],
                       msg_count:0
 
@@ -416,6 +419,7 @@ excel_file.addEventListener('change', (event) => {
           
                   }//if parent and class exist/
         else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
+          if(typeof registerFname === "string" && registerFname.trim() !== "" ||  typeof registerParentEmail === "string" && registerParentEmail.trim() !== "" || typeof registerParentFname === "string" && registerParentFname.trim() !== "" || typeof registerParentlname === "" && registerParentlname.trim() !== "" && (registerlname !== undefined && registerFname !== undefined && registerParentFname !== undefined && registerParentlname !== undefined))
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
         } else if(queryClassSnapshot.empty ) {
@@ -482,6 +486,9 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
               LastName: registerlname,
               ClassID: docRefClass,
               ParentID: res,
+              picked:'',
+              CommissionerId: [],
+              msg_count:0
             }).then(d => {
               //docRef = doc(db, "School",schoolID, "Parent", res.id);
               const StuRef = doc(db, "School", schoolID, "Student", d.id);

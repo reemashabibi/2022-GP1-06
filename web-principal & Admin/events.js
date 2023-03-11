@@ -29,10 +29,10 @@ const firebaseConfig = {
       const db = getFirestore(app);
       const storage = getStorage(app);
       const auth= getAuth();
+      $('.loader').hide();
 
 export async function viewEvents(email){
    
-  $('.loader').show();
     const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', email)));
     var schoolId = "";
 
@@ -47,7 +47,8 @@ export async function viewEvents(email){
   var i=0;
 const querySnapshot = await getDocs(q);
 querySnapshot.forEach(async (doc)  => {
- 
+  $('.loader').show();
+
 
 
   var data = doc.data();
@@ -133,6 +134,7 @@ div1.appendChild(document.createElement('hr'));
 });
 
 
+$('.loader').hide();
 
 }
 $('.loader').hide();

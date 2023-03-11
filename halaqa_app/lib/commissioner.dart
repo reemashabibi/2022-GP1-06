@@ -6,6 +6,7 @@ import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/viewEvents.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 class commissionerHP extends StatefulWidget {
@@ -340,6 +341,9 @@ class _commissionerHPState extends State<commissionerHP> {
       onPressed: () async {
         CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.remove("email");
+        pref.remove('type');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -15,6 +15,7 @@ import 'package:http/http.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:halaqa_app/chat_detail.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class teacherHP extends StatefulWidget {
   const teacherHP({super.key});
@@ -159,7 +160,7 @@ class _teacherHPState extends State<teacherHP> {
 //method to set the setting of the notification in foregroud
   initInfo() {
     var androidInitialize =
-        const AndroidInitializationSettings('images/logo.png');
+        const AndroidInitializationSettings('@mipmap/ic_launcher.png');
     var IOSInitialize = const IOSInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -178,8 +179,8 @@ class _teacherHPState extends State<teacherHP> {
               context,
               MaterialPageRoute<void>(
                   builder: (context) => Chatdetail(
-                        friendName: info[1],
-                        friendUid: info[2],
+                        friendName: info[2],
+                        friendUid: info[1],
                         schoolId: info[3],
                         classId: info[4],
                         subjectId: info[5],
@@ -211,9 +212,9 @@ class _teacherHPState extends State<teacherHP> {
       );
       AndroidNotificationDetails androidNotificationDetails =
           AndroidNotificationDetails('dbfood', 'dbfood',
-              importance: Importance.high,
+              importance: Importance.max,
               styleInformation: bigTextStyleInformation,
-              priority: Priority.high,
+              priority: Priority.max,
               playSound: true);
       NotificationDetails platformChannelSpecifics = NotificationDetails(
           android: androidNotificationDetails,
@@ -236,8 +237,8 @@ class _teacherHPState extends State<teacherHP> {
             context,
             MaterialPageRoute<void>(
                 builder: (context) => Chatdetail(
-                      friendName: info[1],
-                      friendUid: info[2],
+                      friendName: info[2],
+                      friendUid: info[1],
                       schoolId: info[3],
                       classId: info[4],
                       subjectId: info[5],
@@ -636,6 +637,9 @@ class _teacherHPState extends State<teacherHP> {
       onPressed: () async {
         const CircularProgressIndicator();
         await FirebaseAuth.instance.signOut();
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.remove("email");
+        pref.remove('type');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

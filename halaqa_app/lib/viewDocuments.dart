@@ -107,6 +107,7 @@ class _viewDocuments extends State<viewDocuments> {
     if (docInfoList[0].displayName == "") {
       v++;
     }
+    await widget.studentRef.update({'viewedLastDocument': true});
   }
 
   Future<String?> getdoc(path) async {
@@ -137,9 +138,25 @@ class _viewDocuments extends State<viewDocuments> {
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
-        automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Color.fromRGBO(255, 255, 255, 1),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => appBars(
+                  schoolId: schoolID,
+                ),
+              ),
+            );
+          },
+        ),
+        actions: [],
       ),
 
       body: FutureBuilder(

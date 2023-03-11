@@ -77,63 +77,43 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
             .doc(widget.subjectId)
             .set({"msg_count": count, "student_id": widget.StudentUid});
 
-        int hasChatOpen = 0;
+        /*  int hasChatOpen = 0;
         var chatDoc = FirebaseFirestore.instance
             .collection('School/${widget.schoolId}/Teacher')
             .doc(FirebaseAuth.instance.currentUser!.uid)
             .collection("subjects")
             .doc(widget.subjectId)
             .get()
-            .then((value) => hasChatOpen = value.get('msg_count'));
+            .then((value) => hasChatOpen = value.get('msg_count'));*/
 
-        if (hasChatOpen != 0) {
-          //send notification
+        //   if (hasChatOpen != 0) {
+        //send notification
 
-          var senderName = '';
-          var recepientToken = '';
+        var senderName = '';
+        var recepientToken = '';
 
-          //get the sender name
-          FirebaseFirestore.instance
-              .collection('School/${widget.schoolId}/Parent')
-              .doc(currentuserUserId)
-              .get()
-              .then(
-            (DocumentSnapshot doc) {
-              senderName = "${doc['LastName']} ${doc['FirstName']}";
-              // ...
-            },
-            onError: (e) => print("Error getting document: $e"),
-          );
+        var studentName = '';
+        //get the sender student name
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Student')
+            .doc(widget.StudentUid)
+            .get()
+            .then(
+          (DocumentSnapshot doc) {
+            senderName += " (${doc['FirstName']} ${doc['LastName']}) ولي أمر";
+            // ...
+          },
+          onError: (e) => print("Error getting document: $e"),
+        );
 
-          var studentName = '';
-          //get the sender student name
-          FirebaseFirestore.instance
-              .collection('School/${widget.schoolId}/Student')
-              .doc(widget.StudentUid)
-              .get()
-              .then(
-            (DocumentSnapshot doc) {
-              senderName += " (${doc['LastName']} ${doc['FirstName']} ولي أمر)";
-              studentName = '${doc['LastName']} ${doc['FirstName']}';
-              // ...
-            },
-            onError: (e) => print("Error getting document: $e"),
-          );
-
-          //get the recepient token
-          FirebaseFirestore.instance
-              .collection('School/${widget.schoolId}/Teacher')
-              .doc(TeacherUid)
-              .get()
-              .then(
-            (DocumentSnapshot doc) {
-              recepientToken = doc['token'];
-              // ...
-            },
-            onError: (e) => recepientToken = '',
-          );
-
-          if (recepientToken != '') {
+        //get the recepient token
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Teacher')
+            .doc(TeacherUid)
+            .get()
+            .then(
+          (DocumentSnapshot doc) {
+            recepientToken = doc['token'];
             http.post(
               Uri.parse('http://10.0.2.2:8080/chat'),
               headers: <String, String>{
@@ -147,9 +127,13 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
                     '$StudentUid~$studentName~$schoolID~${widget.classID}~${widget.subjectId}'
               }),
             );
-          }
-          //end notification
-        }
+            // ...
+          },
+          onError: (e) => recepientToken = '',
+        );
+
+        //end notification
+        // }
       }));
       setState(() {});
     }

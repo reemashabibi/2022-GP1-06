@@ -237,7 +237,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                       .then(
                                     (DocumentSnapshot doc) {
                                       senderName =
-                                          "${doc['LastName']} ${doc['FirstName']} ";
+                                          " ${doc['FirstName']} ${doc['LastName']} ";
                                       // ...
                                     },
                                     onError: (e) =>
@@ -268,14 +268,32 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                       .get()
                                       .then(
                                     (DocumentSnapshot doc) {
+                                      var parentRef =
+                                          doc['ParentID'] as DocumentReference;
                                       FirebaseFirestore.instance
                                           .collection(
                                               'School/${widget.schoolId}/Parent')
-                                          .doc(doc['ParentID'].id)
+                                          .doc(parentRef.id)
                                           .get()
                                           .then(
                                         (DocumentSnapshot docParent) {
                                           recepientToken = docParent['token'];
+                                          http.post(
+                                            Uri.parse(
+                                                'http://10.0.2.2:8080/chat'),
+                                            headers: <String, String>{
+                                              'Content-Type':
+                                                  'application/json; charset=UTF-8',
+                                            },
+                                            body: jsonEncode(<String, String>{
+                                              'name': senderName,
+                                              'content': "📢" +
+                                                  "\n" +
+                                                  "\n" +
+                                                  controller.text,
+                                              'token': recepientToken
+                                            }),
+                                          );
                                           // ...
                                         },
                                         onError: (e) => recepientToken = '',
@@ -284,24 +302,6 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                     },
                                     onError: (e) => recepientToken = '',
                                   );
-
-                                  if (recepientToken != '') {
-                                    http.post(
-                                      Uri.parse('http://10.0.2.2:8080/chat'),
-                                      headers: <String, String>{
-                                        'Content-Type':
-                                            'application/json; charset=UTF-8',
-                                      },
-                                      body: jsonEncode(<String, String>{
-                                        'name': senderName,
-                                        'content': "📢" +
-                                            "\n" +
-                                            "\n" +
-                                            controller.text,
-                                        'token': recepientToken
-                                      }),
-                                    );
-                                  }
                                   //end notification
 
                                 }

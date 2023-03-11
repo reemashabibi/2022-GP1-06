@@ -44,7 +44,9 @@ app.post('/addUser', async (req, res) => {
     const userData = req.body;
     console.log(userData);
 
+    if(typeof userData.email === "string" && userData.email.trim() !== ""){
     getAuth()
+
     ////changes:
     .createUser({
       email: userData.email,
@@ -64,10 +66,14 @@ app.post('/addUser', async (req, res) => {
         if (errorCode =="auth/email-already-exists"){
             res.json({"status":'used'});}
         else
-        res.end('error');
+        res.json({"status":'error'});
         
       console.log('Error creating new user:', error);
     });
+  }
+  else{
+    res.json({"status":'error'});
+  }
 
     //reset pass (still hasent figured it out)
   /*  getAuth()
@@ -141,7 +147,7 @@ const registrationTokens = req.body.token;
 const message = {
   notification: {
     title: 'غياب',
-    body: 'نفيدكم بأنه تم احتساب غياب ابنكم/ابنتكم اليوم'
+    body: ' نفيدكم بأنه تم احتساب غياب ابنكم/ابنتكم '+req.body.studentName
   },
     token: registrationTokens,
     data: {

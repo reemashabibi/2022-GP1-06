@@ -53,6 +53,7 @@ var classId;
 var globalTeachers;
 var currentSubjects =[];
   export async function subjectTeacherForm(cid, sid){
+    $('.loader').show();
     const classrefrence = doc(db, "School", sid, "Class", cid);
     const classData = await getDoc(classrefrence);
     var titleName= document.createTextNode(classData.data().LevelName+"-"+classData.data().ClassName);
@@ -205,6 +206,7 @@ currentSubjects.push(subject);
 document.getElementById('content').appendChild(tr);
 classId = cid;
   });
+  $('.loader').hide();
 
   }
 
@@ -463,7 +465,10 @@ for (var l=0; l<currentSubjects.length; l++){
               if(teacherValue != "")
                 updateDoc(teacherRef, {
                 Subjects: arrayUnion(docRef)
-            }).then(dicresfre =>{
+            }).then(dicresfre =>  {
+               setDoc(doc(db,"School",principalId,"Teacher",teacherRef.id,"subjects",docRef.id),{
+                msg_count: 0,
+              } )
             })
             
              })

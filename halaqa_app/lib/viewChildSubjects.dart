@@ -115,7 +115,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
       // use ds as a snapshot
 
       setState(() {
-        className = ds['ClassName'] + " / " + ds["LevelName"].toString();
+        className = ds["LevelName"].toString() + "-" + ds['ClassName'];
       });
 
       setState(() {
@@ -201,7 +201,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(255, 80, 80, 80),
-                        fontSize: 30,
+                        fontSize: 25,
                       ),
                     ),
                   ),
@@ -248,7 +248,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                               heroTag: null,
                                               backgroundColor:
                                                   const Color.fromARGB(
-                                                      255, 199, 248, 248),
+                                                      255, 54, 172, 172),
                                               onPressed: () {
                                                 if (_SubjectsRefList[0] != "") {
                                                   Navigator.push(
@@ -266,8 +266,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                               },
                                               child: Image.asset(
                                                 "images/gradesIcon.png",
-                                                width: 45,
-                                                height: 45,
+                                                width: 36,
+                                                height: 36,
                                                 fit: BoxFit.cover,
                                               ),
                                             ),
@@ -280,7 +280,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                       const SizedBox(
                                         width: 15,
                                       ),
-                                      if (e['TeacherID'] != null)
+                                      if (e['TeacherID'] != null &&
+                                          e['TeacherID'] != '')
                                         Stack(
                                           children: [
                                             Column(children: [
@@ -292,7 +293,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                                     heroTag: null,
                                                     backgroundColor:
                                                         const Color.fromARGB(
-                                                            255, 199, 248, 248),
+                                                            255, 54, 172, 172),
                                                     onPressed: () {
                                                       callChatDetailScreen(
                                                           e['TeacherID'], e.id
@@ -313,32 +314,29 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                               ),
                                               SizedBox(height: 5),
                                               Text("المحادثات"),
-                                              e['msg_count'] == 0
-                                                  ? Container()
-                                                  : Positioned(
-                                                      top: 0,
-                                                      right: 0,
-                                                      child: Container(
-                                                        height: 14,
-                                                        width: 14,
-                                                        decoration:
-                                                            const BoxDecoration(
-                                                                color:
-                                                                    Colors.red,
-                                                                shape: BoxShape
-                                                                    .circle),
-                                                        child: Center(
-                                                            child: Text(
-                                                          "${e['msg_count']}",
-                                                          style:
-                                                              const TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 7),
-                                                        )),
-                                                      ),
-                                                    )
                                             ]),
+                                            e['msg_count'] == 0
+                                                ? Container()
+                                                : Positioned(
+                                                    top: 0,
+                                                    right: 0,
+                                                    child: Container(
+                                                      height: 14,
+                                                      width: 14,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                              color: Colors.red,
+                                                              shape: BoxShape
+                                                                  .circle),
+                                                      child: Center(
+                                                          child: Text(
+                                                        "${e['msg_count']}",
+                                                        style: const TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 7),
+                                                      )),
+                                                    ),
+                                                  )
                                           ],
                                         ),
                                       //////does nit show?

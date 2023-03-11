@@ -8,6 +8,7 @@ import 'package:halaqa_app/teacher.dart';
 import 'package:halaqa_app/forgot_pw_screen.dart';
 import 'package:halaqa_app/teacherHP.dart';
 import 'package:halaqa_app/parentHP.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -328,6 +329,8 @@ class StartState extends State<LoginScreen> {
   }
 
   Future<void> route(String email) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
     ///////// Getting SchoolID ////////
     ///***************////
     var schoolID = "x";
@@ -352,6 +355,8 @@ class StartState extends State<LoginScreen> {
         print("TEACHER ID ## ${user.uid}");
         if (documentSnapshot.exists) {
           if (documentSnapshot.get('Email') == user.email) {
+            pref.setString("email", user.email!);
+            pref.setString("type", 'T');
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
@@ -386,6 +391,7 @@ class StartState extends State<LoginScreen> {
       User? user = FirebaseAuth.instance.currentUser;
       print("USER ~~~~~~~~~~~~~~~~~ ${user!.uid}");
       print("USER EMAIL ~~~~~~~~~~~~~~~~~ ${user.email}");
+
       if (role == "ولي أمر") {
         var col = FirebaseFirestore.instance
             .collectionGroup('Parent')
@@ -399,11 +405,14 @@ class StartState extends State<LoginScreen> {
         }
         var kk = FirebaseFirestore.instance
             .collection('School/' + schoolID + '/Parent')
-            .doc(user!.uid)
+            .doc(user.uid)
             .get()
             .then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
-            if (documentSnapshot.get('Email') == user?.email) {
+            if (documentSnapshot.get('Email') == user.email) {
+              pref.setString("email", user.email!);
+              pref.setString("type", 'P');
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -446,12 +455,14 @@ class StartState extends State<LoginScreen> {
             .collectionGroup('Commissioner')
             .where('Email', isEqualTo: user.email);
         var snapshot = await col.get();
+        print("DATA OF DATA ${snapshot.docs.length}");
         for (var doc in snapshot.docs) {
           print("DATA OF DATA ${doc.data()}");
           schoolID = doc.reference.parent.parent!.id;
           print(doc.reference.parent.parent?.id);
           break;
         }
+        print('the commmmmm id $schoolID');
         var kk = FirebaseFirestore.instance
             .collection('School/' + schoolID + '/Commissioner')
             .doc(user!.uid)
@@ -459,6 +470,9 @@ class StartState extends State<LoginScreen> {
             .then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
             if (documentSnapshot.get('Email') == user?.email) {
+              pref.setString("email", user.email!);
+              pref.setString("type", 'C');
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

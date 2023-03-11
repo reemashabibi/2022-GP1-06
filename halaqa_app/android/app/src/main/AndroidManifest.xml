@@ -12,7 +12,7 @@
     </queries>
     
    <application
-        android:label="halaqa_app"
+        android:label="حلقة"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

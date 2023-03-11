@@ -293,6 +293,8 @@ export async function viewDocuments(){
 
               var stuName = docsSnap.data().FirstName+" "+docsSnap.data().LastName;
               
+              document.getElementById('studentName').innerHTML = stuName;
+              
               var div2 = document.createElement('div');
               div2.className = "row";
               document.getElementById('allTabelsDiv').appendChild(div2);
@@ -322,7 +324,7 @@ export async function viewDocuments(){
                     var th =  document.createElement('th');
                     th.colSpan= 2;
                     var thSpan =  document.createElement('span');
-                    thSpan.innerHTML = " مستندات من ولي أمر الطالب "+stuName;
+                    thSpan.innerHTML = " مستندات من ولي أمر الطالب ";
                     
                     var trHead2 = document.createElement('tr');//row for 2nd row titels
                     trHead2.style.fontWeight = 'bolder';
@@ -349,10 +351,10 @@ export async function viewDocuments(){
                     table.appendChild(tableHead);
                     div6.appendChild(table);
                     var tableBody = document.createElement('tbody');
-                    tableBody.appendChild(trHead2);
                     
                     var classDocsRef = [];
                 if(docsFilled.docs.length > 0) {
+                  tableBody.appendChild(trHead2);
                   var i = 0;
                     docsFilled.forEach( async (doc) => {
                 //loop through documents of the class
@@ -461,11 +463,19 @@ export async function viewDocuments(){
                         td2.appendChild(a2);
                        
                     })
-                table.appendChild(tableBody);
               
              
             
         }//end of the parent filled documents
+        else{//if parent never uploaded a document
+         var emptyTableText =  document.createElement('h6');
+         emptyTableText.innerHTML = "لا يوجد أي مستندات تم رفعها من قِبل ولي الأمر"
+         tableBody.appendChild(emptyTableText)
+         tableBody.style.textAlign = 'center';
+        }
+
+        table.appendChild(tableBody);
+
 
         //start of view student abcense excuse
 
@@ -498,7 +508,7 @@ export async function viewDocuments(){
                var absenceth =  document.createElement('th');
                absenceth.colSpan= 3;
                var absencethSpan =  document.createElement('span');
-               absencethSpan.innerHTML = " غياب الطالب "+stuName;
+               absencethSpan.innerHTML = " غياب الطالب ";
 
                var absencetrHead2 = document.createElement('tr');//row for 2nd row titels
                absencetrHead2.style.fontWeight = 'bolder';
@@ -524,12 +534,12 @@ export async function viewDocuments(){
               absencetable.appendChild(absencetableHead);
               absencediv6.appendChild(absencetable);
               var absencetableBody = document.createElement('tbody');
-              absencetableBody.appendChild(absencetrHead2);
               const absenceCollection = collection (db, "School",schoolID, "Student", stu, 'Absence');
 
               const absensces = await getDocs(absenceCollection);
 
               if(absensces.docs.length > 0) {
+                absencetableBody.appendChild(absencetrHead2);
 
                 absensces.forEach( async (doc) => {
 
@@ -595,10 +605,15 @@ export async function viewDocuments(){
 
 
                   });
-                  absencetable.appendChild(absencetableBody);
 
+              }else{//there are no asences by the student
+                var emptyTableText =  document.createElement('h6');
+                emptyTableText.innerHTML = "لم يتم تسجيل أي غيابات "
+                absencetableBody.appendChild(emptyTableText)
+                absencetableBody.style.textAlign = 'center';
               }
-   
+              absencetable.appendChild(absencetableBody);
+
  
 
    
@@ -618,7 +633,7 @@ export async function viewDocuments(){
         //get file name
         var fileName = $(this).closest('tr').find(".tdContent").html();
 
-        if(confirm(" هل تُأكد حذف المستند؟ عند حذف المستند لفصلٍ معين، سيتم حذف مستندات أولياء الأمور طلاب الفصل المرفقة لهذا المستند")){
+        if(confirm(" هل تُأكد حذف المستند؟ عند حذف المستند لفصلٍ معين، سيتم حذف مستندات أولياء أمور طلاب الفصل المرفقة لهذا المستند")){
           $(".loader").show();
           if(classesRef.length == 1){
       
@@ -827,6 +842,9 @@ for(var i=0; k<classesRef.length; i++){
     const querySnapshot = await getDocs(q);
     
     querySnapshot.forEach(async(doc) => {
+      //update the viewedLastDocument attribute to show the red bubble in the parent interface
+      await updateDoc(doc.ref,{viewedLastDocument : false});
+
       //get each parent of a student token
       const pDoc = await getDoc(doc.data().ParentID);
       if(pDoc.data().token != null){
@@ -949,8 +967,10 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
      docClassesIds += documentClasses[i].id+' ';
     }
     const querySnapshot = await getDocs(q);
-    
+
     querySnapshot.forEach(async(doc) => {
+     //update the viewedLastDocument attribute to show the red bubble in the parent interface
+      await updateDoc(doc.ref,{viewedLastDocument : false});
       //get each parent of a student token
       const pDoc = await getDoc(doc.data().ParentID);
       if(pDoc.data().token != null){

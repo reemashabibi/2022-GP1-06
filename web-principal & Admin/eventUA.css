@@ -358,3 +358,6 @@ margin-top: 136px;
   .alert .inner {
     margin-right: 49px;
   }
+.alert{
+  margin-right: 9%;
+}

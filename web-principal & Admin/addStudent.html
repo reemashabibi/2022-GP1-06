@@ -30,6 +30,20 @@
 
 
     <style>
+             @media (max-width:1337px) {
+  .screen__background__shape7 {
+    display: none;
+  }
+    .screen__background__shape6 {
+    display: none;
+  }
+}
+@media (max-width:985px) {
+  .screen__background__shape4 {
+    display: none;
+  }
+}
+
         main {
        margin: 0;
        margin-top: 30px;
@@ -40,6 +54,10 @@
        justify-content:center;
        align-items: center;
      }
+     .alert{
+        margin-right: 9%;
+     }
+
          </style>
 </head>
 
@@ -91,7 +109,9 @@
         <div id="excel_data" class="mt-5"></div>
 
         <h1>إضافة طالب</h1>
-        
+        <div class="inputbox" id = 'alertContainer'>
+            <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
+          </div>
         <form  class="add" name="add">
         <h3>معلومات الطالب</h3>
         
@@ -132,7 +152,7 @@
 
             <div class="inputbox">
                     <input type="text" required="required" name="FnameParent" id="FnameParent">
-                    <span>الاسم الأول</span>
+                    <span id="parentInfoLabel1">الاسم الأول</span>
                 </div>
                
 
@@ -140,19 +160,17 @@
                 <div class="loader topTitle" style="top: 30vmax;"></div>
                 <div class="inputbox">
                     <input type="text" required="required" name="LnameParent" id="LnameParent">
-                    <span>الاسم الأخير</span>
+                    <span id="parentInfoLabel2">الاسم الأخير</span>
                 </div>
 
 
                 <div class="inputbox">
                     <input type="email" required="required" name="email" id="emailP">
-                    <span>البريد الإلكتروني</span>
+                    <span id="parentInfoLabel3">البريد الإلكتروني</span>
                 </div>
 
 
-                <div class="inputbox" id = 'alertContainer'>
-                    <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
-                  </div>
+              
        
             </div>
  

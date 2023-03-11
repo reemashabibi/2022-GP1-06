@@ -123,7 +123,7 @@
                setTimeout(() => {
                   
                   // 👇️ replace element from DOM
-                  document.getElementById('alertContainer').innerHTML ='';
+                  document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
                 }, 5000);
 
                logInform.reset();
@@ -143,7 +143,7 @@
           setTimeout(() => {
                   
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML ='';
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
           }, 5000);
                logInform.reset();
                return;
@@ -175,7 +175,7 @@
           setTimeout(() => {
                   
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML ='';
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
           }, 5000);
           }
           else{
@@ -185,7 +185,7 @@
           setTimeout(() => {
                   
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML ='';
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
           }, 5000);
           }
 
@@ -214,7 +214,7 @@
   if(Email1.value==""||password.value==""){
     $(".loader").hide();
 
-document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام </p> </div>';
+document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">جميع الحقول مطلوبة</p> </div>';
       setTimeout(() => {
       
         // 👇️ replace element from DOM

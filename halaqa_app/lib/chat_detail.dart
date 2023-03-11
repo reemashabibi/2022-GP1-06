@@ -77,7 +77,7 @@ class _ChatdetailState extends State<Chatdetail> {
             .update({"msg_count": count});
 
         //check if the recepient has the caht open then send them notification
-        int hasChatOpen = 0;
+        /*    int hasChatOpen = 0;
         var chatDoc = FirebaseFirestore.instance
             .collection('School/${widget.schoolId}/Class')
             .doc("${widget.classId}")
@@ -85,83 +85,81 @@ class _ChatdetailState extends State<Chatdetail> {
             .doc(widget.subjectId)
             .get()
             .then((value) => hasChatOpen = value.get('msg_count'));
+*/
+        //if (hasChatOpen != 0) {
+        //send notification
 
-        if (hasChatOpen != 0) {
-          //send notification
+        var senderName = '';
+        var recepientToken = '';
+        var teacherName = '';
 
-          var senderName = '';
-          var recepientToken = '';
-          var teacherName = '';
+        //get the sender name
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Teacher')
+            .doc(currentuserUserId)
+            .get()
+            .then(
+          (DocumentSnapshot doc) {
+            senderName = "${doc['FirstName']} ${doc['LastName']} ";
+            teacherName = "${doc.get("FirstName")} ${doc.get("LastName")}";
+            // ...
+          },
+          onError: (e) => print("Error getting document: $e"),
+        );
 
-          //get the sender name
-          FirebaseFirestore.instance
-              .collection('School/${widget.schoolId}/Teacher')
-              .doc(currentuserUserId)
-              .get()
-              .then(
-            (DocumentSnapshot doc) {
-              senderName = "${doc['FirstName']} ${doc['LastName']} ";
-              teacherName = "${doc.get("FirstName")} ${doc.get("LastName")}";
-              // ...
-            },
-            onError: (e) => print("Error getting document: $e"),
-          );
-
-          //get the sender (aka. Teacher) subject
-          FirebaseFirestore.instance
-              .collection('School/${widget.schoolId}/Class')
-              .doc(widget.classId)
-              .collection("Subject")
-              .doc(widget.subjectId)
-              .get()
-              .then(
-            (DocumentSnapshot doc) {
-              senderName += "(${doc['SubjectName']})";
-              // ...
-            },
-            onError: (e) => print("Error getting document: $e"),
-          );
-          //get the recepient token
-          FirebaseFirestore.instance
-              .collection('School/${widget.schoolId}/Student')
-              .doc(friendUid)
-              .get()
-              .then(
-            (DocumentSnapshot doc) {
-              FirebaseFirestore.instance
-                  .collection('School/${widget.schoolId}/Parent')
-                  .doc(doc['ParentID'].id)
-                  .get()
-                  .then(
-                (DocumentSnapshot docParent) {
-                  recepientToken = docParent['token'];
-                  // ...
-                },
-                onError: (e) => recepientToken = '',
-              );
-              recepientToken = doc['ParentID'];
-              // ...
-            },
-            onError: (e) => recepientToken = '',
-          );
-
-          if (recepientToken != '') {
-            http.post(
-              Uri.parse('http://10.0.2.2:8080/chat'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
+        //get the sender (aka. Teacher) subject
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Class')
+            .doc(widget.classId)
+            .collection("Subject")
+            .doc(widget.subjectId)
+            .get()
+            .then(
+          (DocumentSnapshot doc) {
+            senderName += "(${doc['SubjectName']})";
+            // ...
+          },
+          onError: (e) => print("Error getting document: $e"),
+        );
+        //get the recepient token
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Student')
+            .doc(friendUid)
+            .get()
+            .then(
+          (DocumentSnapshot doc) {
+            var parentRef = doc['ParentID'] as DocumentReference;
+            FirebaseFirestore.instance
+                .collection('School/${widget.schoolId}/Parent')
+                .doc(parentRef.id)
+                .get()
+                .then(
+              (DocumentSnapshot docParent) {
+                recepientToken = docParent['token'];
+                print('token $recepientToken');
+                http.post(
+                  Uri.parse('http://10.0.2.2:8080/chat'),
+                  headers: <String, String>{
+                    'Content-Type': 'application/json; charset=UTF-8',
+                  },
+                  body: jsonEncode(<String, String>{
+                    'name': senderName,
+                    'content': msg,
+                    'token': recepientToken,
+                    'data':
+                        '$teacherName~$currentuserUserId~${widget.friendUid}~${widget.schoolId}~${widget.subjectId}~${widget.classId}'
+                  }),
+                );
+                // ...
               },
-              body: jsonEncode(<String, String>{
-                'name': senderName,
-                'content': msg,
-                'token': recepientToken,
-                'data':
-                    '$teacherName~$currentuserUserId~${widget.friendUid}~${widget.schoolId}~${widget.subjectId}~${widget.classId}'
-              }),
+              onError: (e) => recepientToken = '',
             );
-          }
-          //end notification
-        }
+            // ...
+          },
+          onError: (e) => recepientToken = '',
+        );
+        //end notification
+        // }
       }));
       setState(() {});
     }
@@ -260,7 +258,6 @@ class _ChatdetailState extends State<Chatdetail> {
 
           if (snapshot.hasData) {
             var data;
-            readMsg();
             //= document.data()!;
             //initState () ;
             // super.initState();
