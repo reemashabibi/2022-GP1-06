@@ -28,7 +28,8 @@ class _pick extends State<pickup> {
   var i = '';
 
   TextEditingController dateInput = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  //DateTime selectedDate = DateTime.now();
+  var selectedDate;
   final _formKey = GlobalKey<FormState>();
   //var schoolID = "xx";
   bool _buttonVisible = true;
@@ -52,7 +53,7 @@ class _pick extends State<pickup> {
             (doc["someone"] == "yes" &&
                 doc["date"] == DateFormat(' MMM d').format(DateTime.now()))) {
           setState(() {
-            if (doc["someone"] == "no") {
+            if (data == 'no') {
               _textToShow = "تم إبلاغ المدرسة بقدومك ";
               _buttonVisible = false;
             } else {
@@ -231,37 +232,30 @@ class _pick extends State<pickup> {
                                 ),
                               ),
                               Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12.0, vertical: 7),
+                                  padding: const EdgeInsets.all(18.0),
                                   child: Center(
-                                      child: TextField(
-                                    controller: dateInput,
-
-                                    //editing controller of this TextField
-                                    decoration: InputDecoration(
-                                        icon: Icon(Icons
-                                            .arrow_drop_down), //icon of text field
-                                        hintText:
-                                            "يرجى إدخال تاريخ قدوم الموكل" //label text of field
+                                    child: DropdownButton<String>(
+                                      value: selectedDate,
+                                      hint: Text("Select a date"),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedDate = value;
+                                        });
+                                      },
+                                      items: [
+                                        DropdownMenuItem(
+                                          value: "1",
+                                          child: Text(
+                                              "اليوم (${DateFormat('dd/MM/yyyy').format((DateTime.now()))})"),
                                         ),
-
-                                    readOnly: true,
-                                    //set it true, so that user will not able to edit text
-                                    onTap: () async {
-                                      DatePicker.showDatePicker(
-                                        context,
-                                        //initialDate: selectedDate,
-                                        minTime: DateTime.now(),
-                                        maxTime: DateTime.now()
-                                            .add(Duration(days: 1)),
-                                        onConfirm: (date) {
-                                          setState(() {
-                                            selectedDate = date;
-                                          });
-                                        },
-                                      );
-                                    },
-                                  ))),
+                                        DropdownMenuItem(
+                                          value: "2",
+                                          child: Text(
+                                              "غداً (${DateFormat('dd/MM/yyyy').format((DateTime.now().add(Duration(days: 1))))})"),
+                                        ),
+                                      ],
+                                    ),
+                                  )),
                             ],
                           ),
                         ),
@@ -274,7 +268,7 @@ class _pick extends State<pickup> {
             ),
             _buttonVisible
                 ? Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    padding: const EdgeInsets.all(25.0),
                     child: GestureDetector(
                       onTap: () async {
                         if (x == 1) {
@@ -298,10 +292,18 @@ class _pick extends State<pickup> {
                             i = widget.stRef.path;
                             //var jsonObject = i.toJson();
                             print(i);
+                            var dd;
                             DocumentReference docRef =
                                 await FirebaseFirestore.instance.doc(i);
+                            if (selectedDate == "1") {
+                              dd =
+                                  DateFormat(' MMM d').format((DateTime.now()));
+                            } else {
+                              dd = DateFormat(' MMM d').format(
+                                  (DateTime.now().add(Duration(days: 1))));
+                            }
                             docRef.update({
-                              "date": DateFormat(' MMM d').format(selectedDate),
+                              "date": dd,
                               "someone": "yes",
                               "fullname": name,
                               "nid": nid,
