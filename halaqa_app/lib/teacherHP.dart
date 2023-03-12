@@ -95,9 +95,8 @@ class _teacherHPState extends State<teacherHP> {
 
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference docu = ds['Subjects'][i];
-
         DocumentReference str = ds['Subjects'][i].parent.parent;
-        print("ZZZZZZZZ ${ds['Subjects'][i].parent.parent.id}");
+
         // var classRef = await docRef.collection("Announcement").get();
 
         var clsName = await str.get().then((value) {
@@ -112,8 +111,6 @@ class _teacherHPState extends State<teacherHP> {
 
         var subName = await docu.get().then((value) {
           setState(() {
-            print("SUBJECT ID ${value.id}");
-
             _SubjectsRefList.add(docu);
           });
         });
@@ -264,7 +261,7 @@ class _teacherHPState extends State<teacherHP> {
 
 //save token to the user document
   void saveToken(String token) async {
-    await getSubjects();
+    await getSchoolID();
     FirebaseFirestore.instance
         .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
         .update({'token': token});
@@ -562,11 +559,6 @@ class _teacherHPState extends State<teacherHP> {
                                                                     172,
                                                                     172),
                                                             onPressed: () {
-                                                              print("SUBJECT ID " +
-                                                                  e.subjectId);
-                                                              print(
-                                                                  "ID############$schoolID, ${e.subjectId}");
-
                                                               if (_SubjectsRefList[
                                                                       0] !=
                                                                   "") {
@@ -714,7 +706,6 @@ class _MyWidgetState extends State<viewStudents> {
       // use ds as a snapshot
       className = ds['ClassName'];
       levelName = ds['LevelName'];
-
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
@@ -772,7 +763,6 @@ class _MyWidgetState extends State<viewStudents> {
             }
             if (snapshot.hasData && _StudenNameList[0] != "") {
               //Display the list
-
               return Container(
                   child: SingleChildScrollView(
                       child: Column(
