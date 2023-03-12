@@ -13,7 +13,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>حلقة</string>
+	<string>halaqa_app</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -47,15 +47,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	<key>UISupportsDocumentBrowser</key> 
+	<key>UISupportsDocumentBrowser</key>
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
-	<key>UIFileSharingEnabled</key> 
+	<key>UIFileSharingEnabled</key>
 	<true/>
 	<key>LSApplicationQueriesSchemes</key>
-<array>
-  <string>https</string>
-</array>
+	<array>
+		<string>https</string>
+	</array>
 </dict>
 </plist>
