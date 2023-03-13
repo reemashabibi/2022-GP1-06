@@ -74,7 +74,6 @@ class _EditProfilePageState extends State<studentGrades> {
 
         for (int i = 0; i < numOfAssess; i++) {
           Future<List<assessment>> getAssessment() async {
-            setState(() {});
             final snapshots = await Future.wait(
                 [doc.get().then((value) => value['assessments'][i])]);
             return snapshots
@@ -119,8 +118,6 @@ class _EditProfilePageState extends State<studentGrades> {
           print("in if");
           DocumentReference docu =
               await widget.stRef.collection("Grades").doc(gradeID);
-          print(gradeID);
-
           for (int i = 0; i < numOfAssess; i++) {
             Future<List<assessment>> getAssess() async {
               final snapshots = await Future.wait(
@@ -135,14 +132,14 @@ class _EditProfilePageState extends State<studentGrades> {
             setState(() {
               studentAssessmentsList.addAll(assessments2);
             });
-
-            if (v == 0) {
-              setState(() {
-                //   assessmentsList.removeAt(0);
-                studentAssessmentsList.removeAt(0);
-                v++;
-              });
-            }
+          }
+          if (v == 0) {
+            //   assessmentsList.removeAt(0);
+            setState(() {
+              studentAssessmentsList.removeAt(0);
+            });
+            print("object");
+            v++;
           }
         } else {
           setState(() {
@@ -156,8 +153,6 @@ class _EditProfilePageState extends State<studentGrades> {
               studentAssessmentsList.removeAt(0);
               v++;
             });
-            print("studentAssessmentsList.len " +
-                studentAssessmentsList.length.toString());
           }
           widget.stRef.collection("Grades").add({
             "assessments":
@@ -175,6 +170,7 @@ class _EditProfilePageState extends State<studentGrades> {
         studentAssessmentsList.add(assessment(assessmentsList[3].name, 0));
         studentAssessmentsList.add(assessment(assessmentsList[4].name, 0));
         studentAssessmentsList.add(assessment(assessmentsList[5].name, 0));
+        studentAssessmentsList.removeAt(0);
 
         widget.stRef.collection("Grades").add({
           "assessments":
@@ -193,11 +189,13 @@ class _EditProfilePageState extends State<studentGrades> {
       assessmentsList.add(assessment("درجة المشاريع", 15));
       assessmentsList.add(assessment("درجة الاختبار الشهري", 20));
       assessmentsList.add(assessment("درجة الاختبار النهائي", 40));
+      assessmentsList.removeAt(0);
     });
 
     await widget.classRef.update({
       'customized': true,
     });
+
     assessmentsList.forEach((assessment) async {
       await widget.classRef.update(({
         'assessments': FieldValue.arrayUnion([
@@ -308,8 +306,7 @@ class _EditProfilePageState extends State<studentGrades> {
                       getData();
                     }
 
-                    if (studentAssessmentsList.length == numOfAssess &&
-                        y == 1) {
+                    if (studentAssessmentsList.length == numOfAssess) {
                       return ListView.builder(
                         shrinkWrap: true,
                         itemCount: assessmentsList.length,

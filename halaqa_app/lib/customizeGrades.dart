@@ -194,6 +194,7 @@ class _customizeGradesState extends State<customizeGrades> {
                         onPressed: () async {
                           if (await confirmDeleltingStudentGrades()) {
                             Navigator.pop(dialogContex);
+
                             bool accepted = await updateDatabase();
                             if (accepted) {
                               print("accep");
@@ -380,6 +381,7 @@ class _customizeGradesState extends State<customizeGrades> {
                                   setState(() {
                                     assessmentsList.removeAt(position);
                                     delete();
+                                    changed = true;
                                   });
                                 }
                               },
@@ -464,6 +466,7 @@ class _customizeGradesState extends State<customizeGrades> {
                 );
               });
         }
+        return true;
       } else {
         showDialog(
             context: context,
