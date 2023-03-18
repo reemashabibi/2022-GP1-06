@@ -380,7 +380,7 @@ class _customizeGradesState extends State<customizeGrades> {
                                 if (f) {
                                   setState(() {
                                     assessmentsList.removeAt(position);
-                                    delete();
+                                    var z = delete();
                                     changed = true;
                                   });
                                 }
@@ -491,7 +491,17 @@ class _customizeGradesState extends State<customizeGrades> {
     for (int i = 0; i < assessmentsList.length; i++) {
       totalGrades += assessmentsList[i].grade!;
     }
-    if (assessmentsList.length > 0) {
+    if (assessmentsList.length == 0) {
+      print("in delete");
+      await widget.subjectRef.update({
+        'customized': false,
+      });
+
+      await widget.subjectRef.update({'assessments': FieldValue.delete()});
+      return true;
+    }
+    if (assessmentsList.length > 0 && totalGrades == 100) {
+      print("totalGrades is  " + totalGrades.toString());
       await widget.subjectRef.update({
         'customized': true,
       });
@@ -504,49 +514,56 @@ class _customizeGradesState extends State<customizeGrades> {
           ])
         }));
       });
-    }
 
-    if (assessmentsList.length == 0) {
-      print("in delete");
-      await widget.subjectRef.update({
-        'customized': false,
-      });
+      var numOfStudents;
 
-      await widget.subjectRef.update({'assessments': FieldValue.delete()});
-    }
-    var numOfStudents;
+      DocumentReference docRef =
+          widget.subjectRef.parent.parent as DocumentReference<Object?>;
 
-    DocumentReference docRef =
-        widget.subjectRef.parent.parent as DocumentReference<Object?>;
+      docRef.get().then((DocumentSnapshot ds) async {
+        // use ds as a snapshot
 
-    docRef.get().then((DocumentSnapshot ds) async {
-      // use ds as a snapshot
-
-      numOfStudents = ds['Students'].length;
-      for (var i = 0; i < numOfStudents; i++) {
-        DocumentReference docu = ds['Students'][i];
-        var stRef = await docu
-            .collection("Grades")
-            .where('subjectID', isEqualTo: widget.subjectRef)
-            .get();
-        if (stRef.docs.length > 0) {
+        numOfStudents = ds['Students'].length;
+        for (var i = 0; i < numOfStudents; i++) {
+          DocumentReference docu = ds['Students'][i];
           var stRef = await docu
               .collection("Grades")
               .where('subjectID', isEqualTo: widget.subjectRef)
-              .get()
-              .then((querySnapshot) {
-            querySnapshot.docs.map((DocumentSnapshot document) {
-              setState(() {
-                document.reference.delete();
-                // gradeID = document.id;
-              });
-            }).toList();
-          });
+              .get();
+          if (stRef.docs.length > 0) {
+            var stRef = await docu
+                .collection("Grades")
+                .where('subjectID', isEqualTo: widget.subjectRef)
+                .get()
+                .then((querySnapshot) {
+              querySnapshot.docs.map((DocumentSnapshot document) {
+                setState(() {
+                  document.reference.delete();
+                  // gradeID = document.id;
+                });
+              }).toList();
+            });
+          }
         }
-      }
-    });
+      });
 
-    await widget.subjectRef.update({'assessments': FieldValue.delete()});
+      await widget.subjectRef.update({'assessments': FieldValue.delete()});
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(
+                "لم تتم حفظ التغييرات، مجموع الدرجات لا يساوي ١٠٠!",
+                style: TextStyle(
+                    // color: Colors.red,
+                    ),
+              ),
+            );
+          });
+      return false;
+    }
+    return true;
   }
 
   var checked = false;

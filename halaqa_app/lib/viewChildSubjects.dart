@@ -171,8 +171,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
-              return Container(
-                  child: SingleChildScrollView(
+              return SingleChildScrollView(
+                  child: Container(
                       child: Column(
                 children: [
                   Container(
@@ -205,7 +205,9 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       ),
                     ),
                   ),
-                  Container(
+                  SingleChildScrollView(
+                      child: Container(
+                    height: 2000,
                     child: ListView(
                       // padding: const EdgeInsets.only(right: 40.0, left: 40.0),
                       physics: const AlwaysScrollableScrollPhysics(),
@@ -347,7 +349,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                 ]));
                       }).toList(),
                     ),
-                  )
+                  ))
                 ],
               )));
             }
