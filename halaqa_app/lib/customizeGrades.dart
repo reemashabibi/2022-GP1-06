@@ -498,6 +498,49 @@ class _customizeGradesState extends State<customizeGrades> {
       });
 
       await widget.subjectRef.update({'assessments': FieldValue.delete()});
+      var numOfStudents;
+
+      DocumentReference docRef =
+          widget.subjectRef.parent.parent as DocumentReference<Object?>;
+
+      docRef.get().then((DocumentSnapshot ds) async {
+        // use ds as a snapshot
+
+        numOfStudents = ds['Students'].length;
+        for (var i = 0; i < numOfStudents; i++) {
+          DocumentReference docu = ds['Students'][i];
+          var stRef = await docu
+              .collection("Grades")
+              .where('subjectID', isEqualTo: widget.subjectRef)
+              .get();
+          if (stRef.docs.length > 0) {
+            var stRef = await docu
+                .collection("Grades")
+                .where('subjectID', isEqualTo: widget.subjectRef)
+                .get()
+                .then((querySnapshot) {
+              querySnapshot.docs.map((DocumentSnapshot document) {
+                setState(() {
+                  document.reference.delete();
+                  // gradeID = document.id;
+                });
+              }).toList();
+            });
+          }
+        }
+      });
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text(
+                "لم يتم اضافة اي متطلب!",
+                style: TextStyle(
+                    // color: Colors.red,
+                    ),
+              ),
+            );
+          });
       return true;
     }
     if (assessmentsList.length > 0 && totalGrades == 100) {
