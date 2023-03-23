@@ -2,6 +2,10 @@
 FLUTTER_ROOT=/Users/maca7/flutter
 FLUTTER_APPLICATION_PATH=/Users/maca7/Desktop/2022-GP1-06/halaqa_app
 COCOAPODS_PARALLEL_CODE_SIGN=true
+<<<<<<< HEAD
+=======
+FLUTTER_TARGET=/Users/njoudalfahad/Downloads/2022-GP1-06/halaqa_app/lib/pickup.dart
+>>>>>>> 8b4b20e2 (final pickup)
 FLUTTER_BUILD_DIR=build
 FLUTTER_BUILD_NAME=1.0.0
 FLUTTER_BUILD_NUMBER=1
