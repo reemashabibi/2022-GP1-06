@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/commissioner.dart';
-import 'package:halaqa_app/main.dart';
-import 'package:halaqa_app/teacher.dart';
 import 'package:halaqa_app/forgot_pw_screen.dart';
 import 'package:halaqa_app/teacherHP.dart';
-import 'package:halaqa_app/parentHP.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -254,7 +252,7 @@ class StartState extends State<LoginScreen> {
                                 ),
                               );
                             },
-                            child: Text(
+                            child: const Text(
                               "نسيت كلمة المرور؟",
                               style: TextStyle(
                                 color: Colors.blue,
@@ -297,14 +295,14 @@ class StartState extends State<LoginScreen> {
                                     color: Color(0xffEEEEEE)),
                               ],
                             ),
-                            child: Text(
+                            child: const Text(
                               "تسجيل الدخول",
                               style:
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Visibility(
@@ -313,7 +311,7 @@ class StartState extends State<LoginScreen> {
                             maintainState: true,
                             visible: visible,
                             child: Container(
-                                child: CircularProgressIndicator(
+                                child: const CircularProgressIndicator(
                               color: Color.fromARGB(255, 160, 241, 250),
                             ))),
                       ],
@@ -360,25 +358,16 @@ class StartState extends State<LoginScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => teacherHP(),
+                builder: (context) => const teacherHP(),
               ),
             );
           }
         } else {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Text(
-                    "لا يوجد معلّم بهذه البيانات يرجى التحقق من البيانات المدخلة",
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                );
-              });
-          print('Document does not exist on the database');
-          print(user!.uid);
+          Fluttertoast.showToast(
+              msg:
+                  "لا يوجد معلّم بهذه البيانات يرجى التحقق من البيانات المدخلة",
+              backgroundColor: const Color.fromARGB(255, 221, 33, 30));
+
           setState(() {
             visible = false;
           });
@@ -398,13 +387,12 @@ class StartState extends State<LoginScreen> {
             .where('Email', isEqualTo: user.email);
         var snapshot = await col.get();
         for (var doc in snapshot.docs) {
-          print("DATA OF DATA ${doc.data()}");
           schoolID = doc.reference.parent.parent!.id;
-          print(doc.reference.parent.parent?.id);
+
           break;
         }
         var kk = FirebaseFirestore.instance
-            .collection('School/' + schoolID + '/Parent')
+            .collection('School/$schoolID/Parent')
             .doc(user.uid)
             .get()
             .then((DocumentSnapshot documentSnapshot) {
@@ -423,20 +411,11 @@ class StartState extends State<LoginScreen> {
               );
             }
           } else {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text(
-                      "لا يوجد ولي أمر بهذه البيانات يرجى التحقق من البيانات المدخلة",
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                });
-            print('Document does not exist on the database');
-            print(user!.uid);
+            Fluttertoast.showToast(
+                msg:
+                    "لا يوجد ولي أمر بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                backgroundColor: const Color.fromARGB(255, 221, 33, 30));
+
             setState(() {
               visible = false;
             });
@@ -455,46 +434,35 @@ class StartState extends State<LoginScreen> {
             .collectionGroup('Commissioner')
             .where('Email', isEqualTo: user.email);
         var snapshot = await col.get();
-        print("DATA OF DATA ${snapshot.docs.length}");
+
         for (var doc in snapshot.docs) {
-          print("DATA OF DATA ${doc.data()}");
           schoolID = doc.reference.parent.parent!.id;
-          print(doc.reference.parent.parent?.id);
+
           break;
         }
         print('the commmmmm id $schoolID');
         var kk = FirebaseFirestore.instance
-            .collection('School/' + schoolID + '/Commissioner')
-            .doc(user!.uid)
+            .collection('School/$schoolID/Commissioner')
+            .doc(user.uid)
             .get()
             .then((DocumentSnapshot documentSnapshot) {
           if (documentSnapshot.exists) {
-            if (documentSnapshot.get('Email') == user?.email) {
+            if (documentSnapshot.get('Email') == user.email) {
               pref.setString("email", user.email!);
               pref.setString("type", 'C');
 
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => commissionerHP(),
+                  builder: (context) => const commissionerHP(),
                 ),
               );
             }
           } else {
-            showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    content: Text(
-                      "لا يوجد مفوّض بهذه البيانات يرجى التحقق من البيانات المدخلة",
-                      style: TextStyle(
-                        color: Colors.red,
-                      ),
-                    ),
-                  );
-                });
-            print('Document does not exist on the database');
-            print(user!.uid);
+            Fluttertoast.showToast(
+                msg:
+                    "لا يوجد مفوّض بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                backgroundColor: const Color.fromARGB(255, 221, 33, 30));
             setState(() {
               visible = false;
             });
@@ -507,44 +475,24 @@ class StartState extends State<LoginScreen> {
   void signIn(String email, String password) async {
     if (_formkey.currentState!.validate()) {
       try {
-        UserCredential userCredential =
-            await FirebaseAuth.instance.signInWithEmailAndPassword(
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
           email: email,
           password: password,
         );
         route(email);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          print('No user found for that email.');
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Text(
-                    "لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                );
-              });
+          Fluttertoast.showToast(
+              msg: "لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
+              backgroundColor: const Color.fromARGB(255, 221, 33, 30));
           setState(() {
             visible = false;
           });
         } else if (e.code == 'wrong-password') {
-          print('Wrong password provided for that user.');
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Text(
-                    "هناك خطأ في البريد الإلكتروني أو كلمة المرور",
-                    style: TextStyle(
-                      color: Colors.red,
-                    ),
-                  ),
-                );
-              });
+          Fluttertoast.showToast(
+              msg: "هناك خطأ في البريد الإلكتروني أو كلمة المرور",
+              backgroundColor: const Color.fromARGB(255, 221, 33, 30));
+
           setState(() {
             visible = false;
           });

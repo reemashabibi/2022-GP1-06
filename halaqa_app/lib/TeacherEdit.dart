@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/teacher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -189,61 +190,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         SizedBox(
                           height: 20,
                         ),
-                                 TextFormField(
-                                    maxLength: 20,
-                                    onChanged: (newText) {
-                                      NewLname = newText;
-                                    },
-                                    controller: lNameController,
-                                    decoration: InputDecoration(
-                                      labelText: "الاسم الأخير",
-                                      //hintText: "EnterF Name",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "الاسم الأخير مطلوب";
-                                      }
-                                      if (value.length > 20) {
-                                        return "الاسم يجب أن لا يزيد عن 20 حرف";
-                                      }
-                                      if (value.length <= 2) {
-                                        return "الاسم يجب أن لا يقل عن 2 حرف";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    maxLines: 1,
-                                  ),
+                        TextFormField(
+                          maxLength: 20,
+                          onChanged: (newText) {
+                            NewLname = newText;
+                          },
+                          controller: lNameController,
+                          decoration: InputDecoration(
+                            labelText: "الاسم الأخير",
+                            //hintText: "EnterF Name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "الاسم الأخير مطلوب";
+                            }
+                            if (value.length > 20) {
+                              return "الاسم يجب أن لا يزيد عن 20 حرف";
+                            }
+                            if (value.length <= 2) {
+                              return "الاسم يجب أن لا يقل عن 2 حرف";
+                            } else {
+                              return null;
+                            }
+                          },
+                          maxLines: 1,
+                        ),
 
                         SizedBox(
                           height: 20,
                         ),
-                                   TextFormField(
-                                   // maxLength: 20,
-                                    minLines: 2,
-                                    maxLines: 5,
-                                    keyboardType: TextInputType.multiline,
-                                    onChanged: (newText) {
-                                      NewOH = newText;
-                                    },
-                                    controller: officeHoursController,
-                                    decoration: InputDecoration(
-                                      hintText: "الإثنين - 11:00صباحًا - 1:00مساءً",
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey
-                                      ),
-                                      labelText: "الساعات المكتبية",
-                                      //hintText: "EnterF Name",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                
-                                  // maxLines: 1,
-                                  ),
+                        TextFormField(
+                          // maxLength: 20,
+                          minLines: 2,
+                          maxLines: 5,
+                          keyboardType: TextInputType.multiline,
+                          onChanged: (newText) {
+                            NewOH = newText;
+                          },
+                          controller: officeHoursController,
+                          decoration: InputDecoration(
+                            hintText: "الإثنين - 11:00صباحًا - 1:00مساءً",
+                            hintStyle: TextStyle(color: Colors.grey),
+                            labelText: "الساعات المكتبية",
+                            //hintText: "EnterF Name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+
+                          // maxLines: 1,
+                        ),
 
                         SizedBox(
                           height: 20,
@@ -454,35 +453,31 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print("pass updated");
       }
 
-getSchoolID();
- var col = FirebaseFirestore.instance.collectionGroup('Teacher').where('Email', isEqualTo: email);
-     print("in3");
-     var snapshot = await col.get();
-     print("in4");
-     for (var doc in snapshot.docs) {
-       schoolID = doc.reference.parent.parent!.id;
-       break;// Prints document1, document2
-    }
-    
-  await FirebaseFirestore.instance.collection('School/'+ '$schoolID'+'/Teacher').doc(user!.uid).update({
-    'Email': email,
-    'FirstName': fNm ,
-    'LastName': lN,
-    'OfficeHours': OH,
-    });   
+      getSchoolID();
+      var col = FirebaseFirestore.instance
+          .collectionGroup('Teacher')
+          .where('Email', isEqualTo: email);
+      print("in3");
+      var snapshot = await col.get();
+      print("in4");
+      for (var doc in snapshot.docs) {
+        schoolID = doc.reference.parent.parent!.id;
+        break; // Prints document1, document2
+      }
 
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(
-                "تم حفظ التعديلات بنجاح",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-            );
-          });
+      await FirebaseFirestore.instance
+          .collection('School/' + '$schoolID' + '/Teacher')
+          .doc(user!.uid)
+          .update({
+        'Email': email,
+        'FirstName': fNm,
+        'LastName': lN,
+        'OfficeHours': OH,
+      });
+
+      Fluttertoast.showToast(
+          msg: "تم حفظ التعديلات بنجاح",
+          backgroundColor: Color.fromARGB(255, 97, 200, 0));
       return;
     }
   }

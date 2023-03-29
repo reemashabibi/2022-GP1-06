@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/grades.dart';
 
 class customizeGrades extends StatefulWidget {
@@ -311,6 +312,8 @@ class _customizeGradesState extends State<customizeGrades> {
                                     },
                                     decoration: InputDecoration(
                                       labelText: "اسم المتطلب",
+                                      contentPadding:
+                                          EdgeInsets.symmetric(vertical: 20.0),
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
@@ -359,7 +362,7 @@ class _customizeGradesState extends State<customizeGrades> {
                                         return "أدخل درجة المتطلب";
                                       }
                                       if (int.parse(value) == 0) {
-                                        return "لا يمكن للدرجة أن تساوي  صفر";
+                                        return "الدرجة تساوي صفر";
                                       } else {
                                         return null;
                                       }
@@ -380,7 +383,7 @@ class _customizeGradesState extends State<customizeGrades> {
                                 if (f) {
                                   setState(() {
                                     assessmentsList.removeAt(position);
-                                    var z = delete();
+                                    delete();
                                     changed = true;
                                   });
                                 }
@@ -453,33 +456,15 @@ class _customizeGradesState extends State<customizeGrades> {
           }
         });
         if (!checked) {
-          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: Text(
-                    "تم حفظ التعديلات",
-                    style: TextStyle(
-                        // color: Colors.red,
-                        ),
-                  ),
-                );
-              });
+          Fluttertoast.showToast(
+              msg: "تم حفظ التعديلات بنجاح",
+              backgroundColor: Color.fromARGB(255, 97, 200, 0));
         }
         return true;
       } else {
-        showDialog(
-            context: context,
-            builder: (context) {
-              return AlertDialog(
-                content: Text(
-                  "لم تتم حفظ التغييرات، مجموع الدرجات لا يساوي ١٠٠!",
-                  style: TextStyle(
-                      // color: Colors.red,
-                      ),
-                ),
-              );
-            });
+        Fluttertoast.showToast(
+            msg: "لم تتم حفظ التغييرات، مجموع الدرجات لا يساوي ١٠٠!",
+            backgroundColor: Color.fromARGB(255, 221, 33, 30));
         return false;
       }
     }

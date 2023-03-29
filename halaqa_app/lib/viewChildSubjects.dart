@@ -171,8 +171,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
-              return SingleChildScrollView(
-                  child: Container(
+              return Container(
+                  child: SingleChildScrollView(
                       child: Column(
                 children: [
                   Container(
@@ -205,12 +205,11 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       ),
                     ),
                   ),
-                  SingleChildScrollView(
-                      child: Container(
-                    height: 2000,
+                  Container(
                     child: ListView(
                       // padding: const EdgeInsets.only(right: 40.0, left: 40.0),
-                      physics: const AlwaysScrollableScrollPhysics(),
+
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(30.0, 20, 30.0, 10),
                       children: snapshot.data!.docs.map((e) {
@@ -227,15 +226,18 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Container(
-                                    child: Text("${e.get("SubjectName")}",
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                        )),
-                                    margin: EdgeInsets.all(4),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0, 10.0, 0),
+                                  Flexible(
+                                    child: Container(
+                                      child: Text("${e.get("SubjectName")}",
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                            fontSize: 20,
+                                          ),
+                                          overflow: TextOverflow.visible),
+                                      margin: EdgeInsets.all(4),
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0.0, 0, 10.0, 0),
+                                    ),
                                   ),
                                   Container(
                                       child: Row(
@@ -349,7 +351,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                 ]));
                       }).toList(),
                     ),
-                  ))
+                  )
                 ],
               )));
             }
