@@ -118,6 +118,7 @@ excel_file.addEventListener('change', (event) => {
               table_output += '<th>' + sheet_data[row][cell] + '</th>';
             }
             else {
+              if(typeof sheet_data[row][cell] === "string" && sheet_data[row][cell].trim() !== "" || typeof sheet_data[row][cell] === "string" && sheet_data[row][cell].trim() !== "" || typeof sheet_data[row][cell] === "string" && sheet_data[row][cell].trim() !== "" && (sheet_data[row][cell] !== undefined && sheet_data[row][cell] !== undefined ))
               table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
             }
           }
@@ -233,7 +234,8 @@ excel_file.addEventListener('change', (event) => {
                 if(cell==2){
                     registerEmail = sheet_data[row][cell];
                   //  alert(registerEmail);
-                    registerEmail = registerEmail.toLowerCase();
+                  if(typeof registerEmail === "string" && registerEmail.trim() !== "")
+                      registerEmail = registerEmail.toLowerCase();
 
 
                     }
@@ -241,6 +243,7 @@ excel_file.addEventListener('change', (event) => {
             }    
 	                  registerPass = pass();        
                     //alert("#0");
+                    if(typeof registerEmail === "string" && registerEmail.trim() !== "" || typeof registerFname === "string" && registerFname.trim() !== "" || typeof registerlname === "string" && registerlname.trim() !== "" && (registerlname !== undefined && registerFname !== undefined ))
                      authAdminS (registerFname, registerlname,registerEmail, registerPass, authPrinID,row,table);
                     // alert("#1");
           }//end row  
@@ -257,16 +260,15 @@ excel_file.addEventListener('change', (event) => {
     //alert("in func");  
    // alert(registerFname + " - " +registerlname + " - "  + registerEmail + " - " +schoolID );
     registerPass =  pass(); 
-
       /////New code  !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!    
       $.post("http://localhost:8080/addUser",
       {
         email: registerEmail,
         password: registerPass
      },
-     function (data, stat) {
+    async function (data, stat) {
        if(data.status == 'Successfull'){
-          setDoc(doc(db, 'School/'+authPrinID+'/Admin', data.uid), {
+         await setDoc(doc(db, 'School/'+authPrinID+'/Admin', data.uid), {
               Email: registerEmail.toLowerCase(),
               FirstName: registerFname,
               LastName: registerlname,               
@@ -284,12 +286,13 @@ excel_file.addEventListener('change', (event) => {
          var x = table.rows[row].insertCell(3);
          x.innerHTML = "لم تتم الاضافة، البريد الاكتروني مستخدم مسبقاً";
         }
-         else if (data == 'error')
+         else if (data.status == 'error'){
          
          var x = table.rows[row].insertCell(3);
          // alert(errorMessage);
        //  alert(registerFname + " - " +registerlname + " - "  + registerEmail );
           x.innerHTML = "لم تتم الاضافة";
+         }
 
        }
         console.log(data);

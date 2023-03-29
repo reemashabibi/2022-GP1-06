@@ -86,7 +86,7 @@ export { query, orderBy, limit, where, onSnapshot };
     updatePassword(auth.currentUser, Password.value);
   }
   $(".loader").hide();
-  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم حفظ التعديلات بنجاح"</p> </div>';
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم حفظ التعديلات بنجاح</p> </div>';
   setTimeout(() => {
   
     // 👇️ replace element from DOM
@@ -135,22 +135,26 @@ export { query, orderBy, limit, where, onSnapshot };
 });
    function validate() {
   
-    if(Email.value==""||Password.value==""){
+    if(Email.value==""||Password.value=="" || FirstName.value == '' || LastName.value == ''){
       $(".loader").hide();
+      document.getElementById("myForm").style.display = "none";
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">جميع الحقول مطلوبة يرجى التحقق من تعبئتها</p> </div>';
       setTimeout(() => {
         document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
         
-      }, 9000);
+      }, 5000);
+      
       return false;
     }
+    
     else if (Password.value.length < 6) {
       $(".loader").hide();
+      document.getElementById("myForm").style.display = "none";
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام </p> </div>';
       setTimeout(() => {
         document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
         
-      }, 9000);
+      }, 5000);
       return false;
     }
   

@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:flutter/material.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -30,6 +32,7 @@ class documents {
 
 class _viewAbcense extends State<viewAbcense> {
   List<documents> stuAbcenses = [];
+  String studentName = '';
 
   var x = 0;
   var v = 0;
@@ -42,7 +45,7 @@ class _viewAbcense extends State<viewAbcense> {
     x++;
   }
 
-  getSubjects() async {
+  getAbcenses() async {
     User? user = FirebaseAuth.instance.currentUser;
 
     var col = FirebaseFirestore.instance
@@ -54,12 +57,12 @@ class _viewAbcense extends State<viewAbcense> {
       break;
     }
 
-    var EventRefs = await widget.ref
+    var AbcenseRefs = await widget.ref
         .collection("Absence")
         .where("excuse", isEqualTo: '')
         .where('FileName', isEqualTo: '')
         .get();
-    if (EventRefs.docs.length > 0) {
+    if (AbcenseRefs.docs.length > 0) {
       await widget.ref
           .collection("Absence")
           .where("excuse", isEqualTo: "")
@@ -72,7 +75,12 @@ class _viewAbcense extends State<viewAbcense> {
         });
       });
     }
-
+    await widget.ref.get().then((querySnapshot) {
+      setState(() {
+        studentName =
+            '${querySnapshot['FirstName']} ${querySnapshot['LastName']}';
+      });
+    });
     setState(() {
       if (stuAbcenses.length > 1) {
         stuAbcenses.removeAt(0);
@@ -82,12 +90,13 @@ class _viewAbcense extends State<viewAbcense> {
     if (stuAbcenses[0].docId == "") {
       v++;
     }
+    await widget.ref.update({'viewedLastAbsence': true});
   }
 
   @override
   void initState() {
     // getSchoolID();
-    getSubjects();
+    getAbcenses();
 
     super.initState();
   }
@@ -97,64 +106,26 @@ class _viewAbcense extends State<viewAbcense> {
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromRGBO(255, 255, 255, 1),
           ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => parentHP(),
+                builder: (context) => appBars(
+                  schoolId: schoolID,
+                ),
               ),
             );
           },
         ),
         actions: [],
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            setState(() {
-              currentIndex:
-              index;
-            });
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {}
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
 
       body: FutureBuilder(
           future: FirebaseFirestore.instance
@@ -175,33 +146,69 @@ class _viewAbcense extends State<viewAbcense> {
             if (snapshot.hasData && stuAbcenses[0].docId != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
-
-              return ListView.builder(
-                itemCount: stuAbcenses.length,
-                itemBuilder: (context, index) {
-                  final abcenseDay = stuAbcenses[index];
-
-                  return ListTile(
-                    title: Text(" غياب في التاريخ: " + abcenseDay.docId),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        Icons.drive_file_rename_outline_outlined,
-                        color: Color.fromARGB(255, 96, 184, 255),
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Excuse(
-                                    abcneseRef: abcenseDay.ref,
-                                    stuRef: widget.ref,
-                                  )),
-                        );
-                      },
+              return Container(
+                  child: Column(
+                children: [
+                  Container(
+                    height: 80,
+                    width: 500,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      borderRadius: BorderRadius.only(
+                          //    topLeft: Radius.circular(10),
+                          ///    topRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
                     ),
-                  );
-                },
-              );
+                    padding: const EdgeInsets.fromLTRB(20.0, 10, 20.0, 20),
+                    child: Text(
+                      studentName,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 80, 80, 80),
+                        fontSize: 30,
+                      ),
+                    ),
+                  ),
+                  ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: stuAbcenses.length,
+                    itemBuilder: (context, index) {
+                      final abcenseDay = stuAbcenses[index];
+
+                      return ListTile(
+                        title: Text(" غياب في تاريخ: " + abcenseDay.docId),
+                        trailing: IconButton(
+                          icon: const Icon(
+                            Icons.drive_file_rename_outline_outlined,
+                            color: Color.fromARGB(255, 96, 184, 255),
+                          ),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => Excuse(
+                                        abcneseRef: abcenseDay.ref,
+                                        stuRef: widget.ref,
+                                      )),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  )
+                ],
+              ));
             } //end of documents list
             if (stuAbcenses.length == 0 && x == 0) {
               return Center(child: Text("لا يوجد غيابات لم يتم ارفاق اعذارها"));
@@ -313,46 +320,7 @@ class _Excuse extends State<Excuse> {
         ),
         actions: [],
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 1, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            setState(() {
-              currentIndex:
-              index;
-            });
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {}
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
+
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -410,6 +378,7 @@ class _Excuse extends State<Excuse> {
                             color: Color.fromARGB(255, 80, 80, 80),
                             fontSize: 30,
                           ),
+                          textAlign: TextAlign.center,
                         ),
 
 //////////////////////// Inputs /////////////////////////
@@ -420,6 +389,7 @@ class _Excuse extends State<Excuse> {
                         TextFormField(
                           // maxLength: 20,
                           maxLines: 5,
+                          minLines: 1,
                           keyboardType: TextInputType.multiline,
                           onChanged: (newText) {
                             textExcuse = newText;
@@ -448,7 +418,7 @@ class _Excuse extends State<Excuse> {
                               style: TextStyle(fontSize: 20),
                             ),
                             icon: Icon(
-                              Icons.download,
+                              Icons.file_upload_outlined,
                               size: 24.0,
                             ),
                             onPressed: () async {
@@ -487,15 +457,8 @@ class _Excuse extends State<Excuse> {
                             padding: EdgeInsets.only(left: 20, right: 20),
                             height: 54,
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    (Color.fromARGB(255, 170, 243, 250)),
-                                    Color.fromARGB(255, 195, 196, 196)
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight),
+                              color: Color.fromARGB(255, 54, 172, 172),
                               borderRadius: BorderRadius.circular(50),
-                              color: Colors.grey[200],
                               boxShadow: [
                                 BoxShadow(
                                     offset: Offset(0, 10),
@@ -537,26 +500,9 @@ class _Excuse extends State<Excuse> {
 
   Future chackData() async {
     if (file == null && (textExcuse == '' || textExcuse.trim() == '')) {
-      Widget backbutton = TextButton(
-        child: Text("حسنًا"),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-      );
-      // set up the AlertDialog
-      AlertDialog alert = AlertDialog(
-        title: Text(" لم تقم بتعبأة البيانات "),
-        content:
-            Text('لرفع عذر غياب يجب على الأقل تعبئة صندوق النص او رفع ملف'),
-        actions: [backbutton],
-      );
-
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return alert;
-        },
-      );
+      Fluttertoast.showToast(
+          msg: 'لرفع عذر غياب يجب على الأقل تعبئة صندوق النص او رفع ملف',
+          backgroundColor: Color.fromARGB(255, 221, 33, 30));
     } else {
       uploadData();
     }
@@ -583,37 +529,10 @@ class _Excuse extends State<Excuse> {
         }
       }));
 
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text(
-                "تم رفع عذر الغياب بنجاح",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-              content: Icon(
-                Icons.check_circle_outline,
-                color: Colors.green,
-                size: 50.0,
-              ),
-              actions: [
-                TextButton(
-                  child: Text("حسنًا"),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => viewAbcense(
-                                ref: widget.stuRef,
-                              )),
-                    );
-                  },
-                )
-              ],
-            );
-          });
+      Fluttertoast.showToast(
+          msg: "تم رفع عذر الغياب بنجاح",
+          backgroundColor: Color.fromARGB(255, 97, 200, 0));
+
       return;
     }
   }

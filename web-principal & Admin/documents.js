@@ -182,7 +182,7 @@ export async function viewDocuments(){
 
               var table = document.createElement('table');
                     table.ClassName = "table user-list";
-
+                    table.id= doc.ref.path;
                     var tableHead = document.createElement('thead');
                     var trHead = document.createElement('tr');
                     var th =  document.createElement('th');
@@ -293,6 +293,8 @@ export async function viewDocuments(){
 
               var stuName = docsSnap.data().FirstName+" "+docsSnap.data().LastName;
               
+              document.getElementById('studentName').innerHTML = stuName;
+              
               var div2 = document.createElement('div');
               div2.className = "row";
               document.getElementById('allTabelsDiv').appendChild(div2);
@@ -322,7 +324,7 @@ export async function viewDocuments(){
                     var th =  document.createElement('th');
                     th.colSpan= 2;
                     var thSpan =  document.createElement('span');
-                    thSpan.innerHTML = " مستندات من ولي أمر الطالب "+stuName;
+                    thSpan.innerHTML = " مستندات من ولي أمر الطالب ";
                     
                     var trHead2 = document.createElement('tr');//row for 2nd row titels
                     trHead2.style.fontWeight = 'bolder';
@@ -349,10 +351,10 @@ export async function viewDocuments(){
                     table.appendChild(tableHead);
                     div6.appendChild(table);
                     var tableBody = document.createElement('tbody');
-                    tableBody.appendChild(trHead2);
                     
                     var classDocsRef = [];
                 if(docsFilled.docs.length > 0) {
+                  tableBody.appendChild(trHead2);
                   var i = 0;
                     docsFilled.forEach( async (doc) => {
                 //loop through documents of the class
@@ -386,7 +388,7 @@ export async function viewDocuments(){
                     .catch((error) => {
                        // Handle any errors
                        console.log(error);
-                       a_anotherdoclink.innerHTML = "تعذر تحميل الملف";
+                       a_anotherdoclink.innerHTML = "<br>تعذر تحميل الملف";
                       });
                       var cells = document.getElementById(classDocsRef.indexOf(schoolFileDocSnap.id)).getElementsByTagName('td');
                       cells[0].appendChild(a_anotherdoclink);
@@ -461,11 +463,19 @@ export async function viewDocuments(){
                         td2.appendChild(a2);
                        
                     })
-                table.appendChild(tableBody);
               
              
             
         }//end of the parent filled documents
+        else{//if parent never uploaded a document
+         var emptyTableText =  document.createElement('h6');
+         emptyTableText.innerHTML = "لا يوجد أي مستندات تم رفعها من قِبل ولي الأمر"
+         tableBody.appendChild(emptyTableText)
+         tableBody.style.textAlign = 'center';
+        }
+
+        table.appendChild(tableBody);
+
 
         //start of view student abcense excuse
 
@@ -498,7 +508,7 @@ export async function viewDocuments(){
                var absenceth =  document.createElement('th');
                absenceth.colSpan= 3;
                var absencethSpan =  document.createElement('span');
-               absencethSpan.innerHTML = " غياب الطالب "+stuName;
+               absencethSpan.innerHTML = " غياب الطالب ";
 
                var absencetrHead2 = document.createElement('tr');//row for 2nd row titels
                absencetrHead2.style.fontWeight = 'bolder';
@@ -524,12 +534,12 @@ export async function viewDocuments(){
               absencetable.appendChild(absencetableHead);
               absencediv6.appendChild(absencetable);
               var absencetableBody = document.createElement('tbody');
-              absencetableBody.appendChild(absencetrHead2);
               const absenceCollection = collection (db, "School",schoolID, "Student", stu, 'Absence');
 
               const absensces = await getDocs(absenceCollection);
 
               if(absensces.docs.length > 0) {
+                absencetableBody.appendChild(absencetrHead2);
 
                 absensces.forEach( async (doc) => {
 
@@ -595,10 +605,15 @@ export async function viewDocuments(){
 
 
                   });
-                  absencetable.appendChild(absencetableBody);
 
+              }else{//there are no asences by the student
+                var emptyTableText =  document.createElement('h6');
+                emptyTableText.innerHTML = "لم يتم تسجيل أي غيابات "
+                absencetableBody.appendChild(emptyTableText)
+                absencetableBody.style.textAlign = 'center';
               }
-   
+              absencetable.appendChild(absencetableBody);
+
  
 
    
@@ -618,15 +633,47 @@ export async function viewDocuments(){
         //get file name
         var fileName = $(this).closest('tr').find(".tdContent").html();
 
-        if(confirm(" هل أنت تأكد حذف المستند؟")){
+        if(confirm(" هل تُأكد حذف المستند؟ عند حذف المستند لفصلٍ معين، سيتم حذف مستندات أولياء أمور طلاب الفصل المرفقة لهذا المستند")){
           $(".loader").show();
+          if(classesRef.length == 1){
+      
        await deleteDoc(docRef).then(async () =>{
             for(var r=0; r<classesRef.length; r++){
             await updateDoc(classesRef[r], {
                 Documents: arrayRemove(docRef)
             });
         }
-        // Create a reference to the file to delete
+        //delete the parent documents for this school documents in this class
+        const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "==", classesRef[0]));
+
+const querySnapshot = await getDocs(q);
+querySnapshot.forEach(async (stuDoc) =>  {
+
+  var qForFilledDoc = query(collection(db, 'School', schoolID, 'Student',stuDoc.id, 'FilledDocuments'), where("DocumentID", "==", docRef));
+  var querySnapshotFilledDocuments = await getDocs(qForFilledDoc);
+
+  querySnapshotFilledDocuments.forEach(async (stuFilledDoc) =>  {
+    var parentFileName = stuFilledDoc.data().FileName;
+    var filledDocumentID = stuFilledDoc.id;
+
+    await deleteDoc(stuFilledDoc.ref).then(async () =>{
+      // Create a reference to the file to delete
+      const fileRef = ref(storage, 'Parent Files/'+parentFileName+"@"+filledDocumentID);
+
+      // Delete the file
+      await deleteObject(fileRef).then(() => {
+       // File deleted successfully
+     }).catch((error) => {
+     // Uh-oh, an error occurred!
+       });
+
+    });
+  });
+
+});
+//end of parent filled document deletion
+
+        // Create a reference to the school file to delete
        const fileRef = ref(storage, 'School Files/'+fileName+"@"+docID);
 
        // Delete the file
@@ -643,10 +690,54 @@ export async function viewDocuments(){
           $(".loader").hide();
           console.log(error);
         })
+      }
+      //if the document is not just for one class:
+      else{
+        var tableID = doc(db, $(this).closest('table').attr('id'));
+       
+          await updateDoc(tableID, {
+              Documents: arrayRemove(docRef)
+          });
+          await updateDoc(docRef, { Classes: arrayRemove(tableID)})
+
+                  //delete the parent documents for this school documents in this class
+        const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "==", tableID));
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (stuDoc) =>  {
+        
+          var qForFilledDoc = query(collection(db, 'School', schoolID, 'Student',stuDoc.id, 'FilledDocuments'), where("DocumentID", "==", docRef));
+          var querySnapshotFilledDocuments = await getDocs(qForFilledDoc);
+        
+          querySnapshotFilledDocuments.forEach(async (stuFilledDoc) =>  {
+            var parentFileName = stuFilledDoc.data().FileName;
+            var filledDocumentID = stuFilledDoc.id;
+        
+            await deleteDoc(stuFilledDoc.ref).then(async () =>{
+              // Create a reference to the file to delete
+              const fileRef = ref(storage, 'Parent Files/'+parentFileName+"@"+filledDocumentID);
+        
+              // Delete the file
+              await deleteObject(fileRef).then(() => {
+               // File deleted successfully
+             }).catch((error) => {
+             // Uh-oh, an error occurred!
+               });
+        
+            });
+          });
+        
+        });
+        //end of parent filled document deletion
+          
+          $(this).closest('tr').remove();
+      $(".loader").hide();
+      }
         }
        
     
     });
+
 //add new document
 $(document).on('submit', '.docForm', async function (e){
 
@@ -654,8 +745,29 @@ $(document).on('submit', '.docForm', async function (e){
 
     e.preventDefault()
     var selectedClasses = $('#classes').val();
+
     if(!selectedClasses){
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب إختيار فصل واحد على الأقل </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 5000);
+      return false;
+    }
+    if(classDocForm.Dname.value == ''){
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب تعيين اسم للمستند </p> </div>';
+      setTimeout(() => {
+              
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 5000);
+      return false;
+    }
+    if(document.getElementById("file").files.length == 0){
+      document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">يجب ارفاق مستد </p> </div>';
       setTimeout(() => {
               
         // 👇️ replace element from DOM
@@ -717,14 +829,50 @@ if(!classDocForm.allowReply.checked){
         })
    
     });
-    $(".loader").hide();
+    
+    //notification
+//the classes ids that will get the notification
+var classesIds = '';
+for(var i=0; k<classesRef.length; i++){
+  classesIds += classesRef[i].id+' ';
+}
+    //get student to get their parents
+    const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", classesRef));
+
+    const querySnapshot = await getDocs(q);
+    
+    querySnapshot.forEach(async(doc) => {
+      //update the viewedLastDocument attribute to show the red bubble in the parent interface
+      await updateDoc(doc.ref,{viewedLastDocument : false});
+
+      //get each parent of a student token
+      const pDoc = await getDoc(doc.data().ParentID);
+      if(pDoc.data().token != null){
+      $.post("http://localhost:8080/document",
+      {
+        token: pDoc.data().token,
+        documentName: classDocForm.Dname.value,
+        classes: classesIds
+     },
+     function (data, stat) {
+  
+     });}
+    });
+    
+    
+   //end notification
+
+   $(".loader").hide();
+
     document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تمت الإضافة بنجاح</p> </div>';
     setTimeout(() => {
               
       // 👇️ replace element from DOM
       document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
 
-    }, 9000);
+    }, 6000);
+    
+    
 })
    .catch(error => {
     $(".loader").hide();
@@ -741,7 +889,7 @@ if(!classDocForm.allowReply.checked){
       
       })
 });
-//edit uploaded document
+//update uploaded document
 $(document).on('click', '.changeDocSubmit',async function (e) {
   e.preventDefault();
 
@@ -759,8 +907,8 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-        document.getElementById('alertContainer').innerHTML ='';
-      }, 5000);
+        document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
+      }, 9000);
       return false;
     }
 
@@ -798,7 +946,7 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-        document.getElementById('alertContainer').innerHTML ='';
+        document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
       }, 9000);
    
 
@@ -808,25 +956,55 @@ $(document).on('click', '.changeDocSubmit',async function (e) {
     });
     }
     await updateDoc(docRef, data)
-    .then(docRef => {
+    .then(async (documentRef) => {
+          //notification
+          const documentDoc = await getDoc(docRef);
+          var documentClasses = documentDoc.data().Classes;
+          var docClassesIds='';
+    //get student to get their parents
+    const q = query(collection(db, 'School', schoolID, 'Student'), where("ClassID", "in", documentDoc.data().Classes));
+    for(var i=0; i< documentClasses.length; i++){
+     docClassesIds += documentClasses[i].id+' ';
+    }
+    const querySnapshot = await getDocs(q);
+
+    querySnapshot.forEach(async(doc) => {
+     //update the viewedLastDocument attribute to show the red bubble in the parent interface
+      await updateDoc(doc.ref,{viewedLastDocument : false});
+      //get each parent of a student token
+      const pDoc = await getDoc(doc.data().ParentID);
+      if(pDoc.data().token != null){
+      $.post("http://localhost:8080/documentUpdate",
+      {
+        token: pDoc.data().token,
+        documentName: DocForm.NewDocname.value,
+        classes: docClassesIds,
+     },
+     function (data, stat) {
+  
+     });}
+    });
+    
+    
+   //end notification
       $('.loader').hide();
       document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner"> تم التغيير بنجاح</p> </div>';
       setTimeout(() => {
               
         // 👇️ replace element from DOM
-        document.getElementById('alertContainer').innerHTML ='';
+        document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
       }, 9000);
       
-      document.getElementById('alertContainer').innerHTML ='';
+      
    })
    .catch(error => {
     $('.loader').hide();
-
+    alert('hi '+ error);
     document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ يرجى المحاولة لاحقًا </p> </div>';
     setTimeout(() => {
               
       // 👇️ replace element from DOM
-      document.getElementById('alertContainer').innerHTML ='';
+      document.getElementById('alertContainer').innerHTML ='<span style="color: rgb(157, 48, 48); text-align: right;" class="req"> عند تعديل مستند تم ارفاقه لِأكثر من فصل، سيتم تعديل المستند لجميع الفصول المرفق لها</span>';
 
     }, 9000);
     

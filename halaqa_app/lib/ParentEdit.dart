@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String schoolId;
-  const EditProfilePage({Key? key,required this.schoolId}) : super(key: key);
+  const EditProfilePage({Key? key, required this.schoolId}) : super(key: key);
 
   @override
   _EditProfilePageState createState() => _EditProfilePageState();
@@ -16,8 +17,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 //// Retreive
   Future<void> xx() async {
     User? user = FirebaseAuth.instance.currentUser;
-    var collection = FirebaseFirestore.instance
-        .collection('School/$schoolID/Parent');
+    var collection =
+        FirebaseFirestore.instance.collection('School/$schoolID/Parent');
     collection.doc(user!.uid).snapshots().listen((docSnapshot) {
       if (docSnapshot.exists) {
         Map<String, dynamic> data = docSnapshot.data()!;
@@ -38,8 +39,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   TextEditingController FNameController = TextEditingController();
   TextEditingController lNameController = TextEditingController();
   TextEditingController PassController = TextEditingController();
-  TextEditingController PhoneController =  TextEditingController();
-   //// not text
+  TextEditingController PhoneController = TextEditingController();
+  //// not text
   final _auth = FirebaseAuth.instance;
   bool showPassword = false;
   String? FirstName;
@@ -55,15 +56,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String NewEmail = "";
   String NewPass = "";
   var NewPhone = "";
+
   ///check if any data has changed or not.
   checkChanges() {
     return ((FirstName != FNameController.text &&
             FNameController.text.isNotEmpty) ||
         (LastName != lNameController.text && lNameController.text.isNotEmpty) ||
         (Email != emailController.text && emailController.text.isNotEmpty) ||
-        (Pass != passwordController.text && passwordController.text.isNotEmpty)||
-        (Phone != PhoneController.text && PhoneController.text.isNotEmpty)
-            );
+        (Pass != passwordController.text &&
+            passwordController.text.isNotEmpty) ||
+        (Phone != PhoneController.text && PhoneController.text.isNotEmpty));
   } //end checkChanges
 
   void initState() {
@@ -80,18 +82,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            color: Color.fromARGB(255, 76, 170, 175),
+            color: Color.fromRGBO(255, 255, 255, 1),
           ),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => parentHP(),
+                builder: (context) => appBars(
+                  schoolId: schoolID,
+                ),
               ),
             );
           },
@@ -193,72 +197,72 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         SizedBox(
                           height: 20,
                         ),
-                                 TextFormField(
-                                    maxLength: 20,
-                                    onChanged: (newText) {
-                                      NewLname = newText;
-                                    },
-                                    controller: lNameController,
-                                    decoration: InputDecoration(
-                                      labelText: "الاسم الأخير",
-                                      //hintText: "EnterF Name",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "الاسم الأخير مطلوب";
-                                      }
-                                      if (value.length > 20) {
-                                        return "الاسم يجب أن لا يزيد عن 20 حرف";
-                                      }
-                                      if (value.length <= 2) {
-                                        return "الاسم يجب أن لا يقل عن 2 حرف";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    maxLines: 1,
-                                  ),
+                        TextFormField(
+                          maxLength: 20,
+                          onChanged: (newText) {
+                            NewLname = newText;
+                          },
+                          controller: lNameController,
+                          decoration: InputDecoration(
+                            labelText: "الاسم الأخير",
+                            //hintText: "EnterF Name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "الاسم الأخير مطلوب";
+                            }
+                            if (value.length > 20) {
+                              return "الاسم يجب أن لا يزيد عن 20 حرف";
+                            }
+                            if (value.length <= 2) {
+                              return "الاسم يجب أن لا يقل عن 2 حرف";
+                            } else {
+                              return null;
+                            }
+                          },
+                          maxLines: 1,
+                        ),
 
                         SizedBox(
                           height: 20,
                         ),
-                                   
-                                       TextFormField(
-                                   // maxLength: 10,
-                                    onChanged: (newValue) {
-                                      NewPhone = newValue   ;
-                                    },
-                                    controller:PhoneController,
-                                    keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')), 
-                                    FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    decoration: InputDecoration(
-                                      labelText: " رقم الجوال",
-                                      //hintText: "EnterF Name",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "  رقم الجوال مطلوب";
-                                      }
-                                      if (value.length > 11) {
-                                       return "   رقم الجوال يجب أن لا يزيد عن 10 أرقام";
-                                      }
-                                      if (value.length < 10) {
-                                     return "   رقم الجوال يجب أن لا يقل عن 10 أرقام";;
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                
-                                  ),
+
+                        TextFormField(
+                          // maxLength: 10,
+                          onChanged: (newValue) {
+                            NewPhone = newValue;
+                          },
+                          controller: PhoneController,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          decoration: InputDecoration(
+                            labelText: " رقم الجوال",
+                            //hintText: "EnterF Name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "  رقم الجوال مطلوب";
+                            }
+                            if (value.length > 11) {
+                              return "   رقم الجوال يجب أن لا يزيد عن 10 أرقام";
+                            }
+                            if (value.length < 10) {
+                              return "   رقم الجوال يجب أن لا يقل عن 10 أرقام";
+                              ;
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
 
                         SizedBox(
                           height: 20,
@@ -344,11 +348,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             //signIn(emailController.text, passwordController.text);
                             // showAlertDialog(context);
                             method(
-                                emailController.text,
-                                passwordController.text,
-                                FNameController.text,
-                                lNameController.text,
-                                int.parse(PhoneController.text),
+                              emailController.text,
+                              passwordController.text,
+                              FNameController.text,
+                              lNameController.text,
+                              int.parse(PhoneController.text),
                             );
                           },
                           child: Container(
@@ -435,11 +439,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
       Email = value.data()!['Email'];
       emailController.text = value.data()!['Email'];
       Phone = value.data()!['Phonenumber'];
-       temp = value.data()!['Phonenumber']; 
-     //  PhoneController.value = (""+ temp) as TextEditingValue ;
-    //  PhoneController = Phone;
+      temp = value.data()!['Phonenumber'];
+      //  PhoneController.value = (""+ temp) as TextEditingValue ;
+      //  PhoneController = Phone;
       //print (temp);
-      PhoneController.text = temp.toString() ;
+      PhoneController.text = temp.toString();
       PassController.text = "********";
     });
     setState(() {});
@@ -464,7 +468,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   Future<void> method(
       String email, String pass, String fNm, String lN, int Ph) async {
     print("DATA $email, $fNm, $lN, $Ph");
-      //  int Cp = Ph as int;
+    //  int Cp = Ph as int;
     if (_formkey.currentState!.validate()) {
       User? user = FirebaseAuth.instance.currentUser;
       if (email != FirebaseAuth.instance.currentUser?.email) {
@@ -485,13 +489,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
 //        schoolID = doc.reference.parent.parent!.id;
 //        break;// Prints document1, document2
 //     }
-    
-  await FirebaseFirestore.instance.collection('School/$schoolID/Parent').doc(user!.uid).update({
-    'Email': email,
-    'FirstName': fNm ,
-    'LastName': lN,
-    'Phonenumber': Ph
-    });   
+
+      await FirebaseFirestore.instance
+          .collection('School/$schoolID/Parent')
+          .doc(user!.uid)
+          .update({
+        'Email': email,
+        'FirstName': fNm,
+        'LastName': lN,
+        'Phonenumber': Ph
+      });
 
       showDialog(
           context: context,

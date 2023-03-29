@@ -105,7 +105,8 @@ li.short{
 }
 
 .vsb-main .title {
-	margin-right: 6px;
+	margin-right: 32px;
+    margin-top: 6px;
 	user-select:none;
 }
 
@@ -157,7 +158,6 @@ li.short{
 .vsb-menu li.grouped-option i {
 	display: inline-block;
 	font-size: inherit;
-	float:left;
 	font-weight:bold;
 	margin-left:22px;
 	margin-right:2px;
@@ -175,7 +175,6 @@ li.short{
 	display: inline-block;
 	font-size: inherit;
 	color: #333;
-	float:left;
 	margin-left:0px;
 	display: inline-block;
 	transform: rotate(45deg);
@@ -206,7 +205,8 @@ li.short{
 	font-size: 14px;
 	background-color: #fff;
 	min-height:1.4em;
-	padding: 0.2em 2em 0.2em 26px;
+	padding: 0.2em 2em 0.2em 30px;
+	text-align: left;
 }
 
 .vsb-menu .multi li.grouped-option {
@@ -221,14 +221,13 @@ li.short{
 	color:rgb(52, 31, 112);
 }
 
-.vsb-menu .multi li:not(.grouped-option)::before{
+.vsb-menu .multi li:not(.grouped-option)::after{
 	content: "";
 	display: inline-block;
 	font-size: inherit;
-	float:left;
 	font-weight:bold;
-	margin-left:-22px;
-	margin-right:2px;
+	margin-left:15px;
+	margin-right:-21px;
 	border : 1px solid;
 	border-radius : 3px;
 	padding : 7px;
@@ -241,15 +240,15 @@ li.short{
 	display: inline-block;
 	font-size: inherit;
 	color: #333;
-	float:left;
-	margin-left:-18px;
+	margin-left:15px;
+	color: darkcyan;
+	background-color: darkcyan;
 	display: inline-block;
-	transform: rotate(45deg);
+	
 	margin-top:1px;
 	height: 8px;
 	width:  5px;
-	border-bottom: 3px solid black;
-	border-right:  3px solid black;
+	
 }
 
 .caret {

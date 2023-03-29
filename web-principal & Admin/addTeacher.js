@@ -183,7 +183,7 @@ onAuthStateChanged(authPrin, (user) => {
                 }
                   else if (data == 'error'){
                   $(".loader").hide();
-                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ بالنظام، الرجاء المحاولة لاحقًا </p> </div>';
+                  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> حصل خطأ،  الرجاء المحاولة لاحقًا </p> </div>';
                   setTimeout(() => {
                   
                     // 👇️ replace element from DOM

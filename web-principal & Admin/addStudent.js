@@ -235,6 +235,7 @@ addStudentForm.addEventListener('submit', async (e) => {
                   ClassID: docRefClass,
                   ParentID: docRef,
                   ///new
+                  picked:'',
                   CommissionerId: [],
                   msg_count:0
 
@@ -376,10 +377,14 @@ addStudentForm.addEventListener('submit', async (e) => {
           var ref = doc(db, "School", schoolID, "Parent", ParentId);
           var Query = query(collection(db, "School", schoolID, "Student"), where("ParentID", "==", ref));
           var snapshot = await getDocs(Query);
+
+          var childrenNames =[];
           if (!snapshot.empty) {
             snapshot.forEach(async (docu) => {
               var FName = docu.data().FirstName;
-              if (FName != addStudentForm.Fname.value) {
+              childrenNames.push(docu.data().FirstName);
+            })//snapshot.forEach(async (doc)
+              if (childrenNames.indexOf(addStudentForm.Fname.value) == -1) {
 
 
                 docRef = doc(db, "School", schoolID, "Parent", ParentId);
@@ -390,6 +395,7 @@ addStudentForm.addEventListener('submit', async (e) => {
                   ClassID: docRefClass,
                   ParentID: docRef,
                   ///new
+                  picked:'',
                   CommissionerId: [],
                   msg_count:0
 
@@ -441,7 +447,7 @@ addStudentForm.addEventListener('submit', async (e) => {
                 //return;
 
               }
-            })//snapshot.forEach(async (doc)
+         
           }//if (!snapshot.empty) 
 
         }// if not doc.empty
@@ -504,6 +510,18 @@ $(".phone").change(async function () {
         $("#FnameParent").val(d.data().FirstName);
         $("#LnameParent").val(d.data().LastName);
         $("#emailP").val(d.data().Email);
+
+        document.getElementById('parentInfoLabel1').style.transform = 'translate(-13px, -35px)';
+        document.getElementById('parentInfoLabel2').style.transform = 'translate(-13px, -35px)';
+        document.getElementById('parentInfoLabel3').style.transform = 'translate(-13px, -35px)';
+
+        document.getElementById("FnameParent").disabled = true;
+        document.getElementById("LnameParent").disabled = true;
+        document.getElementById("emailP").disabled = true;
+        
+
+
+        
         $(".loader").hide();
             } else{
               $(".loader").hide();
@@ -533,7 +551,7 @@ const colRef = collection(db, 'Parent');
 
 
 //get collection data
-getDocs(colRef)
+await getDocs(colRef)
   .then((snapshot) => {
     let Parent = []
     snapshot.docs.forEach((doc) => {

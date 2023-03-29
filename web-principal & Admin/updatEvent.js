@@ -35,12 +35,13 @@ const storage = getStorage(app);
 var reference;
 var srefrence
 var eventID;
+var schoolID ;
 export async function updatEvent(eventId, schoolId){ 
      reference = doc(db,"School", schoolId,"Event", eventId);
      srefrence = doc(db, "School", schoolId);
     const qc = collection(srefrence, "Event");
     eventID=eventId;
-
+    schoolID=schoolId;
     let event = await getDoc(reference);
 document.getElementById("eventTitle").value=event.data().title;
 document.getElementById("content").value=event.data().content;
@@ -65,7 +66,8 @@ save.addEventListener('click', async (e) => {
   $('.loader').show();
   e.preventDefault();
   if(document.getElementById("eventTitle").value ==''){
-    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين اسم للحدث </p> </div>';
+    $('.loader').hide();
+    document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto; "> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> يجب تعيين اسم للحدث </p> </div>';
     setTimeout(() => {
             
       // 👇️ replace element from DOM
@@ -100,11 +102,29 @@ await updateDoc(reference,{
   content: document.getElementById("content").value,
   image:imageName,
 
-}).then(() => {
+}).then(async () => {
+   //get tokens 
+   const parentsQ = query(collection(db, "School",schoolID,'Parent'), where("token", "!=", null));
+   const parents = await getDocs(parentsQ);
+   var tokens = [];
+   parents.forEach((doc) => {
+   
+     tokens.push(doc.data().token);
+   });
+    //send the notfication
+    $.post("http://localhost:8080/event",
+    {
+      token: tokens,
+      eventName: document.getElementById("eventTitle").value,
+   },
+   function (data, stat) {
+
+   });
+   
   $('.loader').hide();
-  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم التعديل بنجاح </p> </div>';
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto; "> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم التعديل بنجاح </p> </div>';
   setTimeout(() => {
-          
+            
     // 👇️ replace element from DOM
     document.getElementById('alertContainer').innerHTML ='';
   }, 5000);

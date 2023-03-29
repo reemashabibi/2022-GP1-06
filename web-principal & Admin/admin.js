@@ -245,7 +245,6 @@ export async function viewStudents(classId, schoolId){
     
   const d = await getDoc(studentid);
 
-
     var firstName = d.data().FirstName;
     var lastName = d.data().LastName;
 
@@ -604,29 +603,47 @@ $(document).ready(function () {
   });
   // check Absence
   $(document).on('click', '#saveAttendence', async function () {
-   var abenceTaken = true;
+   var abenceTaken;
    var breakOut;
-    $('#schedule tr').each( async function() {
-      var refre =  $(this).attr('id');
-      var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
-        if (abcense.exists()) {
-          abenceTaken = true;
-          breakOut = true;
+   var i=0;
+
+async function checkIfAbsenceTaken(){
+   $('#schedule tr').each( async function() {
       
-          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لقد تم نسجيل الحضور مسبقًا لهذا الفصل</p> </div>';
-          setTimeout(() => {
-            document.getElementById('alertContainer').innerHTML='';
+    var refre =  $(this).attr('id');
+    var abcense = await getDoc(doc(db, refre+'/Absence/'+date));
+      if (abcense.exists()) {
+        abenceTaken = true;
+    
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">لقد تم تسجيل الحضور مسبقًا لهذا الفصل</p> </div>';
+        setTimeout(() => {
+          document.getElementById('alertContainer').innerHTML='';
+          
+        }, 5000);
+        return false;
+          }
+      else{
+        abenceTaken = false;
+      }
+            });
+
+            return new Promise((resolve, reject) => {
+              setTimeout(() => { 
+                 resolve(abenceTaken)
+              }, 2000)
+          }) 
+
+          }
+        
+
             
-          }, 5000);
-          return false;
-        }
-        else{
-          abenceTaken = false;
-        }
-   if(breakOut) {
-                breakOut = false;
-                return false;
-            } 
+    $('#schedule tr').each( async function() {
+   
+      if(!(await checkIfAbsenceTaken())){
+        
+      var refre =  $(this).attr('id');
+
+
       var status = $(this).find("td:first").attr('class');
       if(status == "abcenseBtn out"){
 
@@ -634,20 +651,55 @@ $(document).ready(function () {
           excuse: "", 
           FileName: '' 
      });
+     await updateDoc(doc(db, refre), {
+      viewedLastAbsence: false,
+ });
+    // start send notification
+    var stu = await getDoc(doc(db, refre));
+    var pref = stu.data().ParentID
+    var parentDoc = await getDoc(pref);
+            //send the notfication
+            $.post("http://localhost:8080/absence",
+            {
+              token: parentDoc.data().token,
+              stuRef: refre,
+              studentName: stu.data().FirstName+' '+stu.data().LastName
+           },
+           function (data, stat) {
+
+           });
       }
-              });
-           
-              if(abenceTaken == false){
+       i++;
+    
+      if(abenceTaken == false && i==1){
               
-              document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم نسجيل الحضور</p> </div>';
-              setTimeout(() => {
-                document.getElementById('alertContainer').innerHTML='';
-                
-              }, 5000);
-            }
-              console.log(date);
+        document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">تم تسجيل الحضور</p> </div>';
+        setTimeout(() => {
+          document.getElementById('alertContainer').innerHTML='';
+          
+        }, 5000);
+      }
+    }
+    else{
+      breakOut = true;
+       return false;
+
+    }
+    if(breakOut) {
+      breakOut = false;
+      return false;
+  } 
+              });
+            
+          
+              
+             
+             
+    
+
   });
-  
+
+  //to change the absence button color 
   $(document).on('click', '.abcenseBtn', async function () {
     var abcenseBtn = $(this);
     if($(this).text() == "حاضر"){
@@ -699,7 +751,8 @@ $(document).ready(function () {
         })
     }
     else{
-      $('.transfer option:first').prop('selected',true);
+      $(".transfer option:selected").prop("selected", false);
+$(".transfer option:first").prop("selected", "selected");
     }
 
   });

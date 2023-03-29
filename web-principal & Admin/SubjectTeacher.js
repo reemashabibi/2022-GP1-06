@@ -53,6 +53,7 @@ var classId;
 var globalTeachers;
 var currentSubjects =[];
   export async function subjectTeacherForm(cid, sid){
+    $('.loader').show();
     const classrefrence = doc(db, "School", sid, "Class", cid);
     const classData = await getDoc(classrefrence);
     var titleName= document.createTextNode(classData.data().LevelName+"-"+classData.data().ClassName);
@@ -111,7 +112,7 @@ currentSubjects.push(subject);
     dropdown.appendChild(optionDefault);
 
     var teacherNotDeleted = false;
-    if(subjectdoc.data().TeacherID != ""){
+    if(subjectdoc.data().TeacherID != "" && subjectdoc.data().TeacherID != null){
       for(var i=0; i<teachers.length;i++){
         if(teachers[i] == subjectdoc.data().TeacherID.id ){
           teacherNotDeleted = true;
@@ -138,7 +139,7 @@ currentSubjects.push(subject);
       }
 
     }
-    if(subjectdoc.data().TeacherID == "" ){
+    if(subjectdoc.data().TeacherID == "" || subjectdoc.data().TeacherID == null){
         optionDefault.innerHTML= "--لم يتم تعيين معلم--";
         optionDefault.value = "";
 
@@ -163,7 +164,7 @@ currentSubjects.push(subject);
   
     
     for(var i=0; i<teachers.length;i++){
-      if(subjectdoc.data().TeacherID != "" && teachers[i] == subjectdoc.data().TeacherID.id ){
+      if((subjectdoc.data().TeacherID != "" && subjectdoc.data().TeacherID != null) && teachers[i] == subjectdoc.data().TeacherID.id ){
         i+=2 
         
     }
@@ -205,6 +206,7 @@ currentSubjects.push(subject);
 document.getElementById('content').appendChild(tr);
 classId = cid;
   });
+  $('.loader').hide();
 
   }
 
@@ -222,7 +224,13 @@ classId = cid;
          var arrId = [];
          var deleted = false;
         if($('input[name="chosensubjects[]"]:checked').length == 0){
-          alert("ليتم حذف المواد/المادة يجب النقر على مربع تحديد واحد أو أكثر ");
+     
+          document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">ليتم حذف المواد/المادة يجب النقر على مربع تحديد واحد أو أكثر </p> </div>';
+          setTimeout(() => {
+          
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '';    
+          }, 5000);
           return;
         }
          if(confirm(" هل أنت متأكد من حذف هذه المواد/المادة وجميع البيانات المتعلقة بها؟")){
@@ -257,19 +265,32 @@ classId = cid;
 
          })
 if(deleted){
-  alert("لقد تم حذف المواد");
+  document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert success">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> لقد تم حذف المواد</p> </div>';
+  setTimeout(() => {
+  
+    // 👇️ replace element from DOM
+    document.getElementById('alertContainer').innerHTML = '';      
+  }, 5000);
 }
 
         }
           
       });
-var currentSubjectsWithoutSomeChar =[];
-for (var l=0; l<currentSubjects.length; l++){
- //var str = currentSubjects[l].slice(2);
- currentSubjectsWithoutSomeChar.push(currentSubjects[l]);
-}
-console.log(currentSubjectsWithoutSomeChar);
+
+
+
+//create new subject
+
       $('#add').click(function(){
+
+        // this code is to trim the string form (ال) to compare if the subject exist or not
+        var currentSubjectsWithoutSomeChar =[];
+for (var l=0; l<currentSubjects.length; l++){
+ var str = currentSubjects[l].slice(2);
+ currentSubjectsWithoutSomeChar.push(str);
+}
+// end of triming 
+
         $('.loader').show();
         var subjectName = document.getElementById('sname').value;
         if(subjectName == ""){
@@ -279,7 +300,7 @@ console.log(currentSubjectsWithoutSomeChar);
           setTimeout(() => {
           
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+            document.getElementById('alertContainer').innerHTML = '';
       
           }, 5000);
         }
@@ -290,7 +311,7 @@ console.log(currentSubjectsWithoutSomeChar);
           setTimeout(() => {
           
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+            document.getElementById('alertContainer').innerHTML = '';
       
           }, 5000);
           document.getElementById('sname').value="";
@@ -304,6 +325,7 @@ console.log(currentSubjectsWithoutSomeChar);
         const data = {
           SubjectName: subjectName,
           TeacherID: "",
+          msg_count:0, 
           customized: false 
        };
        addDoc(dbRef, data)
@@ -314,8 +336,7 @@ console.log(currentSubjectsWithoutSomeChar);
           setTimeout(() => {
           
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
-      
+            document.getElementById('alertContainer').innerHTML = '';      
           }, 5000);
           document.getElementById('sname').value= "";
           //add it to the table 
@@ -394,8 +415,7 @@ console.log(currentSubjectsWithoutSomeChar);
         setTimeout(() => {
         
           // 👇️ replace element from DOM
-          document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
-    
+          document.getElementById('alertContainer').innerHTML = '';    
         }, 5000);
         $('.loader').hide();
        })
@@ -434,16 +454,21 @@ console.log(currentSubjectsWithoutSomeChar);
 
             const data = {
               SubjectName: subjectName,
-              TeacherID: teacherRef
+              TeacherID: teacherRef,
+              msg_count:0, 
+          customized: false
             };
 
-            setDoc(docRef, data)
+            updateDoc(docRef, data)
              .then(docref => {
               console.log("Entire Document has been updated successfully");
               if(teacherValue != "")
                 updateDoc(teacherRef, {
                 Subjects: arrayUnion(docRef)
-            }).then(dicresfre =>{
+            }).then(dicresfre =>  {
+               setDoc(doc(db,"School",principalId,"Teacher",teacherRef.id,"subjects",docRef.id),{
+                msg_count: 0,
+              } )
             })
             
              })
@@ -459,8 +484,7 @@ console.log(currentSubjectsWithoutSomeChar);
           setTimeout(() => {
           
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
-      
+            document.getElementById('alertContainer').innerHTML = '';      
           }, 5000);
         }
         else{
@@ -468,8 +492,7 @@ console.log(currentSubjectsWithoutSomeChar);
           setTimeout(() => {
           
             // 👇️ replace element from DOM
-            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
-      
+            document.getElementById('alertContainer').innerHTML = '';      
           }, 5000);
         }
       }

@@ -89,7 +89,6 @@ class _viewChildGradesState extends State<viewChildGrades> {
         .collection("Grades")
         .where('subjectID', isEqualTo: widget.subRef)
         .get();
-    print("stRef.docs.length     " + stRef.docs.length.toString());
     if (stRef.docs.length > 0) {
       for (int i = 0; i < numOfAssess; i++) {
         Future<List<assessment>> getAssessment() async {
@@ -123,10 +122,8 @@ class _viewChildGradesState extends State<viewChildGrades> {
         }).toList();
       });
 
-      print("in if");
       DocumentReference docu =
           await widget.stRef.collection("Grades").doc(gradeID);
-      print(gradeID);
 
       for (int i = 0; i < numOfAssess; i++) {
         Future<List<assessment>> getAssess() async {
@@ -142,17 +139,16 @@ class _viewChildGradesState extends State<viewChildGrades> {
         assessments2 = await getAssess();
         setState(() {
           studentAssessmentsList.addAll(assessments2);
+          if (v == 0) {
+            setState(() {
+              assessmentsList.removeAt(0);
+              studentAssessmentsList.removeAt(0);
+              v++;
+            });
+          }
 
           totalGrade += studentAssessmentsList[i].grade;
         });
-
-        if (v == 0) {
-          setState(() {
-            assessmentsList.removeAt(0);
-            studentAssessmentsList.removeAt(0);
-            v++;
-          });
-        }
       }
     }
     noGrades = true;
@@ -169,52 +165,9 @@ class _viewChildGradesState extends State<viewChildGrades> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
       ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          currentIndex: 2, // Use this to update the Bar giving a position
-          inactiveColor: Color.fromARGB(255, 9, 18, 121),
-          indicatorColor: Color.fromARGB(255, 76, 170, 175),
-          activeColor: Color.fromARGB(255, 76, 170, 175),
-          onTap: (index) {
-            if (index == 0) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => parentHP(),
-                ),
-              );
-            }
-            if (index == 1) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => viewEvents(),
-                ),
-              );
-            }
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: Text('الصفحة الرئيسية',
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-              title: Text('الأحداث',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
-              icon: const Icon(Icons.calendar_today),
-            ), /*
-            TitledNavigationBarItem(
-              title: Text('Events'),
-              icon: Image.asset(
-                "images/eventsIcon.png",
-                width: 20,
-                height: 20,
-                //fit: BoxFit.cover,
-              ),
-            ),*/
-          ]),
       body: FutureBuilder(
           future: FirebaseFirestore.instance
               .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
@@ -225,13 +178,11 @@ class _viewChildGradesState extends State<viewChildGrades> {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
             }
-            print("object");
             //Check if data arrived
             if (x == 0) {
               getData();
             }
-            print("assessmentsList.name    " + assessmentsList[0].name);
-            print("v    " + v.toString());
+
             if (studentAssessmentsList[0].name != "") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
@@ -254,26 +205,19 @@ class _viewChildGradesState extends State<viewChildGrades> {
                   ),
                   new Container(
                     child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: EdgeInsets.only(right: 30.0, left: 30.0),
                       children: studentAssessmentsList.map((e) {
                         return Container(
-                            margin: EdgeInsets.only(bottom: 10),
+                            margin: EdgeInsets.only(bottom: 5),
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                                shape: BoxShape.rectangle,
-                                color: Color.fromARGB(255, 251, 250, 250),
-                                border: Border.all(
-                                  color: Color.fromARGB(255, 130, 126, 126),
-                                  width: 2.5,
-                                ),
-                                borderRadius: BorderRadius.circular(100.0),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: Color.fromARGB(255, 239, 240, 240),
+                            ),
+                            // margin: EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(10),
                             child: new Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -282,23 +226,20 @@ class _viewChildGradesState extends State<viewChildGrades> {
                                     child: Text(e.name,
                                         //    textAlign: TextAlign.right,
                                         style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 20,
                                             fontWeight: FontWeight.bold)),
 
-                                    margin: EdgeInsets.all(4),
-                                    padding: const EdgeInsets.fromLTRB(
-                                        0.0, 0, 10.0, 0),
                                     // padding: EdgeInsets.all(),
                                   ),
                                   //SizedBox(width: 100),
                                   //  Spacer(),
                                   new Container(
                                     child: SizedBox(
-                                      width: 60,
-                                      height: 50,
+                                      width: 80,
+                                      height: 30,
                                       child: FittedBox(
                                         child: FloatingActionButton.extended(
-                                          shape: new CircleBorder(),
+                                          //   shape: new CircleBorder(),
                                           heroTag: null,
                                           backgroundColor: Color.fromARGB(
                                               255, 199, 248, 248),
@@ -320,7 +261,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
                                                 fontWeight: FontWeight.bold,
                                                 color: Color.fromARGB(
                                                     255, 80, 80, 80),
-                                                fontSize: 20,
+                                                fontSize: 25,
                                               )),
                                         ),
                                       ),
@@ -338,7 +279,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
                       height: 100,
                       child: FittedBox(
                         child: FloatingActionButton.extended(
-                          shape: new CircleBorder(),
+                          //  shape: new CircleBorder(),
                           heroTag: null,
                           backgroundColor: Color.fromARGB(255, 199, 248, 248),
                           onPressed: () {},

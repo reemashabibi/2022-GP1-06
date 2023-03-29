@@ -85,7 +85,7 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 76, 170, 175),
+        backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
           icon: Icon(
@@ -129,18 +129,18 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                     height: 120,
                     width: 500,
                     decoration: BoxDecoration(
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(50),
-                          bottomLeft: Radius.circular(50)),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      gradient: LinearGradient(
-                        colors: [
-                          Color.fromARGB(255, 76, 170, 175),
-                          Color.fromARGB(255, 255, 255, 255)
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
+                          bottomLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
                     ),
                     padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
                     child: Text(
@@ -156,30 +156,23 @@ class _viewStudentsForGradesState extends State<viewStudentsForGrades> {
                   new Container(
                     child: ListView(
                       physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 20),
+                      padding: const EdgeInsets.fromLTRB(10.0, 20, 10.0, 20),
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {
                         return InkWell(
                           child: Container(
+                            width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100.0),
-                                color: Color.fromARGB(255, 231, 231, 231),
-                                border: Border.all(
-                                  color: Color(0xffEEEEEE),
-                                  width: 2.0,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.grey,
-                                      blurRadius: 2.0,
-                                      offset: Offset(2.0, 2.0))
-                                ]),
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: Color.fromARGB(255, 239, 240, 240),
+                            ),
+                            margin: EdgeInsets.only(bottom: 10),
+                            padding: const EdgeInsets.all(15),
                             child: Text(e,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold)),
-                            margin: EdgeInsets.all(5),
-                            padding: EdgeInsets.all(15),
+
                             //   color: Color.fromARGB(255, 222, 227, 234),
                           ),
                           onTap: () {

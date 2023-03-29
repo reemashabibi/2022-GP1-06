@@ -76,9 +76,20 @@ function pass() {
   }
   return pass;
 }
+var uploaded = false;
 ///////////////////////////////////// Add StudentS //////////////////////////////////////////////////////
+
+
 const excel_file = document.getElementById('excel_file');
 excel_file.addEventListener('change', (event) => {
+
+  if(uploaded) {
+
+    uploaded = false;
+    location.reload();
+ //   return false;
+ }
+ uploaded = true;
   if (!['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'].includes(event.target.files[0].type)) {
     document.getElementById('excel_data').innerHTML = '<div class="alert alert-danger">.xls او .xlsx يسمح فقط برفع ملف بصيغة </div>';
     excel_file.value = '';
@@ -118,6 +129,7 @@ excel_file.addEventListener('change', (event) => {
             table_output += '<th>' + sheet_data[row][cell] + '</th>';
           }
           else {
+            if(sheet_data[row][cell] !== undefined )
             table_output += '<td id="row' + cell + '">' + sheet_data[row][cell] + '</td>';
           }
         }
@@ -203,56 +215,56 @@ excel_file.addEventListener('change', (event) => {
 
              //***********/  
              if (validate1 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الأولى يجب أن تحتوي على الاسم الأول للطالب، يرجى تحميل نموذج الإضافة ورفعه </p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الأولى يجب أن تحتوي على الاسم الأول للطالب، يرجى تحميل نموذج الإضافة ورفعه </p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate2 == false){ 
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثانية يجب أن تحتوي على الاسم الأخير للطالب، يرجى تحميل نموذج الإضافة ورفعه </p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input  id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثانية يجب أن تحتوي على الاسم الأخير للطالب، يرجى تحميل نموذج الإضافة ورفعه </p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate3 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثالثة يجب أن تحتوي على اسم الفصل، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثالثة يجب أن تحتوي على اسم الفصل، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate4 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الرابعة يجب أن تحتوي على رقم المرحلة الدراسية، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الرابعة يجب أن تحتوي على رقم المرحلة الدراسية، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate5 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الخامسة يجب أن تحتوي على رقم هاتف ولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input  id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الخامسة يجب أن تحتوي على رقم هاتف ولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate6 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة السادسة يجب أن تحتوي على الاسم الأول لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input  id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة السادسة يجب أن تحتوي على الاسم الأول لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate7 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة السابعة يجب أن تحتوي على الاسم الأخير لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة السابعة يجب أن تحتوي على الاسم الأخير لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
              // break;
              }
              if(validate8 == false){
-              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثامنة يجب أن تحتوي على البريد الإلكتروني لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
+              document.getElementById('excel_data').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input  id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">الخانة الثامنة يجب أن تحتوي على البريد الإلكتروني لولي الأمر، يرجى تحميل نموذج الإضافة ورفعه</p> </div>';
               setTimeout(() => {
                 document.getElementById('excel_data').innerHTML='';
               }, 9000);
@@ -315,6 +327,7 @@ excel_file.addEventListener('change', (event) => {
             }
             if (cell == 7) {
               registerParentEmail = sheet_data[row][cell];
+              if(typeof registerParentEmail === "string" && registerParentEmail.trim() !== "")
               registerParentEmail = registerParentEmail.toLowerCase();
 
             }
@@ -384,6 +397,7 @@ excel_file.addEventListener('change', (event) => {
                       ClassID: docRefClass,
                       ParentID: docRef,
                       ///new
+                      picked:'',
                       CommissionerId: [],
                       msg_count:0
 
@@ -405,6 +419,7 @@ excel_file.addEventListener('change', (event) => {
           
                   }//if parent and class exist/
         else if (!queryClassSnapshot.empty && querySnapshot.empty && !studentParentExist ) {
+          if(typeof registerFname === "string" && registerFname.trim() !== "" ||  typeof registerParentEmail === "string" && registerParentEmail.trim() !== "" || typeof registerParentFname === "string" && registerParentFname.trim() !== "" || typeof registerParentlname === "" && registerParentlname.trim() !== "" && (registerlname !== undefined && registerFname !== undefined && registerParentFname !== undefined && registerParentlname !== undefined))
           authParent(registerFname ,registerlname, registerClass,registerParentPhone ,registerParentFname,registerParentlname ,registerParentEmail ,schoolID,registerPass,queryClassSnapshot,row,table)
 
         } else if(queryClassSnapshot.empty ) {
@@ -471,6 +486,9 @@ const colRefStudent = collection(db, "School", schoolID, "Student");
               LastName: registerlname,
               ClassID: docRefClass,
               ParentID: res,
+              picked:'',
+              CommissionerId: [],
+              msg_count:0
             }).then(d => {
               //docRef = doc(db, "School",schoolID, "Parent", res.id);
               const StuRef = doc(db, "School", schoolID, "Student", d.id);

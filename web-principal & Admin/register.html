@@ -128,12 +128,12 @@
     $(".loader").hide();
 
     submit.addEventListener('click', async (e) => {
-      Email = Email.value.toLowerCase();
       $(".loader").show();
       e.preventDefault()
       if (!validate()) {
         return false;
       }
+      Email = Email.value.toLowerCase();
       //check if school exitsts
       const q = query(collection(db, "School"), where("schoolName", "==", schoolName.value));
       const querySnapshot = await getDocs(q);
@@ -261,9 +261,6 @@
             }, 5000);
         return false;
       }
-
-
-
 
      
 
