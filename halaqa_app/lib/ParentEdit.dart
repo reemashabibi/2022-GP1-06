@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/parentHP.dart';
 
@@ -499,7 +500,11 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'LastName': lN,
         'Phonenumber': Ph
       });
-
+      Fluttertoast.showToast(
+    msg:"تم حفظ التعديلات بنجاح",
+    backgroundColor:
+   Colors.green);    
+/*
       showDialog(
           context: context,
           builder: (context) {
@@ -512,6 +517,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             );
           });
+          */
       return;
     }
   }

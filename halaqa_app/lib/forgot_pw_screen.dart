@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 
@@ -28,6 +29,11 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
    try{
      await FirebaseAuth.instance
      .sendPasswordResetEmail(email: emailController.text.trim());
+   Fluttertoast.showToast(
+    msg:"تم إرسال بريد إلكتروني لإعادة تعيين كلمة المرور" ,
+    backgroundColor:
+     Colors.green);
+     /*
      showDialog(
       context: context,
       builder: (context) {
@@ -36,13 +42,20 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
         );
       }
      );
+     */
    }on FirebaseAuthException catch (e){
     print (e);
+   Fluttertoast.showToast(
+    msg: "لم يتم العثور على مستخدم لهذا البريد الإلكتروني" ,
+    backgroundColor:
+     Color.fromARGB(255, 221, 33, 30));
+    ////
+    /*
     showDialog(
       context: context, 
       builder: (context){
         return AlertDialog(
-           content: Text("لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
+           content: Text("لم يتم العثور على مستخدم لهذا البريد الإلكتروني" ,
                   style: TextStyle(
             color: Colors.red,
           ),
@@ -50,7 +63,8 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
                ),
         );
       }
-      );
+      );*/
+      ////
    }
   }
 
@@ -244,6 +258,12 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
+    Fluttertoast.showToast(
+    msg: "لم يتم العثور على مستخدم لهذا البريد الإلكتروني" ,
+    backgroundColor:
+     Color.fromARGB(255, 221, 33, 30));
+
+/*
           //showDialog
          showDialog(
            context: context,
@@ -253,6 +273,8 @@ class _ForgotPasswordPage extends State<ForgotPasswordPage> {
                );
             }
          );
+         */
+
         } else {
           //Nothing
         }

@@ -330,8 +330,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                             }
                           }).catchError((e) {
                             print("EERRROR ${e.toString()}");
-
-                            ///
+print (e);
+                            /*
                             showDialog(
                                 context: context,
                                 builder: (context) {
@@ -344,6 +344,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                     ),
                                   );
                                 });
+                                */
 
                             ///
                           });
@@ -409,6 +410,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                   .sendPasswordResetEmail(email: email.text)
                                   .then((value) {
                                 ////
+                                print ("reset pass has been sent!");
+                                /*
                                 showDialog(
                                     context: context,
                                     builder: (context) {
@@ -421,7 +424,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                         ),
                                       );
                                     });
-
+                                 */
                                 ///Delete Later
                               });
 
@@ -466,6 +469,8 @@ class _AddCommissionerState extends State<AddCommissioner> {
                             print("EERRROR ${e.toString()}");
 
                             ///
+                            print (e);
+                            /*
                             showDialog(
                                 context: context,
                                 builder: (context) {
@@ -478,6 +483,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                     ),
                                   );
                                 });
+                                */
 
                             ///
                           });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/teacher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -470,7 +471,11 @@ getSchoolID();
     'LastName': lN,
     'OfficeHours': OH,
     });   
-
+  Fluttertoast.showToast(
+    msg:"تم حفظ التعديلات بنجاح",
+    backgroundColor:
+   Colors.green);  
+/*
       showDialog(
           context: context,
           builder: (context) {
@@ -483,6 +488,7 @@ getSchoolID();
               ),
             );
           });
+          */
       return;
     }
   }
