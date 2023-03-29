@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/teacherHP.dart';
 
@@ -414,31 +415,13 @@ class _classGradesState extends State<classGrades> {
         }
       });
 
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(
-                "تم حفظ التعديلات بنجاح",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-            );
-          });
+      Fluttertoast.showToast(
+          msg: "تم حفظ التعديلات بنجاح",
+          backgroundColor: Color.fromARGB(255, 97, 200, 0));
     } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(
-                "لم تتم حفظ التغييرات، مجموع الدرجات أكبر من ١٠٠!",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-            );
-          });
+      Fluttertoast.showToast(
+          msg: "لم تتم حفظ التغييرات، مجموع الدرجات أكبر من ١٠٠!",
+          backgroundColor: Color.fromARGB(255, 221, 33, 30));
     }
   }
 

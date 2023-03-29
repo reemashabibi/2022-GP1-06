@@ -500,11 +500,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'LastName': lN,
         'Phonenumber': Ph
       });
-      Fluttertoast.showToast(
-    msg:"تم حفظ التعديلات بنجاح",
-    backgroundColor:
-   Colors.green);    
-/*
+
       showDialog(
           context: context,
           builder: (context) {
@@ -517,7 +513,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             );
           });
-          */
       return;
     }
   }

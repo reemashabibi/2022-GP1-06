@@ -35375,11 +35375,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_storage/firebase_storage-prefix.pch";
@@ -35445,11 +35453,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/fluttertoast/fluttertoast-prefix.pch";
@@ -35530,11 +35546,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/fluttertoast/fluttertoast-prefix.pch";
@@ -35616,11 +35640,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_auth/firebase_auth-prefix.pch";
@@ -35669,11 +35701,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/path_provider_foundation/path_provider_foundation-prefix.pch";
@@ -35750,11 +35790,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/file_picker/file_picker-prefix.pch";
@@ -35801,11 +35849,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_storage/firebase_storage-prefix.pch";
@@ -35929,11 +35985,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_core/firebase_core-prefix.pch";
@@ -35984,11 +36048,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Target Support Files/Pods-Runner/Pods-Runner-Info.plist";
@@ -36247,11 +36319,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/permission_handler/permission_handler-prefix.pch";
@@ -36521,11 +36601,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/open_file/open_file-prefix.pch";
@@ -36608,11 +36696,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/permission_handler/permission_handler-prefix.pch";
@@ -36659,11 +36755,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/fluttertoast/fluttertoast-prefix.pch";
@@ -36745,11 +36849,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/cloud_firestore/cloud_firestore-prefix.pch";
@@ -37144,11 +37256,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_auth/firebase_auth-prefix.pch";
@@ -37370,11 +37490,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/shared_preferences_foundation/shared_preferences_foundation-prefix.pch";
@@ -37416,11 +37544,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/flutter_local_notifications/flutter_local_notifications-prefix.pch";
@@ -37467,11 +37603,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/path_provider_foundation/path_provider_foundation-prefix.pch";
@@ -37581,11 +37725,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/native_font/native_font-prefix.pch";
@@ -37631,11 +37783,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/native_font/native_font-prefix.pch";
@@ -37682,11 +37842,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/open_file/open_file-prefix.pch";
@@ -37943,11 +38111,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/url_launcher_ios/url_launcher_ios-prefix.pch";
@@ -37995,11 +38171,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_auth/firebase_auth-prefix.pch";
@@ -38048,11 +38232,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/cloud_firestore/cloud_firestore-prefix.pch";
@@ -38294,11 +38486,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_messaging/firebase_messaging-prefix.pch";
@@ -38471,11 +38671,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/url_launcher_ios/url_launcher_ios-prefix.pch";
@@ -38611,11 +38819,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/flutter_local_notifications/flutter_local_notifications-prefix.pch";
@@ -38730,11 +38946,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/file_picker/file_picker-prefix.pch";
@@ -38780,11 +39004,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/shared_preferences_foundation/shared_preferences_foundation-prefix.pch";
@@ -38948,11 +39180,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/open_file/open_file-prefix.pch";
@@ -38999,11 +39239,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/file_picker/file_picker-prefix.pch";
@@ -39050,11 +39298,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/path_provider_foundation/path_provider_foundation-prefix.pch";
@@ -39118,11 +39374,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_core/firebase_core-prefix.pch";
@@ -39276,11 +39540,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/url_launcher_ios/url_launcher_ios-prefix.pch";
@@ -39328,11 +39600,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/cloud_firestore/cloud_firestore-prefix.pch";
@@ -39381,11 +39661,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_storage/firebase_storage-prefix.pch";
@@ -39498,11 +39786,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Target Support Files/Pods-Runner/Pods-Runner-Info.plist";
@@ -39708,11 +40004,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/shared_preferences_foundation/shared_preferences_foundation-prefix.pch";
@@ -39823,11 +40127,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_messaging/firebase_messaging-prefix.pch";
@@ -39946,11 +40258,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_messaging/firebase_messaging-prefix.pch";
@@ -40124,11 +40444,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/firebase_core/firebase_core-prefix.pch";
@@ -40179,11 +40507,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Target Support Files/Pods-Runner/Pods-Runner-Info.plist";
@@ -40231,11 +40567,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/flutter_local_notifications/flutter_local_notifications-prefix.pch";
@@ -40409,11 +40753,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/permission_handler/permission_handler-prefix.pch";
@@ -40530,11 +40882,19 @@
 				"EXCLUDED_ARCHS[sdk=iphoneos*]" = "$(inherited) armv7";
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = "$(inherited) i386";
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphoneos*]" = (
+<<<<<<< HEAD
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
 					"$(inherited)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
 					"\"/Users/reemafahad/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+=======
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64\"",
+					"$(inherited)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[sdk=iphonesimulator*]" = (
+					"\"/Users/maca7/flutter/bin/cache/artifacts/engine/ios-release/Flutter.xcframework/ios-arm64_x86_64-simulator\"",
+>>>>>>> c618064ba69db8d0071e0c44b1406d1d6918c0cf
 					"$(inherited)",
 				);
 				GCC_PREFIX_HEADER = "Target Support Files/native_font/native_font-prefix.pch";

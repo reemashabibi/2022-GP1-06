@@ -48,6 +48,7 @@ class _teacherHPState extends State<teacherHP> {
   var className = "";
   List<subject> subjectsList = [];
   late List _SubjectsRefList;
+  late List subjectChatCount;
   bool isExpanded = false;
 
   var x = 0;
@@ -63,6 +64,7 @@ class _teacherHPState extends State<teacherHP> {
     subjectsList.add(subject("", null, "", "", ""));
 
     _SubjectsRefList = [""];
+    subjectChatCount = [0];
     // _SubjectsIdsList = [""];
     x++;
   }
@@ -95,8 +97,11 @@ class _teacherHPState extends State<teacherHP> {
 
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference docu = ds['Subjects'][i];
-        DocumentReference str = ds['Subjects'][i].parent.parent;
+        DocumentReference teacherSubjectMsg_count = FirebaseFirestore.instance.doc(
+            'School/$schoolID/Teacher/${user.uid}/subjects/${ds['Subjects'][i].id}');
 
+        DocumentReference str = ds['Subjects'][i].parent.parent;
+        print("ZZZZZZZZ ${ds['Subjects'][i].parent.parent.id}");
         // var classRef = await docRef.collection("Announcement").get();
 
         var clsName = await str.get().then((value) {
@@ -109,9 +114,20 @@ class _teacherHPState extends State<teacherHP> {
           });
         });
 
-        var subName = await docu.get().then((value) {
+        await docu.get().then((value) {
           setState(() {
+            print("SUBJECT ID ${value.id}");
+
             _SubjectsRefList.add(docu);
+          });
+        });
+        await teacherSubjectMsg_count.get().then((value) {
+          setState(() {
+            if (value.exists) {
+              subjectChatCount.add(value['msg_count']);
+            } else {
+              subjectChatCount.add(0);
+            }
           });
         });
       }
@@ -119,6 +135,7 @@ class _teacherHPState extends State<teacherHP> {
         if (_SubjectsRefList.length > 1 && !refreshed) {
           subjectsList.removeAt(0);
           _SubjectsRefList.removeAt(0);
+          subjectChatCount.removeAt(0);
           refreshed = true;
         }
       });
@@ -142,13 +159,13 @@ class _teacherHPState extends State<teacherHP> {
 
   @override
   void initState() {
-    getSubjects();
+    getToken();
     getSchoolID();
     // getSchoolID();
     //remove();
 
     requestPremission();
-    getToken();
+
     initInfo();
 
     super.initState();
@@ -261,7 +278,7 @@ class _teacherHPState extends State<teacherHP> {
 
 //save token to the user document
   void saveToken(String token) async {
-    await getSchoolID();
+    await getSubjects();
     FirebaseFirestore.instance
         .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
         .update({'token': token});
@@ -394,7 +411,7 @@ class _teacherHPState extends State<teacherHP> {
                           },
                           child: Container(
                             child: ListView(
-                              physics: const AlwaysScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding:
                                   const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
@@ -543,53 +560,83 @@ class _teacherHPState extends State<teacherHP> {
                                                   const SizedBox(
                                                     width: 40,
                                                   ),
-                                                  Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 44,
-                                                        height: 44,
-                                                        child: FittedBox(
-                                                          child:
-                                                              FloatingActionButton(
-                                                            heroTag: null,
-                                                            backgroundColor:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    54,
-                                                                    172,
-                                                                    172),
-                                                            onPressed: () {
-                                                              if (_SubjectsRefList[
-                                                                      0] !=
-                                                                  "") {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              viewStudentsForChat(
-                                                                                ref: _SubjectsRefList[subjectsList.indexOf(e)],
-                                                                                schoolId: schoolID,
-                                                                                subjectId: e.subjectId,
-                                                                              )),
-                                                                );
-                                                              }
-                                                            },
-                                                            child: Image.asset(
-                                                              "images/chatIcon.png",
-                                                              width: 44,
-                                                              height: 44,
-                                                              fit: BoxFit.cover,
+                                                  Stack(children: [
+                                                    Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 44,
+                                                          height: 44,
+                                                          child: FittedBox(
+                                                            child:
+                                                                FloatingActionButton(
+                                                              heroTag: null,
+                                                              backgroundColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          54,
+                                                                          172,
+                                                                          172),
+                                                              onPressed: () {
+                                                                print("SUBJECT ID " +
+                                                                    e.subjectId);
+                                                                print(
+                                                                    "ID############$schoolID, ${e.subjectId}");
+
+                                                                if (_SubjectsRefList[
+                                                                        0] !=
+                                                                    "") {
+                                                                  Navigator
+                                                                      .push(
+                                                                    context,
+                                                                    MaterialPageRoute(
+                                                                        builder: (context) =>
+                                                                            viewStudentsForChat(
+                                                                              ref: _SubjectsRefList[subjectsList.indexOf(e)],
+                                                                              schoolId: schoolID,
+                                                                              subjectId: e.subjectId,
+                                                                            )),
+                                                                  );
+                                                                }
+                                                              },
+                                                              child:
+                                                                  Image.asset(
+                                                                "images/chatIcon.png",
+                                                                width: 44,
+                                                                height: 44,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5.5,
-                                                      ),
-                                                      Text("المحادثات"),
-                                                    ],
-                                                  ),
+                                                        const SizedBox(
+                                                          height: 5.5,
+                                                        ),
+                                                        Text("المحادثات"),
+                                                      ],
+                                                    ),
+                                                    subjectChatCount[
+                                                                subjectsList
+                                                                    .indexOf(
+                                                                        e)] >
+                                                            0
+                                                        ? Positioned(
+                                                            top: 0,
+                                                            right: 0,
+                                                            child: Container(
+                                                              height: 14,
+                                                              width: 14,
+                                                              decoration: const BoxDecoration(
+                                                                  color: Colors
+                                                                      .red,
+                                                                  shape: BoxShape
+                                                                      .circle),
+                                                              child: Center(),
+                                                            ),
+                                                          )
+                                                        : Container()
+                                                  ]),
                                                 ],
                                               ))
 
@@ -706,6 +753,7 @@ class _MyWidgetState extends State<viewStudents> {
       // use ds as a snapshot
       className = ds['ClassName'];
       levelName = ds['LevelName'];
+
       numOfStudents = ds['Students'].length;
       for (var i = 0; i < numOfStudents; i++) {
         DocumentReference docu = ds['Students'][i];
@@ -763,6 +811,7 @@ class _MyWidgetState extends State<viewStudents> {
             }
             if (snapshot.hasData && _StudenNameList[0] != "") {
               //Display the list
+
               return Container(
                   child: SingleChildScrollView(
                       child: Column(
@@ -797,7 +846,7 @@ class _MyWidgetState extends State<viewStudents> {
                   ),
                   Container(
                     child: ListView(
-                      physics: const AlwaysScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       padding: const EdgeInsets.fromLTRB(10.0, 20, 10.0, 20),
                       shrinkWrap: true,
                       children: _StudenNameList.map((e) {

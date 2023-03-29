@@ -190,61 +190,59 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         SizedBox(
                           height: 20,
                         ),
-                                 TextFormField(
-                                    maxLength: 20,
-                                    onChanged: (newText) {
-                                      NewLname = newText;
-                                    },
-                                    controller: lNameController,
-                                    decoration: InputDecoration(
-                                      labelText: "الاسم الأخير",
-                                      //hintText: "EnterF Name",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "الاسم الأخير مطلوب";
-                                      }
-                                      if (value.length > 20) {
-                                        return "الاسم يجب أن لا يزيد عن 20 حرف";
-                                      }
-                                      if (value.length <= 2) {
-                                        return "الاسم يجب أن لا يقل عن 2 حرف";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    maxLines: 1,
-                                  ),
+                        TextFormField(
+                          maxLength: 20,
+                          onChanged: (newText) {
+                            NewLname = newText;
+                          },
+                          controller: lNameController,
+                          decoration: InputDecoration(
+                            labelText: "الاسم الأخير",
+                            //hintText: "EnterF Name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "الاسم الأخير مطلوب";
+                            }
+                            if (value.length > 20) {
+                              return "الاسم يجب أن لا يزيد عن 20 حرف";
+                            }
+                            if (value.length <= 2) {
+                              return "الاسم يجب أن لا يقل عن 2 حرف";
+                            } else {
+                              return null;
+                            }
+                          },
+                          maxLines: 1,
+                        ),
 
                         SizedBox(
                           height: 20,
                         ),
-                                   TextFormField(
-                                   // maxLength: 20,
-                                    minLines: 2,
-                                    maxLines: 5,
-                                    keyboardType: TextInputType.multiline,
-                                    onChanged: (newText) {
-                                      NewOH = newText;
-                                    },
-                                    controller: officeHoursController,
-                                    decoration: InputDecoration(
-                                      hintText: "الإثنين - 11:00صباحًا - 1:00مساءً",
-                                      hintStyle: TextStyle(
-                                        color: Colors.grey
-                                      ),
-                                      labelText: "الساعات المكتبية",
-                                      //hintText: "EnterF Name",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                
-                                  // maxLines: 1,
-                                  ),
+                        TextFormField(
+                          // maxLength: 20,
+                          minLines: 2,
+                          maxLines: 5,
+                          keyboardType: TextInputType.multiline,
+                          onChanged: (newText) {
+                            NewOH = newText;
+                          },
+                          controller: officeHoursController,
+                          decoration: InputDecoration(
+                            hintText: "الإثنين - 11:00صباحًا - 1:00مساءً",
+                            hintStyle: TextStyle(color: Colors.grey),
+                            labelText: "الساعات المكتبية",
+                            //hintText: "EnterF Name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+
+                          // maxLines: 1,
+                        ),
 
                         SizedBox(
                           height: 20,
@@ -471,11 +469,7 @@ getSchoolID();
     'LastName': lN,
     'OfficeHours': OH,
     });   
-  Fluttertoast.showToast(
-    msg:"تم حفظ التعديلات بنجاح",
-    backgroundColor:
-   Colors.green);  
-/*
+
       showDialog(
           context: context,
           builder: (context) {
@@ -488,7 +482,6 @@ getSchoolID();
               ),
             );
           });
-          */
       return;
     }
   }
