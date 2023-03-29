@@ -335,7 +335,7 @@ class _CommissionerListState extends State<CommissionerList> {
   Future<http.Response> deletUser(String uid) {
     return http.post(
       ///Android??
-      Uri.parse("http://127.0.0.1:8080/deleteUser"),
+      Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/deleteUser"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },

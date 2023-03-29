@@ -156,7 +156,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                       return null;
                     }),
                 //   if (widget.isUpdate == false){},
-
+/*
                 Container(child: LayoutBuilder(builder: (context, constraints) {
                   if (widget.isUpdate == false) {
                     return Column(
@@ -184,6 +184,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                     return Text("");
                   }
                 })),
+                */
 
                 SizedBox(
                   height: 20,
@@ -330,7 +331,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                             }
                           }).catchError((e) {
                             print("EERRROR ${e.toString()}");
-print (e);
+                            print (e);
                             /*
                             showDialog(
                                 context: context,
@@ -362,7 +363,7 @@ print (e);
                                   Color.fromARGB(255, 221, 33, 30));
                         } else {
                           //// Node.js
-                          createUser(email.text, password.text)
+                          createUser(email.text, 'xxxxxxxxxxx')
                               .then((data) async {
                             var responseData = json.decode(data.body);
                             print(responseData);
@@ -406,6 +407,7 @@ print (e);
                                   msg: "تمت إضافةالمفوّض بنجاح",
                                   backgroundColor:
                                       Color.fromARGB(255, 97, 200, 0));
+/*
                               await FirebaseAuth.instance
                                   .sendPasswordResetEmail(email: email.text)
                                   .then((value) {
@@ -427,7 +429,7 @@ print (e);
                                  */
                                 ///Delete Later
                               });
-
+*/
                               fName.clear();
                               lName.clear();
                               email.clear();
@@ -535,7 +537,7 @@ print (e);
 
   Future<http.Response> updateUser(String uid, String email) async {
     //Andorid??
-    return http.post(Uri.parse("http://127.0.0.1:8080/updateUser"),
+    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUser"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
@@ -545,10 +547,10 @@ print (e);
 
   Future<http.Response> createUser(String email, String pass) async {
     //Andorid??
-    return http.post(Uri.parse("http://127.0.0.1:8080/addUser"),
+    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/addUser"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(<String, String>{'email': email, 'pass': pass}));
+        body: jsonEncode(<String, String>{'email':  email.toLowerCase(), 'pass': pass}));
   }
 }

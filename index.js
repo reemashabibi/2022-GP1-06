@@ -13,11 +13,11 @@ app.use("/",router);
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("C:\\Users\\ree4m\\Downloads\\halaqa-89b43-firebase-adminsdk-j33v0-0d2cef029f.json");
+var serviceAccount = require("/Users/reemafahad/Desktop/halaqa-89b43-firebase-adminsdk-j33v0-89eea436f9.json");
 
 // Intialize the firebase-admin project/account
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccountcd )
 });
 
 app.use(cors());
@@ -46,7 +46,6 @@ app.post('/addUser', async (req, res) => {
 
     if(typeof userData.email === "string" && userData.email.trim() !== ""){
     getAuth()
-
     ////changes:
     .createUser({
       email: userData.email,
@@ -116,7 +115,32 @@ app.post('/addUser', async (req, res) => {
 
     console.log('Error updating user:', error);
   });
+});
 
+///Update User pass (Teacher & Parent)
+app.post('/updateUserPass', async (req, res) => {
+  const userData = req.body;
+  console.log(userData);
+  getAuth()
+  .updateUser(userData.uid, {
+    email: userData.email,
+    password: userData.pass, 
+  })
+  .then((userRecord) => {
+    // See the UserRecord reference doc for the contents of userRecord.
+    console.log('Successfully updated user');
+    res.json({"status": "Successfull" })
+  })
+  .catch((error) => {
+    console.log(error.code);
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    if (errorCode =="auth/email-already-exists"){
+        res.json({"status":'used'});}
+    else
+    res.end('error');
+    console.log('Error updating user:', error);
+  });
 });
 
 
