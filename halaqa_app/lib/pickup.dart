@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
@@ -362,6 +363,14 @@ class _pick extends State<pickup> {
                         padding: const EdgeInsets.all(5.0),
                         child: GestureDetector(
                           onTap: () async {
+                            if (x == 0) {
+                              Fluttertoast.showToast(
+                                msg: 'يرجى الاختيار',
+                                toastLength: Toast.LENGTH_SHORT,
+                                gravity: ToastGravity.CENTER,
+                                backgroundColor: Color.fromARGB(255, 241, 2, 2),
+                              );
+                            }
                             if (x == 1) {
                               i = widget.stRef.path;
                               //var jsonObject = i.toJson();
