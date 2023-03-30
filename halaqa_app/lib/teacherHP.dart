@@ -416,151 +416,58 @@ class _teacherHPState extends State<teacherHP> {
                               padding:
                                   const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
                               children: subjectsList.map((e) {
-                                return Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15.0),
-                                    color: Color.fromARGB(255, 239, 240, 240),
-                                  ),
-                                  margin: EdgeInsets.only(bottom: 10),
-                                  padding: const EdgeInsets.all(15),
-                                  child: GroovinExpansionTile(
-                                    defaultTrailingIconColor:
-                                        Color.fromARGB(255, 82, 169, 151),
-                                    leading: Icon(
-                                      Icons.book,
-                                      color: Colors.black,
-                                      size: 35,
+                                return Stack(children: [
+                                  Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      color: Color.fromARGB(255, 239, 240, 240),
                                     ),
-                                    title: Text(
-                                        e.subjectName +
-                                            "\nالفصل: " +
-                                            e.className +
-                                            "\nالمرحلة: " +
-                                            e.LevelName,
-                                        textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold)),
-                                    onExpansionChanged: (value) {
-                                      setState(() => isExpanded = value);
-                                    },
-                                    inkwellRadius: !isExpanded
-                                        ? const BorderRadius.all(
-                                            Radius.circular(8.0))
-                                        : const BorderRadius.only(
-                                            topRight: Radius.circular(8.0),
-                                            topLeft: Radius.circular(8.0),
+                                    margin: EdgeInsets.only(bottom: 10),
+                                    padding: const EdgeInsets.all(15),
+                                    child: GroovinExpansionTile(
+                                      defaultTrailingIconColor:
+                                          Color.fromARGB(255, 82, 169, 151),
+                                      leading: Icon(
+                                        Icons.book,
+                                        color: Colors.black,
+                                        size: 35,
+                                      ),
+                                      title: Text(
+                                          e.subjectName +
+                                              "\nالفصل: " +
+                                              e.className +
+                                              "\nالمرحلة: " +
+                                              e.LevelName,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold)),
+                                      onExpansionChanged: (value) {
+                                        setState(() => isExpanded = value);
+                                      },
+                                      inkwellRadius: !isExpanded
+                                          ? const BorderRadius.all(
+                                              Radius.circular(8.0))
+                                          : const BorderRadius.only(
+                                              topRight: Radius.circular(8.0),
+                                              topLeft: Radius.circular(8.0),
+                                            ),
+                                      children: <Widget>[
+                                        ClipRRect(
+                                          borderRadius: const BorderRadius.only(
+                                            bottomLeft: Radius.circular(5.0),
+                                            bottomRight: Radius.circular(5.0),
                                           ),
-                                    children: <Widget>[
-                                      ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          bottomLeft: Radius.circular(5.0),
-                                          bottomRight: Radius.circular(5.0),
-                                        ),
-                                        child: Column(children: <Widget>[
-                                          Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20.0, 20, 20.0, 10),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: <Widget>[
-                                                  Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 44,
-                                                        height: 44,
-                                                        child: FittedBox(
-                                                          child:
-                                                              FloatingActionButton(
-                                                            heroTag: null,
-                                                            backgroundColor:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    54,
-                                                                    172,
-                                                                    172),
-                                                            onPressed: () {
-                                                              if (_SubjectsRefList[
-                                                                      0] !=
-                                                                  "") {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              viewStudents(
-                                                                                ref: _SubjectsRefList[subjectsList.indexOf(e)],
-                                                                              )),
-                                                                );
-                                                              }
-                                                            },
-                                                            child: Image.asset(
-                                                              "images/studentsIcon.png",
-                                                              width: 44,
-                                                              height: 44,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5.5,
-                                                      ),
-                                                      Text("الطلاب"),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 40,
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      SizedBox(
-                                                        width: 44,
-                                                        height: 44,
-                                                        child: FittedBox(
-                                                          child:
-                                                              FloatingActionButton(
-                                                            heroTag: null,
-                                                            backgroundColor:
-                                                                Color.fromARGB(
-                                                                    255,
-                                                                    54,
-                                                                    172,
-                                                                    172),
-                                                            onPressed: () {
-                                                              Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            grades(
-                                                                              subRef: _SubjectsRefList[subjectsList.indexOf(e)],
-                                                                              subName: e.subjectName,
-                                                                            )),
-                                                              );
-                                                            },
-                                                            child: Image.asset(
-                                                              "images/gradesIcon.png",
-                                                              width: 44,
-                                                              height: 44,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5.5,
-                                                      ),
-                                                      Text("الدرجات"),
-                                                    ],
-                                                  ),
-                                                  const SizedBox(
-                                                    width: 40,
-                                                  ),
-                                                  Stack(children: [
+                                          child: Column(children: <Widget>[
+                                            Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20.0, 20, 20.0, 10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: <Widget>[
                                                     Column(
                                                       children: [
                                                         SizedBox(
@@ -578,11 +485,6 @@ class _teacherHPState extends State<teacherHP> {
                                                                           172,
                                                                           172),
                                                               onPressed: () {
-                                                                print("SUBJECT ID " +
-                                                                    e.subjectId);
-                                                                print(
-                                                                    "ID############$schoolID, ${e.subjectId}");
-
                                                                 if (_SubjectsRefList[
                                                                         0] !=
                                                                     "") {
@@ -591,17 +493,15 @@ class _teacherHPState extends State<teacherHP> {
                                                                     context,
                                                                     MaterialPageRoute(
                                                                         builder: (context) =>
-                                                                            viewStudentsForChat(
+                                                                            viewStudents(
                                                                               ref: _SubjectsRefList[subjectsList.indexOf(e)],
-                                                                              schoolId: schoolID,
-                                                                              subjectId: e.subjectId,
                                                                             )),
                                                                   );
                                                                 }
                                                               },
                                                               child:
                                                                   Image.asset(
-                                                                "images/chatIcon.png",
+                                                                "images/studentsIcon.png",
                                                                 width: 44,
                                                                 height: 44,
                                                                 fit: BoxFit
@@ -613,39 +513,160 @@ class _teacherHPState extends State<teacherHP> {
                                                         const SizedBox(
                                                           height: 5.5,
                                                         ),
-                                                        Text("المحادثات"),
+                                                        Text("الطلاب"),
                                                       ],
                                                     ),
-                                                    subjectChatCount[
-                                                                subjectsList
-                                                                    .indexOf(
-                                                                        e)] >
-                                                            0
-                                                        ? Positioned(
-                                                            top: 0,
-                                                            right: 0,
-                                                            child: Container(
-                                                              height: 14,
-                                                              width: 14,
-                                                              decoration: const BoxDecoration(
-                                                                  color: Colors
-                                                                      .red,
-                                                                  shape: BoxShape
-                                                                      .circle),
-                                                              child: Center(),
+                                                    const SizedBox(
+                                                      width: 40,
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 44,
+                                                          height: 44,
+                                                          child: FittedBox(
+                                                            child:
+                                                                FloatingActionButton(
+                                                              heroTag: null,
+                                                              backgroundColor:
+                                                                  Color
+                                                                      .fromARGB(
+                                                                          255,
+                                                                          54,
+                                                                          172,
+                                                                          172),
+                                                              onPressed: () {
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              grades(
+                                                                                subRef: _SubjectsRefList[subjectsList.indexOf(e)],
+                                                                                subName: e.subjectName,
+                                                                              )),
+                                                                );
+                                                              },
+                                                              child:
+                                                                  Image.asset(
+                                                                "images/gradesIcon.png",
+                                                                width: 44,
+                                                                height: 44,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                              ),
                                                             ),
-                                                          )
-                                                        : Container()
-                                                  ]),
-                                                ],
-                                              ))
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.5,
+                                                        ),
+                                                        Text("الدرجات"),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 40,
+                                                    ),
+                                                    Stack(children: [
+                                                      Column(
+                                                        children: [
+                                                          SizedBox(
+                                                            width: 44,
+                                                            height: 44,
+                                                            child: FittedBox(
+                                                              child:
+                                                                  FloatingActionButton(
+                                                                heroTag: null,
+                                                                backgroundColor:
+                                                                    Color.fromARGB(
+                                                                        255,
+                                                                        54,
+                                                                        172,
+                                                                        172),
+                                                                onPressed: () {
+                                                                  print("SUBJECT ID " +
+                                                                      e.subjectId);
+                                                                  print(
+                                                                      "ID############$schoolID, ${e.subjectId}");
 
-                                          // color: Color.fromARGB(255, 222, 227, 234),
-                                        ]),
-                                      ),
-                                    ],
+                                                                  if (_SubjectsRefList[
+                                                                          0] !=
+                                                                      "") {
+                                                                    Navigator
+                                                                        .push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder: (context) =>
+                                                                              viewStudentsForChat(
+                                                                                ref: _SubjectsRefList[subjectsList.indexOf(e)],
+                                                                                schoolId: schoolID,
+                                                                                subjectId: e.subjectId,
+                                                                              )),
+                                                                    );
+                                                                  }
+                                                                },
+                                                                child:
+                                                                    Image.asset(
+                                                                  "images/chatIcon.png",
+                                                                  width: 44,
+                                                                  height: 44,
+                                                                  fit: BoxFit
+                                                                      .cover,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 5.5,
+                                                          ),
+                                                          Text("المحادثات"),
+                                                        ],
+                                                      ),
+                                                      subjectChatCount[
+                                                                  subjectsList
+                                                                      .indexOf(
+                                                                          e)] >
+                                                              0
+                                                          ? Positioned(
+                                                              top: 0,
+                                                              right: 0,
+                                                              child: Container(
+                                                                height: 14,
+                                                                width: 14,
+                                                                decoration: const BoxDecoration(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    shape: BoxShape
+                                                                        .circle),
+                                                                child: Center(),
+                                                              ),
+                                                            )
+                                                          : Container()
+                                                    ]),
+                                                  ],
+                                                ))
+
+                                            // color: Color.fromARGB(255, 222, 227, 234),
+                                          ]),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                );
+                                  subjectChatCount[subjectsList.indexOf(e)] > 0
+                                      ? Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: Container(
+                                            height: 14,
+                                            width: 14,
+                                            decoration: const BoxDecoration(
+                                                color: Colors.red,
+                                                shape: BoxShape.circle),
+                                            child: Center(),
+                                          ),
+                                        )
+                                      : Container()
+                                ]);
                               }).toList(),
                             ),
                           )))
