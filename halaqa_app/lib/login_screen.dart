@@ -129,11 +129,17 @@ class StartState extends State<LoginScreen> {
                           ),
                           validator: (value) {
                             if (value!.length == 0) {
+                                          setState(() {
+              visible = false;
+            });
                               return "يرجى إدخال البريد إلكتروني";
                             }
                             if (!RegExp(
                                     "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                 .hasMatch(value)) {
+                                              setState(() {
+              visible = false;
+            });
                               return ("الرجاء إدحال بريد إلكتروني صحيح");
                             } else {
                               return null;
@@ -189,9 +195,15 @@ class StartState extends State<LoginScreen> {
                           validator: (value) {
                             RegExp regex = new RegExp(r'^.{6,}$');
                             if (value!.isEmpty) {
+                                          setState(() {
+              visible = false;
+            });
                               return "يرجى إدخال كلمة المرور";
                             }
                             if (!regex.hasMatch(value)) {
+                                          setState(() {
+              visible = false;
+            });
                               return ("لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام");
                             } else {
                               return null;
@@ -363,11 +375,20 @@ class StartState extends State<LoginScreen> {
             );
           }
         } else {
-          Fluttertoast.showToast(
-              msg:
-                  "لا يوجد معلّم بهذه البيانات يرجى التحقق من البيانات المدخلة",
-              backgroundColor: const Color.fromARGB(255, 221, 33, 30));
-
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text(
+                    "لا يوجد معلّم بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              });
+          print('Document does not exist on the database');
+          print(user!.uid);
           setState(() {
             visible = false;
           });
@@ -411,11 +432,20 @@ class StartState extends State<LoginScreen> {
               );
             }
           } else {
-            Fluttertoast.showToast(
-                msg:
-                    "لا يوجد ولي أمر بهذه البيانات يرجى التحقق من البيانات المدخلة",
-                backgroundColor: const Color.fromARGB(255, 221, 33, 30));
-
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Text(
+                      "لا يوجد ولي أمر بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                });
+            print('Document does not exist on the database');
+            print(user!.uid);
             setState(() {
               visible = false;
             });
@@ -459,10 +489,20 @@ class StartState extends State<LoginScreen> {
               );
             }
           } else {
-            Fluttertoast.showToast(
-                msg:
-                    "لا يوجد مفوّض بهذه البيانات يرجى التحقق من البيانات المدخلة",
-                backgroundColor: const Color.fromARGB(255, 221, 33, 30));
+            showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    content: Text(
+                      "لا يوجد مفوّض بهذه البيانات يرجى التحقق من البيانات المدخلة",
+                      style: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                  );
+                });
+            print('Document does not exist on the database');
+            print(user!.uid);
             setState(() {
               visible = false;
             });
@@ -482,17 +522,36 @@ class StartState extends State<LoginScreen> {
         route(email);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
-          Fluttertoast.showToast(
-              msg: "لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
-              backgroundColor: const Color.fromARGB(255, 221, 33, 30));
+          print('No user found for that email.');
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text(
+                    "لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              });
           setState(() {
             visible = false;
           });
         } else if (e.code == 'wrong-password') {
-          Fluttertoast.showToast(
-              msg: "هناك خطأ في البريد الإلكتروني أو كلمة المرور",
-              backgroundColor: const Color.fromARGB(255, 221, 33, 30));
-
+          print('Wrong password provided for that user.');
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  content: Text(
+                    "هناك خطأ في البريد الإلكتروني أو كلمة المرور",
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                );
+              });
           setState(() {
             visible = false;
           });

@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/teacher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'package:http/http.dart' as http;
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -446,39 +449,68 @@ class _EditProfilePageState extends State<EditProfilePage> {
       User? user = FirebaseAuth.instance.currentUser;
       if (email != FirebaseAuth.instance.currentUser?.email) {
         print("email updated");
-        await user?.updateEmail(email);
+        /////chenge
+        //await user?.updateEmail(email);
+      var Uid = FirebaseAuth.instance.currentUser?.uid;
+      print (Uid);
+      updateUser(Uid!, email);
       }
       if (NewPass != "") {
-        await user?.updatePassword(NewPass);
-        print("pass updated");
+        /////change
+      //  await user?.updatePassword(NewPass);
+       var Uid = FirebaseAuth.instance.currentUser?.uid;
+       print (Uid);
+       updateUserPass(Uid!, email, NewPass);
+     // print("pass updated");
       }
 
-      getSchoolID();
-      var col = FirebaseFirestore.instance
-          .collectionGroup('Teacher')
-          .where('Email', isEqualTo: email);
-      print("in3");
-      var snapshot = await col.get();
-      print("in4");
-      for (var doc in snapshot.docs) {
-        schoolID = doc.reference.parent.parent!.id;
-        break; // Prints document1, document2
-      }
+getSchoolID();
+ var col = FirebaseFirestore.instance.collectionGroup('Teacher').where('Email', isEqualTo: email);
+     print("in3");
+     var snapshot = await col.get();
+     print("in4");
+     for (var doc in snapshot.docs) {
+       schoolID = doc.reference.parent.parent!.id;
+       break;// Prints document1, document2
+    }
+    
+  await FirebaseFirestore.instance.collection('School/'+ '$schoolID'+'/Teacher').doc(user!.uid).update({
+    'Email': email,
+    'FirstName': fNm ,
+    'LastName': lN,
+    'OfficeHours': OH,
+    });   
 
-      await FirebaseFirestore.instance
-          .collection('School/' + '$schoolID' + '/Teacher')
-          .doc(user!.uid)
-          .update({
-        'Email': email,
-        'FirstName': fNm,
-        'LastName': lN,
-        'OfficeHours': OH,
-      });
+                                        Fluttertoast.showToast(
+                                  msg:  "تم حفظ التعديلات بنجاح",
+                                  backgroundColor:
+                                      Color.fromARGB(255, 97, 200, 0));
 
-      Fluttertoast.showToast(
-          msg: "تم حفظ التعديلات بنجاح",
-          backgroundColor: Color.fromARGB(255, 97, 200, 0));
       return;
     }
   }
+
+
+
+  Future<http.Response> updateUser(String uid, String email) async {
+    //Andorid??
+    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUser"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(
+            <String, String>{'uid': uid, 'email': email.toLowerCase()}));
+  }
+
+
+    Future<http.Response> updateUserPass(String uid, String email, String pass) async {
+    //Andorid??
+    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUserPass"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8'
+        },
+        body: jsonEncode(
+            <String, String>{'uid': uid, 'email': email.toLowerCase(), 'pass': pass}));
+  }
+
 } //end class
