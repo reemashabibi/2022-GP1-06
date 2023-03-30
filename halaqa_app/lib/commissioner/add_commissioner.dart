@@ -331,7 +331,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                             }
                           }).catchError((e) {
                             print("EERRROR ${e.toString()}");
-                            print (e);
+                            print(e);
                             /*
                             showDialog(
                                 context: context,
@@ -407,12 +407,12 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                   msg: "تمت إضافةالمفوّض بنجاح",
                                   backgroundColor:
                                       Color.fromARGB(255, 97, 200, 0));
-/*
+
                               await FirebaseAuth.instance
                                   .sendPasswordResetEmail(email: email.text)
                                   .then((value) {
                                 ////
-                                print ("reset pass has been sent!");
+                                print("reset pass has been sent!");
                                 /*
                                 showDialog(
                                     context: context,
@@ -429,7 +429,6 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                  */
                                 ///Delete Later
                               });
-*/
                               fName.clear();
                               lName.clear();
                               email.clear();
@@ -471,7 +470,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                             print("EERRROR ${e.toString()}");
 
                             ///
-                            print (e);
+                            print(e);
                             /*
                             showDialog(
                                 context: context,
@@ -537,7 +536,9 @@ class _AddCommissionerState extends State<AddCommissioner> {
 
   Future<http.Response> updateUser(String uid, String email) async {
     //Andorid??
-    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUser"),
+    return http.post(
+        Uri.parse(
+            "https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUser"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
@@ -547,10 +548,13 @@ class _AddCommissionerState extends State<AddCommissioner> {
 
   Future<http.Response> createUser(String email, String pass) async {
     //Andorid??
-    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/addUser"),
+    return http.post(
+        Uri.parse(
+            "https://us-central1-halaqa-89b43.cloudfunctions.net/method/addUser"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(<String, String>{'email':  email.toLowerCase(), 'pass': pass}));
+        body: jsonEncode(
+            <String, String>{'email': email.toLowerCase(), 'pass': pass}));
   }
 }
