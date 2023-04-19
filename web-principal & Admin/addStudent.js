@@ -458,9 +458,13 @@ addStudentForm.addEventListener('submit', async (e) => {
 
   }// if validation 
 });
-
+var found = false;
 
 $(".phone").change(async function () {
+  $("#FnameParent").val("");
+  $("#LnameParent").val("");
+  $("#emailP").val("");
+  
   var phoneNumber = parseInt(addStudentForm.phone.value);
   var phoneNo = document.getElementById("phone");
   var phoneno = /^\d{10}$/;
@@ -504,7 +508,8 @@ $(".phone").change(async function () {
         if (!snapshot.empty) {
           snapshot.forEach(async (doc) => {
             var FName = doc.data().FirstName;
-            if (FName != addStudentForm.Fname.value) { 
+            if (FName != addStudentForm.Fname.value ) { 
+             
               // to check if the admin has added the same student for the parent same parent before
 
         $("#FnameParent").val(d.data().FirstName);
@@ -514,16 +519,18 @@ $(".phone").change(async function () {
         document.getElementById('parentInfoLabel1').style.transform = 'translate(-13px, -35px)';
         document.getElementById('parentInfoLabel2').style.transform = 'translate(-13px, -35px)';
         document.getElementById('parentInfoLabel3').style.transform = 'translate(-13px, -35px)';
-
-        document.getElementById("FnameParent").disabled = true;
-        document.getElementById("LnameParent").disabled = true;
-        document.getElementById("emailP").disabled = true;
+if(!found){
+  document.getElementById("FnameParent").disabled = true;
+  document.getElementById("LnameParent").disabled = true;
+  document.getElementById("emailP").disabled = true;
+}
+    
+     
         
 
-
-        
         $(".loader").hide();
             } else{
+              found = true;
               $(".loader").hide();
               document.getElementById('alertContainer').innerHTML = '<div style="width: 500px; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner"> الطالب مسجل بالنظام</p> </div>';
               setTimeout(() => {
@@ -532,10 +539,15 @@ $(".phone").change(async function () {
                 document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
           
               }, 9000);
+              
+              document.getElementById("FnameParent").disabled = false;
+              document.getElementById("LnameParent").disabled = false;
+              document.getElementById("emailP").disabled = false;
               addStudentForm.phone.value = "";
               addStudentForm.Fname.value = "";
               addStudentForm.Fname.focus();
             }//else  if(FName != addStudentForm.Fname.value )
+            
           })//forEach
       }//if snapshot not empty
      }

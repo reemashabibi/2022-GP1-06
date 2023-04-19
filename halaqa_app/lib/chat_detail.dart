@@ -19,17 +19,16 @@ class Chatdetail extends StatefulWidget {
   final String schoolId;
   final String classId;
   final String subjectId;
-  Function(int) msgCount;
+
   @override
-  Chatdetail(
-      {Key? key,
-      required this.friendUid,
-      required this.friendName,
-      required this.schoolId,
-      required this.classId,
-      required this.subjectId,
-      required this.msgCount})
-      : super(key: key);
+  Chatdetail({
+    Key? key,
+    required this.friendUid,
+    required this.friendName,
+    required this.schoolId,
+    required this.classId,
+    required this.subjectId,
+  }) : super(key: key);
 
   State<Chatdetail> createState() => _ChatdetailState(friendUid, friendName);
 }
@@ -54,6 +53,7 @@ class _ChatdetailState extends State<Chatdetail> {
     } else {
       // print("Chat DocumentID:");
       //  print(chatDocID.id);
+
       chats.doc(chatDocID).collection('messages').add({
         'createdOn': FieldValue.serverTimestamp(),
         'uid': currentuserUserId,
@@ -61,6 +61,24 @@ class _ChatdetailState extends State<Chatdetail> {
       }).then(((value) async {
         print('sent ${widget.subjectId}');
         _textController.clear();
+        //New *****************************************************
+        DocumentSnapshot dc = await FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Chats')
+            .doc(chatDocID)
+            .get();
+        count = dc.get("To_Student_msg_count") + 1;
+        print("COUNT MSG $count");
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Chats')
+            .doc(chatDocID)
+            .update({
+          "To_Student_msg_count": count,
+          'SubjectID': widget.subjectId,
+          'StudentID': widget.friendUid
+        });
+
+//red bubble for HOMEPAGE
+/*
         DocumentSnapshot dc = await FirebaseFirestore.instance
             .collection('School/${widget.schoolId}/Class')
             .doc(widget.classId)
@@ -75,6 +93,8 @@ class _ChatdetailState extends State<Chatdetail> {
             .collection("Subject")
             .doc(widget.subjectId)
             .update({"msg_count": count});
+    */
+        ///delete later *****************************************************************
 
         //check if the recepient has the caht open then send them notification
         /*    int hasChatOpen = 0;
@@ -138,7 +158,8 @@ class _ChatdetailState extends State<Chatdetail> {
                 recepientToken = docParent['token'];
                 print('token $recepientToken');
                 http.post(
-                  Uri.parse('http://10.0.2.2:8080/chat'),
+                  Uri.parse(
+                      'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
                   headers: <String, String>{
                     'Content-Type': 'application/json; charset=UTF-8',
                   },
@@ -180,6 +201,14 @@ class _ChatdetailState extends State<Chatdetail> {
 
   readMsg() {
     FirebaseFirestore.instance
+        .collection('School/${widget.schoolId}/Chats')
+        .doc(chatDocID)
+        .update({"To_Teacher_msg_count": 0});
+  }
+//////delete late
+/*
+  readMsg() {
+    FirebaseFirestore.instance
         .collection('School/${widget.schoolId}/Teacher')
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .collection("subjects")
@@ -192,6 +221,8 @@ class _ChatdetailState extends State<Chatdetail> {
     //   "msg_count" : 0
     // });
   }
+  */
+  /////dlete later
 
   void initState() {
     super.initState();
@@ -201,9 +232,7 @@ class _ChatdetailState extends State<Chatdetail> {
     chats = FirebaseFirestore.instance
         .collection('School/${widget.schoolId}/Chats');
 
-    ///because we got an issue when we create broadcast and write a message so i create a new chatId
-    ///and we do broadcast based on subject between teacher and parent
-    ///so first i take subjectId_studentId_parentId
+    /// we do broadcast based on subject between teacher and parent
     chatDocID = "${widget.subjectId}_${widget.friendUid}_$currentuserUserId";
     print("CHAAT ID $chatDocID");
 
@@ -265,8 +294,6 @@ class _ChatdetailState extends State<Chatdetail> {
             return CupertinoPageScaffold(
               navigationBar: CupertinoNavigationBar(
                 previousPageTitle: "رجوع",
-
-                ///add parent Name or TeacherOH
                 middle: Text(
                   friendName,
                   style: TextStyle(

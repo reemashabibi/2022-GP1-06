@@ -67,7 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '969971486820',
     projectId: 'halaqa-89b43',
     storageBucket: 'halaqa-89b43.appspot.com',
-    iosClientId: '969971486820-kffbt46nm0k0or5t0jvp4gd96q5f44o1.apps.googleusercontent.com',
+    iosClientId:
+        '969971486820-kffbt46nm0k0or5t0jvp4gd96q5f44o1.apps.googleusercontent.com',
     iosBundleId: 'com.example.halaqaApp',
   );
 
@@ -77,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '969971486820',
     projectId: 'halaqa-89b43',
     storageBucket: 'halaqa-89b43.appspot.com',
-    iosClientId: '969971486820-kffbt46nm0k0or5t0jvp4gd96q5f44o1.apps.googleusercontent.com',
+    iosClientId:
+        '969971486820-kffbt46nm0k0or5t0jvp4gd96q5f44o1.apps.googleusercontent.com',
     iosBundleId: 'com.example.halaqaApp',
   );
 }

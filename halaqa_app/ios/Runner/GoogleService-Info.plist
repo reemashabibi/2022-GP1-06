@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>969971486820-kffbt46nm0k0or5t0jvp4gd96q5f44o1.apps.googleusercontent.com</string>
+	<string>969971486820-h8go4ucgvopbvhed4m4evrcncs5740ud.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.969971486820-kffbt46nm0k0or5t0jvp4gd96q5f44o1</string>
+	<string>com.googleusercontent.apps.969971486820-h8go4ucgvopbvhed4m4evrcncs5740ud</string>
 	<key>API_KEY</key>
 	<string>AIzaSyCYzz0i3gEzzWWeJvm4UwQLaoQeu8rMXW0</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.example.halaqaApp</string>
+	<string>com.halaqa.halaqaApp</string>
 	<key>PROJECT_ID</key>
 	<string>halaqa-89b43</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,6 +29,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:969971486820:ios:240d162ce9c7d405470f71</string>
+	<string>1:969971486820:ios:2f91397024221dd7470f71</string>
 </dict>
 </plist>

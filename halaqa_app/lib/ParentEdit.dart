@@ -99,6 +99,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               MaterialPageRoute(
                 builder: (context) => appBars(
                   schoolId: schoolID,
+                  Index: 0,
                 ),
               ),
             );
@@ -255,6 +256,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           validator: (value) {
                             if (value!.isEmpty) {
                               return "  رقم الجوال مطلوب";
+                            }
+                            if (value.toString().length == 9) {
+                              value = "0" + value;
+                              print(value);
                             }
                             if (value.length > 10) {
                               return "   رقم الجوال يجب أن لا يزيد عن 10 أرقام";
@@ -447,6 +452,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       //  PhoneController.value = (""+ temp) as TextEditingValue ;
       //  PhoneController = Phone;
       //print (temp);
+
       PhoneController.text = temp.toString();
       PassController.text = "********";
     });
@@ -479,21 +485,20 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print("email updated");
         ////change
         ///
-       // await user?.updateEmail(email);
-      var Uid = FirebaseAuth.instance.currentUser?.uid;
-      print (Uid);
-      updateUser(Uid!, email);
-      
+        // await user?.updateEmail(email);
+        var Uid = FirebaseAuth.instance.currentUser?.uid;
+        print(Uid);
+        updateUser(Uid!, email);
       }
       if (NewPass != "") {
         ////change
-     //   await user?.updatePassword(NewPass);
-      var Uid = FirebaseAuth.instance.currentUser?.uid;
-      print (Uid);
-      print (email);
-      print (NewPass);
-    updateUserPass(Uid!, email, NewPass);
-    // print("pass updated");
+        //   await user?.updatePassword(NewPass);
+        var Uid = FirebaseAuth.instance.currentUser?.uid;
+        print(Uid);
+        print(email);
+        print(NewPass);
+        updateUserPass(Uid!, email, NewPass);
+        // print("pass updated");
       }
 
       await FirebaseFirestore.instance
@@ -505,10 +510,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         'LastName': lN,
         'Phonenumber': Ph
       });
-                                    Fluttertoast.showToast(
-                                  msg:  "تم حفظ التعديلات بنجاح",
-                                  backgroundColor:
-                                      Color.fromARGB(255, 97, 200, 0));
+      Fluttertoast.showToast(
+          msg: "تم حفظ التعديلات بنجاح",
+          backgroundColor: Color.fromARGB(255, 97, 200, 0));
 
       return;
     }
@@ -516,7 +520,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<http.Response> updateUser(String uid, String email) async {
     //Andorid??
-    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUser"),
+    return http.post(
+        Uri.parse(
+            "https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUser"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
@@ -524,16 +530,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
             <String, String>{'uid': uid, 'email': email.toLowerCase()}));
   }
 
-
-  Future<http.Response> updateUserPass(String uid, String email, String pass) async {
+  Future<http.Response> updateUserPass(
+      String uid, String email, String pass) async {
     //Andorid??
-    return http.post(Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUserPass"),
+    return http.post(
+        Uri.parse(
+            "https://us-central1-halaqa-89b43.cloudfunctions.net/method/updateUserPass"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8'
         },
-        body: jsonEncode(
-            <String, String>{'uid': uid, 'email': email.toLowerCase(), 'pass': pass}));
+        body: jsonEncode(<String, String>{
+          'uid': uid,
+          'email': email.toLowerCase(),
+          'pass': pass
+        }));
   }
- 
-
 } //end class

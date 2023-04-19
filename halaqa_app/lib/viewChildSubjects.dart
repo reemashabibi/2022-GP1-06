@@ -38,6 +38,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   late List _SubjectList;
   late List<Map<String, dynamic>> _SubjectsNameList;
   late List _SubjectsRefList;
+  late List _ChatMsgCount;
 
   var x = 0;
   var v = 0;
@@ -48,9 +49,12 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   getData() {
-    _SubjectsNameList = [];
+    _SubjectsNameList = [
+      {'name': ''}
+    ];
     //_SubjectList = [""];
     _SubjectsRefList = [""];
+    _ChatMsgCount = [' '];
     x++;
   }
 
@@ -99,16 +103,44 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
     DocumentReference docRef = widget.classRef;
     var subRefs = await docRef.collection("Subject").get();
     if (subRefs.docs.length > 0) {
-      await docRef.collection("Subject").get().then((querySnapshot) {
+      await docRef.collection("Subject").get().then((querySnapshot) async {
         querySnapshot.docs.forEach((documentSnapshot) {
           _SubjectsNameList.add({
             "name": documentSnapshot.get('SubjectName'),
-            "id": documentSnapshot.get("TeacherID"),
+            "TeacherID": documentSnapshot.get("TeacherID"),
             "docId": documentSnapshot.id,
-            "msg_count": documentSnapshot.get("msg_count")
           });
           _SubjectsRefList.add(documentSnapshot.reference);
         });
+
+// Use for loop with async/await
+        for (var i = 0; i < querySnapshot.docs.length; i++) {
+          var documentSnapshot = querySnapshot.docs[i];
+          var teacherId = '';
+
+          if (documentSnapshot.get("TeacherID") != null &&
+              documentSnapshot.get("TeacherID") != '') {
+            print("in if");
+            teacherId = documentSnapshot.get("TeacherID").id;
+
+            // Use await to wait for get() to complete
+            DocumentSnapshot dc = await FirebaseFirestore.instance
+                .collection('School/$schoolID/Chats')
+                .doc('${documentSnapshot.id}_${widget.stRef.id}_$teacherId')
+                .get();
+            setState(() {
+              try {
+                _ChatMsgCount.add(dc.get("To_Student_msg_count"));
+              } catch (e) {
+                _ChatMsgCount.add(0);
+              }
+              print("after add");
+              print(documentSnapshot.id);
+            });
+          } else {
+            _ChatMsgCount.add(0);
+          }
+        }
       });
     }
     docRef.get().then((DocumentSnapshot ds) async {
@@ -122,6 +154,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
         if (_SubjectsNameList.length > 1) {
           _SubjectsNameList.removeAt(0);
           _SubjectsRefList.removeAt(0);
+          _ChatMsgCount.removeAt(0);
         }
       });
       if (_SubjectsNameList[0] == "") {
@@ -167,7 +200,9 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
               getData();
             }
 
-            if (snapshot.hasData /*&& _SubjectsNameList[0] != ""*/) {
+            if (snapshot.hasData &&
+                _SubjectsNameList[0] != "" &&
+                _ChatMsgCount[0] != " ") {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
 
@@ -212,7 +247,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       padding: const EdgeInsets.fromLTRB(30.0, 20, 30.0, 10),
-                      children: snapshot.data!.docs.map((e) {
+                      children: _SubjectsNameList.map((e) {
                         return Container(
                             margin: EdgeInsets.only(bottom: 5),
                             width: MediaQuery.of(context).size.width,
@@ -228,7 +263,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                 children: [
                                   Flexible(
                                     child: Container(
-                                      child: Text("${e.get("SubjectName")}",
+                                      child: Text("${e['name']}",
                                           textAlign: TextAlign.center,
                                           style: const TextStyle(
                                             fontSize: 20,
@@ -260,8 +295,10 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                                     MaterialPageRoute(
                                                         builder: (context) =>
                                                             viewChildGrades(
-                                                              subRef:
-                                                                  e.reference,
+                                                              subRef: _SubjectsRefList[
+                                                                  _SubjectsNameList
+                                                                      .indexOf(
+                                                                          e)],
                                                               stRef:
                                                                   widget.stRef,
                                                             )),
@@ -300,7 +337,8 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                                             255, 54, 172, 172),
                                                     onPressed: () {
                                                       callChatDetailScreen(
-                                                          e['TeacherID'], e.id
+                                                          e['TeacherID'],
+                                                          e['docId']
                                                           //     context ,
                                                           //     "faisal naser",
                                                           //     "ctDtxUJlRqeAbHEnj0ayyHAF9Lb2",
@@ -319,7 +357,9 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                               SizedBox(height: 5),
                                               Text("المحادثات"),
                                             ]),
-                                            e['msg_count'] == 0
+                                            _ChatMsgCount[_SubjectsNameList
+                                                        .indexOf(e)] ==
+                                                    0
                                                 ? Container()
                                                 : Positioned(
                                                     top: 0,
@@ -334,7 +374,7 @@ class _viewChildSubjcetsState extends State<viewChildSubjcets> {
                                                                   .circle),
                                                       child: Center(
                                                           child: Text(
-                                                        "${e['msg_count']}",
+                                                        "${_ChatMsgCount[_SubjectsNameList.indexOf(e)]}",
                                                         style: const TextStyle(
                                                             color: Colors.white,
                                                             fontSize: 7),

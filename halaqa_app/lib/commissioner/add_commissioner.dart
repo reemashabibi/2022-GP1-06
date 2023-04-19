@@ -298,6 +298,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                           }
                           print("Com ID 2:");
                           print(Uid);
+                          //SharedPref???
                           updateUser(Uid, email.text).then((data) async {
                             print("Printingggg");
                             var responseData = json.decode(data.body);
@@ -429,6 +430,7 @@ class _AddCommissionerState extends State<AddCommissioner> {
                                  */
                                 ///Delete Later
                               });
+
                               fName.clear();
                               lName.clear();
                               email.clear();

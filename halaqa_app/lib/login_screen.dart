@@ -129,17 +129,17 @@ class StartState extends State<LoginScreen> {
                           ),
                           validator: (value) {
                             if (value!.length == 0) {
-                                          setState(() {
-              visible = false;
-            });
+                              setState(() {
+                                visible = false;
+                              });
                               return "يرجى إدخال البريد إلكتروني";
                             }
                             if (!RegExp(
                                     "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                                 .hasMatch(value)) {
-                                              setState(() {
-              visible = false;
-            });
+                              setState(() {
+                                visible = false;
+                              });
                               return ("الرجاء إدحال بريد إلكتروني صحيح");
                             } else {
                               return null;
@@ -195,15 +195,15 @@ class StartState extends State<LoginScreen> {
                           validator: (value) {
                             RegExp regex = new RegExp(r'^.{6,}$');
                             if (value!.isEmpty) {
-                                          setState(() {
-              visible = false;
-            });
+                              setState(() {
+                                visible = false;
+                              });
                               return "يرجى إدخال كلمة المرور";
                             }
                             if (!regex.hasMatch(value)) {
-                                          setState(() {
-              visible = false;
-            });
+                              setState(() {
+                                visible = false;
+                              });
                               return ("لا يمكن لكلمة السر أن تكون أقل من ٦ أحرف أو أرقام");
                             } else {
                               return null;
@@ -375,6 +375,10 @@ class StartState extends State<LoginScreen> {
             );
           }
         } else {
+          Fluttertoast.showToast(
+              msg: "لا يوجد معلّم بهذه البيانات",
+              backgroundColor: Color.fromARGB(255, 221, 33, 30));
+/*
           showDialog(
               context: context,
               builder: (context) {
@@ -387,6 +391,8 @@ class StartState extends State<LoginScreen> {
                   ),
                 );
               });
+*/
+
           print('Document does not exist on the database');
           print(user!.uid);
           setState(() {
@@ -427,12 +433,17 @@ class StartState extends State<LoginScreen> {
                 MaterialPageRoute(
                   builder: (context) => appBars(
                     schoolId: schoolID,
+                    Index: 0,
                   ),
                 ),
               );
             }
           } else {
-            showDialog(
+            Fluttertoast.showToast(
+                msg: "لا يوجد ولي أمر بهذه البيانات",
+                backgroundColor: Color.fromARGB(255, 221, 33, 30));
+
+/*            showDialog(
                 context: context,
                 builder: (context) {
                   return AlertDialog(
@@ -444,6 +455,7 @@ class StartState extends State<LoginScreen> {
                     ),
                   );
                 });
+       */
             print('Document does not exist on the database');
             print(user!.uid);
             setState(() {
@@ -489,6 +501,10 @@ class StartState extends State<LoginScreen> {
               );
             }
           } else {
+            Fluttertoast.showToast(
+                msg: "لا يوجد مفوّض بهذه البيانات",
+                backgroundColor: Color.fromARGB(255, 221, 33, 30));
+/*
             showDialog(
                 context: context,
                 builder: (context) {
@@ -501,6 +517,7 @@ class StartState extends State<LoginScreen> {
                     ),
                   );
                 });
+ */
             print('Document does not exist on the database');
             print(user!.uid);
             setState(() {
@@ -523,6 +540,10 @@ class StartState extends State<LoginScreen> {
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           print('No user found for that email.');
+          Fluttertoast.showToast(
+              msg: "لم يتم العثور على مستخدم لهذا البريد الإلكتروني",
+              backgroundColor: Color.fromARGB(255, 221, 33, 30));
+/*
           showDialog(
               context: context,
               builder: (context) {
@@ -535,11 +556,16 @@ class StartState extends State<LoginScreen> {
                   ),
                 );
               });
+  */
           setState(() {
             visible = false;
           });
         } else if (e.code == 'wrong-password') {
           print('Wrong password provided for that user.');
+          Fluttertoast.showToast(
+              msg: "هناك خطأ في البريد الإلكتروني أو كلمة المرور",
+              backgroundColor: Color.fromARGB(255, 221, 33, 30));
+/*
           showDialog(
               context: context,
               builder: (context) {
@@ -552,6 +578,7 @@ class StartState extends State<LoginScreen> {
                   ),
                 );
               });
+              */
           setState(() {
             visible = false;
           });

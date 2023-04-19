@@ -86,6 +86,7 @@ class _pick extends State<pickup> {
                 MaterialPageRoute(
                   builder: (context) => appBars(
                     schoolId: schoolID,
+                    Index: 0,
                   ),
                 ),
               );

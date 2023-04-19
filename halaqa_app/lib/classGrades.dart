@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/teacherHP.dart';
+import 'package:http/http.dart';
 
 class classGrades extends StatefulWidget {
   const classGrades({super.key, required this.subjectRef});
@@ -17,7 +18,7 @@ class classGrades extends StatefulWidget {
 
 class assessment {
   String name;
-  int grade;
+  var grade;
 
   assessment(this.name, this.grade);
 
@@ -40,16 +41,20 @@ class _classGradesState extends State<classGrades> {
   List<assessment> assessmentsList = [];
   List<assessment> studentAssessmentsList = [];
   List<String> assessmentNamesList = [];
-  List<int> assessmentStudentGradesList = [];
+  List<int> unifiedGradesList = [];
 
   bool customized = false;
+  bool uploadedUnifiedGrades = false;
   var subName = "";
   var numOfAssess = 6;
   var assessments;
+  var studentAssessments;
   var assessments2;
+
   var gradeID;
   var x = 0;
   var y = 0;
+  var w = 0;
   var numOfStudentsInClass = 0;
 
   late bool checked = false;
@@ -62,6 +67,7 @@ class _classGradesState extends State<classGrades> {
 
   notCustomized() async {
     setState(() {
+      // initially add standard customization for grades
       assessmentsList.add(assessment("درجة الحضور", 10));
       assessmentsList.add(assessment("درجة المشاركة", 10));
       assessmentsList.add(assessment("درجة الواجبات", 5));
@@ -70,7 +76,8 @@ class _classGradesState extends State<classGrades> {
       assessmentsList.add(assessment("درجة الاختبار النهائي", 40));
     });
     for (int i = 0; i < assessmentsList.length; i++) {
-      studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
+      studentAssessmentsList.add(assessment(assessmentsList[i].name,
+          '-')); // students  get the assessment with initail grade zero
     }
 
     await widget.subjectRef.update({
@@ -89,17 +96,24 @@ class _classGradesState extends State<classGrades> {
     DocumentReference subjectRef =
         await widget.subjectRef.parent.parent as DocumentReference<Object?>;
     subjectRef.get().then((DocumentSnapshot ds) async {
-      numOfStudentsInClass = ds['Students'].length;
+      numOfStudentsInClass =
+          ds['Students'].length; // get the number of Students in the Class
     });
     DocumentReference doc = await widget.subjectRef;
     await widget.subjectRef.get().then((value) async {
       setState(() {
         customized = value['customized'];
         subName = value['SubjectName'];
+        try {
+          uploadedUnifiedGrades = value['uploadedUnifiedGrades'];
+        } catch (e) {
+          uploadedUnifiedGrades = false;
+        }
       });
       if (customized) {
+        //if the grades are customized
         setState(() {
-          numOfAssess = value['assessments'].length;
+          numOfAssess = value['assessments'].length; // number of assessments
         });
 
         for (int i = 0; i < numOfAssess; i++) {
@@ -108,36 +122,76 @@ class _classGradesState extends State<classGrades> {
             final snapshots = await Future.wait(
                 [doc.get().then((value) => value['assessments'][i])]);
             return snapshots
-                .map((snapshot) =>
-                    assessment(snapshot['name'], snapshot['grade']))
+                .map((snapshot) => assessment(
+                    snapshot['name'],
+                    snapshot[
+                        'grade'])) // get the name and the assigned grade for the assessments
                 .toList();
           }
 
           assessments = await getAssessment();
-          // assessments2 = await getData();
           setState(() {
-            assessmentsList.addAll(assessments);
-            // studentAssessmentsList.addAll(assessments);
+            assessmentsList.addAll(assessments); // add it to a List
           });
 
-          /*
-          for (int i = 0; i < numOfAssess; i++) {
-            studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
-          }*/
           if (y == 0) {
             setState(() {
-              assessmentsList.removeAt(0);
-              studentAssessmentsList.removeAt(0);
+              assessmentsList.removeAt(0); // remove initialization
               y++;
             });
           }
-          studentAssessmentsList.add(assessment(assessmentsList[i].name, 0));
+
+          // students  get the assessment with initail grade zero
+        }
+        if (uploadedUnifiedGrades) {
+          subjectRef.get().then((DocumentSnapshot ds) async {
+            DocumentReference studentRef = ds['Students'][0];
+            var stRef = await studentRef
+                .collection("Grades")
+                .where('subjectID', isEqualTo: widget.subjectRef)
+                .get();
+            List<DocumentSnapshot> gradesList = stRef.docs;
+
+            DocumentReference docu =
+                await studentRef.collection("Grades").doc(gradesList[0].id);
+            for (int i = 0; i < numOfAssess; i++) {
+              Future<List<assessment>> getAssess() async {
+                final snapshots = await Future.wait(
+                    [docu.get().then((value) => value['assessments'][i])]);
+                return snapshots
+                    .map((snapshot) =>
+                        assessment(snapshot['name'], snapshot['grade']))
+                    .toList();
+              }
+
+              assessments2 = await getAssess();
+              setState(() {
+                studentAssessmentsList.addAll(assessments2);
+              });
+            }
+
+/////////////////////////
+            setState(() {
+              print(studentAssessmentsList);
+            });
+          });
+        } else {
+          for (int i = 0; i < numOfAssess; i++) {
+            studentAssessmentsList
+                .add(assessment(assessmentsList[i].name, '-'));
+          }
+        }
+        if (w == 0) {
+          setState(() {
+            studentAssessmentsList.removeAt(0); // remove initialization
+            w++;
+          });
         }
       } else {
+        // if grades are not Customized
         if (y == 0) {
           setState(() {
-            assessmentsList.removeAt(0);
-            //studentAssessmentsList.removeAt(0);
+            assessmentsList.removeAt(0); // remove initial value
             y++;
           });
         }
@@ -146,7 +200,8 @@ class _classGradesState extends State<classGrades> {
     });
   }
 
-  late int state = 0;
+  late var state;
+  late var textGrade = '';
   void initState() {
     state = 0;
     checkCustomization();
@@ -199,41 +254,15 @@ class _classGradesState extends State<classGrades> {
             Icons.arrow_back,
           ),
           onPressed: () async {
-            if (changed && !checked) {
-              if (await confirmBackArrow() &&
-                  await confirmDeleltingStudentGrades()) {
-                updateDatabase();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => grades(
-                      subRef: widget.subjectRef,
-                      subName: subName,
-                    ),
-                  ),
-                );
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => grades(
-                      subRef: widget.subjectRef,
-                      subName: subName,
-                    ),
-                  ),
-                );
-              }
-            } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => grades(
-                    subRef: widget.subjectRef,
-                    subName: subName,
-                  ),
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => grades(
+                  subRef: widget.subjectRef,
+                  subName: subName,
                 ),
-              );
-            }
+              ),
+            );
           },
         ),
         actions: [],
@@ -248,14 +277,22 @@ class _classGradesState extends State<classGrades> {
             getData();
           }
           if (assessmentsList.length == numOfAssess &&
-              numOfStudentsInClass > 0) {
-            print("assessmentsList.grade[0] " +
-                assessmentsList.length.toString());
+              numOfStudentsInClass > 0 &&
+              studentAssessmentsList.length == numOfAssess) {
             //  if (assessmentStudentGradesList.length == assessmentsList.length) {
             return ListView.builder(
               itemCount: assessmentsList.length,
               itemBuilder: (context, position) {
                 state = studentAssessmentsList[position].grade;
+                if (state.toString() == '-') {
+                  textGrade = assessmentsList[position].grade.toString() +
+                      "/" +
+                      state.toString();
+                } else {
+                  textGrade = state.toString() +
+                      "/" +
+                      assessmentsList[position].grade.toString();
+                }
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
                   child: Row(
@@ -268,32 +305,67 @@ class _classGradesState extends State<classGrades> {
                             child: TextFormField(
                               onChanged: (newText) {
                                 changed = true;
-                                setState(() {
-                                  state = int.parse(newText);
-                                });
-                                studentAssessmentsList[position].grade =
-                                    int.parse(newText);
+                                if (newText.isEmpty) {
+                                  setState(() {
+                                    state = "-";
+                                    textGrade = state.toString() +
+                                        "/" +
+                                        assessmentsList[position]
+                                            .grade
+                                            .toString();
+                                  });
+                                  studentAssessmentsList[position].grade = "-";
+                                } else {
+                                  setState(() {
+                                    state = double.parse(newText);
+                                    textGrade = state.toString() +
+                                        "/" +
+                                        assessmentsList[position]
+                                            .grade
+                                            .toString();
+                                  });
+                                  studentAssessmentsList[position].grade =
+                                      double.parse(newText);
+                                }
                               },
                               inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.digitsOnly
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^(\d+)?\.?\d{0,2}')),
+                                FilteringTextInputFormatter.digitsOnly,
                               ],
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
                               //  initialValue: assessmentsList[position].name,
 
                               decoration: InputDecoration(
                                 labelText: assessmentsList[position].name,
                                 //hintText: "EnterF Name",
+                                hintText: 'ادخل الرقم باللغة الإنجليزية',
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                               ),
                               validator: (value) {
                                 if (value!.isEmpty) {
-                                  value = "0";
+                                  if (studentAssessmentsList[position].grade !=
+                                      '-')
+                                    state =
+                                        studentAssessmentsList[position].grade;
+                                  else {
+                                    studentAssessmentsList[position].grade !=
+                                        '-';
+                                    state = '-';
+                                  }
+                                  textGrade = assessmentsList[position]
+                                          .grade
+                                          .toString() +
+                                      "/" +
+                                      state.toString();
                                 }
-                                if (int.parse(value) < 0 ||
-                                    int.parse(value) >
-                                        int.parse(assessmentsList[position]
+                                if (!value!.isEmpty) if (double.parse(value) <
+                                        0 ||
+                                    double.parse(value) >
+                                        double.parse(assessmentsList[position]
                                             .grade
                                             .toString())) {
                                   return "يجب ان تكون حدود الدرجة من 0 الى " +
@@ -315,9 +387,7 @@ class _classGradesState extends State<classGrades> {
                       new Container(
                           child: SingleChildScrollView(
                         child: Text(
-                          state.toString() +
-                              "/" +
-                              assessmentsList[position].grade.toString(),
+                          textGrade,
                           textAlign: TextAlign.left,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -376,14 +446,17 @@ class _classGradesState extends State<classGrades> {
   }
 
   updateDatabase() async {
-    int totalGrades = 0;
+    double totalGrades = 0;
     for (int i = 0; i < assessmentsList.length; i++) {
-      totalGrades += int.parse(studentAssessmentsList[i].grade.toString());
+      if (studentAssessmentsList[i].grade != '-')
+        totalGrades += double.parse(
+            studentAssessmentsList[i].grade.toString()); // get the total grades
     }
     if (totalGrades <= 100) {
       DocumentReference subjectRef =
           await widget.subjectRef.parent.parent as DocumentReference<Object?>;
       subjectRef.get().then((DocumentSnapshot ds) async {
+        widget.subjectRef.update({"uploadedUnifiedGrades": true});
         numOfStudents = ds['Students'].length;
         for (var i = 0; i < numOfStudents; i++) {
           DocumentReference docu = ds['Students'][i];
@@ -392,6 +465,7 @@ class _classGradesState extends State<classGrades> {
               .where('subjectID', isEqualTo: widget.subjectRef)
               .get();
           if (studentRef.docs.length > 0) {
+            // if student has a recorded grades
             await docu
                 .collection("Grades")
                 .where('subjectID', isEqualTo: widget.subjectRef)
@@ -406,6 +480,7 @@ class _classGradesState extends State<classGrades> {
               });
             });
           } else {
+            // if student doesn't have a recorded grades then add
             docu.collection("Grades").add({
               "assessments":
                   studentAssessmentsList.map<Map>((e) => e.toMap()).toList(),
@@ -474,5 +549,3 @@ class _classGradesState extends State<classGrades> {
     );
   }
 } //end class
-
-

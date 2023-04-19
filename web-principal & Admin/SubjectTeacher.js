@@ -326,7 +326,8 @@ for (var l=0; l<currentSubjects.length; l++){
           SubjectName: subjectName,
           TeacherID: "",
           msg_count:0, 
-          customized: false 
+          customized: false,
+          uploadedUnifiedGrades: false 
        };
        addDoc(dbRef, data)
         .then(docRef => {
@@ -455,8 +456,10 @@ for (var l=0; l<currentSubjects.length; l++){
             const data = {
               SubjectName: subjectName,
               TeacherID: teacherRef,
+              assessments: [],
               msg_count:0, 
-          customized: false
+          customized: false,
+          uploadedUnifiedGrades: false
             };
 
             updateDoc(docRef, data)

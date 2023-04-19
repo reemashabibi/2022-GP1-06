@@ -151,6 +151,7 @@ class _viewDocuments extends State<viewDocuments> {
               MaterialPageRoute(
                 builder: (context) => appBars(
                   schoolId: schoolID,
+                  Index: 0,
                 ),
               ),
             );

@@ -22,7 +22,8 @@ Future<void> main() async {
   }
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(_firebseMessagingBackgroundHandler);
-
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
   runApp(MyApp());
 }
 

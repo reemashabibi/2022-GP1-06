@@ -16,13 +16,15 @@ import 'login_screen.dart';
 
 class appBars extends StatelessWidget {
   final schoolId;
-  const appBars({super.key, required this.schoolId});
+  final Index;
+  const appBars({super.key, required this.schoolId, required this.Index});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: MyStatefulWidget(
         schID: schoolId,
+        index: Index,
       ),
     );
   }
@@ -30,7 +32,8 @@ class appBars extends StatelessWidget {
 
 class MyStatefulWidget extends StatefulWidget {
   final schID;
-  const MyStatefulWidget({super.key, required this.schID});
+  final index;
+  const MyStatefulWidget({super.key, required this.schID, required this.index});
 
   @override
   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
@@ -59,6 +62,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   void initState() {
     schID = widget.schID;
+    _selectedIndex = widget.index;
     //getSchoolId();
 
     super.initState();

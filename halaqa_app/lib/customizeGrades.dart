@@ -137,18 +137,9 @@ class _customizeGradesState extends State<customizeGrades> {
                 updateDatabase();
                 Added = false;
               } else {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        content: Text(
-                          "لم يتم اضافة اي متطلب!",
-                          style: TextStyle(
-                              // color: Colors.red,
-                              ),
-                        ),
-                      );
-                    });
+                Fluttertoast.showToast(
+                    msg: "لم يتم اضافة اي متطلب",
+                    backgroundColor: Color.fromARGB(255, 221, 33, 30));
               }
             }
           },
@@ -166,7 +157,7 @@ class _customizeGradesState extends State<customizeGrades> {
             for (int i = 0; i < assessmentsList.length; i++) {
               totalGrades += assessmentsList[i].grade!;
             }
-            if (changed) {
+            if (changed && totalGrades != 0) {
               showDialog(
                 context: context,
                 builder: (dialogContex) => AlertDialog(
@@ -286,114 +277,126 @@ class _customizeGradesState extends State<customizeGrades> {
             print("List : ${.toString()}");
             _studentMap = _studentList.asMap();
             print("MAP : ${_studentMap.toString()}");*/
-
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: assessmentsList.length,
-                    itemBuilder: (context, position) {
-                      /*gradeController.text =
+                  if (assessmentsList.length > 0) {
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: assessmentsList.length,
+                      itemBuilder: (context, position) {
+                        /*gradeController.text =
                           assessmentsList[position].grade.toString();*/
-                      return Padding(
-                        padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Expanded(
-                                child: Row(
-                              children: [
-                                new Flexible(
-                                  child: TextFormField(
-                                    //  keyboardType: TextInputType.number,
-                                    controller: TextEditingController(
-                                        text: assessmentsList[position].name),
-                                    onChanged: (newText) {
-                                      changed = true;
-                                      assessmentsList[position].name = newText;
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: "اسم المتطلب",
-                                      contentPadding:
-                                          EdgeInsets.symmetric(vertical: 20.0),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Expanded(
+                                  child: Row(
+                                children: [
+                                  new Flexible(
+                                    child: TextFormField(
+                                      //  keyboardType: TextInputType.number,
+                                      controller: TextEditingController(
+                                          text: assessmentsList[position].name),
+                                      onChanged: (newText) {
+                                        changed = true;
+                                        assessmentsList[position].name =
+                                            newText;
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: "اسم المتطلب",
+                                        contentPadding: EdgeInsets.symmetric(
+                                            vertical: 20.0),
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return "ادخل اسم المتطلب";
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      maxLines: 1,
                                     ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "ادخل اسم المتطلب";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    maxLines: 1,
                                   ),
-                                ),
-                                // ignore: unnecessary_new
-                                new Flexible(
-                                    child: Focus(
-                                  child: TextFormField(
-                                    //   keyboardType: TextInputType.number,
-                                    inputFormatters: <TextInputFormatter>[
-                                      // for below version 2 use this
-// for version 2 and greater youcan also use this
-                                      FilteringTextInputFormatter.digitsOnly
-                                    ],
-                                    controller: TextEditingController(
-                                        text: assessmentsList[position]
-                                            .grade
-                                            .toString()),
-                                    onChanged: (newText) {
-                                      //  gradeController.clear();
-                                      changed = true;
-                                      //grade = int.parse(newText);
+                                  // ignore: unnecessary_new
+                                  new Flexible(
+                                      child: Focus(
+                                    child: TextFormField(
+                                      //   keyboardType: TextInputType.number,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.allow(
+                                            RegExp(r'^(\d+)?\.?\d{0,2}')),
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      controller: TextEditingController(
+                                          text: assessmentsList[position]
+                                              .grade
+                                              .toString()),
+                                      onChanged: (newText) {
+                                        //  gradeController.clear();
+                                        changed = true;
+                                        //grade = int.parse(newText);
 
-                                      assessmentsList[position].grade =
-                                          int.parse(newText);
-                                      print(newText);
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: "درجة المتطلب",
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(12),
+                                        assessmentsList[position].grade =
+                                            int.parse(newText);
+                                        print(newText);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: "درجة المتطلب",
+                                        border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                        ),
                                       ),
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return "أدخل درجة المتطلب";
+                                        }
+                                        if (int.parse(value) == 0) {
+                                          return "الدرجة تساوي صفر";
+                                        } else {
+                                          return null;
+                                        }
+                                      },
+                                      maxLines: 1,
                                     ),
-                                    validator: (value) {
-                                      if (value!.isEmpty) {
-                                        return "أدخل درجة المتطلب";
-                                      }
-                                      if (int.parse(value) == 0) {
-                                        return "الدرجة تساوي صفر";
-                                      } else {
-                                        return null;
-                                      }
-                                    },
-                                    maxLines: 1,
-                                  ),
-                                )),
-                              ],
-                            )),
-                            IconButton(
-                              icon: Icon(
-                                Icons.delete,
-                                color: Colors.red,
+                                  )),
+                                ],
+                              )),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () async {
+                                  var f = false;
+                                  f = await confirmDelete();
+                                  if (f) {
+                                    setState(() {
+                                      assessmentsList.removeAt(position);
+                                      delete();
+                                      changed = true;
+                                    });
+                                  }
+                                },
                               ),
-                              onPressed: () async {
-                                var f = false;
-                                f = await confirmDelete();
-                                if (f) {
-                                  setState(() {
-                                    assessmentsList.removeAt(position);
-                                    delete();
-                                    changed = true;
-                                  });
-                                }
-                              },
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "لم يتم توزيع الدرجات ",
+                          style: const TextStyle(),
+                          textAlign: TextAlign.center,
+                        ));
+                  }
                 }),
               )),
             ],
@@ -514,18 +517,9 @@ class _customizeGradesState extends State<customizeGrades> {
           }
         }
       });
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(
-                "لم يتم اضافة اي متطلب!",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-            );
-          });
+      Fluttertoast.showToast(
+          msg: "لم يتم اضافة اي متطلب",
+          backgroundColor: Color.fromARGB(255, 221, 33, 30));
       return true;
     }
     if (assessmentsList.length > 0 && totalGrades == 100) {
@@ -577,18 +571,9 @@ class _customizeGradesState extends State<customizeGrades> {
 
       await widget.subjectRef.update({'assessments': FieldValue.delete()});
     } else {
-      showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              content: Text(
-                "لم تتم حفظ التغييرات، مجموع الدرجات لا يساوي ١٠٠!",
-                style: TextStyle(
-                    // color: Colors.red,
-                    ),
-              ),
-            );
-          });
+      Fluttertoast.showToast(
+          msg: "لم تتم حفظ التغييرات، مجموع الدرجات لا يساوي ١٠٠",
+          backgroundColor: Color.fromARGB(255, 221, 33, 30));
       return false;
     }
     return true;

@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/state_manager.dart';
 import 'package:halaqa_app/appBars.dart';
 import 'package:halaqa_app/login_screen.dart';
@@ -19,8 +20,9 @@ class students {
   late String name;
   late DocumentReference? stRef = null;
   bool buttonVisible = true;
+  bool cancel = false;
 
-  students(this.name, this.stRef, this.buttonVisible);
+  students(this.name, this.stRef, this.buttonVisible, this.cancel);
 }
 
 class _commissionerHPState extends State<commissionerHP> {
@@ -33,10 +35,11 @@ class _commissionerHPState extends State<commissionerHP> {
   var studentsNum = 0;
   bool isChecked = false;
   String comName = "";
+  bool _cancel = false;
 
   late List<students> studentName = [];
   getData() {
-    studentName.add(students("", null, true));
+    studentName.add(students("", null, true, false));
     x++;
   }
 
@@ -75,13 +78,15 @@ class _commissionerHPState extends State<commissionerHP> {
               studentName.add(students(
                   value["FirstName"] + " " + value["LastName"],
                   ds['Students'][i],
-                  false));
+                  false,
+                  true));
               _textToShow = "تم إبلاغ المدرسة بقدومك ";
             } else {
               studentName.add(students(
                   value["FirstName"] + " " + value["LastName"],
                   ds['Students'][i],
-                  true));
+                  true,
+                  false));
             }
           });
         });
@@ -104,14 +109,15 @@ class _commissionerHPState extends State<commissionerHP> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset(
-          "images/logo.png",
-          scale: 9,
-        ),
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 1,
         automaticallyImplyLeading: false,
         actions: [
+          Image.asset(
+            "images/logo.png",
+            scale: 9,
+          ),
+          Spacer(),
           IconButton(
             onPressed: () {
               //conformation message
@@ -252,7 +258,12 @@ class _commissionerHPState extends State<commissionerHP> {
                                               e.buttonVisible = false;
                                               _textToShow =
                                                   "تم إبلاغ المدرسة بقدومك ";
+                                              e.cancel = true;
                                             });
+                                            Fluttertoast.showToast(
+                                                msg: "تم اشعار المدرسة",
+                                                backgroundColor: Color.fromARGB(
+                                                    255, 97, 200, 0));
 
                                             Future.delayed(
                                                 Duration(minutes: 15), () {
@@ -306,7 +317,77 @@ class _commissionerHPState extends State<commissionerHP> {
                                             ),
                                           ),
                                         )
-                                      : Text(_textToShow),
+                                      : GestureDetector(
+                                          onTap: () async {
+                                            DocumentReference<Object?>? docRef =
+                                                e.stRef;
+                                            if (e.cancel == true) {
+                                              docRef?.update({
+                                                "picked": "no",
+                                                "time":
+                                                    FieldValue.serverTimestamp()
+                                              });
+
+                                              setState(() {
+                                                e.buttonVisible = true;
+                                                e.cancel = false;
+                                              });
+                                            }
+                                            if (e.buttonVisible == false) {
+                                              docRef?.update({
+                                                "picked": "yes",
+                                                "time": ""
+                                              });
+                                              setState(() {
+                                                e.buttonVisible = true;
+                                              });
+                                            } else {
+                                              docRef?.update({
+                                                "picked": "yes",
+                                                "time": ""
+                                              });
+                                              setState(() {
+                                                e.buttonVisible = true;
+                                              });
+                                            }
+                                          },
+                                          child: Container(
+                                            width: 130,
+                                            height: 40,
+                                            decoration: BoxDecoration(
+                                              gradient: LinearGradient(
+                                                colors: [
+                                                  Color.fromARGB(
+                                                      255, 246, 6, 6),
+                                                  Color.fromARGB(
+                                                      255, 250, 0, 0),
+                                                ],
+                                                begin: Alignment.topLeft,
+                                                end: Alignment.bottomRight,
+                                              ),
+
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  bottomRight:
+                                                      Radius.circular(10)),
+                                              //   borderRadius: BorderRadius.circular(100),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                'إلغاء',
+                                                style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 248, 245, 245),
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
 
                                   //SizedBox(width: 100),
                                   //  Spacer(),

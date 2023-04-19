@@ -30,9 +30,10 @@ class subject {
   String className;
   String LevelName;
   String subjectId;
+  int subjectChatCount;
 
   subject(this.subjectName, this.subjectRef, this.className, this.LevelName,
-      this.subjectId);
+      this.subjectId, this.subjectChatCount);
 /*
   @override
   String toString() {
@@ -48,7 +49,6 @@ class _teacherHPState extends State<teacherHP> {
   var className = "";
   List<subject> subjectsList = [];
   late List _SubjectsRefList;
-  late List subjectChatCount;
   bool isExpanded = false;
 
   var x = 0;
@@ -61,11 +61,9 @@ class _teacherHPState extends State<teacherHP> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   User? user = FirebaseAuth.instance.currentUser;
   getData() {
-    subjectsList.add(subject("", null, "", "", ""));
+    subjectsList.add(subject("", null, "", "", "", 0));
 
     _SubjectsRefList = [""];
-    subjectChatCount = [0];
-    // _SubjectsIdsList = [""];
     x++;
   }
 
@@ -97,48 +95,51 @@ class _teacherHPState extends State<teacherHP> {
 
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference docu = ds['Subjects'][i];
-        DocumentReference teacherSubjectMsg_count = FirebaseFirestore.instance.doc(
-            'School/$schoolID/Teacher/${user.uid}/subjects/${ds['Subjects'][i].id}');
-
         DocumentReference str = ds['Subjects'][i].parent.parent;
         print("ZZZZZZZZ ${ds['Subjects'][i].parent.parent.id}");
-        // var classRef = await docRef.collection("Announcement").get();
-
-        var clsName = await str.get().then((value) {
-          setState(() {
-            var subName = docu.get().then((valueIn) {
-              //   _ClassNameList.add(value['ClassName']);
-              subjectsList.add(subject(valueIn['SubjectName'], docu,
-                  value['ClassName'], value['LevelName'], valueIn.id));
-            });
-          });
-        });
 
         await docu.get().then((value) {
           setState(() {
-            print("SUBJECT ID ${value.id}");
-
             _SubjectsRefList.add(docu);
           });
         });
-        await teacherSubjectMsg_count.get().then((value) {
-          setState(() {
-            if (value.exists) {
-              subjectChatCount.add(value['msg_count']);
-            } else {
-              subjectChatCount.add(0);
-            }
+        var msg_count_sum;
+        try {
+          final querySnapshot = await FirebaseFirestore.instance
+              .collection('School/$schoolID/Chats')
+              .where('SubjectID', isEqualTo: ds['Subjects'][i].id)
+              .get();
+
+          msg_count_sum = 0;
+          for (var docSnapshot in querySnapshot.docs) {
+            msg_count_sum += docSnapshot.get('To_Teacher_msg_count');
+          }
+          var clsName = await str.get().then((value) {
+            setState(() {
+              var subName = docu.get().then((valueIn) {
+                subjectsList.add(subject(
+                    valueIn['SubjectName'],
+                    docu,
+                    value['ClassName'],
+                    value['LevelName'],
+                    valueIn.id,
+                    msg_count_sum));
+              });
+            });
           });
-        });
+        } catch (e) {
+          print('Error completing: $e');
+        }
       }
+
       setState(() {
         if (_SubjectsRefList.length > 1 && !refreshed) {
           subjectsList.removeAt(0);
           _SubjectsRefList.removeAt(0);
-          subjectChatCount.removeAt(0);
           refreshed = true;
         }
       });
+
       if (_SubjectsRefList[0] == "") {
         v++;
       }
@@ -159,13 +160,12 @@ class _teacherHPState extends State<teacherHP> {
 
   @override
   void initState() {
-    getToken();
     getSchoolID();
     // getSchoolID();
     //remove();
 
     requestPremission();
-
+    getToken();
     initInfo();
 
     super.initState();
@@ -173,8 +173,7 @@ class _teacherHPState extends State<teacherHP> {
 
 //method to set the setting of the notification in foregroud
   initInfo() {
-    var androidInitialize =
-        const AndroidInitializationSettings('@mipmap/ic_launcher.png');
+    var androidInitialize = const AndroidInitializationSettings('ic_launcher');
     var IOSInitialize = const IOSInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -200,12 +199,6 @@ class _teacherHPState extends State<teacherHP> {
                         subjectId: info[5],
 
                         ///after read msg update a variable
-                        msgCount: (s) {
-                          var msgCount = s;
-                          // setState(() {
-                          //
-                          // });
-                        },
                       )),
             );
           }
@@ -229,6 +222,7 @@ class _teacherHPState extends State<teacherHP> {
               importance: Importance.max,
               styleInformation: bigTextStyleInformation,
               priority: Priority.max,
+              icon: "ic_launcher", //add app icon here
               playSound: true);
       NotificationDetails platformChannelSpecifics = NotificationDetails(
           android: androidNotificationDetails,
@@ -256,12 +250,6 @@ class _teacherHPState extends State<teacherHP> {
                       schoolId: info[3],
                       classId: info[4],
                       subjectId: info[5],
-                      msgCount: (s) {
-                        var msgCount = s;
-                        // setState(() {
-                        //
-                        // });
-                      },
                     )),
           );
         }
@@ -309,7 +297,6 @@ class _teacherHPState extends State<teacherHP> {
 
   @override
   Widget build(BuildContext context) {
-    // print('School/' + '$schoolID' + '/Teacher/' + user!.uid);
     return Scaffold(
       //appBar: AppBar(title: const Text("Teacher")),
       appBar: AppBar(
@@ -354,7 +341,6 @@ class _teacherHPState extends State<teacherHP> {
               .get(),
           builder:
               (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            // print("DAT A ${snapshot.data!.data()}");
             if (snapshot.hasError) {
               return Center(
                   child: Text('Some error occurred ${snapshot.error}'));
@@ -368,50 +354,53 @@ class _teacherHPState extends State<teacherHP> {
             if (snapshot.hasData && refreshed) {
               //  dataGet();
               // _SubjectList = snapshot.data!['Subjects'];
+              return RefreshIndicator(
+                  color: Colors.black,
+                  onRefresh: () async {
+                    subjectsList.clear();
+                    _SubjectsRefList.clear();
 
-              return Container(
-                  child: SingleChildScrollView(
-                      child: Column(
-                children: [
-                  Container(
-                    height: 120,
-                    width: 500,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      borderRadius: BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset: Offset(0, 3), // changes position of shadow
+                    await getSubjects();
+                  },
+                  child: Column(
+                    children: [
+                      new Container(
+                        height: 120,
+                        width: 500,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.only(
+                              //    topLeft: Radius.circular(10),
+                              ///    topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset:
+                                  Offset(0, 3), // changes position of shadow
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
-                    child: Text(
-                      textAlign: TextAlign.center,
-                      teacherName,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 80, 80, 80),
-                        fontSize: 30,
+                        padding: const EdgeInsets.fromLTRB(20.0, 40, 20.0, 20),
+                        child: Text(
+                          textAlign: TextAlign.center,
+                          teacherName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 30,
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  Container(
-                      child: RefreshIndicator(
-                          color: Colors.black,
-                          onRefresh: () async {
-                            subjectsList.clear();
-                            _SubjectsRefList.clear();
-                            await getSubjects();
-                          },
+                      new Container(
+                          height: 600,
                           child: Container(
+                            height: 550,
                             child: ListView(
-                              physics: const NeverScrollableScrollPhysics(),
+                              // physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               padding:
                                   const EdgeInsets.fromLTRB(8.0, 20, 8.0, 10),
@@ -622,11 +611,7 @@ class _teacherHPState extends State<teacherHP> {
                                                           Text("المحادثات"),
                                                         ],
                                                       ),
-                                                      subjectChatCount[
-                                                                  subjectsList
-                                                                      .indexOf(
-                                                                          e)] >
-                                                              0
+                                                      e.subjectChatCount > 0
                                                           ? Positioned(
                                                               top: 0,
                                                               right: 0,
@@ -638,7 +623,17 @@ class _teacherHPState extends State<teacherHP> {
                                                                         .red,
                                                                     shape: BoxShape
                                                                         .circle),
-                                                                child: Center(),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    e.subjectChatCount
+                                                                        .toString(),
+                                                                    style: const TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            12),
+                                                                  ),
+                                                                ),
                                                               ),
                                                             )
                                                           : Container()
@@ -652,7 +647,7 @@ class _teacherHPState extends State<teacherHP> {
                                       ],
                                     ),
                                   ),
-                                  subjectChatCount[subjectsList.indexOf(e)] > 0
+                                  e.subjectChatCount > 0
                                       ? Positioned(
                                           top: 0,
                                           right: 0,
@@ -669,9 +664,12 @@ class _teacherHPState extends State<teacherHP> {
                                 ]);
                               }).toList(),
                             ),
-                          )))
-                ],
-              )));
+                          ))
+                      //)
+
+                      // )
+                    ],
+                  ));
             }
             if (subjectsList.length == 0 && x == 0) {
               return const Center(child: Text("لم يتم تعيين أي فصل بعد."));
@@ -696,6 +694,9 @@ class _teacherHPState extends State<teacherHP> {
       child: const Text("نعم"),
       onPressed: () async {
         const CircularProgressIndicator();
+        FirebaseFirestore.instance
+            .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
+            .update({'token': null});
         await FirebaseAuth.instance.signOut();
         SharedPreferences pref = await SharedPreferences.getInstance();
         pref.remove("email");
@@ -865,30 +866,28 @@ class _MyWidgetState extends State<viewStudents> {
                       ),
                     ),
                   ),
-                  Container(
-                    child: ListView(
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.fromLTRB(10.0, 20, 10.0, 20),
-                      shrinkWrap: true,
-                      children: _StudenNameList.map((e) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15.0),
-                            color: Color.fromARGB(255, 239, 240, 240),
-                          ),
-                          margin: EdgeInsets.only(bottom: 10),
-                          padding: const EdgeInsets.all(15),
-                          child: Text(e,
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold)),
+                  ListView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(10.0, 20, 10.0, 20),
+                    shrinkWrap: true,
+                    children: _StudenNameList.map((e) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          color: Color.fromARGB(255, 239, 240, 240),
+                        ),
+                        margin: EdgeInsets.only(bottom: 10),
+                        padding: const EdgeInsets.all(15),
+                        child: Text(e,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold)),
 
-                          //   color: Color.fromARGB(255, 222, 227, 234),
-                        );
-                      }).toList(),
-                    ),
-                  )
+                        //   color: Color.fromARGB(255, 222, 227, 234),
+                      );
+                    }).toList(),
+                  ),
                 ],
               )));
             }

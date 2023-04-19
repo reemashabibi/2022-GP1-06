@@ -119,6 +119,7 @@ class _viewAbcense extends State<viewAbcense> {
               MaterialPageRoute(
                 builder: (context) => appBars(
                   schoolId: schoolID,
+                  Index: 0,
                 ),
               ),
             );

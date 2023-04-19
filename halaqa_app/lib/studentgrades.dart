@@ -18,7 +18,7 @@ class studentGrades extends StatefulWidget {
 
 class assessment {
   String name;
-  int grade;
+  var grade;
 
   assessment(this.name, this.grade);
 
@@ -146,7 +146,7 @@ class _EditProfilePageState extends State<studentGrades> {
           setState(() {
             for (int i = 0; i < numOfAssess; i++) {
               studentAssessmentsList
-                  .add(assessment(assessmentsList[i].name, 0));
+                  .add(assessment(assessmentsList[i].name, '-'));
             }
           });
           if (v == 0) {
@@ -165,12 +165,12 @@ class _EditProfilePageState extends State<studentGrades> {
       else {
         notCustomized();
 
-        studentAssessmentsList.add(assessment(assessmentsList[0].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[1].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[2].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[3].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[4].name, 0));
-        studentAssessmentsList.add(assessment(assessmentsList[5].name, 0));
+        studentAssessmentsList.add(assessment(assessmentsList[0].name, '-'));
+        studentAssessmentsList.add(assessment(assessmentsList[1].name, '-'));
+        studentAssessmentsList.add(assessment(assessmentsList[2].name, '-'));
+        studentAssessmentsList.add(assessment(assessmentsList[3].name, '-'));
+        studentAssessmentsList.add(assessment(assessmentsList[4].name, '-'));
+        studentAssessmentsList.add(assessment(assessmentsList[5].name, '-'));
         studentAssessmentsList.removeAt(0);
 
         widget.stRef.collection("Grades").add({
@@ -208,7 +208,9 @@ class _EditProfilePageState extends State<studentGrades> {
 
   late bool checked = false;
   late bool changed = false;
-  late int state = 0;
+  late var state;
+  var origGrade;
+  late var textGrade = '';
   void initState() {
     checkCustomization();
 
@@ -256,32 +258,10 @@ class _EditProfilePageState extends State<studentGrades> {
         backgroundColor: Color.fromARGB(255, 54, 172, 172),
         elevation: 1,
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-          ),
-          onPressed: () async {
-            if (changed && !checked) {
-              if (await confirmBackArrow()) {
-                updateDatabase();
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => viewStudentsForGrades(
-                      ref: widget.classRef,
-                    ),
-                  ),
-                );
-              } else {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => viewStudentsForGrades(
-                      ref: widget.classRef,
-                    ),
-                  ),
-                );
-              }
-            } else {
+            icon: Icon(
+              Icons.arrow_back,
+            ),
+            onPressed: () async {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -290,9 +270,7 @@ class _EditProfilePageState extends State<studentGrades> {
                   ),
                 ),
               );
-            }
-          },
-        ),
+            }),
         actions: [],
       ),
       body: Form(
@@ -312,8 +290,18 @@ class _EditProfilePageState extends State<studentGrades> {
                         shrinkWrap: true,
                         itemCount: assessmentsList.length,
                         itemBuilder: (context, position) {
+                          origGrade = studentAssessmentsList[position].grade;
                           state = studentAssessmentsList[position].grade;
-
+                          if (state.toString() == '-') {
+                            textGrade =
+                                assessmentsList[position].grade.toString() +
+                                    "/" +
+                                    state.toString();
+                          } else {
+                            textGrade = state.toString() +
+                                "/" +
+                                assessmentsList[position].grade.toString();
+                          }
                           return Padding(
                             padding:
                                 const EdgeInsets.fromLTRB(20.0, 20, 20.0, 5),
@@ -327,20 +315,44 @@ class _EditProfilePageState extends State<studentGrades> {
                                       child: TextFormField(
                                         onChanged: (newText) {
                                           changed = true;
-                                          setState(() {
-                                            state = int.parse(newText);
-                                          });
-
-                                          studentAssessmentsList[position]
-                                              .grade = int.parse(newText);
+                                          if (newText.isEmpty) {
+                                            setState(() {
+                                              state = "-";
+                                              textGrade = origGrade.toString() +
+                                                  "/" +
+                                                  assessmentsList[position]
+                                                      .grade
+                                                      .toString();
+                                            });
+                                            studentAssessmentsList[position]
+                                                .grade = "-";
+                                          } else {
+                                            setState(() {
+                                              state = double.parse(newText);
+                                              textGrade = state.toString() +
+                                                  "/" +
+                                                  assessmentsList[position]
+                                                      .grade
+                                                      .toString();
+                                            });
+                                            studentAssessmentsList[position]
+                                                .grade = double.parse(newText);
+                                          }
                                         },
                                         inputFormatters: <TextInputFormatter>[
-                                          FilteringTextInputFormatter.digitsOnly
+                                          FilteringTextInputFormatter.allow(
+                                              RegExp(r'^(\d+)?\.?\d{0,2}')),
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
                                         ],
-                                        keyboardType: TextInputType.number,
+                                        keyboardType:
+                                            TextInputType.numberWithOptions(
+                                                decimal: true),
                                         decoration: InputDecoration(
                                           labelText:
                                               assessmentsList[position].name,
+                                          hintText:
+                                              'ادخل الرقم باللغة الإنجليزية',
                                           border: OutlineInputBorder(
                                             borderRadius:
                                                 BorderRadius.circular(12),
@@ -348,11 +360,30 @@ class _EditProfilePageState extends State<studentGrades> {
                                         ),
                                         validator: (value) {
                                           if (value!.isEmpty) {
-                                            return "ادخل درجة المتطلب";
+                                            if (studentAssessmentsList[position]
+                                                    .grade !=
+                                                '-')
+                                              state = studentAssessmentsList[
+                                                      position]
+                                                  .grade;
+                                            else {
+                                              studentAssessmentsList[position]
+                                                      .grade !=
+                                                  '-';
+                                              state = '-';
+                                            }
+                                            textGrade =
+                                                assessmentsList[position]
+                                                        .grade
+                                                        .toString() +
+                                                    "/" +
+                                                    state.toString();
                                           }
-                                          if (int.parse(value) < 0 ||
-                                              int.parse(value) >
-                                                  int.parse(
+                                          if (!value!.isEmpty) if (double.parse(
+                                                      value) <
+                                                  0 ||
+                                              double.parse(value) >
+                                                  double.parse(
                                                       assessmentsList[position]
                                                           .grade
                                                           .toString())) {
@@ -375,11 +406,7 @@ class _EditProfilePageState extends State<studentGrades> {
                                 new Container(
                                     child: SingleChildScrollView(
                                   child: Text(
-                                    state.toString() +
-                                        "/" +
-                                        assessmentsList[position]
-                                            .grade
-                                            .toString(),
+                                    textGrade,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -450,11 +477,14 @@ class _EditProfilePageState extends State<studentGrades> {
   }
 
   updateDatabase() async {
-    int totalGrades = 0;
+    double totalGrades = 0;
     for (int i = 0; i < assessmentsList.length; i++) {
-      totalGrades += int.parse(studentAssessmentsList[i].grade.toString());
+      if (studentAssessmentsList[i].grade != '-')
+        totalGrades += double.parse(studentAssessmentsList[i].grade.toString());
     }
     if (totalGrades > 0) {
+      await widget.classRef.update({"uploadedUnifiedGrades": false});
+
       var stRef = await widget.stRef
           .collection("Grades")
           .where('subjectID', isEqualTo: widget.classRef)

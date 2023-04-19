@@ -30,7 +30,6 @@ class StartState extends State<SplashScreen> {
   }
 
   route() async {
-    /*
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var email = prefs.getString("email");
     if (email != null) {
@@ -44,6 +43,7 @@ class StartState extends State<SplashScreen> {
             MaterialPageRoute(
               builder: (context) => appBars(
                 schoolId: prefs.getString('school'),
+                Index: 0,
               ),
             ));
       } else if (type == 'C') {
@@ -51,10 +51,9 @@ class StartState extends State<SplashScreen> {
             context, MaterialPageRoute(builder: (context) => commissionerHP()));
       }
     } else {
-      */
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => LoginScreen()));
-   // }
+    }
   }
 
   @override

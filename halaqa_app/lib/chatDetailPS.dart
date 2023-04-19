@@ -62,6 +62,23 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
         print('sent');
         _textController.text = "";
 
+        //New ***************************************************** if new it does not add feilds
+        DocumentSnapshot dc = await FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Chats')
+            .doc(chatDocID)
+            .get();
+        count = dc.get("To_Teacher_msg_count") + 1;
+        print("COUNT MSG $count");
+        FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Chats')
+            .doc(chatDocID)
+            .update({
+          "To_Teacher_msg_count": count,
+          'SubjectID': widget.subjectId,
+          'StudentID': currentuserUserId
+        });
+
+/*
         ///while we send a message from parent side we need to set subcollection because we have 3 student and we send msg to partucular
         DocumentSnapshot dc = await FirebaseFirestore.instance
             .collection('School/${widget.schoolId}/Teacher')
@@ -76,6 +93,7 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
             .collection("subjects")
             .doc(widget.subjectId)
             .set({"msg_count": count, "student_id": widget.StudentUid});
+            */
 
         /*  int hasChatOpen = 0;
         var chatDoc = FirebaseFirestore.instance
@@ -115,7 +133,8 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
           (DocumentSnapshot doc) {
             recepientToken = doc['token'];
             http.post(
-              Uri.parse('http://10.0.2.2:8080/chat'),
+              Uri.parse(
+                  'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
               },
@@ -168,11 +187,9 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
 
   readMsg() {
     FirebaseFirestore.instance
-        .collection('School/${widget.schoolId}/Class')
-        .doc("${widget.classID}")
-        .collection("Subject")
-        .doc(widget.subjectId)
-        .update({"msg_count": 0});
+        .collection('School/${widget.schoolId}/Chats')
+        .doc(chatDocID)
+        .update({"To_Student_msg_count": 0});
   }
 
   getOfficeHours() async {

@@ -26,7 +26,7 @@ class viewChildGrades extends StatefulWidget {
 
 class assessment {
   String name;
-  int grade;
+  var grade;
 
   assessment(this.name, this.grade);
 
@@ -52,7 +52,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
   var numOfAssess = 0;
   var assessments2;
   var assessments;
-  var totalGrade = 0;
+  double totalGrade = 0;
   List<assessment> studentAssessmentsList = [];
   List<assessment> assessmentsList = [];
 
@@ -146,13 +146,15 @@ class _viewChildGradesState extends State<viewChildGrades> {
               v++;
             });
           }
-
-          totalGrade += studentAssessmentsList[i].grade;
+          if (studentAssessmentsList[i].grade != '-')
+            totalGrade += studentAssessmentsList[i].grade;
         });
       }
     }
     noGrades = true;
   }
+
+  late var textGrade = '';
 
   @override
   void initState() {
@@ -209,6 +211,20 @@ class _viewChildGradesState extends State<viewChildGrades> {
                       shrinkWrap: true,
                       padding: EdgeInsets.only(right: 30.0, left: 30.0),
                       children: studentAssessmentsList.map((e) {
+                        if (e.grade.toString() == '-') {
+                          textGrade =
+                              assessmentsList[studentAssessmentsList.indexOf(e)]
+                                      .grade
+                                      .toString() +
+                                  "/" +
+                                  e.grade.toString();
+                        } else {
+                          textGrade = e.grade.toString() +
+                              "/" +
+                              assessmentsList[studentAssessmentsList.indexOf(e)]
+                                  .grade
+                                  .toString();
+                        }
                         return Container(
                             margin: EdgeInsets.only(bottom: 5),
                             width: MediaQuery.of(context).size.width,
@@ -244,18 +260,7 @@ class _viewChildGradesState extends State<viewChildGrades> {
                                           backgroundColor: Color.fromARGB(
                                               255, 199, 248, 248),
                                           onPressed: () {},
-                                          label: Text(
-                                              studentAssessmentsList[
-                                                          studentAssessmentsList
-                                                              .indexOf(e)]
-                                                      .grade
-                                                      .toString() +
-                                                  "/" +
-                                                  assessmentsList[
-                                                          studentAssessmentsList
-                                                              .indexOf(e)]
-                                                      .grade
-                                                      .toString(),
+                                          label: Text(textGrade,
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,

@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/grades.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/studentgrades.dart';
@@ -35,16 +36,20 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
   late List _StudentList;
   late List _StudenNameList;
   late List _StudentsRefList;
+  late List _ChatMsgCount;
+
   var x = 0;
   var v = 0;
   var className;
   var levelName;
   var numOfStudents;
+  int _msgCount = 0;
 
   getData() {
     _StudentList = [""];
     _StudentsRefList = [""];
     _StudenNameList = [""];
+    _ChatMsgCount = [''];
     x++;
   }
 
@@ -77,13 +82,32 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
             _StudentsRefList.add(docu);
           });
         });
-      }
 
+        DocumentSnapshot dc = await FirebaseFirestore.instance
+            .collection('School/${widget.schoolId}/Chats')
+            .doc(
+                '${widget.subjectId}_${docu.id}_${FirebaseAuth.instance.currentUser?.uid}')
+            .get();
+        try {
+          setState(() {
+            _ChatMsgCount.add(dc.get("To_Teacher_msg_count"));
+          });
+        } catch (e) {
+          setState(() {
+            _ChatMsgCount.add(0);
+          });
+        }
+      }
+      print(_ChatMsgCount);
       setState(() {
         if (_StudenNameList.length > 1) {
           _StudentList.removeAt(0);
           _StudenNameList.removeAt(0);
           _StudentsRefList.removeAt(0);
+          _ChatMsgCount.removeAt(0);
+          print(_ChatMsgCount);
+          print(_StudenNameList);
+          print(_StudentsRefList);
         }
       });
       if (_StudenNameList[0] == "") {
@@ -91,6 +115,13 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
       }
     });
 
+    ///New  ********************************************
+    ///show count of msg from inside teacher collection and inside of this subcollection subjects
+    // var chatDocID = "${widget.subjectId}_${widget.friendUid}_$TeacherUid";
+    //  print("CHAAT ID $chatDocID");
+
+    ///
+/*
     ///show count of msg from inside teacher collection and inside of this subcollection subjects
     FirebaseFirestore.instance
         .collection('School/${widget.schoolId}/Teacher')
@@ -104,6 +135,8 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
         studentId = value.get("student_id");
       });
     });
+    */
+    /////delete later
   }
 
   TextEditingController controller = TextEditingController();
@@ -139,12 +172,6 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                   subjectId: subjectId,
 
                   ///after read msg update a variable
-                  msgCount: (s) {
-                    msgCount = s;
-                    // setState(() {
-                    //
-                    // });
-                  },
                 )));
     setState(() {});
   }
@@ -221,6 +248,31 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                         FirebaseAuth.instance.currentUser?.uid,
                                     'msg': "📢" + "\n" + "\n" + controller.text,
                                   });
+                                  var msg_count;
+                                  DocumentSnapshot chat = await FirebaseFirestore
+                                      .instance
+                                      .collection(
+                                          'School/${widget.schoolId}/Chats')
+                                      .doc(
+                                          "${widget.subjectId}_${qr.docs[i].id}_${FirebaseAuth.instance.currentUser?.uid}")
+                                      .get();
+                                  msg_count =
+                                      chat.get('To_Student_msg_count') + 1;
+
+                                  FirebaseFirestore.instance
+                                      .collection(
+                                          'School/${widget.schoolId}/Chats')
+                                      .doc(
+                                          "${widget.subjectId}_${qr.docs[i].id}_${FirebaseAuth.instance.currentUser?.uid}")
+                                      .update({
+                                    'To_Student_msg_count': msg_count,
+                                    'SubjectID': widget.subjectId,
+                                    'StudentID': qr.docs[i].id
+                                  });
+                                  Fluttertoast.showToast(
+                                      msg: "تم ارسال الرسالة بنجاح",
+                                      backgroundColor:
+                                          Color.fromARGB(255, 97, 200, 0));
 
                                   //send notification
 
@@ -280,7 +332,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                           recepientToken = docParent['token'];
                                           http.post(
                                             Uri.parse(
-                                                'http://10.0.2.2:8080/chat'),
+                                                'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
                                             headers: <String, String>{
                                               'Content-Type':
                                                   'application/json; charset=UTF-8',
@@ -306,26 +358,13 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
 
                                 }
 
-                                DocumentSnapshot dc = await FirebaseFirestore
-                                    .instance
-                                    .collection(
-                                        'School/${widget.schoolId}/Class')
-                                    .doc(classId)
-                                    .collection("Subject")
-                                    .doc(widget.subjectId)
-                                    .get();
-                                count = dc.get("msg_count") + 1;
-                                print("COUNT MSG $count");
-                                FirebaseFirestore.instance
-                                    .collection(
-                                        'School/${widget.schoolId}/Class')
-                                    .doc(classId)
-                                    .collection("Subject")
-                                    .doc(widget.subjectId)
-                                    .update({"msg_count": count});
+/////delet later how to increment To_student_msg_count ????????????
+
                                 // FirebaseFirestore.instance.collection("sc")
                                 // }
                               });
+
+                              ///delete later
                             }
 
                             setState(() {});
@@ -424,7 +463,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                             ),
                             SliverList(
                                 delegate: SliverChildListDelegate(
-                                    snapshot.data!.docs.map((e) {
+                                    _StudenNameList.map((e) {
                               // print("+++999 9+9 ${e.id}");
                               // Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
@@ -432,36 +471,41 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                 onTap: () {
                                   callChatDetailScreen(
                                       context,
-                                      e['FirstName'] + " " + e['LastName'],
-                                      e.id,
-                                      e["ClassID"].id,
+                                      e,
+                                      _StudentsRefList[
+                                              _StudenNameList.indexOf(e)]
+                                          .id,
+                                      widget.ref.parent.parent!.id,
                                       widget.subjectId);
                                 },
                                 title: Row(
                                   children: [
-                                    if (e.id == studentId)
-                                      msgCount == 0
-                                          ? Container()
-                                          : Container(
-                                              height: 25,
-                                              width: 25,
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.red,
-                                                  shape: BoxShape.circle),
-                                              child: Center(
-                                                child: Text(
-                                                  msgCount.toString(),
-                                                  style: const TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12),
-                                                ),
+                                    _ChatMsgCount[_StudenNameList.indexOf(e)] ==
+                                            0
+                                        ? Container()
+                                        : Container(
+                                            height: 25,
+                                            width: 25,
+                                            decoration: const BoxDecoration(
+                                                color: Colors.red,
+                                                shape: BoxShape.circle),
+                                            child: Center(
+                                              child: Text(
+                                                _ChatMsgCount[
+                                                        _StudenNameList.indexOf(
+                                                            e)]
+                                                    .toString(),
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12),
                                               ),
                                             ),
+                                          ),
                                     const SizedBox(
                                       width: 5,
                                     ),
                                     Text(
-                                      e['FirstName'] + " " + e['LastName'],
+                                      e,
                                       style: const TextStyle(
                                         color: Color.fromARGB(255, 1, 135, 173),
                                         fontSize: 25,

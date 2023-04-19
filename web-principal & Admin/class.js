@@ -127,7 +127,8 @@ classForm.addEventListener('submit', async (e) => {
         SubjectName: doc.data().Subjects[i],
         TeacherID:  "",
         msg_count:0 ,
-        customized: false 
+        customized: false,
+        uploadedUnifiedGrades: false
       }).then(() => { 
         console.log("added")
       })}
