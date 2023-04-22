@@ -447,7 +447,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       print(doc.reference.parent.parent?.id);
       schoolID = doc.reference.parent.parent!.id;
       print("schoolID=" + '$schoolID');
-      // break;// Prints document1, document2
     }
     Get();
   }

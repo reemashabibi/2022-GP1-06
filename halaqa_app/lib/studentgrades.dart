@@ -116,7 +116,6 @@ class _EditProfilePageState extends State<studentGrades> {
             }).toList();
           });
 
-          print("in if");
           DocumentReference docu =
               await widget.stRef.collection("Grades").doc(gradeID);
           for (int i = 0; i < numOfAssess; i++) {
@@ -135,11 +134,9 @@ class _EditProfilePageState extends State<studentGrades> {
             });
           }
           if (v == 0) {
-            //   assessmentsList.removeAt(0);
             setState(() {
               studentAssessmentsList.removeAt(0);
             });
-            print("object");
             v++;
           }
         } else {
@@ -219,7 +216,6 @@ class _EditProfilePageState extends State<studentGrades> {
 
   @override
   Widget build(BuildContext context) {
-    // print(customized.toString());
     return Scaffold(
       floatingActionButton:
           Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
@@ -342,8 +338,6 @@ class _EditProfilePageState extends State<studentGrades> {
                                         inputFormatters: <TextInputFormatter>[
                                           FilteringTextInputFormatter.allow(
                                               RegExp(r'^(\d+)?\.?\d{0,2}')),
-                                          FilteringTextInputFormatter
-                                              .digitsOnly,
                                         ],
                                         keyboardType:
                                             TextInputType.numberWithOptions(

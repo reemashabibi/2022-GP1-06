@@ -171,9 +171,6 @@ class _classGradesState extends State<classGrades> {
             }
 
 /////////////////////////
-            setState(() {
-              print(studentAssessmentsList);
-            });
           });
         } else {
           for (int i = 0; i < numOfAssess; i++) {
@@ -270,16 +267,11 @@ class _classGradesState extends State<classGrades> {
       body: Form(
         key: _formkey,
         child: Builder(builder: (context) {
-          //   print("studentAssessmentsList.lenght " +
-          //   studentAssessmentsList.length.toString());
-
           if (x == 0) {
             getData();
           }
           if (assessmentsList.length == numOfAssess &&
-              numOfStudentsInClass > 0 &&
-              studentAssessmentsList.length == numOfAssess) {
-            //  if (assessmentStudentGradesList.length == assessmentsList.length) {
+              numOfStudentsInClass > 0) {
             return ListView.builder(
               itemCount: assessmentsList.length,
               itemBuilder: (context, position) {
@@ -331,7 +323,6 @@ class _classGradesState extends State<classGrades> {
                               inputFormatters: <TextInputFormatter>[
                                 FilteringTextInputFormatter.allow(
                                     RegExp(r'^(\d+)?\.?\d{0,2}')),
-                                FilteringTextInputFormatter.digitsOnly,
                               ],
                               keyboardType: TextInputType.numberWithOptions(
                                   decimal: true),
@@ -401,9 +392,6 @@ class _classGradesState extends State<classGrades> {
                 );
               },
             );
-            //   } else {
-            //   return Center(child: CircularProgressIndicator());
-            //}
           } else if (numOfStudentsInClass == 0) {
             return Center(child: Text("لم يتم تعيين طلاب بالفصل بعد."));
           } else {
