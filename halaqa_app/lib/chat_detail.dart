@@ -66,16 +66,18 @@ class _ChatdetailState extends State<Chatdetail> {
             .collection('School/${widget.schoolId}/Chats')
             .doc(chatDocID)
             .get();
-        count = dc.get("To_Student_msg_count") + 1;
+        try {
+          count = dc.get("To_Student_msg_count") + 1;
+        } catch (e) {}
         print("COUNT MSG $count");
-        FirebaseFirestore.instance
+        await FirebaseFirestore.instance //code change !!!!!!!!!
             .collection('School/${widget.schoolId}/Chats')
             .doc(chatDocID)
-            .update({
+            .set({
           "To_Student_msg_count": count,
           'SubjectID': widget.subjectId,
           'StudentID': widget.friendUid
-        });
+        }, SetOptions(merge: true));
 
 //red bubble for HOMEPAGE
 /*
@@ -155,23 +157,26 @@ class _ChatdetailState extends State<Chatdetail> {
                 .get()
                 .then(
               (DocumentSnapshot docParent) {
-                recepientToken = docParent['token'];
-                print('token $recepientToken');
-                http.post(
-                  Uri.parse(
-                      'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
-                  headers: <String, String>{
-                    'Content-Type': 'application/json; charset=UTF-8',
-                  },
-                  body: jsonEncode(<String, String>{
-                    'name': senderName,
-                    'content': msg,
-                    'token': recepientToken,
-                    'data':
-                        '$teacherName~$currentuserUserId~${widget.friendUid}~${widget.schoolId}~${widget.subjectId}~${widget.classId}'
-                  }),
-                );
-                // ...
+                if (docParent['token'] != null) {
+                  //code change
+                  recepientToken = docParent['token'];
+                  print('token $recepientToken');
+                  http.post(
+                    Uri.parse(
+                        'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
+                    headers: <String, String>{
+                      'Content-Type': 'application/json; charset=UTF-8',
+                    },
+                    body: jsonEncode(<String, String>{
+                      'name': senderName,
+                      'content': msg,
+                      'token': recepientToken,
+                      'data':
+                          '$teacherName~$currentuserUserId~${widget.friendUid}~${widget.schoolId}~${widget.subjectId}~${widget.classId}'
+                    }),
+                  );
+                  // ...
+                }
               },
               onError: (e) => recepientToken = '',
             );

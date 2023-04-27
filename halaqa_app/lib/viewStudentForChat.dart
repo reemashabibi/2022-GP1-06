@@ -329,24 +329,29 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                           .get()
                                           .then(
                                         (DocumentSnapshot docParent) {
-                                          recepientToken = docParent['token'];
-                                          http.post(
-                                            Uri.parse(
-                                                'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
-                                            headers: <String, String>{
-                                              'Content-Type':
-                                                  'application/json; charset=UTF-8',
-                                            },
-                                            body: jsonEncode(<String, String>{
-                                              'name': senderName,
-                                              'content': "📢" +
-                                                  "\n" +
-                                                  "\n" +
-                                                  controller.text,
-                                              'token': recepientToken
-                                            }),
-                                          );
-                                          // ...
+                                          if (docParent['token'] != null) {
+                                            //code change
+                                            recepientToken = docParent['token'];
+                                            http.post(
+                                              Uri.parse(
+                                                  'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
+                                              headers: <String, String>{
+                                                'Content-Type':
+                                                    'application/json; charset=UTF-8',
+                                              },
+                                              body: jsonEncode(<String, String>{
+                                                'name': senderName,
+                                                'content': "📢" +
+                                                    "\n" +
+                                                    "\n" +
+                                                    controller.text,
+                                                'token': recepientToken,
+                                                'data': //code change
+                                                    '$senderName~${FirebaseAuth.instance.currentUser?.uid}~${doc.id}~${widget.schoolId}~${widget.subjectId}~$classId'
+                                              }),
+                                            );
+                                            // ...
+                                          }
                                         },
                                         onError: (e) => recepientToken = '',
                                       );

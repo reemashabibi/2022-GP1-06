@@ -67,16 +67,19 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
             .collection('School/${widget.schoolId}/Chats')
             .doc(chatDocID)
             .get();
-        count = dc.get("To_Teacher_msg_count") + 1;
+        print('hhhhhhhhhhhhhhhhhhhhhhhhhffffff');
+        try {
+          count = dc.get("To_Teacher_msg_count") + 1;
+        } catch (e) {}
         print("COUNT MSG $count");
-        FirebaseFirestore.instance
+        await FirebaseFirestore.instance //code change
             .collection('School/${widget.schoolId}/Chats')
             .doc(chatDocID)
-            .update({
+            .set({
           "To_Teacher_msg_count": count,
           'SubjectID': widget.subjectId,
           'StudentID': currentuserUserId
-        });
+        }, SetOptions(merge: true));
 
 /*
         ///while we send a message from parent side we need to set subcollection because we have 3 student and we send msg to partucular
@@ -131,22 +134,25 @@ class _ChatdetailPSState extends State<ChatdetailPS> {
             .get()
             .then(
           (DocumentSnapshot doc) {
-            recepientToken = doc['token'];
-            http.post(
-              Uri.parse(
-                  'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-              },
-              body: jsonEncode(<String, String>{
-                'name': senderName,
-                'content': msg,
-                'token': recepientToken,
-                'data':
-                    '$StudentUid~$studentName~$schoolID~${widget.classID}~${widget.subjectId}'
-              }),
-            );
-            // ...
+            if (doc['token'] != null) {
+              //code change
+              recepientToken = doc['token'];
+              http.post(
+                Uri.parse(
+                    'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
+                headers: <String, String>{
+                  'Content-Type': 'application/json; charset=UTF-8',
+                },
+                body: jsonEncode(<String, String>{
+                  'name': senderName,
+                  'content': msg,
+                  'token': recepientToken,
+                  'data':
+                      '$StudentUid~$studentName~$schoolID~${widget.classID}~${widget.subjectId}'
+                }),
+              );
+              // ...
+            }
           },
           onError: (e) => recepientToken = '',
         );

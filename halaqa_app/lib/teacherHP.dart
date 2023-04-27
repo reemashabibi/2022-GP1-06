@@ -114,22 +114,23 @@ class _teacherHPState extends State<teacherHP> {
           for (var docSnapshot in querySnapshot.docs) {
             msg_count_sum += docSnapshot.get('To_Teacher_msg_count');
           }
-          var clsName = await str.get().then((value) {
-            setState(() {
-              var subName = docu.get().then((valueIn) {
-                subjectsList.add(subject(
-                    valueIn['SubjectName'],
-                    docu,
-                    value['ClassName'],
-                    value['LevelName'],
-                    valueIn.id,
-                    msg_count_sum));
-              });
-            });
-          });
         } catch (e) {
+          //here is change
           print('Error completing: $e');
         }
+        var clsName = await str.get().then((value) {
+          setState(() {
+            var subName = docu.get().then((valueIn) {
+              subjectsList.add(subject(
+                  valueIn['SubjectName'],
+                  docu,
+                  value['ClassName'],
+                  value['LevelName'],
+                  valueIn.id,
+                  msg_count_sum));
+            });
+          });
+        });
       }
 
       setState(() {
@@ -694,7 +695,8 @@ class _teacherHPState extends State<teacherHP> {
       child: const Text("نعم"),
       onPressed: () async {
         const CircularProgressIndicator();
-        FirebaseFirestore.instance
+
+        await FirebaseFirestore.instance //code change
             .doc('School/' + '$schoolID' + '/Teacher/' + user!.uid)
             .update({'token': null});
         await FirebaseAuth.instance.signOut();
