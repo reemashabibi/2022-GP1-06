@@ -97,15 +97,20 @@ class _parentHPState extends State<parentHP> {
       for (var i = 0; i < numOfSubjects; i++) {
         DocumentReference str = ds['Students'][i];
         var msg_count_sum;
+        try {
+          // here is change
+          final querySnapshot = await FirebaseFirestore.instance
+              .collection('School/$schoolID/Chats')
+              .where('StudentID', isEqualTo: ds['Students'][i].id)
+              .get();
 
-        final querySnapshot = await FirebaseFirestore.instance
-            .collection('School/$schoolID/Chats')
-            .where('StudentID', isEqualTo: ds['Students'][i].id)
-            .get();
-
-        msg_count_sum = 0;
-        for (var docSnapshot in querySnapshot.docs) {
-          msg_count_sum += docSnapshot.get('To_Student_msg_count');
+          msg_count_sum = 0;
+          for (var docSnapshot in querySnapshot.docs) {
+            msg_count_sum += docSnapshot.get('To_Student_msg_count');
+          }
+        } catch (e) {
+          //here is change
+          print('Error completing: $e');
         }
         var clsName = await str.get().then((value) {
           setState(() {
@@ -146,7 +151,6 @@ class _parentHPState extends State<parentHP> {
     requestPremission();
     getToken();
     initInfo();
-
     super.initState();
   }
 
@@ -776,63 +780,6 @@ class _parentHPState extends State<parentHP> {
     );
   }
 
-  Future<void> logout(BuildContext context) async {
-    showAlertDialog(BuildContext context) {}
-    ;
-  }
-
-  Future<void> showAlertDialog(BuildContext context) async {
-    // set up the buttons
-    Widget continueButton = TextButton(
-      //continueButton
-      child: const Text("نعم"),
-      onPressed: () async {
-        const CircularProgressIndicator();
-        await FirebaseFirestore.instance
-            .doc('School/' + '$schoolID' + '/Parent/' + user!.uid)
-            .update({'token': null});
-        await FirebaseAuth.instance.signOut();
-        SharedPreferences pref = await SharedPreferences.getInstance();
-        pref.remove("email");
-        pref.remove('type');
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoginScreen(),
-          ),
-        );
-      },
-    );
-
-    Widget cancelButton = TextButton(
-      //cancelButton
-      child: const Text("إلغاء",
-          style: TextStyle(
-            color: Colors.red,
-          )),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      //title: Text("AlertDialog"),
-      content: const Text(
-        "هل تأكد تسجيل الخروج؟",
-        textAlign: TextAlign.center,
-      ),
-      actions: [continueButton, cancelButton],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  } //end method
+//end method
 
 }

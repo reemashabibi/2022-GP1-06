@@ -8,6 +8,7 @@ import 'package:halaqa_app/commissioner/commisioner_list.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:halaqa_app/viewAnnouncement.dart';
 import 'package:halaqa_app/viewEvents.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 
 import 'login_screen.dart';
@@ -59,6 +60,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
   }
 
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
     schID = widget.schID;
@@ -149,7 +151,13 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       child: Text("نعم"),
       onPressed: () async {
         CircularProgressIndicator();
+        await FirebaseFirestore.instance
+            .doc('School/' + '$schID' + '/Parent/' + user!.uid)
+            .update({'token': null});
         await FirebaseAuth.instance.signOut();
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.remove("email");
+        pref.remove('type');
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

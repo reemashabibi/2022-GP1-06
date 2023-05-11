@@ -256,8 +256,20 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                       .doc(
                                           "${widget.subjectId}_${qr.docs[i].id}_${FirebaseAuth.instance.currentUser?.uid}")
                                       .get();
-                                  msg_count =
-                                      chat.get('To_Student_msg_count') + 1;
+                                  try {
+                                    msg_count =
+                                        chat.get('To_Student_msg_count') + 1;
+                                  } catch (e) {
+                                    msg_count = 0;
+                                  }
+                                  var msg_count_t = 0;
+
+                                  try {
+                                    msg_count_t =
+                                        chat.get('To_Teacher_msg_count') + 1;
+                                  } catch (e) {
+                                    msg_count_t = 0;
+                                  }
 
                                   FirebaseFirestore.instance
                                       .collection(
@@ -266,6 +278,7 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                           "${widget.subjectId}_${qr.docs[i].id}_${FirebaseAuth.instance.currentUser?.uid}")
                                       .update({
                                     'To_Student_msg_count': msg_count,
+                                    'To_Teacher_msg_count': msg_count_t,
                                     'SubjectID': widget.subjectId,
                                     'StudentID': qr.docs[i].id
                                   });
@@ -329,24 +342,29 @@ class _viewStudentsForChatState extends State<viewStudentsForChat> {
                                           .get()
                                           .then(
                                         (DocumentSnapshot docParent) {
-                                          recepientToken = docParent['token'];
-                                          http.post(
-                                            Uri.parse(
-                                                'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
-                                            headers: <String, String>{
-                                              'Content-Type':
-                                                  'application/json; charset=UTF-8',
-                                            },
-                                            body: jsonEncode(<String, String>{
-                                              'name': senderName,
-                                              'content': "📢" +
-                                                  "\n" +
-                                                  "\n" +
-                                                  controller.text,
-                                              'token': recepientToken
-                                            }),
-                                          );
-                                          // ...
+                                          if (docParent['token'] != null) {
+                                            //code change
+                                            recepientToken = docParent['token'];
+                                            http.post(
+                                              Uri.parse(
+                                                  'https://us-central1-halaqa-89b43.cloudfunctions.net/method/chat'),
+                                              headers: <String, String>{
+                                                'Content-Type':
+                                                    'application/json; charset=UTF-8',
+                                              },
+                                              body: jsonEncode(<String, String>{
+                                                'name': senderName,
+                                                'content': "📢" +
+                                                    "\n" +
+                                                    "\n" +
+                                                    controller.text,
+                                                'token': recepientToken,
+                                                'data': //code change
+                                                    '$senderName~${FirebaseAuth.instance.currentUser?.uid}~${doc.id}~${widget.schoolId}~${widget.subjectId}~$classId'
+                                              }),
+                                            );
+                                            // ...
+                                          }
                                         },
                                         onError: (e) => recepientToken = '',
                                       );

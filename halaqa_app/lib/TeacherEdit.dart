@@ -248,7 +248,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return "الساعات المكتبية مطلوبة";
+                            }
 
+                            return null;
+                          },
                           // maxLines: 1,
                         ),
 

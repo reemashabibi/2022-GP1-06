@@ -18,17 +18,31 @@ Languages,libraries, services and tools  that we used to build our project:
 * JavaScript
 * CSS
 * jQuery
+* Dart
 * Firebase firestore 9
+* Cloud function
 * Firebase Authentication
  
 Developed using:
 * Visual Studio
+* Xcode
+* Android Studio
 
 
 ## Launching Instructions
 
-1. If you do not have a localhost downloaded, then download one first.
-3. Internet connection.
-2. Install code.
-3. Run the code starting with index.html file.
+* Website
+
+ 1. If you do not have a localhost downloaded, then download one first.
+ 2. Internet connection.
+ 3. Install code.
+ 4. Run the code starting with index.html file.
+
+* Application
+
+ 1. Internet connection.
+ 2. Install code.
+ 3. Applicable virtual machine Or linked phone.
+ 4. Run the code starting with main.dart file.
+
 

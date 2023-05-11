@@ -34,6 +34,7 @@ class _pick extends State<pickup> {
   final _formKey = GlobalKey<FormState>();
   //var schoolID = "xx";
   bool _buttonVisible = true;
+  var text = "اختر تاريخ قدوم الموكل";
   bool _cancel = false;
   String _textToShow = "";
   bool _formVisible = false;
@@ -59,7 +60,8 @@ class _pick extends State<pickup> {
               _textToShow = "تم إبلاغ المدرسة بقدومك ";
               _buttonVisible = false;
             } else {
-              _textToShow = "تم إبلاغ المدرسة بقدوم " + doc["fullname"];
+              _textToShow =
+                  "تم إبلاغ المدرسة بقدوم " + doc["fullname"] + " اليوم";
               _buttonVisible = false;
               _cancel = true;
             }
@@ -108,9 +110,11 @@ class _pick extends State<pickup> {
                   new Container(
                     padding: const EdgeInsets.all(5.0),
                     child: Text(
-                      'اصطحاب الطلاب',
+                      "اصطحاب الطلاب ",
                       style: TextStyle(
-                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 80, 80, 80),
+                        fontSize: 30,
                       ),
                     ),
                   ),
@@ -250,55 +254,9 @@ class _pick extends State<pickup> {
                                               hint: Text(
                                                   "اختر تاريخ قدوم الموكل"),
                                               onChanged: (value) {
-                                                if (value == 1) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()));
-                                                }
-
-                                                if (value == 2) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()
-                                                          .add(Duration(
-                                                              days: 1))));
-                                                }
-
-                                                if (value == 3) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()
-                                                          .add(Duration(
-                                                              days: 2))));
-                                                }
-                                                if (value == 4) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()
-                                                          .add(Duration(
-                                                              days: 3))));
-                                                }
-                                                if (value == 5) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()
-                                                          .add(Duration(
-                                                              days: 4))));
-                                                }
-                                                if (value == 6) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()
-                                                          .add(Duration(
-                                                              days: 5))));
-                                                }
-                                                if (value == 7) {
-                                                  selectedDate = DateFormat(
-                                                          ' MMM d')
-                                                      .format((DateTime.now()
-                                                          .add(Duration(
-                                                              days: 6))));
-                                                }
+                                                setState(() {
+                                                  selectedDate = value;
+                                                });
                                               },
                                               items: [
                                                 DropdownMenuItem(
@@ -338,14 +296,8 @@ class _pick extends State<pickup> {
                                                 ),
                                               ].toList(),
                                             ),
-                                            Visibility(
-                                              visible: _showerror,
-                                              child: Text(
-                                                'Please select a valid option.',
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                            ),
+                                            Text(
+                                                "في حال تأكيدك للطلب سيتم إلغاء الطلبات السابقة"),
                                           ],
                                         ),
                                       )),
@@ -403,8 +355,36 @@ class _pick extends State<pickup> {
                               dd = DateFormat(' MMM d').format(
                                   (DateTime.now().add(Duration(days: 1))));
                             }*/
+                                // dd = DateFormat(' MMM d')
+                                //   .format((DateTime.now()));
+                                if (selectedDate == "1") {
+                                  dd = DateFormat(' MMM d')
+                                      .format(DateTime.now());
+                                } else if (selectedDate == "2") {
+                                  dd = DateFormat(' MMM d').format(
+                                      (DateTime.now().add(Duration(days: 1))));
+                                } else if (selectedDate == "3") {
+                                  dd = DateFormat(' MMM d').format(
+                                      (DateTime.now().add(Duration(days: 2))));
+                                } else if (selectedDate == "4") {
+                                  dd = DateFormat(' MMM d').format(
+                                      (DateTime.now().add(Duration(days: 3))));
+                                } else if (selectedDate == "5") {
+                                  dd = DateFormat(' MMM d').format(
+                                      (DateTime.now().add(Duration(days: 4))));
+                                } else if (selectedDate == "6") {
+                                  dd = DateFormat(' MMM d').format(
+                                      (DateTime.now().add(Duration(days: 5))));
+                                } else if (selectedDate == "7") {
+                                  dd = DateFormat(' MMM d').format(
+                                      (DateTime.now().add(Duration(days: 6))));
+                                } else {
+                                  dd = DateFormat(' MMM d')
+                                      .format(DateTime.now());
+                                }
+                                print(selectedDate);
                                 docRef.update({
-                                  "date": selectedDate,
+                                  "date": dd,
                                   "someone": "yes",
                                   "fullname": name,
                                   "nid": nid,
@@ -412,8 +392,11 @@ class _pick extends State<pickup> {
                                 });
                                 setState(() {
                                   _buttonVisible = false;
-                                  _textToShow =
-                                      "تم إبلاغ المدرسة بقدوم " + name;
+                                  _textToShow = "تم إبلاغ المدرسة بقدوم " +
+                                      name +
+                                      " في تاريخ " +
+                                      dd;
+                                  selectedDate = null;
                                 });
                               }
                             } else if (x == 0) {

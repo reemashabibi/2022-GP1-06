@@ -6,8 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:halaqa_app/appBars.dart';
+import 'package:halaqa_app/login_screen.dart';
 import 'package:halaqa_app/parentHP.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
   final String schoolId;
@@ -35,6 +37,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   String schoolID = "xx";
+  bool EmailUpdated = false;
+  bool PassUpdated = false;
   bool _isObscure3 = true;
   bool visible = false;
   final _formkey = GlobalKey<FormState>();
@@ -276,6 +280,26 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         SizedBox(
                           height: 20,
                         ),
+                        new Container(
+                            child: new Column(
+                          children: <Widget>[
+                            new Align(
+                              alignment: Alignment.centerRight,
+                              child: new Text(
+                                " *سيؤدي إعادة تعيين البريد الإلكتروني إلى تسجيل خروجك ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        SizedBox(
+                          height: 12,
+                        ),
+
                         TextFormField(
                           // maxLength: 20,
                           onChanged: (newText) {
@@ -306,6 +330,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
                         SizedBox(
                           height: 20,
+                        ),
+                        new Container(
+                            child: new Column(
+                          children: <Widget>[
+                            new Align(
+                              alignment: Alignment.centerRight,
+                              child: new Text(
+                                " *سيؤدي إعادة تعيين كلمة المرور إلى تسجيل خروجك ",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                        SizedBox(
+                          height: 12,
                         ),
                         TextFormField(
                           maxLength: 20,
@@ -483,12 +526,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
       User? user = FirebaseAuth.instance.currentUser;
       if (email != FirebaseAuth.instance.currentUser?.email) {
         print("email updated");
+        SharedPreferences pref = await SharedPreferences.getInstance();
+        pref.setString("email", email);
         ////change
         ///
         // await user?.updateEmail(email);
         var Uid = FirebaseAuth.instance.currentUser?.uid;
         print(Uid);
         updateUser(Uid!, email);
+        EmailUpdated = true;
       }
       if (NewPass != "") {
         ////change
@@ -498,9 +544,19 @@ class _EditProfilePageState extends State<EditProfilePage> {
         print(email);
         print(NewPass);
         updateUserPass(Uid!, email, NewPass);
+        PassUpdated = true;
         // print("pass updated");
       }
 
+      var col = FirebaseFirestore.instance
+          .collectionGroup('Parent')
+          .where('Email', isEqualTo: email);
+      var snapshot = await col.get();
+
+      for (var doc in snapshot.docs) {
+        schoolID = doc.reference.parent.parent!.id;
+        break; // Prints document1, document2
+      }
       await FirebaseFirestore.instance
           .collection('School/$schoolID/Parent')
           .doc(user!.uid)
@@ -513,8 +569,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
       Fluttertoast.showToast(
           msg: "تم حفظ التعديلات بنجاح",
           backgroundColor: Color.fromARGB(255, 97, 200, 0));
-
-      return;
+      Future.delayed(Duration(seconds: 3), () async {
+        // print("Executed after 5 seconds");
+        if (EmailUpdated || PassUpdated) {
+          CircularProgressIndicator();
+          await FirebaseAuth.instance.signOut();
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          pref.remove("email");
+          pref.remove('type');
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+          );
+        } else
+          return;
+      });
     }
   }
 
