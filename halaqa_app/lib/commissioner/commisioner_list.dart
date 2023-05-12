@@ -274,7 +274,7 @@ class _CommissionerListState extends State<CommissionerList> {
                                                                         msg:
                                                                             "تم حذف المفوّض بنجاح",
                                                                         backgroundColor:
-                                                                            Colors.red);
+                                                                            Colors.green);
                                                                   },
                                                                   child:
                                                                       Container(
@@ -335,7 +335,8 @@ class _CommissionerListState extends State<CommissionerList> {
   Future<http.Response> deletUser(String uid) {
     return http.post(
       ///Android??
-      Uri.parse("https://us-central1-halaqa-89b43.cloudfunctions.net/method/deleteUser"),
+      Uri.parse(
+          "https://us-central1-halaqa-89b43.cloudfunctions.net/method/deleteUser"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8'
       },
