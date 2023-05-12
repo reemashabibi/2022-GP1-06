@@ -33,7 +33,7 @@ Developed using:
 
 ### Website
 
- * Halaqa website Link: https://halaqa-89b43.web.app
+ #### Halaqa website Link: https://halaqa-89b43.web.app
 
  * You can follow the following steps to run the code from localhost:
 
@@ -44,7 +44,7 @@ Developed using:
 
 ### Application
 
-  #### Android Applications: 
+  #### Android Application: 
    * Option 1: Using APK file:
 
     1. open your Android settings.
@@ -65,7 +65,7 @@ Developed using:
     3. Applicable virtual machine Or linked phone.
     4. Run the code starting with main.dart file.
 
-  #### Ios Applications: 
+  #### Ios Application: 
    * Option 1: Using IPA file:
 
     1. Install the IPA file on your iOS device.
@@ -77,8 +77,8 @@ Developed using:
     7. Drag and drop the IPA file onto the "Installed Apps" section of your device in the Devices window.
     8. Xcode will install the app on your iOS device. Once the installation is complete, you can find and launch the app on your device.
 
-   * Option 2: Or Applying the following steps:
-   
+   * Option 2: Applying the following steps:
+
     1. Internet connection.
     2. Install code.
     3. Applicable virtual machine Or linked phone.
