@@ -35,7 +35,7 @@ Developed using:
 
  * Halaqa website Link: https://halaqa-89b43.web.app
 
- * Or you can follow the following steps to run the code from localhost:
+ * You can follow the following steps to run the code from localhost:
 
   1. If you do not have a localhost downloaded, then download one first.
   2. Internet connection.
@@ -46,18 +46,20 @@ Developed using:
 
   #### Android Applications: 
    * Option 1: Using APK file:
-    1. open your Android settings
-    2. scroll down and tap Apps or Biometrics and Security
-    3. Tap Special app access
-    4. Tap Install unknown apps
-    5. Select a file manager app,either Files by google or My files and allow installing from it
-    6. Download the APK file to your PC
-    7. Connect your Android device to your PC via USB
+
+    1. open your Android settings.
+    2. scroll down and tap Apps or Biometrics and Security.
+    3. Tap Special app access.
+    4. Tap Install unknown apps.
+    5. Select a file manager app,either Files by google or My files and allow installing from it.
+    6. Download the APK file to your PC.
+    7. Connect your Android device to your PC via USB.
     8. Navigate to the Halaqa APK file on the computer. Right click on it and send to your Android device.
     9. Open your Android file manager and Locate to Halaqa APK file and tap on it.
     10. Tap on install, then tap on Done.
 
    * Option 2: Applying the following steps:
+
     1. Internet connection.
     2. Install code.
     3. Applicable virtual machine Or linked phone.
@@ -65,6 +67,7 @@ Developed using:
 
   #### Ios Applications: 
    * Option 1: Using IPA file:
+
     1. Install the IPA file on your iOS device.
     2. Using Xcode and a Mac computer:
     3. Connect your iOS device to your Mac using a USB cable.
@@ -75,6 +78,7 @@ Developed using:
     8. Xcode will install the app on your iOS device. Once the installation is complete, you can find and launch the app on your device.
 
    * Option 2: Or Applying the following steps:
+   
     1. Internet connection.
     2. Install code.
     3. Applicable virtual machine Or linked phone.
