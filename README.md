@@ -16,6 +16,7 @@
 Languages,libraries, services and tools  that we used to build our project:
 * HTML
 * JavaScript
+* Node JS
 * CSS
 * jQuery
 * Dart
@@ -62,7 +63,7 @@ Developed using:
 
     1. Internet connection.
     2. Install code.
-    3. Applicable virtual machine Or linked phone.
+    3. Emulator Or linked phone.
     4. Run the code starting with main.dart file.
 
   #### Ios Application: 
@@ -81,7 +82,7 @@ Developed using:
 
     1. Internet connection.
     2. Install code.
-    3. Applicable virtual machine Or linked phone.
+    3. Simulator Or linked phone.
     4. Run the code starting with main.dart file.
 
 
