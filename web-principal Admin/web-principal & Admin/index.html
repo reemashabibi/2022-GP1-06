@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول</title>
+    <link href="register.css" rel="stylesheet" >
+    <link href="style.css" rel="stylesheet" >
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+    
+  
+</head>
+<style>
+  .alert{ position: relative;}
+</style>
+<body>
+
+
+    <div class="center">
+      <a class="navbar-brand navbar-logo sideLogo" href="#"><img src="navbarlogo.png" alt="logo" height="66"></a>
+        <h1 class="">تسجيل الدخول </h1>
+        
+        <form id="logIn">
+          <div class="loader topTitle"></div>
+        <div class="inputbox">
+            <input type="email" required="required"  id="emailInp">
+            <span>البريد الإلكتروني</span>
+          </div>
+          <div class="inputbox">
+            
+            <input type="password" name="password" required="required"  id="passInp">
+            <span>كلمة المرور</span>
+          </div>
+          
+
+        
+          <div class="inputbox">
+          <span for="userType" class="userSelect" >:اختر نوع المستخدم</span>
+         <select name="userType" id="userType" style="font-size: large;">
+           <option value="principal">مدير</option>
+           <option value="admin">إداري</option>
+        </select>
+          </div>
+          <div class="inputbox" id="alertContainer"></div>
+          <div class="inputbox button">
+            <button type="text" id="subButton" class="btn"  > تسجيل الدخول</button>
+        </div>
+    </form>
+        <br>
+        <a href="register.html" class="alink">  مدرسة جديدة؟ التسجيل هنا</a>
+        <br>
+        
+        <a href="resetPassword.html" class="alink" style="margin-left: 75%;" >  نسيت كلمة المرور؟</a>
+        <br>
+    </div>
+    <div class="screen__background">
+      <span class="screen__background__shape screen__background__shape5"></span>
+      <span class="screen__background__shape screen__background__shape4"></span>
+      <span class="screen__background__shape screen__background__shape3"></span>		
+      <span class="screen__background__shape screen__background__shape2"></span>
+      <span class="screen__background__shape screen__background__shape1"></span>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-analytics.js";
+        import { collection, getDocs, addDoc, Timestamp, deleteDoc , getDoc, updateDoc, collectionGroup  } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { query, orderBy, limit, where, onSnapshot } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { doc, setDoc } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-firestore.js";
+        import { get, ref } from "https://www.gstatic.com/firebasejs/9.12.1//firebase-database.js";
+
+
+
+        const firebaseConfig = {
+             apiKey: "AIzaSyAk1XvudFS302cnbhPpnIka94st5nA23ZE",
+             authDomain: "halaqa-89b43.firebaseapp.com",
+             projectId: "halaqa-89b43",
+             storageBucket: "halaqa-89b43.appspot.com",
+             messagingSenderId: "969971486820",
+             appId: "1:969971486820:web:40cc0abf19a909cc470f71",
+             measurementId: "G-PCYTHJF1SD"
+        };
+           const app = initializeApp(firebaseConfig);
+           
+
+           export { app, db, collection, getDoc, Timestamp, addDoc, setDoc };
+           export { query, orderBy, limit, where, onSnapshot }; 
+           const db = getFirestore(app);
+           const analytics = getAnalytics(app);
+
+           const userType=document.getElementById("userType");
+           var Email=document.getElementById("emailInp");
+           const Password=document.getElementById("passInp");
+           const submit=document.getElementById("subButton");
+           const logInform=document.getElementById("logIn");
+          
+
+           $(".loader").hide();
+
+           submit.addEventListener('click',  async (e) => {
+            Email = Email.value.toLowerCase();
+            $('.loader').show();
+           e.preventDefault();
+           if(!validate()){
+            return false;
+            logInform.reset();
+           }
+           const auth = getAuth();
+           
+           
+           if (userType.value=="principal"){
+              
+              const q = query(collection(db, "School"), where("Email", "==", Email));
+             
+              const querySnapshot = await getDocs(q);
+             
+              if(querySnapshot.empty){
+               
+               $('.loader').hide();
+               document.getElementById('alertContainer').innerHTML = '<div style=" margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يوجد مدير بهذه البيانات يرجى التحقق من البيانات المدخلة</p> </div>';
+               setTimeout(() => {
+                  
+                  // 👇️ replace element from DOM
+                  document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+                }, 5000);
+
+               logInform.reset();
+               return;
+            }
+           
+            }
+            
+            if ((userType.value=="admin")){
+              $('.loader').show();
+              const docSnap = await getDocs(query(collectionGroup(db, 'Admin'), where('Email', '==', Email)));
+             
+
+              if(docSnap.empty){
+                $('.loader').hide();
+          document.getElementById('alertContainer').innerHTML = '<div style=" margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">لا يوجد إداري بهذه البيانات يرجى التحقق من البيانات المدخلة</p> </div>';
+          setTimeout(() => {
+                  
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          }, 5000);
+               logInform.reset();
+               return;
+            }
+            }
+             
+
+
+           signInWithEmailAndPassword(auth,Email,Password.value)
+           .then((userCredential) => {
+          // Signed in 
+           const user = userCredential.user;
+         
+           if(document.getElementById("userType").value=="principal"){
+            $('.loader').hide();
+            window.location.href="principalHomePage.html";
+           }
+           else if(userType.value=="admin"){
+            $('.loader').hide();
+            window.location.href="adminHomePage.html";
+
+           }
+        
+           })
+        .catch((error) =>{
+          if(error.message=="Firebase: Error (auth/wrong-password)."){
+            $('.loader').hide();
+            document.getElementById('alertContainer').innerHTML = '<div style="margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">هناك خطأ في البريد الإلكتروني أو كلمة المرور</p> </div>';
+          setTimeout(() => {
+                  
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          }, 5000);
+          }
+          else{
+            $('.loader').hide();
+
+            document.getElementById('alertContainer').innerHTML = '<div style=" margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert2"/> <label class="close" title="close" for="alert2"> <i class="icon-remove"></i>  </label>  <p class="inner">حدث خطأ يرجى المحاولة في وقتٍ لاحق</p> </div>';
+          setTimeout(() => {
+                  
+            // 👇️ replace element from DOM
+            document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+          }, 5000);
+          }
+
+            console.log("somethingis wrong"+error.message);
+        });
+
+            
+
+
+});
+           
+
+    </script>
+
+
+<script type="text/javascript">
+    
+    
+    const Email1=document.getElementById("emailInp");
+    const password=document.getElementById("passInp");
+  
+
+
+ function validate() {
+  
+  if(Email1.value==""||password.value==""){
+    $(".loader").hide();
+
+document.getElementById('alertContainer').innerHTML = '<div style="width: 100%; margin: 0 auto;"> <div class="alert error">  <input type="checkbox" id="alert1"/> <label class="close" title="close" for="alert1"> <i class="icon-remove"></i>  </label>  <p class="inner">جميع الحقول مطلوبة</p> </div>';
+      setTimeout(() => {
+      
+        // 👇️ replace element from DOM
+        document.getElementById('alertContainer').innerHTML = '<span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>';
+  
+      }, 5000);
+    return false;
+  }
+
+ 
+  else {
+    return true;
+   }
+ }
+ 
+ </script>
+
+
+<script>
+ function myFunction() {
+  var x = document.getElementById("passInp");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+  
+
+    
+</body>
+</html>

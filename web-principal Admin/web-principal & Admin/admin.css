@@ -1,0 +1,180 @@
+body {background-color : #ededed; font-family : "Open Sans", sans-serif;}
+
+h1 {padding: 40px; text-align: center; font-size: 1.5em;}
+
+li a {text-decoration : none; color : #2d2f31;}
+
+
+span {
+  padding : 30px;
+  background : #3e8183; 
+  color : white;
+  font-size : 1.2em;
+  font-variant : small-caps;
+  cursor : pointer;
+  display: block;
+  text-align: center;
+}
+span:hover{
+    background : #737373;   
+    color : white;
+}
+
+span::after {
+  float: right;
+  right: 10%;
+  content: "تعيين معلم";
+}
+
+
+.theTab{
+  background-color: white;
+}
+
+   
+.deleteClass{
+  margin-top: 5%;
+  background : #a4a2a2; 
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #6ce5e8;
+  border-right: 16px solid #6ce5e8;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+.titleLoaderClash{
+  margin-top: 10%;
+  
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+
+/* CSS */
+.button-65 {
+  appearance: none;
+  backface-visibility: hidden;
+  background-color: #2f80ed;
+  border-radius: 10px;
+  border-style: none;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Inter,-apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  height: 38px;
+  width: 148.44px;
+  letter-spacing: normal;
+  line-height: 1.5;
+  outline: none;
+  overflow: hidden;
+  padding: 14px 30px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transform: translate3d(0, 0, 0);
+  transition: all .3s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-65:hover {
+  background-color: #1366d6;
+  box-shadow: rgba(0, 0, 0, .05) 0 5px 30px, rgba(0, 0, 0, .05) 0 1px 4px;
+  opacity: 1;
+  transform: translateY(0);
+  transition-duration: .35s;
+}
+
+.button-65:hover:after {
+  opacity: .5;
+}
+
+.button-65:active {
+  box-shadow: rgba(0, 0, 0, .1) 0 3px 6px 0, rgba(0, 0, 0, .1) 0 0 10px 0, rgba(0, 0, 0, .1) 0 1px 4px -1px;
+  transform: translateY(2px);
+  transition-duration: .35s;
+}
+
+.button-65:active:after {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .button-65 {
+    padding: 14px 22px;
+
+    width: 148.44px;
+
+  }
+}
+
+.deletebtn{
+  width: 38.58px;
+  margin-right: 5px;
+}
+.dropdownTeacher{
+  width:10rem;
+}
+
+@media (max-width: 768px) {
+  #bigdiv  {
+    text-align: center;
+  }
+  #bigdiv2  {
+    text-align: center;
+  }
+.student-class-btns{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.addClass{
+  display: flex;
+  align-items: center;
+  width: 36%;
+}
+
+}

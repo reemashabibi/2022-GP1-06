@@ -1,0 +1,405 @@
+@import url("https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@600&display=swap");
+
+.center {
+    display:inline;
+    margin-top: 10%;
+    position: relative;
+    padding: 5% 5%;
+    background: #fff;
+    border-radius: 10px;
+    margin-right: 50px;
+    margin-left: 50px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 100%;
+  }
+
+  .center h1 {
+    font-size: 2em;
+    border-bottom: 5px solid #6ce5e8;
+    padding: 10px;
+    color: #000;
+   
+    margin-bottom: 40px;
+    font-weight: bold;
+    padding-left: 10px;
+    text-align: center;
+  }
+
+  .card{
+    text-align: right;
+  }
+  .center .inputbox {
+    position: relative;
+    width: 400px;
+    height: 50px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-left: 50px;
+  }
+  .center .inputbox input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #000;
+    outline: none;
+    background: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    text-align: right;
+    margin-left: 30px;
+  }
+  .center .inputbox textarea {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #000;
+    outline: none;
+    background: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    text-align: right;
+    margin-left: 30px;
+  }
+
+  .center .inputbox span {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: 1em;
+    transition: 0.6s;
+    font-family: sans-serif;
+    
+  }
+  .center .inputbox input:focus ~ span,
+  .center .inputbox input:valid ~ span{
+    transform: translateX(-13px) translateY(-35px);
+    font-size: 1em;
+  }
+  .center .inputbox textarea:focus ~ span,
+  .center .inputbox textarea:valid ~ span{
+    transform: translateX(-13px) translateY(-35px);
+    font-size: 1em;
+  }
+  
+  .center .inputbox [type="button"] {
+    width: 50%;
+    background: #ccc;
+    color: #fff;
+    border: #fff;
+    text-align: center;
+  }
+  .center .inputbox:hover [type="button"] {
+    background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
+  }
+
+/* Add some hover effects to buttons */
+.center .btn:hover, .open-button:hover {
+    opacity: 1;
+    color: #4ebfc1;
+    background-color: #fff;
+    border-style: solid;
+    border-color: #4ebfc1;
+  }
+  
+  
+  /* Set a style for the submit/login button */
+  .center .btn {
+    border-radius: 10px;
+    background-color: #4ebfc1;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  
+.button-36 {
+    margin-left: 30px;
+    background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    height: 3rem;
+    width: 25rem;
+    padding: 16px 20px;
+    margin-right: 0px;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+    transition: all .5s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-align: right;
+  }
+  
+  .button-36:hover {
+    background-image: linear-gradient(92.88deg, #ffffff 9.16%, #ffffff 43.89%, #ffffff 64.72%);
+    color: #3790ad;
+    border-style: solid;
+    border-color: #3790ad;
+    transition-duration: .1s;
+  }  
+
+  @media (min-width: 768px) {
+    .button-36 {
+      padding: 0 2.6rem;
+    }
+  }
+
+  .center {
+    display:inline;
+    margin-top: 100px;
+    position: relative;
+    padding: 50px 50px;
+    background: #fff;
+    border-radius: 10px;
+    margin-right: 50px;
+    margin-left: 50px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width: 100%;
+  }
+  .center h1 {
+    font-size: 2em;
+    border-bottom: 5px solid #6ce5e8;
+    padding: 10px;
+    color: #000;
+  
+    margin-bottom: 40px;
+    font-weight: bold;
+    padding-left: 10px;
+    text-align: center;
+  }
+   
+  .center .inputbox {
+    position: relative;
+    width: 400px;
+    height: 50px;
+    margin-bottom: 40px;
+    margin-top: 20px;
+    margin-left: 50px;
+  }
+  .center .inputbox input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    border: 1px solid #000;
+    outline: none;
+    background: none;
+    padding: 10px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    text-align: right;
+    margin-left: 30px;
+  }
+  
+      .center .inputbox:last-child {
+          margin-bottom: 0;
+      }
+      .center .inputbox span {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    font-size: 1em;
+    transition: 0.6s;
+    font-family: sans-serif;
+    
+  }
+  .center .inputbox input:focus ~ span,
+  .center .inputbox input:valid ~ span,
+  .center .inputbox input:disabled ~ span{
+    transform: translateX(-13px) translateY(-35px);
+    font-size: 1em;
+    
+  }
+  .center .inputbox [type="button"] {
+    width: 50%;
+    background: #ccc;
+    color: #fff;
+    border: #fff;
+    text-align: center;
+  }
+  .center .inputbox:hover [type="button"] {
+    background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
+  }
+  
+  
+  /* Add some hover effects to buttons */
+  .center .btn:hover, .open-button:hover {
+    opacity: 1;
+  }
+  
+  
+  /* Set a style for the submit/login button */
+  .center .btn {
+    border-radius: 10px;
+    background-color: #4ebfc1;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    margin-bottom:10px;
+    opacity: 0.8;
+  }
+  .button-36 {
+    margin-left: 30px;
+    background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    height: 3rem;
+    width: 25rem;
+    padding: 16px 20px;
+    margin-right: 0px;
+    text-align: center;
+    text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+    transition: all .5s;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    box-align: right;
+  }
+  .screen__background__shape {
+    transform: rotate(45deg);
+    position: absolute;
+  }
+  .screen__background__shape1 {
+    height: 520px;
+    width: 520px;
+    background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+    top: -20px;
+    left: 150px;	
+    z-index: -1;
+    border-radius: 72px 72px 72px 72px;
+  }
+  
+  .screen__background__shape2 {
+    height: 220px;
+    z-index: -1;
+    width: 220px;
+    background: cadetblue;	
+    top: -100px;
+    left: 0;	
+    border-radius: 32px;
+  }
+  
+  .screen__background__shape3 {
+    height: 500px;
+    width: 190px;
+    z-index: -1;
+    top: 100px;
+    background: linear-gradient(45deg,#b9bebd  25%, #4bcacf 100%);		
+    left: 77%;	
+    border-radius: 32px;
+  }
+  @media (max-width:1427px) {
+.screen__background__shape3 {
+  display: none;
+}
+
+}
+ 
+  .screen__background__shape5 {
+    height: 540px;
+    width: 190px;
+    top: 25%;
+    z-index: -1;
+    background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+    left: 0;	
+    border-radius: 32px;
+  }
+  .screen__background__shape6 {
+    height: 520px;
+    width: 580px;
+    background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+    top: 45em;
+    left: 80%;	
+    z-index: -1;
+    border-radius: 72px 72px 72px 72px;
+  }
+  
+  .screen__background__shape7 {
+    height: 440px;
+    width: 200px;
+    z-index: -1;
+    top: 90px;
+    background:linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+    left: 70%;	
+    border-radius: 32px;
+  }
+  #alertContainer {
+    width: 91%
+  }
+  @media (max-width:1057px) {
+.screen__background__shape7 {
+  display: none;
+}
+
+}
+  .loader {
+margin-top: 136px;
+  }
+  .alert .inner {
+    margin-right: 49px;
+  }
+.alert{
+  margin-right: 9%;
+}
+
+@media (max-width: 768px) {
+  .center{
+    padding:0%;
+    margin-left: 12px;
+    width: 100%;
+  }
+  .center h3 {
+    margin-right: 27px;
+  }
+  .center .inputbox{
+    width: 70%;
+    margin-left: 103px;
+  }
+  form{
+    width: 100%;
+  }
+  .center .inputbox input{
+    margin-left: -66px;
+  }
+  .center .inputbox span{
+    right: 91px;
+  }
+  .button-36{
+    width: 100%;
+    margin-left: -66px;
+  }
+  .card{
+    align-items: center;
+  }
+  .center .inputbox textarea{
+    margin-left: -64px;
+  }
+  #alertContainer {
+    width: 100%;
+    margin-left: 15px;
+    
+  }
+}

@@ -1,0 +1,144 @@
+@import url('https://fonts.googleapis.com/css?family=Abel');
+
+body {
+  background: #F0EDED;
+}
+
+#wrapper {
+  width: 100%;
+  position: relative;
+  left: 6%;  
+  @media screen and (min-width: 1024px) {
+    width: 1100px;
+    margin: 0 auto;
+  }
+}
+  #wrapper #pricing-tables {
+    font-family: "Abel", sans-serif;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    @media screen and (min-width: 1024px) {
+      flex-direction: row;
+    }
+  }
+  #pricing-tables  .pricing-table {
+      max-width: 530px;
+      width: 100%;
+      margin: 15px 0;
+      
+      @media screen and (min-width: 1024px) {
+        margin: 0;
+      }
+    } 
+      
+        
+        #pricing-tables  .pricing-table .header .title {
+          text-align: center;
+          text-transform: uppercase;
+          padding: 15px 0;
+          background: #e4e4e4;
+          color: #000;
+          font-size: 16x;
+        }
+        
+        #pricing-tables  .pricing-table .header .price {
+          text-align: center;
+          text-transform: uppercase;
+          padding: 15px 0;
+          background: #f6f6f6;
+          color: #000;
+          font-size: 28px;
+          font-weight: 300;
+            
+           
+        }
+        span {
+          font-size: 14px;
+          vertical-align: super;
+        }
+      
+      
+      .features {
+        background: #fff;
+      }
+      .features ul {
+          list-style: none;
+          margin: 0;
+          padding: 15px 0;}
+
+          .features li {
+            padding: 8px 5px;
+            text-align: center;
+            
+          }
+          .features li  span {
+              color: #999;
+            }
+          
+        
+      
+      
+       
+      
+    
+    
+  
+
+
+
+
+ 
+  
+  h2 {
+    font-size: 26px;
+    margin: 20px 0;
+    text-align: center;
+    color: rgb(40, 87, 111);
+   
+  }
+  
+  
+  .responsive-table li {
+      border-radius: 3px;
+      padding: 25px 30px;
+      
+      margin-bottom: 25px;
+      font-size: 20px;
+      text-align: center;    }
+    
+    .responsive-table .table-row {
+      background-color: #ffffff;
+      text-align: center;
+      align-content: center;
+      box-shadow: 0px 0px 9px 0px rgba(0, 0, 0, 0.1);
+    }
+    .responsive-table .col-1 {
+      flex-basis: 100%;
+    }
+  
+     @media all and (max-width: 500px) {
+        .responsive-table .table-header {
+        display: none;
+      }
+      
+      .responsive-table li {
+        display: block;
+        text-align: center;
+      }
+      .responsive-table .col {
+        flex-basis: 100%;
+        text-align: center;
+      }
+      .responsive-table .col {
+        display: flex;
+        padding: 10px 0;
+        text-align: center;
+      }
+    }
+  
+  
+  
+  

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<script type="module">
+  import{checkUser} from "./admin.js";
+  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.12.1/firebase-auth.js";
+   const auth = getAuth();
+
+   checkUser();
+     
+   const logout= document.getElementById("signout");
+
+   logout.addEventListener('click',  async (e) => {
+      e.preventDefault()
+      if(confirm("هل تُأكد تسجيل الخروج من الحساب؟")){
+      signOut(auth).then(() => {
+        alert("تم تسجيل الخروج بنجاح");
+        window.location.href="index.html";
+        }).catch((error) => {
+        console.log(error.message);
+        }); 
+    }
+     }); 
+  </script>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+   
+
+    <link rel="stylesheet" href="create.css">
+    <script type="text/javascript" src="https://unpkg.com/xlsx@0.15.1/dist/xlsx.full.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css"/>
+
+    <link rel="stylesheet" href="navbar.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css"/>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+
+    <title>إضافة فصل</title>
+
+    <style>
+      main {
+ margin: 0;
+ margin-top: 30px;
+ margin-bottom: 30px;
+ padding: 0;
+ box-sizing: border-box;
+ display:grid;
+ justify-content:center;
+ align-items: center;
+}
+   </style>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/7.14.1-0/firebase.js"></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js'></script>
+
+
+</head>
+
+
+<body>
+  
+    <!--start of nav -->
+    <nav class="navbar navbar-expand-custom navbar-mainbg">
+      <a class="navbar-brand navbar-logo" href="adminHomePage.html"><img src="navbarlogo.png" alt="logo" height="66"></a>
+      <svg viewBox="0 0 512 512" width="30" title="sign-out-alt" id="signout">
+<path d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z" />
+</svg>
+
+<svg viewBox="0 0 496 512" width="30" title="user-circle" id="updateAccountLogo" onclick="window.location.href='editAdmin.html'">
+  <path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z" />
+</svg>
+      <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fas fa-bars text-black"></i>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <div class="hori-selector" ><div class="left" ></div><div class="right" ></div></div>
+    
+           
+              <li class="nav-item ">
+                  <a class="nav-link" href="pickup.html"> إصطحاب الطلاب</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="announcement.html"></i>الإعلانات</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="events.html">الأحداث</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="documents.html">المستندات</a>
+              </li>
+
+              <li class="nav-item ">
+                  <a class="nav-link" href="adminHomePage.html">الصفحة الرئيسية</a>
+              </li>
+              <li class="nav-item active">
+                <a class="nav-link" href="javascript:void(0);"></a>
+            </li>
+          </ul>
+      </div>
+  </nav>
+  <!--end of nav -->
+
+  <main>
+    <div class="center">
+        <h1>إضافة فصل</h1>
+        <div class="loader topTitle"></div>
+        <form class="addClassForm">
+
+
+            <div class="inputbox">
+                <input type="text" required="required" name="Cname" id="Cname">
+                <span>اسم الفصل</span>
+            </div>
+
+            <div class="inputbox">
+      <select required=" true"
+       id="classes" name="classes">
+                <option id="non" value="" name="non">--المرحلة الدراسية--</option>
+                </select>
+                <span
+                id="spanLevel"
+                    >المرحلة</span>
+            </div>
+            <div class="inputbox" id="alertContainer">
+                <span style="color: rgb(157, 48, 48);" class="req">جميع الحقول مطلوبة*</span>
+              </div>
+            <div class="inputbox">
+
+                <button type="submit" id="btn" class="button-36 topTitle">إضافة</button>
+            </div>
+        </form>
+    </div>
+    <div class="screen__background">
+        <div class="screen__background__shape screen__background__shape7"></div>
+        <div class="screen__background__shape screen__background__shape5"></div>
+     
+        	
+        <div class="screen__background__shape screen__background__shape2"></div>
+        <div class="screen__background__shape screen__background__shape1"></div>
+      </div>
+    </main>
+
+    <script type="module" src="class.js"></script>
+    <!-- Add class style -->
+    <style>
+
+#spanLevel{
+  width:40%;  text-align:right; border-radius: 10px; font-size: 1.2em; position: absolute;
+}
+#classes{
+  margin-left: 50px; margin-top: 1%; padding: 10px; border: 2px solid #000; width:45%; height: 50px; text-align:center;
+}
+.center {
+  display:inline;
+  margin-top: 100px;
+  position: relative;
+  padding: 50px 50px;
+  background: #fff;
+  border-radius: 10px;
+  margin-right: 50px;
+  margin-left: 50px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%;
+}
+.center h1 {
+  font-size: 2em;
+  border-bottom: 5px solid #6ce5e8;
+  padding: 10px;
+  color: #000;
+
+  margin-bottom: 40px;
+  font-weight: bold;
+  padding-left: 10px;
+  text-align: center;
+}
+ 
+.center .inputbox {
+  position: relative;
+  width: 400px;
+  height: 50px;
+  margin-bottom: 50px;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+.center .inputbox input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 1px solid #000;
+  outline: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2em;
+  text-align: right;
+  margin-left: 30px;
+}
+
+    .center .inputbox:last-child {
+        margin-bottom: 0;
+    }
+    .center .inputbox span {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  font-size: 1em;
+  transition: 0.6s;
+  font-family: sans-serif;
+  
+}
+.center .inputbox input:focus ~ span,
+.center .inputbox input:valid ~ span,
+.center .inputbox input:disabled ~ span{
+  transform: translateX(-13px) translateY(-35px);
+  font-size: 1em;
+  
+}
+.center .inputbox [type="button"] {
+  width: 50%;
+  background: #ccc;
+  color: #fff;
+  border: #fff;
+  text-align: center;
+}
+.center .inputbox:hover [type="button"] {
+  background: linear-gradient(45deg, rgb(198, 218, 253), #ccc);
+}
+
+
+/* Add some hover effects to buttons */
+.center .btn:hover, .open-button:hover {
+  opacity: 1;
+}
+
+
+/* Set a style for the submit/login button */
+.center .btn {
+  border-radius: 10px;
+  background-color: #4ebfc1;
+  color: white;
+  padding: 16px 20px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  margin-bottom:10px;
+  opacity: 0.8;
+}
+.button-36 {
+  margin-left: 30px;
+  background-image: linear-gradient(92.88deg, #3790ad 9.16%, #3790ad 43.89%, #3790ad 64.72%);
+  border-radius: 8px;
+  border-style: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  height: 3rem;
+  width: 25rem;
+  padding: 16px 20px;
+  margin-right: 0px;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+  transition: all .5s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  box-align: right;
+}
+.screen__background__shape {
+	transform: rotate(45deg);
+	position: absolute;
+}
+.screen__background__shape1 {
+	height: 520px;
+	width: 520px;
+  background: linear-gradient(45deg, #4ebfc1 0%, #75a79b 100%);		
+	top: -20px;
+	left: 150px;	
+  z-index: -1;
+	border-radius: 72px 72px 72px 72px;
+}
+
+.screen__background__shape2 {
+	height: 220px;
+  z-index: -1;
+	width: 220px;
+	background: cadetblue;	
+	top: -100px;
+	left: 0;	
+	border-radius: 32px;
+}
+
+
+
+.screen__background__shape5 {
+	height: 540px;
+	width: 190px;
+	top: 25%;
+  z-index: -1;
+  background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+	left: 0;	
+	border-radius: 32px;
+}
+.screen__background__shape6 {
+	height: 520px;
+	width: 580px;
+  background: linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+	top: 45em;
+	left: 80%;	
+  z-index: -1;
+	border-radius: 72px 72px 72px 72px;
+}
+
+.screen__background__shape7 {
+	height: 440px;
+	width: 200px;
+  z-index: -1;
+	top: 90px;
+  background:linear-gradient(45deg,#dfdade  0%, #e7e8ea 100%);		
+	left: 70%;	
+	border-radius: 32px;
+}
+
+.loader {
+  position: absolute;
+  left: 50%;
+  top:12em;
+  z-index: 1;
+  width: 120px;
+  height: 120px;
+  margin: -76px 0 0 -76px;
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #6ce5e8;
+  border-right: 16px solid #6ce5e8;
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.alert{
+  margin-right: 9%;
+}
+#alertContainer{
+  margin-left: 14%;
+}
+@media (max-width: 768px) {
+  .center{
+    padding:0%;
+    margin-left: 12px;
+    width: fit-content;
+  }
+  .center h3 {
+    margin-right: 27px;
+  }
+  .center .inputbox{
+    width: 70%;
+    margin-left: 117px;
+  }
+  form{
+    width: fit-content;
+  }
+  .center .inputbox input{
+    margin-left: -66px;
+  }
+  .center .inputbox span{
+    right: 91px;
+  }
+  .button-36{
+    width: 100%;
+    margin-left: -66px;
+  }
+  .card{
+    align-items: center;
+  }
+  #classes{
+        margin-left: 36px;
+        width: 64%;
+    }
+    #spanLevel{
+        display: none;
+    }
+}
+
+    </style>
+    <div>
+
+      <footer><a href="mailto:Halaqa.KSU@gmail.com"> Halaqa.KSU@gmail.com</a> :للدعم الفني والاستفسارات يرجى التواصل عبر البريد</footer>    
+    </div>
+<script src="navbar.js"></script>
+</body>
+
+</html>
