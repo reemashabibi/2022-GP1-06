@@ -179,7 +179,7 @@ class _pick extends State<pickup> {
                     SingleChildScrollView(
                       child: Form(
                           key: _formKey,
-                          child: Expanded(
+                          child: Container(
                             child: SingleChildScrollView(
                               child: Column(
                                 children: [
